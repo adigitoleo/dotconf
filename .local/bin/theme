@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Synchronized light/dark theme switcher.
+# Only works for software that updates its colorscheme in real-time.
+# To set themes at startup, the query option could be useful.
+
+
+THEME_SOURCE="$HOME/.config/alacritty/alacritty.yml"
+
+
+theme_query() { awk '/colors:/,/\w/ {print substr($2,2)}' "$THEME_SOURCE" ;}
+
+theme_dark() {
+    sed -i "s/*light/*dark/" "$THEME_SOURCE"
+    true
+}
+
+theme_light() {
+    sed -i "s/*dark/*light/" "$THEME_SOURCE"
+    true
+}
+
+
+case $1 in
+    "dark" ) [[ theme_query == "dark" ]] || theme_dark ;;
+    "light" ) [[ theme_query == "light" ]] || theme_light ;;
+
+    "toggle" )
+        case $(theme_query) in
+            "dark" ) theme_light ;;
+            "light" ) theme_dark ;;
+        esac
+        ;;
+
+    "query" ) theme_query ;;
+
+    "query-fancy" )
+        case $(theme_query) in
+            "dark" ) echo 🌙;;
+            "light" ) echo ☀;;
+        esac
+        ;;
+esac

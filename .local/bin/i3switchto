@@ -1,0 +1,20 @@
+#!/bin/bash
+# Switch to existing app instance, else launch new instance.
+# From https://www.reddit.com/r/i3wm/comments/ebv6nt/run_only_one_instance_of_a_program/
+# Requires: jq
+
+class="$1"
+con_id="$(i3-msg -t get_tree | jq '
+  first(recurse((.nodes + .floating_nodes)[]) |
+  select(any(
+    .window_properties.class,
+    .window_properties.instance,
+    .window_properties.window_role,
+    .app_id;
+    values and match("'"${class}"'")
+  )).id)'
+)"
+if [ -n "${con_id:-}" ]
+then i3-msg "[con_id=${con_id%% }]" focus
+else i3-msg exec -- "$@"
+fi

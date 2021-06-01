@@ -1,0 +1,15 @@
+set selection-clipboard clipboard
+set font "monospace normal 11"
+set show-recent 0
+set adjust-open "width"
+set pages-per-row 2
+set default-bg "#66292F"
+set inputbar-bg "#66292F"
+set statusbar-bg "#66292F"
+set window-height 900
+set window-width 1600
+
+map <C-l> reload
+map <C-i> recolor
+map ; focus_inputbar ":"
+map <A-;> abort

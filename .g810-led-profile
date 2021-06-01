@@ -1,0 +1,18 @@
+# LED profile for logitech keyboards.
+# 1. Install controller from https://github.com/MatMoul/g810-led
+# 2. Symlink/copy this file to /etc/g810-led/profile
+# 3. Enable g810-led-reboot.service (optional)
+# 4. Reboot
+
+g logo aa1111
+g indicators aa1111
+g multimedia aa1111
+g fkeys aa1111
+g modifiers aa1111
+g arrows aa1111
+g numeric aa1111
+g functions aa1111
+g keys aa1111
+g gkeys aa1111
+
+c  # Commit changes

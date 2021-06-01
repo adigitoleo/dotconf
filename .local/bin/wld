@@ -1,0 +1,38 @@
+#!/usr/bin/sh
+SCRIPTNAME="${0##*/}"
+SYNOPSIS="Usage: $SCRIPTNAME [-h]"
+echoerr() { printf "$SCRIPTNAME: %s\n" "$*" >&2; echo $SYNOPSIS; }
+echohelp() {
+    echo
+    echo 'Start custom background processes for wayland.'
+    echo 'Call this using the autostart method for your compositor.'
+    echo "For example, in dwl you can use dwl -s $SCRIPTNAME."
+}
+
+case "$1" in
+    "-h" | "--help" ) echo $SYNOPSIS; echohelp; exit 0 ;;
+esac
+
+# NOTE: Do NOT start the ssh-agent from this script! Use `ssh-agent <compositor>` instead.
+#       This will ensure that the agent dies with the compositor.
+
+# TODO: Launch statusbars, configure monitors (?).
+
+is_command() { command -v "$1" >/dev/null 2>&1 || echoerr "command '$1' not found"; }
+is_running() { pgrep "$1" >/dev/null 2>&1 ; }
+
+is_running wlsunset || \
+    {
+        LOG="$(mktemp --tmpdir=/tmp $SCRIPTNAME-wlsunset-XXXXXX)"
+        is_command wlsunset && wlsunset -l 35.2 -L 149.7 -t 4750 -T 6250 >>"$LOG" 2>&1 ;
+    } &
+is_running swaybg || \
+    {
+        LOG="$(mktemp --tmpdir=/tmp $SCRIPTNAME-swaybg-XXXXXX)"
+        is_command swaybg && swaybg -m fill -i "$HOME/Pictures/wallpapers/chauvet_lions_66292F.jpg" >>"$LOG" 2>&1 ;
+    } &
+is_running mocp || \
+    {
+        LOG="$(mktemp --tmpdir=/tmp $SCRIPTNAME-mocp-XXXXXX)"
+        is_command mocp && mocp -S >>"$LOG" 2>&1 ;
+    } &

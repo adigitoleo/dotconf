@@ -1,0 +1,83 @@
+# vim:ft=sh
+# Shell aliases for bash/zsh.
+
+# --- Prefix rules ---
+# a = alsa (audio)
+# m = mocp (music)
+# d = disk controls (mount/unmount etc.)
+# e = elinks (text browser utilities), note that bare `e` should be `$EDITOR` instead
+# p = pacman (package manager)
+# v = virtual console
+# x = xorg-specific (X11 server)
+# py = python (+ venv, pyenv, ...)
+# rg = ripgrep (search)
+# mon = monitor configuration (using wlr-randr)
+
+
+# COLORS AND OUTPUT FORMATTING {{{1
+# https://wiki.archlinux.org/index.php/Color_output_in_console
+
+alias ls='ls --color=auto --group-directories-first'
+alias diff='diff --color=auto'
+alias grep='grep --color=auto'
+alias ip='ip --color=auto'
+alias lsblk='lsblk -o NAME,MAJ:MIN,RM,SIZE,RO,TYPE,MOUNTPOINT,FSTYPE,FSVER'
+alias pacman='pacman --color=auto'
+
+# Ignore whatever ripgrep would ignore in the tree output.
+alias rg,tree='rg --files | tree --fromfile'
+
+
+# VERSION CONTROL AND SYSTEM ADMIN {{{1
+
+alias p='pacman --color=auto'
+alias p,get='sudo pacman -Syu --color=auto'
+alias p,rmsafe='sudo pacman -Rn --color=auto'
+alias p,rm='sudo pacman -Rns --color=auto'
+alias p,orphans='pacman -Qtdq --color=auto'
+alias aur='auracle'
+alias pacdiff='sudo SUDO_EDITOR="$EDITOR -d" DIFFPROG="sudoedit" pacdiff'
+
+# Use ED25519 ssh keys by default.
+alias ssh-keygen='ssh-keygen -t ed25519'
+
+# Terminal editor.
+alias e=$EDITOR
+
+# Terminal clock.
+alias t='watch -t -n 1 "figlet -c $(date +"%a   %d   %b") && figlet -c $(date +"%H : %M")"'
+# Suspend and lock (run from a vconsole).
+alias v,lock='systemctl suspend && vlock --all'
+
+# MISC. ABBREVIATIONS {{{1
+
+# (Un)mount drives, e.g. external usb devices (udisks2).
+# Because automounting is not smart enough and always breaks somehow.
+alias d,mount='udisksctl mount --options fmask=0133 dmask=0022 -b'
+alias d,unmount='udisksctl unmount -b'
+alias d,free='lsblk -o NAME,MOUNTPOINT,FSAVAIL'
+
+# Only for X.
+alias x,clip='xclip -sel clip'
+alias x,op='xdg-open'
+
+# Find and print site urls from elinks history or bookmarks.
+alias e,hist='cut -f2 < ~/.elinks/globhist|fzf'
+alias e,mark='cut -f2 < ~/.elinks/bookmarks|fzf'
+
+# Ouroboros and the Virtual Environment.
+alias py=python
+alias py,venv='python -m venv .venv-${PWD##*/} && source .venv-${PWD##*/}/bin/activate && pip install --upgrade pip pylint jedi jedi-language-server mypy black'
+alias py,activate='test -f .venv-${PWD##*/}/bin/activate && source .venv-${PWD##*/}/bin/activate'
+
+# Without music, life would be a mistake.
+alias a,mute='amixer set Master toggle'
+alias a,mixer=alsamixer
+alias m='mocp 2>/dev/null'
+
+# Mon écran!
+alias mon,left='wlr-randr --output HDMI-A-2 --preferred --pos 0,0 --output HDMI-A-1 --preferred --pos -1920,0'
+alias mon,right='wlr-randr --output HDMI-A-2 --preferred --pos 0,0 --output HDMI-A-1 --preferred --pos 1920,0'
+
+# Empty current path recursively including hidden files.
+alias empty='rm -rfI ./{*,.*} && echo "Emptied ${PWD}"'
