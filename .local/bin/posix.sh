@@ -1,8 +1,8 @@
 #!/usr/bin/sh
-# ----------- I/O FUNCTIONS ---------------------------------------------------
+# ----------- MESSAGING FUNCTIONS ---------------------------------------------
 SCRIPTNAME="${0##*/}"
 usage() { # Print a short synopsis <https://pubs.opengroup.org/onlinepubs/9699919799/>
-    printf 'Usage: %s\n' "$SCRIPTNAME [-h]"
+    printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
     printf '       %s ' "$SCRIPTNAME"
     echo '[-ab][-c command]'
 }
@@ -19,7 +19,7 @@ helpf() { # Print a longer help string
     echo 'See also <https://github.com/dylanaraps/pure-sh-bible>.'
 }
 warn() { # warn [message]... Print message to stderr <https://stackoverflow.com/a/23550347>
-    >&2 printf '%s\n' "$*"
+    >&2 printf '%s\n' "${SCRIPTNAME}: $1"
 }
 quote() { # quote [string] Safe shell quoting? <https://www.etalabs.net/sh_tricks.html>
     printf '%s\n' "$1" | sed "s/'/'\\\\''/g;1s/^/'/;\$s/\$/'/"
@@ -39,7 +39,10 @@ consume() { # consume [letter] Consume a command line option
 }
 is_command() { # Check if command exists, for flow control (no stdout messages)
     1>/dev/null 2>&1 command -v "$1" && [ "$?" -eq 0 ] && return 0 \
-        || warn 'command' "$1" 'not found' && return 1
+        || warn "command ${1} not found" && return 1
+}
+count_files() { # count_files [glob] Count files matching glob
+    [ -e "$1" ] && FUNCRETURN="$#" || return 1
 }
 
 [ $# -eq 0 ] && usage && exit 1
@@ -51,10 +54,10 @@ while [ $# -gt 0 ] ; do
         case "$ARGSTR" in
             'a'* ) consume 'a' && echo 'A' ;;
             'b'* ) consume 'b' && echo 'B' ;;
-            'c' ) consume 'c' && shift ; is_command "$1" || exit 1 ;;
+            'c' ) consume 'c' && shift ; is_command "$1" ; shift || exit 1 ;;
             'h' ) usage && helpf ; exit 0 ;;
-            * ) warn "$1" 'is not a valid option' && usage ; exit 1 ;;
+            * ) warn "${1} is not a valid option" && usage ; exit 1 ;;
         esac
     done
-    shift
+    # Handle required/operand arguments here.
 done

@@ -715,7 +715,7 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'adigitoleo/vim-mellow'
 
     " Plug '~/vcs/vim-mellow-statusline'
-    Plug 'adigitoleo/vim-mellow-statusline'
+    Plug 'adigitoleo/vim-mellow-statusline', {'tag': '*'}
     " Plug 'vim-airline/vim-airline'
     " Plug 'itchyny/lightline.vim'
 
@@ -844,6 +844,11 @@ let g:latex_to_unicode_file_types = ["julia", "markdown"]
 let g:helpier_buftype_matches = ["help", "quickfix"]
 
 " }}}}}}
+
+let g:mellow_custom_parts = [
+            \ [function('strftime', ['%H:%M']), '%2*', 1, 0],
+            \]
+let g:mellow_show_bufnr = 0
 
 if $TERM == "alacritty"
     set termguicolors  " <https://gist.github.com/XVilka/8346728>
