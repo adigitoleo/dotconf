@@ -1,78 +1,65 @@
-#!/usr/bin/env python3
+#!/usr/bin/python
 """Generate BibTeX reference metadata from DOI links.
 
-Provide full DOI links via stdin or a text file. Lines beginning with '#' in
-the file are safe to use for comments.
+INPUT_FILE must contain at most one DOI link per line.
+Lines beginning with '#' in INPUT_FILE are safe to use for comments.
 
 """
 
 import argparse
+import os
+import urllib.error as ue
 import urllib.request as ur
 
 
-def _get_args():
-    parser = argparse.ArgumentParser(
-        description=(
-            "Generate BibTeX reference metadata from DOI links."
-        ),
-        epilog=(
-            """Use the standard POSIX flag '-' to switch from reading the file
-            to reading from standard input (e.g. to read DOI links directly
-            from the command line). Lines starting with '#' in the file are not
-            parsed, and can be used for comments.
-
-            """
-        ),
+def _get_args() -> argparse.Namespace:
+    description, epilog = __doc__.split(os.linesep + os.linesep, 1)
+    parser = argparse.ArgumentParser(description=description, epilog=epilog)
+    parser.add_argument(
+        "-f",
+        "--fromfile",
+        action="store_true",
+        help="interpret the operand as an input file containing DOI links",
     )
     parser.add_argument(
-        'file',
-        metavar="FILE",
-        nargs='?',
-        type=argparse.FileType('r'),
-        default='-',  # Use standard POSIX '-' flag to read from stdin instead.
-        help="text file containing reference DOI links (max. one per line)",
-    )
-    parser.add_argument(
-        'doilist',
-        metavar="DOI",
-        nargs='*',  # Collect all strings after '-' from stdin.
-        help="reference DOI links passed in as stdin arguments",
+        "doi_or_file",
+        metavar="DOI|INPUT_FILE",
+        help="single DOI link, or INPUT_FILE if -f was given",
     )
     args = parser.parse_args()
     return args
 
 
+def getbib(doi: str) -> str:
+    """Get BibTeX metadata from a DOI link."""
+    url = doi.rstrip().lstrip()
+    if not url.startswith("https://doi.org/"):
+        url = "https://doi.org/" + url
+    try:
+        response = ur.urlopen(
+            ur.Request(url, headers={"Accept": "application/x-bibtex"})
+        )
+    except ue.URLError:
+        return "failed to open URL"
+    return response.read().decode("utf-8")
+
+
 def _main():
     args = _get_args()
-    if args.file.name == '<stdin>' and not args.doilist:
-        raise IOError(
-            "must provide either text file or args with the list of DOI links"
-        )
+    if args.fromfile:
+        with open(args.doi_or_file) as file:
+            for line in file:
+                if line.startswith("#"):  # Treat hash as comment marker.
+                    continue
+                if line.rstrip():  # Skip blank lines.
+                    print(getbib(line))
 
-    hdr = {'Accept' : 'application/x-bibtex'}
-
-    # Read DOI's from the file if provided.
-    if args.file.name != '<stdin>':
-        for line in args.file:
-            if line.startswith('#'):  # Treat hash as comment marker.
-                continue
-            if line.rstrip():  # Skip blank lines.
-                url = line.rstrip().lstrip()
-                req = ur.Request(url, headers=hdr)
-                response = ur.urlopen(req)
-                print(response.read().decode('utf-8'))
-
-        # Need to close the stream, see
-        # https://discuss.python.org/t/argparse-filetype-trick/1863
-        args.file.close()
-
-    # Read DOI's from stdin if provided via args.
-    for doi in args.doilist:
-        url = doi.rstrip().lstrip()
-        req = ur.Request(url, headers=hdr)
-        response = ur.urlopen(req)
-        print(response.read().decode('utf-8'))
+    else:
+        print(getbib(args.doi_or_file))
 
 
-if __name__ == '__main__':
-    _main()
+if __name__ == "__main__":
+    try:
+        _main()
+    except KeyboardInterrupt:
+        pass
