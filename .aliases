@@ -5,18 +5,19 @@
 # a = alsa (audio)
 # m = mocp (music)
 # d = disk controls (mount/unmount etc.)
-# e = elinks (text browser utilities), note that bare `e` should be `$EDITOR` instead
+# e = elinks (text browser utilities), note that bare `e` should run $EDITOR instead
 # p = pacman (package manager)
 # v = virtual console
 # x = xorg-specific (X11 server)
 # py = python (+ venv, pyenv, ...)
-# rg = ripgrep (search)
-# mon = monitor configuration (using wlr-randr)
+# rg = ripgrep shortcuts (search)
+# mon = wayland monitor configuration (using wlr-randr)
 
 
 # COLORS AND OUTPUT FORMATTING {{{1
 # https://wiki.archlinux.org/index.php/Color_output_in_console
 
+alias colors16='msgcat --color=test|head -11'
 alias ls='ls --color=auto --group-directories-first'
 alias diff='diff --color=auto'
 alias grep='grep --color=auto'
