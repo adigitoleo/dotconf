@@ -1,39 +1,42 @@
-#!/usr/bin/env python3
-"""Convert between ordinal date and calendar date."""
+#!/usr/bin/python
+"""Convert between ordinal date (YYYY-DDD) and calendar date (YYYY-MM-DD)."""
 
 import argparse
 import datetime
+import re
 
-parser = argparse.ArgumentParser(
-    description="Convert between ordinal date YYYY-DDD (D = day-of-year) and"
-                " calendar date YYYY-MM-DD. Automatically detects required"
-                " conversion."
-)
 
-parser.add_argument(
-    'date',
-    help="either ordinal or calendar date in dashed ISO format"
-)
+def _get_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "date", help="either ordinal or calendar date in dashed ISO format"
+    )
+    args = parser.parse_args()
+    if re.match(r"^\d{4}-\d{3}$|^\d{4}-\d{2}-\d{2}", args.date):
+        return args
+    parser.error("incorrect input, must be YYYY-DDD or YYYY-MM-DD")
+    return argparse.Namespace()
 
-args = parser.parse_args()
 
-INVALID_INPUT_MSG = "incorrect input, must be YYYY-DDD or YYYY-MM-DD"
+def dashed_iso(date) -> str:
+    """Get dashed ISO (YYYY-MM-DD) representation of ordinal (YYYY-DDD) date."""
+    return datetime.datetime.strptime(f"{date}", "%Y-%j").date().strftime("%d-%m-%Y")
 
-if args.date.startswith('-'):
-    parser.error(INVALID_INPUT_MSG)
-if args.date.endswith('-'):
-    parser.error(INVALID_INPUT_MSG)
 
-if len(args.date.split('-')) == 2:
-    ord2date = datetime.datetime.strptime(f'{args.date}', '%Y-%j').date()
-    ord2date.strftime('%d-%m%-%Y')
-    print(ord2date)
-elif len(args.date.split('-')) == 3:
-    date2ord = datetime.datetime.strptime(f'{args.date}', '%Y-%m-%d')
-    date2ord = date2ord.timetuple()
-    date2ord = date2ord.tm_year * 1000 + date2ord.tm_yday
-    date2ord = str(date2ord)
-    date2ord = date2ord[:4] + '-' + date2ord[4:]
-    print(date2ord)
-else:
-    parser.error(INVALID_INPUT_MSG)
+def ordinal(date) -> str:
+    """Get ordinal (YYYY-DDD) representation of dashed ISO date (YYYY-MM-DD)."""
+    dateparts = datetime.datetime.strptime(f"{date}", "%Y-%m-%d").timetuple()
+    datestr = str(dateparts.tm_year * 1000 + dateparts.tm_yday)
+    return datestr[:4] + "-" + datestr[4:]
+
+
+def _main():
+    args = _get_args()
+    if len(args.date.split("-")) == 2:
+        print(dashed_iso(args.date))
+    else:
+        print(ordinal(args.date))
+
+
+if __name__ == "__main__":
+    _main()
