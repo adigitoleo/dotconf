@@ -26,8 +26,7 @@ def _get_args() -> argparse.Namespace:
         metavar="DOI|INPUT_FILE",
         help="single DOI link, or INPUT_FILE if -f was given",
     )
-    args = parser.parse_args()
-    return args
+    return parser.parse_args()
 
 
 def getbib(doi: str) -> str:
