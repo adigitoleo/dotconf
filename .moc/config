@@ -237,6 +237,7 @@ Shuffle = no
 #
 # https://github.com/wimstefan/mocp-themes
 # Theme = orange
+Theme = yellow_red_theme
 
 # The theme used when running on an xterm.
 #
