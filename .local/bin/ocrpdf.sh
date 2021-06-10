@@ -1,6 +1,6 @@
 #!/usr/bin/sh
 # ----------- MESSAGING FUNCTIONS ---------------------------------------------
-SCRIPTNAME="${0##*/}"
+readonly SCRIPTNAME="${0##*/}"
 usage() { # Print a short synopsis <https://pubs.opengroup.org/onlinepubs/9699919799/>
     printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
     printf '       %s ' "$SCRIPTNAME"
@@ -57,7 +57,7 @@ ocr() { # ocr [input] [output] Run OCR on input PDF and write to output PDF
     is_command tesseract || { warn 'command tesseract not found, aborting' && return 1 ; }
 
     echo 'scanning PDF document...'
-    TEMP_DIR=$(mktemp --tmpdir --directory ocrpdf-XXXXXX)
+    readonly TEMP_DIR=$(mktemp --tmpdir --directory ocrpdf-XXXXXX)
     if [ -n "$USR_PASS" ] ; then
         pdftoppm -upw "$USR_PASS" -tiff -r 300 "$1" "${TEMP_DIR}/pg" \
             || { warn 'command pdftoppm failed, aborting' \
@@ -68,7 +68,7 @@ ocr() { # ocr [input] [output] Run OCR on input PDF and write to output PDF
                 && rm -rf "$TEMP_DIR" ; return 1 ; }
     fi
 
-    TEMP_LIST=$(mktemp --tmpdir ocrpdf-XXXXXX.txt)
+    readonly TEMP_LIST=$(mktemp --tmpdir ocrpdf-XXXXXX.txt)
     count_files "$TEMP_DIR"/* && echo "found ${FUNCRETURN} pages" \
         || { warn 'no pages found, aborting' ; return 1 ; }
     # TODO: Ensure correct glob match sorting for the tiff pages.

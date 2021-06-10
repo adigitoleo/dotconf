@@ -5,7 +5,7 @@
 
 eval doc=\${$#}
 
-ps fh -ocmd -Cimv-wayland|grep "${doc##*/}" >/dev/null 2>&1 && exit
+ps fh -ocmd -Cimv-wayland|grep "${doc##*/}" >/dev/null 2>&1 && exit 1
 
 bwrap \
     --ro-bind /usr /usr \

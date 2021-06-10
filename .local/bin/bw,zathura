@@ -6,7 +6,7 @@
 
 eval doc=\${$#}
 
-ps fh -ocmd -Czathura|grep "${doc##*/}" >/dev/null 2>&1 && exit
+ps fh -ocmd -Czathura|grep "${doc##*/}" >/dev/null 2>&1 && exit 1
 
 bwrap \
     --ro-bind /usr /usr \

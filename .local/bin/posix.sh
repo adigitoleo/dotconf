@@ -1,6 +1,6 @@
 #!/usr/bin/sh
 # ----------- MESSAGING FUNCTIONS ---------------------------------------------
-SCRIPTNAME="${0##*/}"
+readonly SCRIPTNAME="${0##*/}"
 usage() { # Print a short synopsis <https://pubs.opengroup.org/onlinepubs/9699919799/>
     printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
     printf '       %s ' "$SCRIPTNAME"
