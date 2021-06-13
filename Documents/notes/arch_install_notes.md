@@ -106,6 +106,7 @@ Use `iwctl` to connect to networks.
 
 *TODO: Wireless certificates (?) , `crda` ...*
 
+
 ## Configure systemd-boot
 
 *TODO: Tips for EFISTUB as an alternative*
@@ -148,8 +149,7 @@ Now create `/boot/loader/entries/arch.conf` with:
 For HiDPI screens, add `fbcon=font:TER16x32` to the options.
 
 
-# Troubleshooting
-
+## Troubleshooting
 
 > No /sys/firmware/efi/ directory
 
@@ -173,7 +173,6 @@ Otherwise reinstall the packages (change the *-ucode* to match processor manufac
     pacman -S linux linux-firmware intel-ucode
 
 
-
 ## Minimal post-install setup
 
 Set zsh as default shell with `chsh -s /bin/zsh` and relog.
@@ -183,9 +182,7 @@ Set up reflector for automatic mirrorlist refreshing by editing
 `/etc/xdg/reflector/reflector.conf` and setting the desired countries.
 Then enable and start `reflector.service` as well as `reflector.timer` daemons.
 
-Probably worth grabbing `pulseaudio` for audio (?).
-
-For laptops, it's worth getting `tlp` and enabling `tlp.service`.
+For laptops, it's worth getting `tlp` and enabling `tlp.service` (power saving).
 
 To allow `sudo` for all users added to the `wheel` group, edit
 `/etc/sudoers` and uncomment `%wheel ALL=(ALL) ALL`.
@@ -225,6 +222,10 @@ Install `git` and set up a minimal, convenient `~/.gitconfig`, e.g.:
         unstage = reset HEAD --
         nuke = !sh -c 'git branch -d $1 && git push origin :$1' -
 
+Set a better login greeter, change `/etc/issue` to:
+
+    \d \t (\U) \n:\l
+
 
 ## Timers and backups
 
@@ -261,15 +262,10 @@ Also allow the Tor port if you want:
 
     ufw allow 9050
 
-Read the arch wiki page "Security". Quick hints to pick and choose:
+Edit `/etc/sysctl.d/51-kexec-restrict.conf` to contain
+`kernel.kexec_load_disabled = 1` to disable switching kernels at runtime.
 
-- Edit `/etc/sysctl.d/51-dmesg-restrict.conf` to contain
-  `kernel.dmesg_restrict = 1`, can read kernel logs using `sudo journalctl -k`.
-
-- Edit `/etc/sysctl.d/51-kexec-restrict.conf` to contain
-  `kernel.kexec_load_disabled = 1` to disable switching kernels at runtime.
-
-- Edit `/etc/sysctl.d/99-network.conf` to contain:
+Unless setting up a server, edit `/etc/sysctl.d/99-network.conf` to contain:
 
     net.ipv4.tcp_syncookies = 1
     net.ipv4.conf.default.rp_filter = 1
@@ -283,13 +279,7 @@ Read the arch wiki page "Security". Quick hints to pick and choose:
     net.ipv4.conf.all.send_redirects = 0
     net.ipv4.conf.default.send_redirects = 0
 
-  source: <https://wiki.archlinux.org/index.php/Sysctl#TCP/IP_stack_hardening>
-
-- For kernel versions > 5.4, verify that lockdown mode is supported by checking
-  the output of `cat /sys/kernel/security/lsm`, and enable by adding the
-  `lockdown=integrity` kernel parameter to e.g.
-  `/boot/loader/entries/arch.conf` in the `options`.
-  NOTE: this messes with ACPI stuff so hibernate/suspend might not work.
+source: <https://wiki.archlinux.org/index.php/Sysctl#TCP/IP_stack_hardening>
 
 
 ## Better font rendering (recommended)
