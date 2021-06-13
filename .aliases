@@ -79,6 +79,3 @@ alias m='mocp 2>/dev/null'
 # Mon écran!
 alias mon,left='wlr-randr --output HDMI-A-2 --preferred --pos 0,0 --output HDMI-A-1 --preferred --pos -1920,0'
 alias mon,right='wlr-randr --output HDMI-A-2 --preferred --pos 0,0 --output HDMI-A-1 --preferred --pos 1920,0'
-
-# Empty current path recursively including hidden files.
-alias empty='rm -rfI ./{*,.*} && echo "Emptied ${PWD}"'
