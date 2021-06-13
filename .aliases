@@ -54,7 +54,7 @@ alias v,lock='systemctl suspend && vlock --all'
 
 # (Un)mount drives, e.g. external usb devices (udisks2).
 # Because automounting is not smart enough and always breaks somehow.
-alias d,mount='udisksctl mount --options fmask=0133 dmask=0022 -b'
+alias d,mount='udisksctl mount --options fmask=0133 dmask=0022 noexec -b'
 alias d,unmount='udisksctl unmount -b'
 alias d,free='lsblk -o NAME,MOUNTPOINT,FSAVAIL'
 
