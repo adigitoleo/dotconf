@@ -17,18 +17,20 @@ static const float focuscolor[]     = {1.0, 0.0, 0.0, 1.0};
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
 static const Rule rules[] = {
-    /* app_id     title       tags mask     isfloating   monitor */
+    /* app_id     title       tags mask     isfloating   monitor   x    y   width   height */
+    /* x, y, width, height = 0 ->  use default */
     /* examples:
-    { "Gimp",     NULL,       0,            1,           -1 },
-    { "firefox",  NULL,       1 << 8,       0,           -1 },
+    { "Gimp",     NULL,       0,            1,           -1        0    0    500     400 },
+    { "firefox",  NULL,       1 << 8,       0,           -1       200  100    0       0 },
     */
     { "floating-terminal", NULL, 0, 1, -1 },
     { "zathura", NULL, 0, 1, -1 },
     { "imv", NULL, 0, 1, -1 },
+    { "drracket", NULL, 0, 1, -1, 360, 100, 1200, 880 },
     { "gimp", NULL, 0, 1, -1 },
     { "inkscape", NULL, 0, 1, -1 },
     { "mscore", NULL, 0, 1, -1 },
-    { "mypaint", NULL, 0, 1, -1 },
+    { "mypaint", NULL, 0, 1, -1, 360, 100, 1200, 880 },
     { "matplotlib", NULL, 0, 1, -1 },  /* FIXME: not working */
 };
 
