@@ -16,8 +16,6 @@ On Circulation #blog #ANU https://oncirculation.wordpress.com/
 python 4 features #satire https://charlesleifer.com/blog/new-features-planned-for-python-4-0/
 attrs - The One Python Library Everyone Needs #guide #python https://glyph.twistedmatrix.com/2016/08/attrs.html
 SourceHut #git https://sr.ht/~adigitoleo/
-Mini File Browser http://localhost:8080/
-Zuerich PhD (wave propagation) 15/01/2021 https://emea2.softfactors.com/job-opening/rgum-QnTOmaY9abCKjXkoMu#/rgum-HUqnDE1U4SUlIJzEbz6VwikP/summary
 Bash #shell cheatsheet https://devhints.io/bash
 Fully automatic, dynamic python C++ bindings https://bitbucket.org/wlav/cppyy/src/master/
 NearlyFreeSpeech - simple pre-paid shared web hosting https://www.nearlyfreespeech.net/
@@ -26,12 +24,15 @@ Our software dependency problem (Russ Cox) https://research.swtch.com/deps#note1
 arch linux requirements for git send-email https://wiki.archlinux.org/index.php/Git#Directly_sending_patches_to_a_mailing_list
 Cotse Webmail https://www.cotse.net/mail/src/login.php
 Geodynamics Slack https://teamgeodynamics.slack.com/
-RSES Slack https://rseshdrstudents.slack.com/
 LaTeX documentation https://texdoc.org/index.html
 python abstract containers typing https://docs.python.org/3/library/collections.abc.html#module-collections.abc
 numpy docstring guide python https://numpydoc.readthedocs.io/en/latest/format.html#class-docstring
-ANU email https://outlook.office365.com/mail/inbox
 ANU printing https://wirelessprinting.anu.edu.au/Account/SelectAuth
 POSIX Issue 7 2018 https://pubs.opengroup.org/onlinepubs/9699919799/
 Portable Shell Programming https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.70/autoconf.html#Portable-Shell
 SoloKey 2FA USB Keys https://solokeys.com/
+SICP Abelson & Sussman [online] http://sarabander.github.io/sicp/
+Bogdan Popa [racketeer] blog https://defn.io/
+ANU email http://outlook.com/owa/anu.edu.au
+C tutorial | build text editor in 1k loc https://viewsourcecode.org/snaptoken/kilo/index.html
+Look for broken links in markdown files http://howto.philippkeller.com/files/link_checker.py

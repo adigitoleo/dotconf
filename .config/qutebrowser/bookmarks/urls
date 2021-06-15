@@ -4,7 +4,6 @@ https://stackoverflow.com/questions/7576525/optional-stdin-in-python-with-argpar
 https://dev.to/codemouse92/dead-simple-python-working-with-files-lmg Dead Simple Python: Working with Files - DEV
 https://sourcehut.org/ sourcehut - the hacker's forge
 https://github.com/jamessan/vim-gnupg jamessan/vim-gnupg: This script implements transparent editing of gpg encrypted files. The filename must have a ".gpg", ".pgp" or ".asc" suffix. When opening such a file the content is decrypted, when opening a new file the script will ask for the recipients of the encrypted file. The file content will be encrypted to all recipients before it is written. The script turns off viminfo, swapfile, and undofile to increase security.
-https://www.reddit.com/ reddit: the front page of the internet
 https://system76.com/desktops Thelio - System76
 https://system76.com/laptops/lemur Lemur Pro - System76
 https://www.tuxedocomputers.com/en/Linux-Hardware/Linux-Notebooks/10-14-inch/Manjaro-InfinityBook-S-14-v5_1.tuxedo TUXEDO InfinityBook S 14 v5 - 14 inch non-glare Full-HD IPS + magnesium chassis + max. Intel Core i7-Quad-Core + max. 40GB RAM + max. two SSD + max. 24h battery + USB-C - Manjaro InfinityBook S 14 v5 - TUXEDO Computers
@@ -13,13 +12,8 @@ https://komascript.de/ KOMA-Script Documentation Project | Aktive Anwender verbe
 https://aur.archlinux.org/ AUR (en) - Home
 https://dynamicinstaller.intel.com/oneapi/toolkits/base-kit/linux/ Intel® oneAPI Base Toolkit for Linux*
 https://wiki.archlinux.org/index.php/Intel_C%2B%2B Intel C++ - ArchWiki
-https://www.archlinux.org/packages/community/x86_64/python-scipy/ Arch Linux - python-scipy 1.5.2-1 (x86_64)
-https://www.archlinux.org/packages/extra/x86_64/python-numpy/ Arch Linux - python-numpy 1.19.1-1 (x86_64)
-https://aur.archlinux.org/packages/python-ray/ AUR (en) - python-ray
 https://fedoraproject.org/wiki/Bundled_Libraries Bundled Libraries - Fedora Project Wiki
-https://www.debian.org/doc/debian-policy/ch-source.html#s-embeddedfiles 4. Source packages — Debian Policy Manual v4.5.0.3
 https://wiki.gentoo.org/wiki/Why_not_bundle_dependencies Why not bundle dependencies - Gentoo Wiki
-https://gordma.wordpress.com/2014/03/26/we-know-the-lion-by-his-claw/ We know the lion by his claw | Gord Ma
 http://vimcolors.com/ Newest - Vim Colors
 https://blog.developer.atlassian.com/stop-foxtrots-now/ Protect our Git Repos, Stop Foxtrots Now! - Atlassian Developer Blog
 https://developercertificate.org/ Developer Certificate of Origin
@@ -33,24 +27,18 @@ https://www.particleincell.com/ Particle In Cell Consulting, LLC
 https://www.salome-platform.org/ Welcome to the www.salome-platform.org — SALOME Platform
 https://www.fileformat.info/index.htm FileFormat.Info · The Digital Rosetta Stone
 https://wiki.archlinux.org/index.php/System_maintenance System maintenance - ArchWiki
-https://protesilaos.com/codelog/2019-09-22-bspwm-resize-sample/ Sample of a BSPWM resize method | Protesilaos Stavrou
 https://vimcolorschemes.com/ Trending vim color schemes | vimcolorschemes
-https://rem.co/blog/2015/02/12/git-the-difference-between-lightweight-and-annotated-tags/ Git: The Difference Between Lightweight and Annotated Tags - Rem.co: Remco Overdijk
 https://discourse.obspy.org/ ObsPy Forum
 https://docs.racket-lang.org/quad/ Quad: document processor
 https://florimond.dev/blog/articles/2018/10/reconciling-dataclasses-and-properties-in-python/ Reconciling Dataclasses And Properties In Python
 https://stackoverflow.com/questions/50563546/validating-detailed-types-in-python-dataclasses typing - Validating detailed types in python dataclasses - Stack Overflow
 https://stackoverflow.com/questions/7423744/how-should-i-perform-imports-in-a-python-module-without-polluting-its-namespace How should I perform imports in a python module without polluting its namespace? - Stack Overflow
-https://bananamafia.dev/post/dotfiles/ How I Over-Engineered My Dotfiles
 https://www.python-academy.com/courses/specialtopics/python_course_testing.html Professional Testing with pytest and tox
 http://www.stochasticlifestyle.com/modular-algorithms-scientific-computing-julia/ Modular Algorithms for Scientific Computing in Julia - Stochastic Lifestyle
-https://github.com/junegunn/dotfiles/blob/5a152686a9456e3713c5b0d4abc7798607db1979/vimrc#L673-728 dotfiles/vimrc at 5a152686a9456e3713c5b0d4abc7798607db1979 · junegunn/dotfiles
 https://www.reddit.com/r/i3wm/comments/c17m5e/launcher_to_open_files_with_xdgopen_using_fzf/ Launcher to open files with xdg-open using fzf : i3wm
-https://blog.sarine.nl/2014/08/03/rofi-updates.html Rofi updates - Qball's Weblog
 https://www.vidarholen.net/contents/blog/?p=479 Useless Use Of dd – Vidar's Blog
 https://choosealicense.com/ Choose an open source license | Choose a License
 https://www.kernel.org/doc/Documentation/Intel-IOMMU.txt https://www.kernel.org/doc/Documentation/Intel-IOMMU.txt
-https://www.reddit.com/r/ProgrammerHumor/comments/6gsoto/archlinux_fuckup_assessment_form/ Archlinux fuck-up assessment form : ProgrammerHumor
 https://www.theregister.com/ The Register: Enterprise Technology News and Analysis
 https://www.svgator.com/ Online SVG Animation Creator - No Coding | SVGator
 https://ruffle.rs/ Ruffle | Flash Player emulator written in the Rust programming language
@@ -62,10 +50,8 @@ https://scilua.org/ SciLua
 https://luarocks.org/ LuaRocks - The Lua package manager
 https://nim-lang.org/learn.html Learn - Nim Programming Language
 https://nim-by-example.github.io/hello_world/ Nim by Example - Hello World
-https://blog.johnnovak.net/2020/12/21/nim-apocrypha-vol1/ Nim Apocrypha, Vol. I
 http://elinks.or.cz/documentation/manual.html The ELinks Manual
 https://github.com/Patol75/PyDRex Patol75/PyDRex: Python 3 Implementation of the FORTRAN program D-Rex
-http://www.lua.org/pil/contents.html Programming in Lua (first edition)
 http://andrewsforge.com/article/python-new-package-landscape/ Python's New Package Landscape
 https://realpython.com/pipenv-guide/?utm_source=mybridge&utm_medium=blog&utm_campaign=read_more#reader-comments Pipenv: A Guide to the New Python Packaging Tool – Real Python
 https://git-rebase.io/ Learn to change history with git rebase!
@@ -85,7 +71,6 @@ https://theconversation.com/the-only-safe-email-is-text-only-email-81434 The onl
 https://tonisagrista.com/blog/2020/tor-qutebrowser/ Tor with qutebrowser
 https://anonaddy.com/ Free, Open-source Anonymous Email Forwarding - AnonAddy
 https://www.billdietrich.me/SecureCommunication.html#Migadu Secure Communication
-https://posteo.de/en/site/features#featurespayment Email green, secure, simple and ad-free - posteo.de - Features
 https://tools.ietf.org/html/rfc1178 RFC 1178 - Choosing a name for your computer
 https://archive.org/details/OpenGenera Symbolics Open Genera 2.0 (with patch) : Free Download, Borrow, and Streaming : Internet Archive
 https://github.com/froggey/Mezzano froggey/Mezzano: An operating system written in Common Lisp
@@ -96,12 +81,10 @@ https://tldr.ostera.io/ tldr | simplified, community driven man pages
 https://iep.utm.edu/simplici/ Simplicity in the Philosophy of Science | Internet Encyclopedia of Philosophy
 https://digdeeper.neocities.org/ghost/ninja.html Ninja's guide to the Internet
 https://wiki.archlinux.org/index.php/Installation_guide Installation guide - ArchWiki
-https://www.guerrillamail.com/inbox ✉ Guerrilla Mail - Disposable Temporary E-Mail Address
 https://shattered.io/ SHAttered
 https://josefsson.org/inline-openpgp-considered-harmful.html Inline PGP in E-mail is bad, Mm'kay?
 https://github.com/jedisct1/minisign jedisct1/minisign: A dead simple tool to sign files and verify digital signatures.
 https://github.com/FiloSottile/age FiloSottile/age: A simple, modern and secure encryption tool (and Go library) with small explicit keys, no config options, and UNIX-style composability.
-https://neocities.org/ Neocities: Create your own free website!
 https://wiki.archlinux.org/index.php/Intel_NUC#Hades_Canyon_NUC_-_No_External_Microphones Intel NUC - ArchWiki
 https://www.cvedetails.com/ CVE security vulnerability database. Security vulnerabilities, exploits, references and more
 https://github.com/rocketraman/gitworkflow/blob/master/docs/concepts-summary.adoc gitworkflow/concepts-summary.adoc at master · rocketraman/gitworkflow · GitHub
@@ -110,13 +93,10 @@ https://github.com/containers/bubblewrap GitHub - containers/bubblewrap: Unprivi
 https://github.com/natpen/awesome-wayland GitHub - natpen/awesome-wayland: A curated list of Wayland code and resources.
 https://arewewaylandyet.com/ Are we Wayland yet?
 https://lwn.net/ Welcome to LWN.net [LWN.net]
-https://luxagraf.net/src/guide-to-switching-i3-to-sway A Guide to Switching From i3 to Sway - by Scott Gilbertson
-https://github.com/pystardust/ytfzf GitHub - pystardust/ytfzf: A posix script to find and watch youtube videos from the terminal. (With out API)
 https://regginator729.wordpress.com/2017/12/12/using-bubblewrap-as-sandbox/ Using bubblewrap to sandbox applications in Linux – Excerpts of the Regginator
 https://github.com/valoq/bwscripts valoq/bwscripts: Bubblewrap example scripts
 https://www.etalabs.net/sh_tricks.html Rich’s sh (POSIX shell) tricks
 http://longwei.github.io/Linux-Graphic-And-Wayland/ Linux Graphic Stack and Wayland – Longwei Su – Software Engineer
-https://viewsourcecode.org/snaptoken/kilo/index.html Build Your Own Text Editor
 https://github.com/bpython/curtsies GitHub - bpython/curtsies: Curses-like terminal wrapper with a display based on compositing 2d arrays of text.
 https://www.iue.tuwien.ac.at/phd/orio/node48.html#subfig4:tetrahedron_xyz 4.1.3 Shape Function
 https://github.com/swaywm/sway/blob/master/contrib/grimshot sway/grimshot at master · swaywm/sway · GitHub
@@ -125,7 +105,6 @@ https://github.com/novoid/LaTeX-KOMA-template novoid/LaTeX-KOMA-template: Generi
 https://gist.github.com/glats/ca71bbddc85f6a756e1e Improve fonts archlinux
 https://castel.dev/post/lecture-notes-1/ How I'm able to take notes in mathematics lectures using LaTeX and Vim | Gilles Castel
 https://vonheikemen.github.io/devlog/tools/using-vim-abbreviations/ Devlog | Using Vim's abbreviations
-https://github.com/junegunn/fzf/issues/2406 vim matchparen highlight is drawn over fzf popup · Issue #2406 · junegunn/fzf
 https://tex.stackexchange.com/questions/7542/for-formal-articles-should-a-displayed-equation-be-followed-by-a-punctuation-to For formal articles, should a displayed equation be followed by a punctuation to conform to the language grammar ? - TeX - LaTeX Stack Exchange
 https://stackoverflow.com/questions/2235497/punctuation-in-latex-formulas/2235734#2235734 Punctuation in LaTeX formulas - Stack Overflow
 https://texample.net/ TeXample.net
@@ -134,8 +113,6 @@ https://najeebkhan.github.io/blog/VecCal.html Gradient, Jacobian, Hessian, Lapla
 https://en.wikipedia.org/wiki/Fick%27s_laws_of_diffusion Fick's laws of diffusion - Wikipedia
 https://docs.python.org/3/howto/functional.html Functional Programming HOWTO — Python 3.9.4 documentation
 https://cs.sandia.gov/Zoltan/ug_html/ug_usage.html Zoltan User's Guide: Library Usage
-http://howto.philippkeller.com/files/link_checker.py howto.philippkeller.com/files/link_checker.py
-https://mail.protonmail.com/login Login | ProtonMail
 https://packaging.python.org/overview/ An Overview of Packaging for Python — Python Packaging User Guide
 http://www.liedersoundarchive.org/ The Lieder Sound Archive - The Lieder Sound Archive | Home
 https://www.classiccat.net/index.php Classic Cat - the free classical music directory
@@ -145,7 +122,6 @@ https://www.musoscorner.com.au/steinberg-ur22c-usb-c-2-channel-audio-interface-2
 https://djcity.com.au/product/behringer-u-phoria-umc202hd-audio-interface/ Behringer UMC202HD U-Phoria 2x2 Audio Interface - DJ City
 https://djcity.com.au/product/steinberg-ur22c-recording-pack-audio-interface/ Steinberg UR22C Recording Pack - Audio Interface - DJ City
 https://www.swamp.net.au/articles/laptop-or-ipod-into-balanced-xlr-microphone-input.html Laptop or Ipod into Balanced XLR Input...? | SWAMP
-https://docs.github.com/en/github/setting-up-and-managing-your-github-profile/personalizing-your-profile#list-of-qualifying-repositories-for-mars-2020-helicopter-contributor-badge Personalizing your profile - GitHub Docs
 http://thepythoncorner.com/dev/how-to-create-a-watchdog-in-python-to-look-for-filesystem-changes/ How to create a watchdog in Python to look for filesystem changes - The Python Corner
 https://wiki.archlinux.org/index.php/TOMOYO_Linux#TOMOYO_Linux_2.x TOMOYO Linux - ArchWiki
 https://towardsdatascience.com/where-you-should-drop-deep-learning-in-favor-of-constraint-solvers-eaab9f11ef45 When you should use Constraint Solvers instead of Machine Learning | by Antoine Champion | Towards Data Science
@@ -158,7 +134,6 @@ https://github.com/erroneousboat/slack-term/wiki#running-slack-term-without-lega
 https://developers.google.com/optimization/cp Constraint Optimization  |  OR-Tools  |  Google Developers
 https://en.wikipedia.org/wiki/Boolean_satisfiability_problem Boolean satisfiability problem - Wikipedia
 https://gist.github.com/endolith/c5b39ab78f1910e99cadaced9b839fc1 Window function constant overlap-add conditions (COLA) · GitHub
-https://ccrma.stanford.edu/~jos/ JOS Home Page
 https://github.com/michaelgrund/stacksplit GitHub - michaelgrund/stacksplit: Multi-event processing plugin for the MATLAB shear wave splitting toolbox SplitLab
 https://waitbutwhy.com/2017/04/neuralink.html#part1 Neuralink and the Brain's Magical Future — Wait But Why
 https://www.multivax.com/last_question.html The Last Question -- Isaac Asimov
@@ -200,5 +175,19 @@ https://medium.com/@skikirkwood/truth-lies-and-fraud-in-the-audiophile-world-a36
 https://fs.blog/2021/02/feynman-learning-technique/ The Feynman Learning Technique
 https://forum.audacityteam.org/viewtopic.php?t=13654 Removing clapping from an audio recording - Audacity Forum
 https://lopes.id/hardening-arch-linux/ lopes - Hardening Arch Linux
-https://www.privacytools.io/operating-systems/ Operating Systems | PrivacyTools
 https://medium.com/technicity/moving-to-an-era-of-decentralized-dns-registry-725ac716512c Moving to an era of Decentralized DNS registry | by Faisal Khan | Technicity | Medium
+https://netflixtechblog.com/avif-for-next-generation-image-coding-b1d75675fe4 AVIF for Next-Generation Image Coding | by Netflix Technology Blog | Netflix TechBlog
+https://squoosh.app/ Squoosh
+https://www.gerritcodereview.com/ Gerrit Code Review | Gerrit Code Review
+https://vitalik.ca/general/2019/12/07/quadratic.html Quadratic Payments: A Primer
+https://liberapay.com/ Liberapay
+https://www.ato.gov.au/Business/Income-and-deductions-for-business/In-detail/Crowdfunding/ Crowdfunding | Australian Taxation Office
+https://stackoverflow.com/questions/8182801/using-imagemagick-to-repeat-or-tile-an-image Using ImageMagick to repeat or "tile" an image - Stack Overflow
+https://legacy.imagemagick.org/Usage/layers/ Layering -- IM v6 Examples
+https://www.finl.xyz/2021/05/27/a-current-status-on-finl/ A current status on finl – finl is not LaTeX
+https://www.linuxlinks.com/excellent-free-tutorials-learn-racket/ Excellent Free Tutorials to Learn Racket - LinuxLinks
+https://srht.site/ sourcehut pages
+https://www.greghendershott.com/2013/04/parameters-in-racket.html Parameters in Racket
+http://slurp.doc.ic.ac.uk/ SLURP Home Page
+https://www.ponylang.io/ Pony - Pony
+https://privacytools.io/ PrivacyTools - Encryption Against Global Mass Surveillance
