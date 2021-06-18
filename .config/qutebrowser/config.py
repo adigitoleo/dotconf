@@ -104,13 +104,6 @@ else:
 # Per-domain settings.
 ########################################################################################
 
-PROTOCOL_HANDLERS = {
-    "https://mail.google.com?extsrc=mailto&url=%25s": True,
-}
-
-for handler in PROTOCOL_HANDLERS:
-    config.set("content.register_protocol_handler", PROTOCOL_HANDLERS[handler], handler)
-
 # Youtube adblock.
 def filter_yt(info: interceptor.Request):
     """Block the given request if necessary."""
