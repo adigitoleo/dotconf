@@ -6,6 +6,7 @@ everything from `base-devel` is assumed.
 
 ## In main Arch repos
 
+*   **aerc**: TUI email client, with IMAP/SMTP support <https://git.sr.ht/~sircmpwn/aerc>
 *   **biber**: BibTeX with üńïćöðę (and other improvements) <https://github.com/plk/biber>
 *   **bpython**: a better python REPL <https://bpython-interpreter.org/>
 *   **cloc**: count lines of code in a source tree <https://github.com/AlDanial/cloc>
@@ -25,6 +26,7 @@ everything from `base-devel` is assumed.
 *   **namcap**: a static analyzer for PKGBUILDS <https://projects.archlinux.org/namcap.git/>
 *   **noto-fonts**: google open source fonts, wide unicode coverage <https://www.google.com/get/noto/>
 *   **noto-fonts-cjk**: google open source fonts for Chinese, Japanese and Korean <https://www.google.com/get/noto/>
+*   **pass**: password manager that uses gnupg <https://www.passwordstore.org/>
 *   **patch**: apply patch files to sources <https://www.gnu.org/software/patch/>
 *   **perl-authen-sasl**: required for `git send-email` workflow <https://search.cpan.org/dist/Authen-SASL>
 *   **perl-mime-tools**: required for `git send-email` workflow <https://metacpan.org/pod/MIME::Tools>
@@ -40,12 +42,12 @@ everything from `base-devel` is assumed.
 *   **texlive-latexextra**: ??? LaTeX <http://tug.org/texlive/>
 *   **texlive-pictures**: Image manipulation in LaTeX documents <http://tug.org/texlive/>
 *   **texlive-science**: Science packages for LaTeX <http://tug.org/texlive/>
+*   **tldr**: examples of common Linux commands (requires network) <https://github.com/tldr-pages/tldr-python-client>
 *   **tree**: it shows directory structure as... uhm... a tree <http://mama.indstate.edu/users/ice/tree/>
 *   **ttf-liberation**: a good font family <https://github.com/liberationfonts/liberation-fonts>
 *   **udisks2**: manage (removable) disks without superuser <https://www.freedesktop.org/wiki/Software/udisks>
 *   **unzip**: GNU's Not User-friendly (a .zip extractor is bloat?) <https://www.info-zip.org/UnZip.html>
 *   **zip**: *sigh*, UnIx PhIlOsOpHy (creates .zip archives, cf: `unzip`) <http://www.info-zip.org/Zip.html>
-
 
 ## AUR
 
