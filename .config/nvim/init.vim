@@ -366,7 +366,8 @@ if type(function('fzf#run'))
         \ 'dir': l:dir,
         \ 'options': [
         \   '--multi',
-        \   '--preview', 'case $(file {}) in *"text"*) head -200 {} ;; *) echo "Preview unavailable" ;; esac',
+        \   '--preview', 'case $(file {}) in *"text"*) head -200 {} ;;'
+        \       .. '*) echo "Preview unavailable" ;; esac',
         \   '--preview-window', &columns > 120 ? 'right:60%:sharp' : 'down:60%:sharp',
         \   '--prompt', get(a:, 1, l:dir .. ' '),
         \ ]
@@ -544,21 +545,11 @@ nnoremap <silent> zL :call <SID>HorizontalScrollMode('L')<CR>
 nnoremap <silent> <Space> <Cmd>mode<Cr>
 
 " Meta mappings: buffer navigation and control. {{{2
-" Unload focused buffer while preserving window layout.
-nnoremap <expr> <M-d> winnr('$') == 1 && tabpagenr('$') == 1 ?
-            \ '<Cmd>bd<Cr>' :
-            \ '<Cmd>' .. (bufloaded(0) ? 'b#' : 'enew') .. '<Bar>bd#<Cr>'
-tnoremap <expr> <M-d> &filetype == "fzf" ? "" : (
-            \ winnr('$') == 1 && tabpagenr('$') == 1 ?
-            \ '<Cmd>bd<Cr>' :
-            \ '<Cmd>' .. (bufloaded(0) ? 'b#' : 'enew') .. '<Bar>bd#<Cr>'
-            \)
 " Write focused buffer if modified.
 nnoremap <M-s> <Cmd>up<Cr>
 inoremap <M-s> <Cmd>up<Cr>
-" Close window (i.e. the view on the focused buffer).
-nnoremap <expr> <M-q> winnr('$') == 1 && tabpagenr('$') == 1 ?
-            \  '<Cmd>confirm qa<Cr>': '<Cmd>close<Cr>'
+" Close window (i.e. the view on the focused buffer), don't special-case last window.
+nnoremap <expr> <M-q> '<Cmd>try<Bar>close<Bar>catch /^Vim\%((\a\+)\)\=:E444/<Bar>confirm qa<Cr>'
 " Add/remove indentation in insert mode.
 inoremap <M-,> <C-d>
 inoremap <M-.> <C-t>

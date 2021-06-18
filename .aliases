@@ -32,6 +32,7 @@ alias rg,tree='rg --files | tree --fromfile'
 # VERSION CONTROL AND SYSTEM ADMIN {{{1
 
 alias p='pacman --color=auto'
+alias y=yadm
 alias p,get='sudo pacman -Syu --color=auto'
 alias p,rmsafe='sudo pacman -Rn --color=auto'
 alias p,rm='sudo pacman -Rns --color=auto'
