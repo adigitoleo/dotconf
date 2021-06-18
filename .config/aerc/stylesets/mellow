@@ -1,0 +1,37 @@
+# 
+# aerc mellow styleset
+# 
+# This styleset uses the terminal defaults as its base.
+# More information on how to configure the styleset can be found in
+# the aerc-styleset(7) manpage. Please read the manual before
+# modifying or creating a styleset.
+
+*.default=true
+*.selected.bg = fuchsia
+*.selected.fg = yellow
+
+title.reverse=true
+header.bold=true
+
+*error.bold=true
+error.fg=red
+warning.fg=yellow
+success.fg=green
+
+statusline*.default=true
+statusline_default.bg = gray
+statusline_default.fg = yellow
+statusline_error.fg=red
+statusline_error.reverse=true
+
+msglist_unread.bold=true
+msglist_deleted.fg=gray
+
+completion_pill.bg = gray
+
+tab.bg = gray
+tab.fg = yellow
+border.bg = gray
+
+selector_focused.reverse=true
+selector_chooser.bold=true
