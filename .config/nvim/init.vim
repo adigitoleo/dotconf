@@ -586,8 +586,6 @@ nnoremap            <Leader>c <Cmd>set cursorcolumn!<Cr>
 nnoremap <expr>     <Leader>d '<Cmd>lcd ' .. (empty(&buftype) && !empty(bufname()) ? '%:p:h' : '') .. '<Bar>pwd<Cr>'
 " Toggle folding in focused buffer.
 nnoremap            <Leader>f <Cmd>setlocal foldenable!<Cr>
-" Enter prose mode (quit with :close/:quit).
-nnoremap <expr>     <Leader>g '<Cmd>Goyo ' .. (&textwidth ? &textwidth + 2 : 82) .. '<Cr>'
 " Insert char before cursor [count] times.
 nnoremap <expr>     <Leader>i 'i' .. nr2char(getchar()) .. '<Esc>'
 " Toggle cursor line indicator.
@@ -678,7 +676,6 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'AndrewRadev/inline_edit.vim'  " For polyglot code and heredocs.
     Plug 'aymericbeaumet/vim-symlink'  " Follow symlinks (linux).
     Plug 'chrisbra/unicode.vim'  " Easy unicode and digraph handling.
-    Plug 'junegunn/goyo.vim'  " Centered/focused mode for writing prose.
     Plug 'arp242/jumpy.vim'  " Better and extended mappings for ]], g], etc.
     " Dev tooling and filetype plugins. {{{3
     Plug 'dense-analysis/ale'  " Linting and LSP server.
@@ -722,6 +719,9 @@ if empty(glob(g:PLUGIN_HOME.'/*'))
     finish
 endif
 
+" Make VimCompletesMe do <C-p> completion on <Tab>.
+let g:vcm_direction = 'p'
+
 " Linting/LSP settings. {{{2
 " Don't highlight todo comments, that's already handled by the colorscheme.
 let g:ale_exclude_highlights = ['TODO']
@@ -731,8 +731,6 @@ let g:ale_fix_on_save = 1
 let g:ale_completion_enabled = 1
 " Allow ALE to run imports for more completion suggestions.
 let g:ale_completion_autoimport = 1
-" Make VimCompletesMe do <C-p> completion on <Tab>.
-let g:vcm_direction = 'p'
 
 " Workaround for #2260 because ALEDisable doesn't... uhm... disable ALE.
 function! s:ALEFixOnSaveToggle(vartype, value)
@@ -824,12 +822,6 @@ augroup END
 " Miscellaneous {{{2
 " Don't open folds when restoring cursor position.
 let g:lastplace_open_folds = 0
-" Settings for prose/notes writing.
-augroup goyo_tweaks
-    autocmd!
-    autocmd User GoyoEnter mode | set spell sidescrolloff=15 wrap
-    autocmd User GoyoLeave set nospell
-augroup END
 " Use the latex to unicode converter provided by julia.vim for other filetypes.
 let g:latex_to_unicode_file_types = ["julia", "markdown"]
 
