@@ -57,7 +57,7 @@ function! InitPlug() abort "{{{2
     echom 'Restart neovim and run :PlugInstall to install plugins.'
 endfunction
 
-function! s:BufList() " {{{2
+function! s:BufList() abort " {{{2
     " Get a list of open ('listed') buffer names.
     let l:bufnames = []
     for l:buf in getbufinfo({'buflisted': 1})
@@ -157,10 +157,8 @@ function! s:CmdFeed() abort "{{{2
 endfunction
 
 function! s:TermQuit(job_id, code, event) dict "{{{2
-    " Automatically delete terminal buffers on exit code 0.
-    " Use with termopen(<command>, {'on_exit': '<SID>TermQuit'}) to get a
-    " terminal that closes without waiting for confirmation.
-    if a:code == 0
+    " Callback to automatically delete terminal buffers on exit code 0.
+    if a:code == 0 && &buftype == 'terminal'
         bdelete!
     endif
 endfunction
@@ -269,6 +267,15 @@ function! SmartSplit(...) abort "{{{2
         exec (winwidth(0) > 120 ? 'vert ' : '') .. 'sbuffer ' .. a:1
     else
         exec (winwidth(0) > 120 ? 'vert ' : '') .. 'split|enew'
+    endif
+endfunction
+
+function! StartTUI(prog, ...) abort "{{{2
+    " Execute a TUI program a:prog with optional arguments using termopen().
+    if executable(a:prog)
+        let l:cmdstr = a:0 ? join(extend([a:prog], a:000)) : a:prog
+        exec 'enew'
+        call termopen('export TERM=' .. $TERM .. '&& ' .. l:cmdstr, {"on_exit": function("<SID>TermQuit")})
     endif
 endfunction
 
@@ -382,6 +389,10 @@ if type(function('fzf#run'))
     command! -complete=dir -nargs=? -bang FuzzyEdit call fzf#run(fzf#wrap(
         \ s:FZFspecgen($FZF_DEFAULT_COMMAND .. ' ;' .. s:TermFeed(), <q-args>),
         \ <bang>0))
+    " Open listed buffers (including `:terminal` buffers).
+    command! -bang FuzzyBuffers call fzf#run(fzf#wrap(
+        \ s:FZFspecgen(s:FileFeed([s:BufList()], ':~:.', '\n') .. ' ;' .. s:TermFeed(),
+        \ '', "Listed buffers: "), <bang>0))
 
     " Search for (most) cmdline mode commands. See s:CmdFeed() for details.
     " Semicolon <;> drops back to normal command line, <space>, ! or | are
@@ -423,27 +434,18 @@ if type(function('fzf#run'))
 endif
 
 " Executable shortcuts. {{{2
-command! Term enew | call termopen("$SHELL", {"on_exit": "<SID>TermQuit"})
 if executable('theme')  " Toggle global TUI theme using external script.
     command! ToggleTheme silent! exec '!theme toggle'
                 \| let &background = get(systemlist('theme query'), 0, 'light')
     command! SyncTheme silent! let &background = get(systemlist('theme query'), 0, 'light')
 endif
-if executable('elinks')
-    command! Elinks enew | call termopen("elinks", {"on_exit": "<SID>TermQuit"})
-endif
-if executable('aerc')
-    command! Aerc enew | call termopen("aerc", {"on_exit": "<SID>TermQuit"})
-endif
-if executable("ipython")
-    command! IPython enew | call termopen("ipython --no-autoindent", {"on_exit": "<SID>TermQuit"})
-endif
-if executable("bpython")
-    command! BPython enew | call termopen("bpython", {"on_exit": "<SID>TermQuit"})
-endif
-if executable("julia")
-    command! Julia enew | call termopen("julia --color=no", {"on_exit": "<SID>TermQuit"})
-endif
+command! -nargs=* Terminal if strlen(<q-args>) > 0 | call StartTUI($SHELL, <f-args>)
+            \ | else | call StartTUI($SHELL) | endif
+command! -nargs=* Elinks call StartTUI("elinks", <f-args>)
+command! -nargs=* Aerc call StartTUI("aerc", <f-args>)
+command! -nargs=* IPython call StartTUI("ipython", "--no-autoindent", <f-args>)
+command! -nargs=* BPython call StartTUI("bpython", <f-args>)
+command! -nargs=* Julia call StartTUI("julia", "--color=no", <f-args>)
 
 " Misc. {{{2
 " Insert current date in ISO (YYYY-MM-DD) format.
