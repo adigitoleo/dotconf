@@ -549,7 +549,7 @@ nnoremap <silent> <Space> <Cmd>mode<Cr>
 nnoremap <M-s> <Cmd>up<Cr>
 inoremap <M-s> <Cmd>up<Cr>
 " Close window (i.e. the view on the focused buffer), don't special-case last window.
-nnoremap <expr> <M-q> '<Cmd>try<Bar>close<Bar>catch /^Vim\%((\a\+)\)\=:E444/<Bar>confirm qa<Cr>'
+nnoremap <M-q> <Cmd>try<Bar>close<Bar>catch /^Vim\%((\a\+)\)\=:E444/<Bar>confirm qa<Bar>endtry<Cr>
 " Add/remove indentation in insert mode.
 inoremap <M-,> <C-d>
 inoremap <M-.> <C-t>
