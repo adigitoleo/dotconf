@@ -435,9 +435,9 @@ endif
 
 " Executable shortcuts. {{{2
 if executable('theme')  " Toggle global TUI theme using external script.
-    command! ToggleTheme silent! exec '!theme toggle'
-                \| let &background = get(systemlist('theme query'), 0, 'light')
-    command! SyncTheme silent! let &background = get(systemlist('theme query'), 0, 'light')
+    command! ToggleTheme silent! exec '!theme -t'
+                \| let &background = get(systemlist('theme -q'), 0, 'light')
+    command! SyncTheme silent! let &background = get(systemlist('theme -q'), 0, 'light')
 endif
 command! -nargs=* Terminal if strlen(<q-args>) > 0 | call StartTUI($SHELL, <f-args>)
             \ | else | call StartTUI($SHELL) | endif
@@ -500,6 +500,8 @@ augroup filetype_rules
     autocmd FileType tex setlocal textwidth=0 wrap
     autocmd FileType enaml setlocal textwidth=88 filetype=python.enaml formatoptions-=t
     autocmd FileType yaml setlocal tabstop=2
+    autocmd FileType css setlocal tabstop=2
+    autocmd FileType html setlocal tabstop=2
     autocmd FileType desktop set commentstring=#\ %s
 augroup END
 
@@ -838,7 +840,7 @@ let g:mellow_show_bufnr = 0
 if $TERM == "alacritty"
     set termguicolors  " <https://gist.github.com/XVilka/8346728>
     " Inherit 'background' (dark/light mode) from terminal emulator.
-    let &background = get(systemlist('theme query'), 0, 'light')
+    let &background = get(systemlist('theme -q'), 0, 'light')
     let g:mellow_user_colors = 1
     colorscheme mellow
     " let g:lightline = {'colorscheme': 'mellow'}
