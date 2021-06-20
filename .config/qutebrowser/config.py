@@ -76,7 +76,7 @@ c.colors.webpage.darkmode.policy.images = "smart"
 c.colors.webpage.darkmode.threshold.background = 100
 c.colors.webpage.darkmode.threshold.text = 200
 
-THEME = subprocess.run(["theme", "query"], capture_output=True, check=True).stdout
+THEME = subprocess.run(["theme", "-q"], capture_output=True, check=True).stdout
 if "dark" in str(THEME):
     c.colors.webpage.darkmode.enabled = True
     c.colors.webpage.preferred_color_scheme = "dark"
