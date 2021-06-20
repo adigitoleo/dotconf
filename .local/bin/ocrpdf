@@ -89,23 +89,18 @@ ocr() { # ocr [input] [output] Run OCR on input PDF and write to output PDF
 }
 
 [ $# -eq 0 ] && usage && exit 1
-while [ $# -gt 0 ] ; do
-    # NOTE: Long form options like `--help` are not POSIX compliant.
-    case "$1" in "-"* ) lstrip "$1" '-' && ARGSTR="$FUNCRETURN" ;; esac
-    # NOTE: Additional while loop required to support option clusters.
-    while [ -n "$ARGSTR" ] ; do
-        case "$ARGSTR" in
-            'o' ) consume 'o' && shift ; PDF_OUT="$1" ; shift ;;
-            'p' ) consume 'p' && shift ; USR_PASS="$1" ; shift ;;
-            'l' ) consume 'l' && shift ; OCR_LANG="$1" ; shift ;;
-            'h' ) usage && helpf ; exit 0 ;;
-            * ) warn "${1} is not a valid option" && usage ; exit 1 ;;
-        esac
-    done
-
-    if [ -z "$PDF_OUT" ] ; then
-        rstrip "$1" '.pdf' && PDF_OUT="${FUNCRETURN}_searchable"
-    fi
-    ocr "$1" "$PDF_OUT" || exit 1
-    shift
+# NOTE: Long form options like `--help` are not POSIX compliant.
+while getopts "o:p:l:h" OPT ; do
+    case "$OPT" in
+        o ) PDF_OUT="$OPTARG" ;;
+        p ) USR_PASS="$OPTARG" ;;
+        l ) OCR_LANG="$OPTARG" ;;
+        h ) usage && helpf ; exit 0 ;;
+        * ) warn "${1} is not a valid option" && usage ; exit 1 ;;
+    esac
 done
+shift $(("$OPTIND" - 1))
+if [ -z "$PDF_OUT" ] ; then
+    rstrip "$1" '.pdf' && PDF_OUT="${FUNCRETURN}_searchable"
+fi
+ocr "$1" "$PDF_OUT" || exit 1

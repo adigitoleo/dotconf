@@ -1,42 +1,75 @@
-#!/usr/bin/env bash
-# Synchronized light/dark theme switcher.
-# Only works for software that updates its colorscheme in real-time.
-# To set themes at startup, the query option could be useful.
+#!/usr/bin/sh
+# ----------- MESSAGING FUNCTIONS ---------------------------------------------
+readonly SCRIPTNAME="${0##*/}"
+usage() { # Print a short synopsis <https://pubs.opengroup.org/onlinepubs/9699919799/>
+    printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
+    printf '       %s ' "$SCRIPTNAME"
+    echo '[-q|-t|-s theme]'
+}
+helpf() { # Print a longer help string
+    echo 'Options:'
+    echo '-q                query the current theme from $THEME_SOURCE'
+    echo '-s <theme>        set the theme to either dark or light explicitly'
+    echo '-t                toggle between dark and light themes'
+    echo
+    echo 'Simple and unintrusive dark/light theme switcher,'
+    echo 'providing a central interface for programs to query the'
+    echo 'requested theme. It does not restart anything automatically,'
+    echo 'and therefore does not need to know about any other APIs.'
+    echo 'This utility could be used to set the theme at startup,'
+    echo "and compatible programs can be set up to read '$SCRIPTNAME -q'."
+}
+warn() { # warn [message]... Print message to stderr <https://stackoverflow.com/a/23550347>
+    >&2 printf '%s\n' "${SCRIPTNAME}: $1"
+}
+quote() { # quote [string] Safe shell quoting? <https://www.etalabs.net/sh_tricks.html>
+    printf '%s\n' "$1" | sed "s/'/'\\\\''/g;1s/^/'/;\$s/\$/'/"
+}
 
-
-THEME_SOURCE="$HOME/.config/alacritty/alacritty.yml"
-
-
+# ----------- MAIN ROUTINES ---------------------------------------------------
+FUNCRETURN=  # Store non-integer return values, see also <https://stackoverflow.com/a/18198358>
+ARGSTR=  # Store argument string during processing
+lstrip() { # lstrip [string] [pattern] Strip pattern from start of string
+    FUNCRETURN="${1##$2}"
+}
+rstrip() { # rstrip [string] [pattern] Strip pattern from end of string
+    FUNCRETURN="${1%%$2}"
+}
+consume() { # consume [letter] Consume a command line option
+    lstrip "$ARGSTR" "$1" && ARGSTR="$FUNCRETURN"
+}
 theme_query() { awk '/colors:/,/\w/ {print substr($2,2)}' "$THEME_SOURCE" ;}
-
-theme_dark() {
-    sed -i "s/*light/*dark/" "$THEME_SOURCE"
-    true
+theme_set() { # theme_set [theme] Set the theme in $THEME_SOURCE using sed
+    case "$1" in
+        'light' ) sed -i "s/*dark/*light/" "$THEME_SOURCE" ;;
+        'dark' ) sed -i "s/*light/*dark/" "$THEME_SOURCE" ;;
+    esac
+}
+theme_toggle() {
+    case "$(theme -q)" in
+        'dark' ) theme_set light ;;
+        'light' ) theme_set dark ;;
+    esac
 }
 
-theme_light() {
-    sed -i "s/*dark/*light/" "$THEME_SOURCE"
-    true
-}
+if [ -z "$THEME_SOURCE" ] ; then
+    DEFAULT_THEME_SOURCE="$HOME/.config/alacritty/alacritty.yml"
+    if [ -f "$DEFAULT_THEME_SOURCE" ] ; then
+        THEME_SOURCE="$DEFAULT_THEME_SOURCE"
+    else
+        warn "can't load default theme source: $DEFAULT_THEME_SOURCE" ; exit 1
+    fi
+fi
 
-
-case $1 in
-    "dark" ) [[ theme_query == "dark" ]] || theme_dark ;;
-    "light" ) [[ theme_query == "light" ]] || theme_light ;;
-
-    "toggle" )
-        case $(theme_query) in
-            "dark" ) theme_light ;;
-            "light" ) theme_dark ;;
-        esac
-        ;;
-
-    "query" ) theme_query ;;
-
-    "query-fancy" )
-        case $(theme_query) in
-            "dark" ) echo 🌙;;
-            "light" ) echo ☀;;
-        esac
-        ;;
-esac
+[ $# -eq 0 ] && usage && exit 1
+# NOTE: Long form options like `--help` are not POSIX compliant.
+while getopts "qs:th" OPT ; do
+    case "$OPT" in
+        q ) theme_query ;;
+        s ) theme_set "$OPTARG" ;;
+        t ) theme_toggle ;;
+        h ) usage && helpf ; exit 0 ;;
+        * ) warn "${1} is not a valid option" && usage ; exit 1 ;;
+    esac
+done
+shift $(("$OPTIND" - 1))
