@@ -439,7 +439,7 @@ if executable('theme')  " Toggle global TUI theme using external script.
                 \| let &background = get(systemlist('theme -q'), 0, 'light')
     command! SyncTheme silent! let &background = get(systemlist('theme -q'), 0, 'light')
 endif
-command! -nargs=* Terminal if strlen(<q-args>) > 0 | call StartTUI($SHELL, <f-args>)
+command! -nargs=* Term if strlen(<q-args>) > 0 | call StartTUI($SHELL, <f-args>)
             \ | else | call StartTUI($SHELL) | endif
 command! -nargs=* Elinks call StartTUI("elinks", <f-args>)
 command! -nargs=* Aerc call StartTUI("aerc", <f-args>)
@@ -496,6 +496,7 @@ augroup filetype_rules
     autocmd FileType make setlocal noexpandtab
     autocmd FileType markdown setlocal foldlevel=1 foldenable
     autocmd FileType python setlocal textwidth=88 foldmethod=syntax formatoptions-=t
+    autocmd FileType julia setlocal textwidth=92 formatoptions-=t
     autocmd FileType plaintex setlocal filetype=tex
     autocmd FileType tex setlocal textwidth=0 wrap
     autocmd FileType enaml setlocal textwidth=88 filetype=python.enaml formatoptions-=t
@@ -679,6 +680,8 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'aymericbeaumet/vim-symlink'  " Follow symlinks (linux).
     Plug 'chrisbra/unicode.vim'  " Easy unicode and digraph handling.
     Plug 'arp242/jumpy.vim'  " Better and extended mappings for ]], g], etc.
+    Plug 'inkarkat/vim-ingo-library'  " A vimscript library for \/ \/ \/
+    Plug 'inkarkat/vim-OnSyntaxChange'  " Events when changing syntax group.
     " Dev tooling and filetype plugins. {{{3
     Plug 'dense-analysis/ale'  " Linting and LSP server.
     Plug 'mzlogin/vim-markdown-toc'  " Pandoc/GFM table of contents generator.
@@ -826,6 +829,16 @@ augroup END
 let g:lastplace_open_folds = 0
 " Use the latex to unicode converter provided by julia.vim for other filetypes.
 let g:latex_to_unicode_file_types = ["julia", "markdown"]
+" Always use 80 char textwidth when writing comments/documentation.
+if has_key(plugs, "vim-OnSyntaxChange")
+    call OnSyntaxChange#Install('Comment', '^Comment$\|Doc[sS]tring', 0, 'i')
+    augroup auto_wrap_comments
+        " Set textwidth to 80 when editing.
+        autocmd User SyntaxCommentEnterI setlocal textwidth=80
+        " Remove it again when leaving insert mode.
+        autocmd User SyntaxCommentLeaveI exec 'filetype detect'
+    augroup END
+endif
 
 " Testing/development.
 let g:helpier_buftype_matches = ["help", "quickfix"]
