@@ -320,6 +320,8 @@ set clipboard+=unnamedplus
 set matchpairs+=<:>
 " Suppress feedback messages during auto-completion.
 set shortmess+=cI
+" Don't auto-format anything in insert mode by default.
+set formatoptions-=t
 " Show a few extra lines/columns while scrolling.
 let &scrolloff=g:SCROLLOFF
 " If lines need to be soft-wrapped, show virtual leading character(s).
@@ -495,14 +497,14 @@ augroup filetype_rules
     autocmd FileType bash,sh setlocal foldmethod=marker
     autocmd FileType make setlocal noexpandtab
     autocmd FileType markdown setlocal foldlevel=1 foldenable
-    autocmd FileType python setlocal textwidth=88 foldmethod=syntax formatoptions-=t
-    autocmd FileType julia setlocal textwidth=92 formatoptions-=t
+    autocmd FileType python setlocal textwidth=88 foldmethod=syntax
+    autocmd FileType julia setlocal textwidth=92
     autocmd FileType plaintex setlocal filetype=tex
     autocmd FileType tex setlocal textwidth=0 wrap
-    autocmd FileType enaml setlocal textwidth=88 filetype=python.enaml formatoptions-=t
+    autocmd FileType enaml setlocal textwidth=88 filetype=python.enaml
     autocmd FileType yaml setlocal tabstop=2
     autocmd FileType css setlocal tabstop=2
-    autocmd FileType html setlocal tabstop=2
+    autocmd FileType xml,html setlocal tabstop=2
     autocmd FileType desktop set commentstring=#\ %s
 augroup END
 
@@ -520,8 +522,9 @@ augroup END
 " MAPPINGS {{{1
 " De gustibus: general fixes and tweaks. {{{2
 " Ergonomic, smart mode switches.
-nnoremap <silent> ; <Cmd>FuzzyCmd<Cr>
 inoremap <M-;> <Esc>
+nnoremap ; <Cmd>FuzzyCmd<Cr>
+nnoremap <M-;> :
 xnoremap ; :
 xnoremap <M-;> <Esc>
 cnoremap <M-;> <C-c>
@@ -553,18 +556,13 @@ nnoremap <silent> <Space> <Cmd>mode<Cr>
 " Write focused buffer if modified.
 nnoremap <M-s> <Cmd>up<Cr>
 inoremap <M-s> <Cmd>up<Cr>
-" Close window (i.e. the view on the focused buffer), don't special-case last window.
-nnoremap <M-q> <Cmd>try<Bar>close<Bar>catch /^Vim\%((\a\+)\)\=:E444/<Bar>confirm qa<Bar>endtry<Cr>
 " Add/remove indentation in insert mode.
 inoremap <M-,> <C-d>
 inoremap <M-.> <C-t>
 " Navigate buffers (next, previous, most recent - if still loaded).
-nnoremap <expr> <M-]> '<Cmd>bn<Cr>'
-nnoremap <expr> <M-[> '<Cmd>bp<Cr>'
+nnoremap <M-]> <Cmd>bn<Cr>
+nnoremap <M-[> <Cmd>bp<Cr>
 nnoremap <expr> <M-Tab> '<Cmd>b' .. (buflisted(0) ? '#' : 'n') .. '<Cr>'
-tnoremap <expr> <M-]> &filetype == "fzf" ? "" : '<Cmd>bn<Cr>'
-tnoremap <expr> <M-[> &filetype == "fzf" ? "" : '<Cmd>bp<Cr>'
-tnoremap <expr> <M-Tab> &filetype == "fzf" ? "" : '<C-\><C-n><Cmd>b' .. (bufloaded(0) ? '#' : 'n') .. '<Cr>'
 " Ergonomic alternative for expanding abbreviations.
 inoremap <M-]> <C-]>
 " Window navigation and relocation.
@@ -654,6 +652,9 @@ let g:markdown_folding = 1
 " reStructuredText {{{3
 let g:rst_use_emphasis_colors = 1
 let g:rst_fold_enabled = 0
+" Fortran {{{3
+let fortran_more_precise = 1
+let fortran_free_source = 1
 " HTML {{{3
 let g:html_indent_script1 = "inc"
 let g:html_indent_style1 = "inc"
@@ -704,19 +705,10 @@ call plug#begin(g:PLUGIN_HOME)
         Plug 'ekalinin/Dockerfile.vim'  " Syntax highlighting for dockerfiles.
     endif
     " Contributing/maintaining. {{{3
-
-    " Plug '~/vcs/vim-mellow'
-    " Plug 'adigitoleo/vim-mellow', {'tag': '*'}
     Plug 'adigitoleo/vim-mellow'
-
-    " Plug '~/vcs/vim-mellow-statusline'
     Plug 'adigitoleo/vim-mellow-statusline', {'tag': '*'}
-    " Plug 'vim-airline/vim-airline'
     " Plug 'itchyny/lightline.vim'
-
-    " Plug '~/vcs/vim-helpier'
     Plug 'adigitoleo/vim-helpier'
-
     " }}}
 call plug#end()
 " Check that plugins are installed before configuring.
@@ -834,9 +826,10 @@ if has_key(plugs, "vim-OnSyntaxChange")
     call OnSyntaxChange#Install('Comment', '^Comment$\|Doc[sS]tring', 0, 'i')
     augroup auto_wrap_comments
         " Set textwidth to 80 when editing.
-        autocmd User SyntaxCommentEnterI setlocal textwidth=80
+        autocmd User SyntaxCommentEnterI setlocal textwidth=80 formatoptions+=t
         " Remove it again when leaving insert mode.
         autocmd User SyntaxCommentLeaveI exec 'filetype detect'
+                    \ | setlocal formatoptions-=t
     augroup END
 endif
 
