@@ -21,9 +21,8 @@ if executable('/usr/bin/python3')
     " NOTE: This python binary should have access to the `pynvim` module.
 endif
 
-" TODO: Move from ALE to vim-lsp OR plugin vim-julia-lint for Lint.jl via ALE
-"       Cf: <https://github.com/zyedidia/julialint.vim>
-" TODO: Plugin vim-pycfg for correct syntax highlighting of setup.cfg files.
+" TODO: The julia+vim linting and LSP situation isn't great...
+" TODO: Write plugin for correct syntax highlighting of setup.cfg files.
 " TODO: Set up offline thesaurus files, :h 'thesaurus'
 " TODO: Make *Feed functions more robust by using fprint instead of echo.
 " TODO: Add an on_exit caller to :Run that notifies of finished jobs.
@@ -281,58 +280,33 @@ endfunction
 
 " OPTIONS {{{1
 " Global booleans. {{{2
-" Don't show mode info in the command line.
 set noshowmode
-" Prompt for confirmation, rather than throwing errors, where possible.
 set confirm
-" Ignore case in general, but become case-sensitive when uppercase is present.
 set ignorecase smartcase infercase
-" Show sign column for warning/error indicators.
 set signcolumn=yes
-" Set initial split positions for horizontal and vertical windows.
 set splitbelow splitright
-" Prefer hiding buffers over unloading them, see :h 'hidden'.
 set hidden
-" Join lines with only one space after punctuation.
 set nojoinspaces
-" Turn search match highlighting off, except during matching.
 set nohlsearch
-" Soft-wrap on spaces.
 set linebreak
-" Don't soft-wrap lines by default.
 set nowrap
-" Show non-printable characters defined by 'listchars' by default.
 set list
 " Global configs. {{{2
-" Enable mouse cursor support if possible.
 if has('mouse')
     set mouse=a
 endif
-" Set language for built-in spellchecker.
 set spelllang=en_au
-" Set location to store additional words, see :h 'spellfile'.
 set spellfile=~/.config/nvim/after/spell/extras.en.utf-8.add
-" Reduce time to wait for sequential mappings.
 set timeoutlen=500
-" Integrate system clipboard with vim operations.
 set clipboard+=unnamedplus
-" Add character pairings for highlighting and '%' jumps.
 set matchpairs+=<:>
-" Suppress feedback messages during auto-completion.
 set shortmess+=cI
-" Don't auto-format anything in insert mode by default.
 set formatoptions-=t
-" Show a few extra lines/columns while scrolling.
 let &scrolloff=g:SCROLLOFF
-" If lines need to be soft-wrapped, show virtual leading character(s).
 let &showbreak = '+++ '
-" Set up characters to show in place of non-printable characters with 'list'.
 set listchars+=trail:\ ,precedes:<,extends:>
-" Limit number of items shown in popup menus.
 set pumheight=15
-" Make help buffers respect :set ea
 set helpheight=0
-" Prevent syntax highlighting of absurdly long lines to save performance.
 set synmaxcol=200
 " Indentation. {{{2
 set tabstop=4      " Set indent size.
@@ -347,7 +321,6 @@ set foldopen-=block         " Motions that automatically open folds.
 set fillchars=fold:\ ,      " Remove excessive fillchars for folds.
 set foldtext=NeatFoldText() " Use custom foldtext.
 " Misc. {{{2
-" Use ripgrep if available.
 if executable('rg')
     set grepprg=rg\ --vimgrep\ --smart-case\ --follow
 endif
@@ -508,6 +481,12 @@ augroup filetype_rules
     autocmd FileType desktop set commentstring=#\ %s
 augroup END
 
+" LSP and linting. {{{2
+augroup lsp_and_linting
+    autocmd!
+    autocmd FileType python,fortran let b:vcm_tab_complete = "omni"
+augroup END
+
 " Miscellaneous. {{{2
 augroup misc
     autocmd!
@@ -600,8 +579,6 @@ nnoremap <expr>     <Leader>O '<Cmd>keepjumps normal! ' .. v:count .. 'O<Cr>'
 " Paste last yanked text ignoring cut text.
 noremap             <Leader>p "0p
 noremap             <Leader>P "0P
-" Rename symbols using LSP (ALE implementation).
-nnoremap <silent>   <Leader>r <Cmd>ALERename<Cr>
 " Toggle spellchecker.
 nnoremap <silent>   <Leader>s <Cmd>setlocal spell!<Cr>
 " See :function CopyFile.
@@ -631,12 +608,6 @@ nnoremap g] g<C-]>
 " Jump to first/last character of current line.
 noremap ]l g_
 noremap [l ^
-" Jump to next/previous error, requires ALE.
-nmap <silent> ]e <Plug>(ale_next_wrap_error)
-nmap <silent> [e <Plug>(ale_previous_wrap_error)
-" Jump to next/previous warning, requires ALE.
-nmap <silent> ]w <Plug>(ale_next_wrap_warning)
-nmap <silent> [w <Plug>(ale_previous_wrap_warning)
 
 " PLUGINS {{{1
 " Set builtin plugin options. {{{2
@@ -684,7 +655,8 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'inkarkat/vim-ingo-library'  " A vimscript library for \/ \/ \/
     Plug 'inkarkat/vim-OnSyntaxChange'  " Events when changing syntax group.
     " Dev tooling and filetype plugins. {{{3
-    Plug 'dense-analysis/ale'  " Linting and LSP server.
+    Plug 'dense-analysis/ale'  " Async code linting.
+    Plug 'natebosch/vim-lsc'  " Async LSP client.
     Plug 'mzlogin/vim-markdown-toc'  " Pandoc/GFM table of contents generator.
     Plug 'chmp/mdnav'  " Markdown: internal hyperlink navigation.
     Plug 'alvan/vim-closetag'  " Auto-close (x)html tags.
@@ -719,32 +691,15 @@ endif
 " Make VimCompletesMe do <C-p> completion on <Tab>.
 let g:vcm_direction = 'p'
 
-" Linting/LSP settings. {{{2
-" Don't highlight todo comments, that's already handled by the colorscheme.
-let g:ale_exclude_highlights = ['TODO']
-" Run the fixers automatically. THIS ISN'T TOGGLED BY :ALEDisable (see #2260).
-let g:ale_fix_on_save = 1
-" Let ALE also set omnicomplete.
-let g:ale_completion_enabled = 1
-" Allow ALE to run imports for more completion suggestions.
-let g:ale_completion_autoimport = 1
-
-" Workaround for #2260 because ALEDisable doesn't... uhm... disable ALE.
-function! s:ALEFixOnSaveToggle(vartype, value)
-    let l:new = a:value == -1 ? '!' . get(eval(a:vartype . ':'), 'ale_fix_on_save', 0) : a:value
-    execute 'let ' .  a:vartype . ':ale_fix_on_save = ' . l:new
-endfunction
-command! -bar ALEFixOnSaveToggle        call <SID>ALEFixOnSaveToggle('g', -1)
-command! -bar ALEFixOnSaveToggleBuffer  call <SID>ALEFixOnSaveToggle('b', -1)
-command! -bar ALEFixOnSaveEnable        call <SID>ALEFixOnSaveToggle('g', 1)
-command! -bar ALEFixOnSaveEnableBuffer  call <SID>ALEFixOnSaveToggle('b', 1)
-command! -bar ALEFixOnSaveDisable       call <SID>ALEFixOnSaveToggle('g', 0)
-command! -bar ALEFixOnSaveDisableBuffer call <SID>ALEFixOnSaveToggle('b', 0)
-command! -bar ALEEnableAll        ALEEnable | ALEFixOnSaveEnable
-command! -bar ALEEnableAllBuffer  ALEEnableBuffer | ALEFixOnSaveEnableBuffer
-command! -bar ALEDisableAll       ALEDisable | ALEFixOnSaveDisable
-command! -bar ALEDisableAllBuffer ALEDisableBuffer | ALEFixOnSaveDisableBuffer
-
+" LSP settings. {{{2
+let g:lsc_auto_map = {'defaults': 1, 'Completion': 'omnifunc'}
+let g:lsc_enable_autocomplete = 0
+let g:lsc_server_commands = {
+            \ 'python': 'pyls',
+            \ 'fortran': 'fortls --lowercase_intrinsics',
+            \ 'julia': 'julials',
+            \}
+" Linting settings. {{{2
 augroup ale_highlights
     autocmd!
     autocmd ColorScheme mellow hi link ALEError Visual
@@ -752,19 +707,14 @@ augroup ale_highlights
     autocmd ColorScheme mellow hi link ALEErrorSign NonText
     autocmd ColorScheme mellow hi link ALEWarningSign CursorColumn
 augroup END
-
+" Don't highlight TODO and FIXME comments, that's done by the colorscheme.
+let g:ale_exclude_highlights = ['TODO']
 " Latex settings. {{{2
-" Ensure unified tex flavour for correct syntax handling.
 let g:tex_flavor = 'latex'
-" Enable syntax folding for latex files.
 let g:vimtex_fold_enabled = 1
-" Don't open quickfix window automatically, workaround for #1595
-let g:vimtex_quickfix_mode = 0
-" Don't perform enhanced matchparen searches, highlights bleed across buffers.
+let g:vimtex_quickfix_mode = 0  " See #1595
 let g:vimtex_matchparen_enabled = 1
-" Set up PDF viewer for LaTeX documents.
 let g:vimtex_view_method = 'zathura'
-" Tweak automatic folding.
 let g:vimtex_fold_types = {
             \   'cmd_single' : {'enabled' : 0},
             \   'cmd_multi' : {'enabled' : 0},
@@ -776,7 +726,6 @@ let g:vimtex_fold_types = {
             \       ],
             \   },
             \}
-" Tweak automatic list indenting.
 let g:vimtex_indent_lists = [
             \ 'itemize',
             \ 'description',
@@ -784,7 +733,6 @@ let g:vimtex_indent_lists = [
             \ 'thebibliography',
             \ 'compactitem',
             \]
-" Suppress nuisance warnings.
 let g:vimtex_quickfix_ignore_filters = [
     \   'underfull',
     \   'moderncv',
@@ -833,7 +781,7 @@ if has_key(plugs, "vim-OnSyntaxChange")
     augroup END
 endif
 
-" Testing/development.
+" Testing/development. {{{2
 let g:helpier_buftype_matches = ["help", "quickfix"]
 
 " }}}}}}
