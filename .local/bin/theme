@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/bin/sh
 # ----------- MESSAGING FUNCTIONS ---------------------------------------------
 readonly SCRIPTNAME="${0##*/}"
 usage() { # Print a short synopsis <https://pubs.opengroup.org/onlinepubs/9699919799/>

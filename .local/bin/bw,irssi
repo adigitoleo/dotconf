@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/bin/sh
 # Bubblewrap launcher for sandboxed irssi on wayland.
 
 pgrep -x irssi >/dev/null 2>&1 && exit 1

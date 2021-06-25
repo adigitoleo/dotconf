@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/bin/sh
 SCRIPTNAME="${0##*/}"
 SYNOPSIS="Usage: $SCRIPTNAME [-h] [--noisy]"
 echoerr() { printf "$SCRIPTNAME: %s\n" "$*" >&2; echo $SYNOPSIS; }

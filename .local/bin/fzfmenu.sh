@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/bin/sh
 
 ls -I 'Alacritty.*' -I '*.cache'|fzf --layout=reverse \
     --bind "backward-eof:abort,tab:down,shift-tab:up,alt-;:cancel" \
