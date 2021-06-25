@@ -108,7 +108,7 @@ endfunction
 function! s:TermFeed() abort "{{{2
     " Get shell command to generate a list of terminal buffers.
     let l:terminals = []
-    for l:buf in getbufinfo({'buflisted': 1})
+    for l:buf in getbufinfo({'bufloaded': 1})
         if l:buf.name =~ "term://"
             let l:terminals += [l:buf.name]
         endif
@@ -287,7 +287,7 @@ set signcolumn=yes
 set splitbelow splitright
 set hidden
 set nojoinspaces
-set nohlsearch
+set noincsearch
 set linebreak
 set nowrap
 set list
@@ -306,6 +306,7 @@ let &scrolloff=g:SCROLLOFF
 let &showbreak = '+++ '
 set listchars+=trail:\ ,precedes:<,extends:>
 set pumheight=15
+set completeopt-=preview
 set helpheight=0
 set synmaxcol=200
 " Indentation. {{{2
@@ -364,8 +365,8 @@ if type(function('fzf#run'))
     command! -complete=dir -nargs=? -bang FuzzyEdit call fzf#run(fzf#wrap(
         \ s:FZFspecgen($FZF_DEFAULT_COMMAND .. ' ;' .. s:TermFeed(), <q-args>),
         \ <bang>0))
-    " Open listed buffers (including `:terminal` buffers).
-    command! -bang FuzzyBuffers call fzf#run(fzf#wrap(
+    " Switch between listed buffers or loaded `:terminal` buffers.
+    command! -bang FuzzySwitch call fzf#run(fzf#wrap(
         \ s:FZFspecgen(s:FileFeed([s:BufList()], ':~:.', '\n') .. ' ;' .. s:TermFeed(),
         \ '', "Listed buffers: "), <bang>0))
 
@@ -452,7 +453,7 @@ command! -nargs=1 EditNear exec 'edit %:h/' .. <q-args>
 " Special terminal buffer settings and overrides. {{{2
 augroup terminal_buffer_rules
     autocmd!
-    autocmd TermOpen * setlocal nonumber norelativenumber signcolumn=no
+    autocmd TermOpen * setlocal nobuflisted nonumber norelativenumber signcolumn=no
     autocmd TermOpen * startinsert
     autocmd TermEnter * set scrolloff=0
     autocmd TermLeave * let &scrolloff=g:SCROLLOFF
@@ -479,12 +480,13 @@ augroup filetype_rules
     autocmd FileType css setlocal tabstop=2
     autocmd FileType xml,html setlocal tabstop=2
     autocmd FileType desktop set commentstring=#\ %s
+    autocmd FileType fortran setlocal textwidth=92
 augroup END
 
 " LSP and linting. {{{2
 augroup lsp_and_linting
     autocmd!
-    autocmd FileType python,fortran let b:vcm_tab_complete = "omni"
+    autocmd FileType python,fortran,julia let b:vcm_tab_complete = "omni"
 augroup END
 
 " Miscellaneous. {{{2
@@ -510,14 +512,18 @@ cnoremap <M-;> <C-c>
 tnoremap <M-:> <C-\><C-n>
 nnoremap q; q:
 nnoremap Q <Nop>
+" Some shell-style improvements to command mode mappings.
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Up>
+cnoremap <C-a> <C-b>
 " Make Y consistent with D and C.
 nnoremap Y y$
 " Search in selection.
 xnoremap / <Esc>/\%V
 " Redo (can't use U, see :h U).
 nnoremap yu <Cmd>redo<Cr>
-" CTRL-L also toggles search highlighting.
-nnoremap <silent> <C-l> <Cmd>set hlsearch!<Cr><C-l>
+" CTRL-L also clears search highlighting.
+nnoremap <silent> <C-l> <Cmd>:nohlsearch<Cr><C-l>
 " Disable middle mouse paste.
 noremap <MiddleMouse> <Nop>
 noremap <2-MiddleMouse> <Nop>
@@ -589,7 +595,7 @@ nnoremap <silent>   <Leader>z <Cmd>setlocal wrap!<Cr>
 nnoremap <silent>   <Leader>\ gwip
 xnoremap <silent>   <Leader>\ gw
 " Convenient cmdline mode prefixes.
-nnoremap            <Leader>/ :%s/<C-r><C-w>
+nnoremap            <Leader>/ :%s/<C-r><C-w>/
 xnoremap            <Leader>/ :s/
 nnoremap            <Leader>; :!
 
@@ -626,6 +632,7 @@ let g:rst_fold_enabled = 0
 " Fortran {{{3
 let fortran_more_precise = 1
 let fortran_free_source = 1
+let fortran_do_enddo = 1
 " HTML {{{3
 let g:html_indent_script1 = "inc"
 let g:html_indent_style1 = "inc"
@@ -639,11 +646,11 @@ let g:plug_window = 'SmartSplit'
 call plug#begin(g:PLUGIN_HOME)
     " Ergonomics and general fixes. {{{3
     Plug 'ackyshake/VimCompletesMe'  " Smart, context-aware <Tab> completion.
+    Plug 'ncm2/float-preview.nvim'  " Use a floating window for preview-window.
     Plug 'tpope/vim-abolish'  " Word variant manipulation.
     Plug 'tpope/vim-commentary'  " Quickly comment/uncomment code.
     Plug 'tpope/vim-eunuch'  " UNIX helpers.
     Plug 'tpope/vim-fugitive'  " Git wrapper for vim habitat.
-    Plug 'tpope/vim-rsi'  " Readline mappings in relevant modes.
     Plug 'tpope/vim-surround'  " Quoting/parenthesizing made simple.
     Plug 'junegunn/vim-easy-align'  " Align text on delimiters.
     Plug 'justinmk/vim-sneak'  " Extended motions and operators like `f`.
@@ -654,6 +661,8 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'arp242/jumpy.vim'  " Better and extended mappings for ]], g], etc.
     Plug 'inkarkat/vim-ingo-library'  " A vimscript library for \/ \/ \/
     Plug 'inkarkat/vim-OnSyntaxChange'  " Events when changing syntax group.
+    Plug 'inkarkat/vim-SearchHighlighting'  " Better hlsearch and `*`.
+    Plug 'inkarkat/vim-AdvancedSorters'  " Sort by multiline patterns, etc.
     " Dev tooling and filetype plugins. {{{3
     Plug 'dense-analysis/ale'  " Async code linting.
     Plug 'natebosch/vim-lsc'  " Async LSP client.
