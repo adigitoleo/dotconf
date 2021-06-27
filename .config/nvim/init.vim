@@ -21,6 +21,7 @@ if executable('/usr/bin/python3')
     " NOTE: This python binary should have access to the `pynvim` module.
 endif
 
+" TODO: Wrapper script instead of FZF_DEFAULT_COMMAND, don't index binary files.
 " TODO: The julia+vim linting and LSP situation isn't great...
 " TODO: Write plugin for correct syntax highlighting of setup.cfg files.
 " TODO: Set up offline thesaurus files, :h 'thesaurus'
@@ -301,6 +302,7 @@ set timeoutlen=500
 set clipboard+=unnamedplus
 set matchpairs+=<:>
 set shortmess+=cI
+set shortmess-=F
 set formatoptions-=t
 let &scrolloff=g:SCROLLOFF
 let &showbreak = '+++ '
@@ -362,7 +364,7 @@ if type(function('fzf#run'))
         \ s:FZFspecgen(s:FileFeed([v:oldfiles, s:BufList()], ':~:.', '\n'),
         \ '', "Recent files: "), <bang>0))
     " Open files in <dir> (or :pwd by default).
-    command! -complete=dir -nargs=? -bang FuzzyEdit call fzf#run(fzf#wrap(
+    command! -complete=dir -nargs=? -bang FuzzyFind call fzf#run(fzf#wrap(
         \ s:FZFspecgen($FZF_DEFAULT_COMMAND .. ' ;' .. s:TermFeed(), <q-args>),
         \ <bang>0))
     " Switch between listed buffers or loaded `:terminal` buffers.
@@ -421,7 +423,7 @@ command! -nargs=* Elinks call StartTUI("elinks", <f-args>)
 command! -nargs=* Aerc call StartTUI("aerc", <f-args>)
 command! -nargs=* IPython call StartTUI("ipython", "--no-autoindent", <f-args>)
 command! -nargs=* BPython call StartTUI("bpython", <f-args>)
-command! -nargs=* Julia call StartTUI("julia", "--color=no", <f-args>)
+command! -nargs=* Julia call StartTUI("julia", <f-args>)
 
 " Misc. {{{2
 " Insert current date in ISO (YYYY-MM-DD) format.

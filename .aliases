@@ -24,9 +24,10 @@ alias grep='grep --color=auto'
 alias ip='ip --color=auto'
 alias lsblk='lsblk -o NAME,MAJ:MIN,RM,SIZE,RO,TYPE,MOUNTPOINT,FSTYPE,FSVER'
 alias pacman='pacman --color=auto'
+alias tree='tree --dirsfirst'
 
 # Ignore whatever ripgrep would ignore in the tree output.
-alias rg,tree='rg --files | tree --fromfile'
+alias rg,tree='rg --files | tree --fromfile --dirsfirst'
 
 
 # VERSION CONTROL AND SYSTEM ADMIN {{{1
@@ -38,6 +39,7 @@ alias p,rmsafe='sudo pacman -Rn --color=auto'
 alias p,rm='sudo pacman -Rns --color=auto'
 alias p,orphans='pacman -Qtdq --color=auto'
 alias aur='auracle'
+alias less='less -i'
 alias pacdiff='sudo SUDO_EDITOR="$EDITOR -d" DIFFPROG="sudoedit" pacdiff'
 
 # Use ED25519 ssh keys by default.
