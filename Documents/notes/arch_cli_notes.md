@@ -36,6 +36,7 @@ everything from `base-devel` is assumed.
 *   **python-pylint**: static python linter <https://pylint.org>
 *   **ripgrep**: rg is shorter than grep :) <https://github.com/BurntSushi/ripgrep>
 *   **rsync**: simple backup/remote file sync tool <https://rsync.samba.org/>
+*   **smartmontools**: S.M.A.R.T device monitoring and health check for modern SSD's <http://smartmontools.sourceforge.net>
 *   **texlive-bibtexextra**: BibTeX and friends for better referencing/citations <http://tug.org/texlive/>
 *   **texlive-core**: LaTeX -- a document markup "language" <http://tug.org/texlive/>
 *   **texlive-fontsextra**: Modern fonts like Liberation, etc. for LaTeX <http://tug.org/texlive/>
@@ -51,13 +52,12 @@ everything from `base-devel` is assumed.
 
 ## AUR
 
-*   **auracle-git**: AUR package info/query (can also check for outdated PKGBUILDS)
-    <https://github.com/falconindy/auracle.git>
-*   **yadm**: dotfiles manager (git wrapper with some extras)
-    <https://github.com/TheLocehiliosan/yadm>
-*   **exfat-utils-nofuse**: use kernel support for exFAT (replaces `exfat-utils`)
-    <https://github.com/relan/exfat>
-*   **g810-led-git**: RGB control for fancy Logitech keyboards
-    <https://github.com/MatMoul/g810-led>
-*   **quivira**: a nice font *shrug*
-    <http://www.quivira-font.com/index.php>
+*   **amp**: Modern but simple vim-like editor for the terminal <https://github.com/jmacdonald/amp>
+*   **auracle-git**: AUR package info/query (can also check for outdated PKGBUILDS) <https://github.com/falconindy/auracle.git>
+*   **exfat-utils-nofuse**: use kernel support for exFAT (replaces `exfat-utils`) <https://github.com/relan/exfat>
+*   **fortran-language-server**: LSP (auto-complete etc.) for Fortran90 or newer <https://github.com/hansec/fortran-language-server>
+*   **g810-led-git**: RGB control for fancy Logitech keyboards <https://github.com/MatMoul/g810-led>
+*   **quivira**: a nice font *shrug* <http://www.quivira-font.com/index.php>
+*   **rx**: Vim-like pixel editor <http://cloudhead.io/rx/>
+*   **yadm**: dotfiles manager (git wrapper with some extras) <https://github.com/TheLocehiliosan/yadm>
+*   **zsh-pure-prompt**: Pretty, minimal and fast ZSH prompt <https://github.com/sindresorhus/pure>

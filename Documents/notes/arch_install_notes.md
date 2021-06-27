@@ -176,7 +176,7 @@ Otherwise reinstall the packages (change the *-ucode* to match processor manufac
 ## Minimal post-install setup
 
 Set zsh as default shell with `chsh -s /bin/zsh` and relog.
-Get `zsh-completions` and optionally `zsh-pure-prompt-git` (AUR).
+Get `zsh-completions` and optionally `zsh-pure-prompt` (AUR).
 
 Set up reflector for automatic mirrorlist refreshing by editing
 `/etc/xdg/reflector/reflector.conf` and setting the desired countries.
