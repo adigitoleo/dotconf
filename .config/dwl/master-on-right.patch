@@ -1,0 +1,30 @@
+From 895ae11c732a8f6b7a5a10ce4cee070587fdb4a0 Mon Sep 17 00:00:00 2001
+From: Sevz17 <leohdz172@outlook.com>
+Date: Fri, 25 Jun 2021 19:50:56 -0500
+Subject: [PATCH] show master window at the right
+
+---
+ dwl.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dwl.c b/dwl.c
+index a8e1dcd..5a2d2bd 100644
+--- a/dwl.c
++++ b/dwl.c
+@@ -2196,11 +2196,11 @@ tile(Monitor *m)
+ 			continue;
+ 		if (i < m->nmaster) {
+ 			h = (m->w.height - my) / (MIN(n, m->nmaster) - i);
+-			resize(c, m->w.x, m->w.y + my, mw, h, 0);
++			resize(c, m->w.x + m->w.width - mw, m->w.y + my, mw, h, 0);
+ 			my += c->geom.height;
+ 		} else {
+ 			h = (m->w.height - ty) / (n - i);
+-			resize(c, m->w.x + mw, m->w.y + ty, m->w.width - mw, h, 0);
++			resize(c, m->w.x, m->w.y + ty, m->w.width - mw, h, 0);
+ 			ty += c->geom.height;
+ 		}
+ 		i++;
+-- 
+2.31.1
+
