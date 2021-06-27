@@ -6,7 +6,6 @@ https://sourcehut.org/ sourcehut - the hacker's forge
 https://github.com/jamessan/vim-gnupg jamessan/vim-gnupg: This script implements transparent editing of gpg encrypted files. The filename must have a ".gpg", ".pgp" or ".asc" suffix. When opening such a file the content is decrypted, when opening a new file the script will ask for the recipients of the encrypted file. The file content will be encrypted to all recipients before it is written. The script turns off viminfo, swapfile, and undofile to increase security.
 https://system76.com/desktops Thelio - System76
 https://system76.com/laptops/lemur Lemur Pro - System76
-https://www.tuxedocomputers.com/en/Linux-Hardware/Linux-Notebooks/10-14-inch/Manjaro-InfinityBook-S-14-v5_1.tuxedo TUXEDO InfinityBook S 14 v5 - 14 inch non-glare Full-HD IPS + magnesium chassis + max. Intel Core i7-Quad-Core + max. 40GB RAM + max. two SSD + max. 24h battery + USB-C - Manjaro InfinityBook S 14 v5 - TUXEDO Computers
 https://bbs.archlinux.org/ Arch Linux Forums
 https://komascript.de/ KOMA-Script Documentation Project | Aktive Anwender verbessern KOMA-Script.
 https://aur.archlinux.org/ AUR (en) - Home
@@ -203,3 +202,12 @@ https://tex.stackexchange.com/questions/425098/which-opentype-math-fonts-are-ava
 http://www.khirevich.com/latex/microtype/ Microtype - Thesis in LaTeX
 https://www.intmath.com/cg5/katex-mathjax-comparison.php?processor=MathJax3 KaTeX and MathJax Comparison Demo, currently processed as MathJax3
 https://keybase.io/ Keybase
+https://pkgs.alpinelinux.org/packages Alpine Linux packages
+https://cortexjs.io/guides/mathfield-getting-started/ CortexJS
+https://www.entropysink.com/forums/index.php?PHPSESSID=8a781910471bbdd07900457e59ab5418& EntropySink - Index
+https://www.pccasegear.com/products/53611/msi-modern-15-core-i5-15-6in-laptop Buy MSI Modern 15 Core i5 15.6in Laptop [MODERN-15-A10M-425AU] | PC Case Gear Australia
+https://www.centrecom.com.au/asus-ga401ii-he003t-14-fhd-ryzen-7-4800hs-ultra-slim-gaming-laptop Asus Zephyrus G14 GA401II 14" FHD Ryzen 7 4800HS Gaming Laptop - Eclipse Gray (GA401II-HE003T) | Centre Com : Best PC Hardware Prices!
+https://dev.to/nflamel/smart-textwidth-on-vim-to-80-characters-on-comments-56id Smart textwidth on Vim when writing comments - DEV Community
+https://courses.eas.ualberta.ca/eas421/lecturepages/microstructures.html Rheology and deformation mechanisms
+https://www.mkdocs.org/ MkDocs
+https://blogs.gentoo.org/mgorny/2021/02/19/the-modern-packagers-security-nightmare/ The modern packager’s security nightmare – Michał Górny
