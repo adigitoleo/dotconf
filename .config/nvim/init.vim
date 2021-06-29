@@ -785,7 +785,8 @@ if has_key(plugs, "vim-OnSyntaxChange")
     call OnSyntaxChange#Install('Comment', '^Comment$\|Doc[sS]tring', 0, 'i')
     augroup auto_wrap_comments
         " Set textwidth to 80 when editing.
-        autocmd User SyntaxCommentEnterI setlocal textwidth=80 formatoptions+=t
+        autocmd User SyntaxCommentEnterI if &textwidth > 0
+                    \ | setlocal textwidth=80 formatoptions+=t | endif
         " Remove it again when leaving insert mode.
         autocmd User SyntaxCommentLeaveI exec 'filetype detect'
                     \ | setlocal formatoptions-=t
