@@ -1,11 +1,5 @@
-https://github.com/freitass/todo.txt-vim GitHub - freitass/todo.txt-vim: Vim plugin for Todo.txt
-https://github.com/todotxt/todo.txt GitHub - todotxt/todo.txt: ‼️ A complete primer on the whys and hows of todo.txt.
 https://stackoverflow.com/questions/7576525/optional-stdin-in-python-with-argparse Optional stdin in Python with argparse - Stack Overflow
 https://dev.to/codemouse92/dead-simple-python-working-with-files-lmg Dead Simple Python: Working with Files - DEV
-https://sourcehut.org/ sourcehut - the hacker's forge
-https://github.com/jamessan/vim-gnupg jamessan/vim-gnupg: This script implements transparent editing of gpg encrypted files. The filename must have a ".gpg", ".pgp" or ".asc" suffix. When opening such a file the content is decrypted, when opening a new file the script will ask for the recipients of the encrypted file. The file content will be encrypted to all recipients before it is written. The script turns off viminfo, swapfile, and undofile to increase security.
-https://system76.com/desktops Thelio - System76
-https://system76.com/laptops/lemur Lemur Pro - System76
 https://bbs.archlinux.org/ Arch Linux Forums
 https://komascript.de/ KOMA-Script Documentation Project | Aktive Anwender verbessern KOMA-Script.
 https://aur.archlinux.org/ AUR (en) - Home
@@ -23,20 +17,16 @@ https://semver.org/ Semantic Versioning 2.0.0 | Semantic Versioning
 https://www.sumnotes.net/ Sumnotes - Summarize PDF Annotations
 https://stackoverflow.com/questions/1106098/parse-annotations-from-a-pdf python - Parse annotations from a pdf - Stack Overflow
 https://www.particleincell.com/ Particle In Cell Consulting, LLC
-https://www.salome-platform.org/ Welcome to the www.salome-platform.org — SALOME Platform
 https://www.fileformat.info/index.htm FileFormat.Info · The Digital Rosetta Stone
 https://wiki.archlinux.org/index.php/System_maintenance System maintenance - ArchWiki
 https://vimcolorschemes.com/ Trending vim color schemes | vimcolorschemes
-https://discourse.obspy.org/ ObsPy Forum
 https://docs.racket-lang.org/quad/ Quad: document processor
 https://florimond.dev/blog/articles/2018/10/reconciling-dataclasses-and-properties-in-python/ Reconciling Dataclasses And Properties In Python
 https://stackoverflow.com/questions/50563546/validating-detailed-types-in-python-dataclasses typing - Validating detailed types in python dataclasses - Stack Overflow
 https://stackoverflow.com/questions/7423744/how-should-i-perform-imports-in-a-python-module-without-polluting-its-namespace How should I perform imports in a python module without polluting its namespace? - Stack Overflow
 https://www.python-academy.com/courses/specialtopics/python_course_testing.html Professional Testing with pytest and tox
 http://www.stochasticlifestyle.com/modular-algorithms-scientific-computing-julia/ Modular Algorithms for Scientific Computing in Julia - Stochastic Lifestyle
-https://www.reddit.com/r/i3wm/comments/c17m5e/launcher_to_open_files_with_xdgopen_using_fzf/ Launcher to open files with xdg-open using fzf : i3wm
 https://www.vidarholen.net/contents/blog/?p=479 Useless Use Of dd – Vidar's Blog
-https://choosealicense.com/ Choose an open source license | Choose a License
 https://www.kernel.org/doc/Documentation/Intel-IOMMU.txt https://www.kernel.org/doc/Documentation/Intel-IOMMU.txt
 https://www.theregister.com/ The Register: Enterprise Technology News and Analysis
 https://www.svgator.com/ Online SVG Animation Creator - No Coding | SVGator
@@ -44,13 +34,11 @@ https://ruffle.rs/ Ruffle | Flash Player emulator written in the Rust programmin
 https://incenp.org/notes/2019/hwaccel-intel-uhd-graphics.html Enabling Hardware Acceleration on GNU/Linux with a Intel UHD Graphics 620 Chipset
 https://unix.stackexchange.com/questions/396904/fstab-mount-options-for-umask-fmask-dmask-for-ntfs-with-noexec fstab mount options for umask, fmask, dmask for ntfs with noexec - Unix & Linux Stack Exchange
 https://gist.github.com/dupuy/1855764 Common markup for Markdown and reStructuredText
-https://meyerweb.com/eric/comment/chech.html “Considered Harmful” Essays Considered Harmful
 https://scilua.org/ SciLua
 https://luarocks.org/ LuaRocks - The Lua package manager
 https://nim-lang.org/learn.html Learn - Nim Programming Language
 https://nim-by-example.github.io/hello_world/ Nim by Example - Hello World
 http://elinks.or.cz/documentation/manual.html The ELinks Manual
-https://github.com/Patol75/PyDRex Patol75/PyDRex: Python 3 Implementation of the FORTRAN program D-Rex
 http://andrewsforge.com/article/python-new-package-landscape/ Python's New Package Landscape
 https://realpython.com/pipenv-guide/?utm_source=mybridge&utm_medium=blog&utm_campaign=read_more#reader-comments Pipenv: A Guide to the New Python Packaging Tool – Real Python
 https://git-rebase.io/ Learn to change history with git rebase!
@@ -61,48 +49,32 @@ https://stackoverflow.com/questions/6028000/how-to-read-a-static-file-from-insid
 https://importlib-resources.readthedocs.io/en/latest/ Welcome to importlib_resources documentation! — importlib_resources 5.0.2.dev21+g1401cc4.d20210119 documentation
 https://www.egu.eu/jobs/ EGU - Jobs
 https://crypt.ee/ Cryptee | Private, Secure, Encrypted Photos and Encrypted Documents
-https://github.com/nvim-lua/completion-nvim nvim-lua/completion-nvim: A async completion framework aims to provide completion to neovim's built in LSP written in Lua
 https://www.vi-improved.org/plugins/ Plugins - #vim on freenode
 https://sembr.org/ Semantic Line Breaks
 https://shapeshed.com/vim-packages/ Vim: So long Pathogen, hello native package loading | George Ornbo
 https://medium.com/@sdboyer/so-you-want-to-write-a-package-manager-4ae9c17d9527 So you want to write a package manager | by sam boyer | Medium
-https://theconversation.com/the-only-safe-email-is-text-only-email-81434 The only safe email is text-only email
 https://tonisagrista.com/blog/2020/tor-qutebrowser/ Tor with qutebrowser
 https://anonaddy.com/ Free, Open-source Anonymous Email Forwarding - AnonAddy
-https://www.billdietrich.me/SecureCommunication.html#Migadu Secure Communication
 https://tools.ietf.org/html/rfc1178 RFC 1178 - Choosing a name for your computer
 https://archive.org/details/OpenGenera Symbolics Open Genera 2.0 (with patch) : Free Download, Borrow, and Streaming : Internet Archive
-https://github.com/froggey/Mezzano froggey/Mezzano: An operating system written in Common Lisp
 https://interlisp.org/ Medley Interlisp (& CommonLisp)
 https://lisp-journey.gitlab.io/blog/state-of-the-common-lisp-ecosystem-2020/ State of the Common Lisp ecosystem, 2020 🎉 - Lisp journey
 https://mitpress.mit.edu/sites/default/files/sicp/index.html Welcome to the SICP Web Site
 https://tldr.ostera.io/ tldr | simplified, community driven man pages
 https://iep.utm.edu/simplici/ Simplicity in the Philosophy of Science | Internet Encyclopedia of Philosophy
-https://digdeeper.neocities.org/ghost/ninja.html Ninja's guide to the Internet
 https://wiki.archlinux.org/index.php/Installation_guide Installation guide - ArchWiki
 https://shattered.io/ SHAttered
-https://josefsson.org/inline-openpgp-considered-harmful.html Inline PGP in E-mail is bad, Mm'kay?
-https://github.com/jedisct1/minisign jedisct1/minisign: A dead simple tool to sign files and verify digital signatures.
-https://github.com/FiloSottile/age FiloSottile/age: A simple, modern and secure encryption tool (and Go library) with small explicit keys, no config options, and UNIX-style composability.
-https://wiki.archlinux.org/index.php/Intel_NUC#Hades_Canyon_NUC_-_No_External_Microphones Intel NUC - ArchWiki
+https://wiki.archlinux.org/index.php/Intel_NUC Intel NUC - ArchWiki
 https://www.cvedetails.com/ CVE security vulnerability database. Security vulnerabilities, exploits, references and more
 https://github.com/rocketraman/gitworkflow/blob/master/docs/concepts-summary.adoc gitworkflow/concepts-summary.adoc at master · rocketraman/gitworkflow · GitHub
 https://hackernoon.com/how-the-creators-of-git-do-branches-e6fcc57270fb How the Creators of Git Do Branching | Hacker Noon
-https://github.com/containers/bubblewrap GitHub - containers/bubblewrap: Unprivileged sandboxing tool
-https://github.com/natpen/awesome-wayland GitHub - natpen/awesome-wayland: A curated list of Wayland code and resources.
 https://arewewaylandyet.com/ Are we Wayland yet?
 https://lwn.net/ Welcome to LWN.net [LWN.net]
 https://regginator729.wordpress.com/2017/12/12/using-bubblewrap-as-sandbox/ Using bubblewrap to sandbox applications in Linux – Excerpts of the Regginator
-https://github.com/valoq/bwscripts valoq/bwscripts: Bubblewrap example scripts
 https://www.etalabs.net/sh_tricks.html Rich’s sh (POSIX shell) tricks
 http://longwei.github.io/Linux-Graphic-And-Wayland/ Linux Graphic Stack and Wayland – Longwei Su – Software Engineer
-https://github.com/bpython/curtsies GitHub - bpython/curtsies: Curses-like terminal wrapper with a display based on compositing 2d arrays of text.
 https://www.iue.tuwien.ac.at/phd/orio/node48.html#subfig4:tetrahedron_xyz 4.1.3 Shape Function
-https://github.com/swaywm/sway/blob/master/contrib/grimshot sway/grimshot at master · swaywm/sway · GitHub
-https://gitlab.freedesktop.org/wayland/weston/-/blob/master/compositor/weston-screenshooter.c compositor/weston-screenshooter.c · master · wayland / weston · GitLab
-https://github.com/novoid/LaTeX-KOMA-template novoid/LaTeX-KOMA-template: Generic template for midsize and larger documents based on KOMA script classes.
 https://gist.github.com/glats/ca71bbddc85f6a756e1e Improve fonts archlinux
-https://castel.dev/post/lecture-notes-1/ How I'm able to take notes in mathematics lectures using LaTeX and Vim | Gilles Castel
 https://vonheikemen.github.io/devlog/tools/using-vim-abbreviations/ Devlog | Using Vim's abbreviations
 https://tex.stackexchange.com/questions/7542/for-formal-articles-should-a-displayed-equation-be-followed-by-a-punctuation-to For formal articles, should a displayed equation be followed by a punctuation to conform to the language grammar ? - TeX - LaTeX Stack Exchange
 https://stackoverflow.com/questions/2235497/punctuation-in-latex-formulas/2235734#2235734 Punctuation in LaTeX formulas - Stack Overflow
@@ -116,34 +88,24 @@ https://packaging.python.org/overview/ An Overview of Packaging for Python — P
 http://www.liedersoundarchive.org/ The Lieder Sound Archive - The Lieder Sound Archive | Home
 https://www.classiccat.net/index.php Classic Cat - the free classical music directory
 https://www.gardnermuseum.org/experience/music Music Collection | Isabella Stewart Gardner Museum
-https://www.musoscorner.com.au/steinberg-ur22c-usb-c-2-channel-audio-interface Steinberg Steinberg UR22C USB-C 2 Channel Audio Interface | Australia's #1 Music Store. Zip Accepted
-https://www.musoscorner.com.au/steinberg-ur22c-usb-c-2-channel-audio-interface-27383 Steinberg Steinberg UR22C Interface & Mic Recording Pack | Australia's #1 Music Store. Zip Accepted
-https://djcity.com.au/product/behringer-u-phoria-umc202hd-audio-interface/ Behringer UMC202HD U-Phoria 2x2 Audio Interface - DJ City
-https://djcity.com.au/product/steinberg-ur22c-recording-pack-audio-interface/ Steinberg UR22C Recording Pack - Audio Interface - DJ City
 https://www.swamp.net.au/articles/laptop-or-ipod-into-balanced-xlr-microphone-input.html Laptop or Ipod into Balanced XLR Input...? | SWAMP
 http://thepythoncorner.com/dev/how-to-create-a-watchdog-in-python-to-look-for-filesystem-changes/ How to create a watchdog in Python to look for filesystem changes - The Python Corner
 https://wiki.archlinux.org/index.php/TOMOYO_Linux#TOMOYO_Linux_2.x TOMOYO Linux - ArchWiki
 https://towardsdatascience.com/where-you-should-drop-deep-learning-in-favor-of-constraint-solvers-eaab9f11ef45 When you should use Constraint Solvers instead of Machine Learning | by Antoine Champion | Towards Data Science
 https://www.jvt.me/posts/2019/01/29/git-worktree-multiple-branches/ Using `git worktree` to have multiple branches checked out at once · Jamie Tanna | Software Engineer
 https://stackoverflow.com/questions/20101834/pip-install-from-git-repo-branch python - pip install from git repo branch - Stack Overflow
-https://github.com/Kethku/neovide Kethku/neovide: No Nonsense Neovim Client in Rust
-https://github.com/Schmiddiii/qute-cookie-block Schmiddiii/qute-cookie-block: Blocking cookies for qutebrowser.
 https://ccrma.stanford.edu/~jos/fp/Forward_Backward_Filtering.html Forward-Backward Filtering
-https://github.com/erroneousboat/slack-term/wiki#running-slack-term-without-legacy-tokens Home · erroneousboat/slack-term Wiki
 https://developers.google.com/optimization/cp Constraint Optimization  |  OR-Tools  |  Google Developers
 https://en.wikipedia.org/wiki/Boolean_satisfiability_problem Boolean satisfiability problem - Wikipedia
 https://gist.github.com/endolith/c5b39ab78f1910e99cadaced9b839fc1 Window function constant overlap-add conditions (COLA) · GitHub
-https://github.com/michaelgrund/stacksplit GitHub - michaelgrund/stacksplit: Multi-event processing plugin for the MATLAB shear wave splitting toolbox SplitLab
 https://waitbutwhy.com/2017/04/neuralink.html#part1 Neuralink and the Brain's Magical Future — Wait But Why
 https://www.multivax.com/last_question.html The Last Question -- Isaac Asimov
-https://www.iecc.com/linker/ Linkers and Loaders
 http://www.stochasticlifestyle.com/why-numba-and-cython-are-not-substitutes-for-julia/ Why Numba and Cython are not substitutes for Julia - Stochastic Lifestyle
 https://stackoverflow.com/questions/56472727/difference-between-apache-parquet-and-arrow Difference between Apache parquet and arrow - Stack Overflow
 https://gitlab.com/almarklein/bsdf/blob/master/python/bsdf_example_python.ipynb python/bsdf_example_python.ipynb · master · Almar Klein / bsdf · GitLab
 http://www.damtp.cam.ac.uk/user/reh10/lectures/ Dr Robert Hunt: Lecture Notes and Handouts
 https://vim.cx/ vim.cx - encrypted pastebin
 https://bssw.io/ Better Scientific Software
-https://docs.julialang.org/en/v1/manual/unicode-input/ Unicode Input · The Julia Language
 https://juliadocs.github.io/Julia-Cheat-Sheet/ The Fast Track to Julia
 https://www.naturalearthdata.com/downloads/ Natural Earth » Downloads - Free vector and raster map data at 1:10m, 1:50m, and 1:110m scales
 http://geojson.io/#map=2/20.0/0.0 geojson.io
@@ -151,14 +113,9 @@ https://github.com/nvkelso/natural-earth-vector/tree/master/geojson natural-eart
 http://geojson.xyz/ geojson.xyz
 https://www.ngdc.noaa.gov/mgg/shorelines/gshhs.html Shoreline/Coastline Databases | NCEI
 https://towardsdatascience.com/plotting-thematic-maps-using-shapefiles-in-julia-6a926ef77721 Plotting Thematic Maps using Shapefiles in Julia | by René | Towards Data Science
-https://github.com/timholy/Revise.jl timholy/Revise.jl: Automatically update function definitions in a running Julia session
 http://xarray.pydata.org/en/stable/index.html xarray: N-D labeled arrays and datasets in Python
-https://github.com/Immediate-Mode-UI/Nuklear Immediate-Mode-UI/Nuklear: A single-header ANSI C immediate mode cross-platform GUI library
 https://gist.github.com/Miouyouyou/89e9fe56a2c59bce7d4a18a858f389ef An example, inspired by Rob Clark "kmscube.c" that uses Linux Direct Rendering Manager ( DRM ) and EGL to create an OpenGL ES 2 context. This is a standalone example, that just clears the screen with a blueish color. Usable with Rockchip DRM drivers and Mali Wayland/DRM userspace drivers.
-https://www.bleepingcomputer.com/news/microsoft/windows-10-now-lets-you-seamlessly-run-linux-gui-apps/ Windows 10 now lets you seamlessly run Linux GUI apps
-https://github.com/godotengine/godot godotengine/godot: Godot Engine – Multi-platform 2D and 3D game engine
 https://genieframework.github.io/Genie.jl/dev/tutorials/4-1--Developing_MVC_Web_Apps.html Developing MVC web applications · Genie - The Highly Productive Julia Web Framework
-https://github.com/hecrj/iced hecrj/iced: A cross-platform GUI library for Rust, inspired by Elm
 https://arstechnica.com/science/2020/10/the-unreasonable-effectiveness-of-the-julia-programming-language/ The unreasonable effectiveness of the Julia programming language | Ars Technica
 https://juliageo.org/ Get involved | JuliaGeo
 https://techytok.com/code-optimisation-in-julia/ Code optimisation in Julia - TechyTok
@@ -180,12 +137,9 @@ https://squoosh.app/ Squoosh
 https://www.gerritcodereview.com/ Gerrit Code Review | Gerrit Code Review
 https://vitalik.ca/general/2019/12/07/quadratic.html Quadratic Payments: A Primer
 https://liberapay.com/ Liberapay
-https://www.ato.gov.au/Business/Income-and-deductions-for-business/In-detail/Crowdfunding/ Crowdfunding | Australian Taxation Office
 https://stackoverflow.com/questions/8182801/using-imagemagick-to-repeat-or-tile-an-image Using ImageMagick to repeat or "tile" an image - Stack Overflow
 https://legacy.imagemagick.org/Usage/layers/ Layering -- IM v6 Examples
 https://www.finl.xyz/2021/05/27/a-current-status-on-finl/ A current status on finl – finl is not LaTeX
-https://www.linuxlinks.com/excellent-free-tutorials-learn-racket/ Excellent Free Tutorials to Learn Racket - LinuxLinks
-https://srht.site/ sourcehut pages
 https://www.greghendershott.com/2013/04/parameters-in-racket.html Parameters in Racket
 http://slurp.doc.ic.ac.uk/ SLURP Home Page
 https://www.ponylang.io/ Pony - Pony
@@ -204,10 +158,8 @@ https://www.intmath.com/cg5/katex-mathjax-comparison.php?processor=MathJax3 KaTe
 https://keybase.io/ Keybase
 https://pkgs.alpinelinux.org/packages Alpine Linux packages
 https://cortexjs.io/guides/mathfield-getting-started/ CortexJS
-https://www.entropysink.com/forums/index.php?PHPSESSID=8a781910471bbdd07900457e59ab5418& EntropySink - Index
-https://www.pccasegear.com/products/53611/msi-modern-15-core-i5-15-6in-laptop Buy MSI Modern 15 Core i5 15.6in Laptop [MODERN-15-A10M-425AU] | PC Case Gear Australia
-https://www.centrecom.com.au/asus-ga401ii-he003t-14-fhd-ryzen-7-4800hs-ultra-slim-gaming-laptop Asus Zephyrus G14 GA401II 14" FHD Ryzen 7 4800HS Gaming Laptop - Eclipse Gray (GA401II-HE003T) | Centre Com : Best PC Hardware Prices!
 https://dev.to/nflamel/smart-textwidth-on-vim-to-80-characters-on-comments-56id Smart textwidth on Vim when writing comments - DEV Community
 https://courses.eas.ualberta.ca/eas421/lecturepages/microstructures.html Rheology and deformation mechanisms
 https://www.mkdocs.org/ MkDocs
 https://blogs.gentoo.org/mgorny/2021/02/19/the-modern-packagers-security-nightmare/ The modern packager’s security nightmare – Michał Górny
+https://makefiletutorial.com/ Makefile Tutorial By Example

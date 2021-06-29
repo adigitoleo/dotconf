@@ -1,12 +1,5 @@
-ISIS Login #ANU https://isis.anu.edu.au
-WATTLE Login #ANU https://wattlecourses.anu.edu.au
-Preview colorschemes for #vim http://bytefluent.com/vivify/
-Gmail #email https://mail.google.com/mail/u/0/#inbox
-Proxy Login #ANU http://virtual.anu.edu.au/
 POSIX #shell scripting https://steinbaugh.com/posts/posix.html
-Seismological Society of America https://www.seismosoc.org/
 GitHub #git https://github.com/adigitoleo
-GitLab #git https://gitlab.com/adigitoleo
 Setuptools documentation #python https://setuptools.readthedocs.io/en/latest/setuptools.html
 Best practices #guide #python BOBP https://gist.github.com/sloria/7001839
 ReST #guide #docs https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html
@@ -22,12 +15,9 @@ NearlyFreeSpeech - simple pre-paid shared web hosting https://www.nearlyfreespee
 Stop using encrypted email https://latacora.micro.blog/2020/02/19/stop-using-encrypted.html
 Our software dependency problem (Russ Cox) https://research.swtch.com/deps#note13
 arch linux requirements for git send-email https://wiki.archlinux.org/index.php/Git#Directly_sending_patches_to_a_mailing_list
-Cotse Webmail https://www.cotse.net/mail/src/login.php
-Geodynamics Slack https://teamgeodynamics.slack.com/
 LaTeX documentation https://texdoc.org/index.html
 python abstract containers typing https://docs.python.org/3/library/collections.abc.html#module-collections.abc
 numpy docstring guide python https://numpydoc.readthedocs.io/en/latest/format.html#class-docstring
-ANU printing https://wirelessprinting.anu.edu.au/Account/SelectAuth
 POSIX Issue 7 2018 https://pubs.opengroup.org/onlinepubs/9699919799/
 Portable Shell Programming https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.70/autoconf.html#Portable-Shell
 SoloKey 2FA USB Keys https://solokeys.com/
@@ -38,3 +28,4 @@ C tutorial | build text editor in 1k loc https://viewsourcecode.org/snaptoken/ki
 Look for broken links in markdown files http://howto.philippkeller.com/files/link_checker.py
 LaTeX unofficial reference manual https://latexref.xyz/
 MathML vs TeX test website https://mdn.mozillademos.org/en-US/docs/Mozilla/MathML_Project/MathML_Torture_Test$samples/MathML_Torture_Test?revision=1506691
+SALOME pre and post-processing for numerics https://www.salome-platform.org/
