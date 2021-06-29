@@ -17,6 +17,7 @@ Schmiddiii/qute-cookie-block: Blocking cookies for qutebrowser.
 SciTools/cartopy: Cartopy - a cartographic python library with matplotlib support
 anowacki/Seis.jl: An open, fast and flexible framework for analysing seismic data in Julia
 anowacki/SeisSplit.jl: Seismic shear wave splitting analysis in Julia
+balthild/katex-physics: Implemented some physics package commands for KaTeK
 benschwarz/gallery-css: CSS only Gallery
 bpython/curtsies: Curses-like terminal wrapper with a display based on compositing 2d arrays of text.
 compholio/jabbrv: Automatic Journal Title Abbreviation Package for LaTeX

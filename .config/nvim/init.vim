@@ -622,10 +622,10 @@ noremap [l ^
 let g:loaded_netrwPlugin = 1  " Hack to disable buggy netrw completely.
 " Markdown {{{3
 let g:markdown_fenced_languages = [
-            \'vim', 'python', 'sh', 'zsh', 'bash=sh',
+            \'vim', 'python', 'sh', 'zsh', 'bash=sh', 'julia', 'fortran',
             \'haskell', 'java', 'c', 'css', 'ruby', 'erb=eruby',
             \'javascript', 'js=javascript', 'json=javascript',
-            \'tex', 'scala', 'sql', 'gnuplot', 'html', 'xml',
+            \'tex', 'scala', 'sql', 'gnuplot', 'html', 'xml', 'lisp',
             \]
 let g:markdown_folding = 1
 " reStructuredText {{{3
