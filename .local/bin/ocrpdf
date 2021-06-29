@@ -25,6 +25,9 @@ helpf() { # Print a longer help string
 warn() { # warn [message]... Print message to stderr <https://stackoverflow.com/a/23550347>
     >&2 printf '%s\n' "${SCRIPTNAME}: $1"
 }
+tell() { # tell [message]... Print message to stdout
+    printf '%s\n' "${SCRIPTNAME}: $1"
+}
 
 # ----------- MAIN ROUTINES ---------------------------------------------------
 FUNCRETURN=  # Store non-integer return values, see also <https://stackoverflow.com/a/18198358>
@@ -56,7 +59,7 @@ ocr() { # ocr [input] [output] Run OCR on input PDF and write to output PDF
     is_command pdftoppm || { warn 'command pdftoppm not found, aborting' && return 1 ; }
     is_command tesseract || { warn 'command tesseract not found, aborting' && return 1 ; }
 
-    echo 'scanning PDF document...'
+    tell 'scanning PDF document...'
     readonly TEMP_DIR=$(mktemp --tmpdir --directory ocrpdf-XXXXXX)
     if [ -n "$USR_PASS" ] ; then
         pdftoppm -upw "$USR_PASS" -tiff -r 300 "$1" "${TEMP_DIR}/pg" \
@@ -69,7 +72,7 @@ ocr() { # ocr [input] [output] Run OCR on input PDF and write to output PDF
     fi
 
     readonly TEMP_LIST=$(mktemp --tmpdir ocrpdf-XXXXXX.txt)
-    count_files "$TEMP_DIR"/* && echo "found ${FUNCRETURN} pages" \
+    count_files "$TEMP_DIR"/* && tell "found ${FUNCRETURN} pages" \
         || { warn 'no pages found, aborting' ; return 1 ; }
     # TODO: Ensure correct glob match sorting for the tiff pages.
     for FILE in "${TEMP_DIR}"/* ; do
@@ -84,7 +87,7 @@ ocr() { # ocr [input] [output] Run OCR on input PDF and write to output PDF
             || { warn 'tesseract failed, aborting' \
                 && rm -rf "$TEMP_DIR" ; rm "$TEMP_LIST" ; return 1 ; }
     fi
-    echo "wrote searchable PDF to ${2}.pdf"
+    tell "wrote searchable PDF to ${2}.pdf"
     rm -rf "$TEMP_DIR" ; rm "$TEMP_LIST"
 }
 
@@ -99,7 +102,7 @@ while getopts "o:p:l:h" OPT ; do
         * ) warn "${1} is not a valid option" && usage ; exit 1 ;;
     esac
 done
-shift $(("$OPTIND" - 1))
+shift $(($OPTIND - 1))
 if [ -z "$PDF_OUT" ] ; then
     rstrip "$1" '.pdf' && PDF_OUT="${FUNCRETURN}_searchable"
 fi

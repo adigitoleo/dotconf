@@ -25,6 +25,9 @@ helpf() { # Print a longer help string
 warn() { # warn [message]... Print message to stderr <https://stackoverflow.com/a/23550347>
     >&2 printf '%s\n' "${SCRIPTNAME}: $1"
 }
+tell() { # tell [message]... Print message to stdout
+    printf '%s\n' "${SCRIPTNAME}: $1"
+}
 quote() { # quote [string] Safe shell quoting? <https://www.etalabs.net/sh_tricks.html>
     printf '%s\n' "$1" | sed "s/'/'\\\\''/g;1s/^/'/;\$s/\$/'/"
 }
@@ -47,7 +50,7 @@ consume() { # consume [letter] Consume a command line option
 }
 is_command() { # Check if command exists, for flow control (no stdout messages)
     1>/dev/null 2>&1 command -v "$1" && [ "$?" -eq 0 ] && return 0 \
-        || warn "command '${1}' not found" && return 1
+        || { warn "command '${1}' not found" && return 1 ;}
 }
 count_files() { # count_files [glob] Count files matching glob
     [ -e "$1" ] && FUNCRETURN="$#" || return 1
@@ -73,7 +76,7 @@ while getopts "abc:d:h" OPT ; do
         h ) usage && helpf ; exit 0 ;;
     esac
 done
-shift $(("$OPTIND" - 1))
+shift $(($OPTIND - 1))
 while [ $# -gt 0 ] ; do
     echo "remaining args (operands): $1"
     shift
