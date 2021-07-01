@@ -273,9 +273,9 @@ endfunction
 function! StartTUI(prog, ...) abort "{{{2
     " Execute a TUI program a:prog with optional arguments using termopen().
     if executable(a:prog)
-        let l:cmdstr = a:0 ? join(extend([a:prog .. " -c "], a:000)) : a:prog
+        let l:cmdstr = a:0 ? join(extend([a:prog], a:000)) : a:prog
         exec 'enew'
-        call termopen('export TERM=' .. $TERM .. '&& ' .. l:cmdstr, {"on_exit": function("<SID>TermQuit")})
+        call termopen('export TERM=' .. $TERM .. ' && ' .. l:cmdstr, {"on_exit": function("<SID>TermQuit")})
     endif
 endfunction
 
@@ -308,7 +308,7 @@ let &scrolloff=g:SCROLLOFF
 let &showbreak = '+++ '
 set listchars+=trail:\ ,precedes:<,extends:>
 set pumheight=15
-set completeopt-=preview
+set completeopt=menu
 set helpheight=0
 set synmaxcol=200
 " Indentation. {{{2
@@ -417,7 +417,7 @@ if executable('theme')  " Toggle global TUI theme using external script.
                 \| let &background = get(systemlist('theme -q'), 0, 'light')
     command! SyncTheme silent! let &background = get(systemlist('theme -q'), 0, 'light')
 endif
-command! -nargs=* Term if strlen(<q-args>) > 0 | call StartTUI($SHELL, <f-args>)
+command! -nargs=* Term if strlen(<q-args>) > 0 | call StartTUI($SHELL, '-c', <f-args>)
             \ | else | call StartTUI($SHELL) | endif
 command! -nargs=* Elinks call StartTUI("elinks", <f-args>)
 command! -nargs=* Aerc call StartTUI("aerc", <f-args>)
@@ -623,7 +623,7 @@ let g:loaded_netrwPlugin = 1  " Hack to disable buggy netrw completely.
 " Markdown {{{3
 let g:markdown_fenced_languages = [
             \'vim', 'python', 'sh', 'zsh', 'bash=sh', 'julia', 'fortran',
-            \'haskell', 'java', 'c', 'css', 'ruby', 'erb=eruby',
+            \'haskell', 'java', 'c', 'css', 'ruby', 'erb=eruby', 'go',
             \'javascript', 'js=javascript', 'json=javascript',
             \'tex', 'scala', 'sql', 'gnuplot', 'html', 'xml', 'lisp',
             \]
@@ -701,6 +701,7 @@ endif
 
 " LSP settings. {{{2
 let g:lsc_auto_map = {'defaults': 1, 'Completion': 'omnifunc'}
+let g:lsc_auto_completeopt = 'menu,menuone,noinsert,noselect'
 let g:lsc_server_commands = {
             \ 'python': 'pyls',
             \ 'fortran': 'fortls --lowercase_intrinsics',
