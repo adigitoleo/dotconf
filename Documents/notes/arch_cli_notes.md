@@ -59,5 +59,6 @@ everything from `base-devel` is assumed.
 *   **g810-led-git**: RGB control for fancy Logitech keyboards <https://github.com/MatMoul/g810-led>
 *   **quivira**: a nice font *shrug* <http://www.quivira-font.com/index.php>
 *   **rx**: Vim-like pixel editor <http://cloudhead.io/rx/>
+*   **tiny**: Minimalist console IRC client written in Rust <https://github.com/osa1/tiny>
 *   **yadm**: dotfiles manager (git wrapper with some extras) <https://github.com/TheLocehiliosan/yadm>
 *   **zsh-pure-prompt**: Pretty, minimal and fast ZSH prompt <https://github.com/sindresorhus/pure>
