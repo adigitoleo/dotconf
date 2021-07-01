@@ -37,7 +37,7 @@ function chpwd {
 }
 
 # Make directory and enter it.
-function mkcd { mkdir "$1" && cd "$1" }
+function mkcd { mkdir "$@" && cd "$@[-1]" }
 
 # Change cursor shape based on keymap mode.
 function zle-keymap-select {
