@@ -104,7 +104,7 @@
 
 # Set playback toggles.
 Repeat = yes
-Shuffle = no
+Shuffle = yes
 #AutoNext = yes
 
 # Default FormatString:

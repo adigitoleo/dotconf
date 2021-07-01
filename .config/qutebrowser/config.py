@@ -22,6 +22,7 @@ c.auto_save.session = True
 c.completion.shrink = True
 c.session.lazy_restore = True
 c.content.autoplay = False
+c.content.prefers_reduced_motion = True
 c.editor.command = [
     "alacritty",
     "--class=Floating Terminal,Floating Terminal",
