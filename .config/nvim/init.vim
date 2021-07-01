@@ -273,7 +273,7 @@ endfunction
 function! StartTUI(prog, ...) abort "{{{2
     " Execute a TUI program a:prog with optional arguments using termopen().
     if executable(a:prog)
-        let l:cmdstr = a:0 ? join(extend([a:prog], a:000)) : a:prog
+        let l:cmdstr = a:0 ? join(extend([a:prog .. " -c "], a:000)) : a:prog
         exec 'enew'
         call termopen('export TERM=' .. $TERM .. '&& ' .. l:cmdstr, {"on_exit": function("<SID>TermQuit")})
     endif
@@ -455,11 +455,11 @@ command! -nargs=1 EditNear exec 'edit %:h/' .. <q-args>
 " Special terminal buffer settings and overrides. {{{2
 augroup terminal_buffer_rules
     autocmd!
-    autocmd TermOpen * setlocal nobuflisted nonumber norelativenumber signcolumn=no
+    autocmd TermOpen * setlocal nonumber norelativenumber signcolumn=no
     autocmd TermOpen * startinsert
     autocmd TermEnter * set scrolloff=0
     autocmd TermLeave * let &scrolloff=g:SCROLLOFF
-    autocmd BufEnter,WinEnter term://* startinsert
+    autocmd BufEnter,WinEnter term://* startinsert | setlocal nobuflisted
 augroup END
 
 " Special filetype settings and overrides. {{{2
