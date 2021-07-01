@@ -22,7 +22,7 @@ if executable('/usr/bin/python3')
 endif
 
 " TODO: Wrapper script instead of FZF_DEFAULT_COMMAND, don't index binary files.
-" TODO: The julia+vim linting and LSP situation isn't great...
+" TODO: Get ALE to use my julials script for diagnostics
 " TODO: Write plugin for correct syntax highlighting of setup.cfg files.
 " TODO: Set up offline thesaurus files, :h 'thesaurus'
 " TODO: Make *Feed functions more robust by using fprint instead of echo.
@@ -699,12 +699,8 @@ if empty(glob(g:PLUGIN_HOME.'/*'))
     finish
 endif
 
-" Make VimCompletesMe do <C-p> completion on <Tab>.
-let g:vcm_direction = 'p'
-
 " LSP settings. {{{2
 let g:lsc_auto_map = {'defaults': 1, 'Completion': 'omnifunc'}
-let g:lsc_enable_autocomplete = 0
 let g:lsc_server_commands = {
             \ 'python': 'pyls',
             \ 'fortran': 'fortls --lowercase_intrinsics',
