@@ -370,7 +370,7 @@ if type(function('fzf#run'))
     " Switch between listed buffers or loaded `:terminal` buffers.
     command! -bang FuzzySwitch call fzf#run(fzf#wrap(
         \ s:FZFspecgen(s:FileFeed([s:BufList()], ':~:.', '\n') .. ' ;' .. s:TermFeed(),
-        \ '', "Listed buffers: "), <bang>0))
+        \ '', "Open buffers: "), <bang>0))
 
     " Search for (most) cmdline mode commands. See s:CmdFeed() for details.
     " Semicolon <;> drops back to normal command line, <space>, ! or | are
@@ -549,7 +549,7 @@ inoremap <M-.> <C-t>
 " Navigate buffers (next, previous, most recent - if still loaded).
 nnoremap <M-]> <Cmd>bn<Cr>
 nnoremap <M-[> <Cmd>bp<Cr>
-nnoremap <expr> <M-Tab> '<Cmd>b' .. (buflisted(0) ? '#' : 'n') .. '<Cr>'
+nnoremap <M-Tab> <Cmd>FuzzySwitch<Cr>
 " Ergonomic alternative for expanding abbreviations.
 inoremap <M-]> <C-]>
 " Window navigation and relocation.
