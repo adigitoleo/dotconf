@@ -1,8 +1,7 @@
 #!/bin/sh
 readonly SCRIPTNAME="${0##*/}"
 usage() {
-    printf 'Usage: %s \n' "$SCRIPTNAME"
-    printf '       %s ' "$SCRIPTNAME"
+    printf 'Usage: %s ' "$SCRIPTNAME"
     echo 'source... target'
     echo
     echo 'Copy one or more sources to a remote target with scp,'
