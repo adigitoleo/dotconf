@@ -27,7 +27,7 @@ pop() {  # https://stackoverflow.com/a/63864756
 }
 
 [ $# -eq 0 ] && usage && exit 1
-case "$1" in '-*' ) usage && exit 0 ;; esac
+case "$1" in -* ) usage && exit 0 ;; esac
 for TARGET; do : ; done
 pop $#
 eval "$POP_EXPR"
