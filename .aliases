@@ -19,12 +19,12 @@
 
 alias colors16='msgcat --color=test|head -11'
 alias ls='ls --color=auto --group-directories-first'
-alias diff='diff --color=auto'
 alias grep='grep --color=auto'
 alias ip='ip --color=auto'
 alias lsblk='lsblk -o NAME,MAJ:MIN,RM,SIZE,RO,TYPE,MOUNTPOINT,FSTYPE,FSVER'
 alias pacman='pacman --color=auto'
 alias tree='tree --dirsfirst'
+alias less='less -iR'
 
 # Ignore whatever ripgrep would ignore in the tree output.
 alias rg,tree='rg --files | tree --fromfile --dirsfirst'
@@ -34,12 +34,12 @@ alias rg,tree='rg --files | tree --fromfile --dirsfirst'
 
 alias p='pacman --color=auto'
 alias y=yadm
+alias d='diff --color=always -u'
 alias p,get='sudo pacman -Syu --color=auto'
 alias p,rmsafe='sudo pacman -Rn --color=auto'
 alias p,rm='sudo pacman -Rns --color=auto'
 alias p,orphans='pacman -Qtdq --color=auto'
 alias aur='auracle'
-alias less='less -i'
 alias pacdiff='sudo SUDO_EDITOR="$EDITOR -d" DIFFPROG="sudoedit" pacdiff'
 
 # Use ED25519 ssh keys by default.
@@ -82,3 +82,6 @@ alias m='mocp 2>/dev/null'
 # Mon écran!
 alias mon,left='wlr-randr --output HDMI-A-2 --preferred --pos 0,0 --output HDMI-A-1 --preferred --pos -1920,0'
 alias mon,right='wlr-randr --output HDMI-A-2 --preferred --pos 0,0 --output HDMI-A-1 --preferred --pos 1920,0'
+
+# Create an archive of <folder>: PATTERN=<folder> && mktar <archive>.tar.gz <folder>
+alias mktar='tar --transform=s/$PATTERN/$date +%Y%m%dT%H%M)/ --exclude={__pycache,.mypy_cache} -vcaf'
