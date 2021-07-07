@@ -1,0 +1,25 @@
+Set up backup scripts and move stuff out of the dotfiles repo that shouldn't be there (web bookmarks, github stars file, etc.)
+
+Better TUI mail client? Aerc hangs at fetching "sent" mail sometimes...
+- Change to use modular components for receiving, sending, reading?
+
+Better/broader backup scripts for ~/Documents
+
+How to do presentations?
+- latex + beamer ?
+- google sheets ?
+- some javascript heresy ?
+- custom tools using katex (similar to blog) ?
+
+Abbreviated journal names in latex bibtex
+- go over old perl script at https://pastebin.com/2C7X8aGZ
+- python script for bio only ? at https://github.com/matthew-brett/bibstuff/blob/master/scripts/jabbrev.py
+- jabbrev package for latex ? can't seem to find it anymore
+
+More bubblewrap profiles for sandboxed execution/file opening
+- qutebrowser
+- tiny
+- aerc
+- ssh
+- unzip
+- libreoffice
