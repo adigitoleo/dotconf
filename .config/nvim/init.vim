@@ -305,7 +305,7 @@ set shortmess+=cI
 set shortmess-=F
 set formatoptions-=t
 let &scrolloff=g:SCROLLOFF
-let &showbreak = '+++ '
+let &showbreak='--'
 set listchars+=trail:\ ,precedes:<,extends:>
 set pumheight=15
 set completeopt=menu
@@ -437,7 +437,7 @@ command! SentenceCase silent! .s/\v(.*)/\L\1/|.s/\v<(\a)(\a*)/\u\1\L\2/
 " Save and execute focused buffer as job (needs shebang + executable permissions).
 command! Run exec 'up|call jobstart(expand("%:p"))'
 " Strip trailing whitespace.
-command! StripTrails silent! %s/\s\+$//e
+command! StripTrails silent! keeppatterns %s/\s\+$//e
 " Smart buffer splitting based on terminal width.
 command! -nargs=? -bar -complete=buffer SmartSplit call SmartSplit(<q-args>)
 " Easier vertical window resizing.
