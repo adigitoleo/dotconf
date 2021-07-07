@@ -14,7 +14,9 @@ helpf() { # Print a longer help string
     echo '                  cannot be repeated more than twice'
     echo '-c <command>      check for command in the current shell'
     echo '-d <string>       echo back the given string'
-    echo '<operand>...      echo back operands after handling everything else'
+    echo
+    echo 'Operands:'
+    echo '  <operand>...    echo back operands after handling everything else'
     echo
     echo 'Template for a robust Bourne shell script,'
     echo 'focusing on POSIX compliance and portability.'
