@@ -52,7 +52,7 @@ c.content.dns_prefetch = False
 
 c.tabs.last_close = "startpage"
 c.tabs.mousewheel_switching = False
-c.tabs.position = "right"
+c.tabs.position = "left"
 c.tabs.new_position.related = "prev"
 c.tabs.new_position.unrelated = "prev"
 c.tabs.title.format_pinned = "{audio}{index}: {current_title}"
