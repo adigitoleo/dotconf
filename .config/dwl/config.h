@@ -7,7 +7,7 @@ For the AUR package, replace the provided `config.h` with this file.
 */
 
 /* appearance */
-static const int sloppyfocus        = 1;  /* focus follows mouse */
+static const int sloppyfocus        = 0;  /* focus follows mouse */
 static const unsigned int borderpx  = 3;  /* border pixel of windows */
 static const float rootcolor[]      = {0.3, 0.3, 0.3, 1.0};
 static const float bordercolor[]    = {0.5, 0.5, 0.5, 1.0};
