@@ -138,7 +138,7 @@ fi
 
 # COMPLETION {{{1
 autoload -Uz compinit; compinit
-setopt menu_complete
+setopt menu_complete complete_in_word
 
 # Requires fzf.
 if command -v fzf &>/dev/null; then
