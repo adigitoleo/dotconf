@@ -16,16 +16,18 @@ everything from `base-devel` is assumed.
 *   **fzf**: fuzzy-finder <https://github.com/junegunn/fzf>
 *   **htmlhint**: static HTML linter <https://htmlhint.com/>
 *   **htop**: same as `top` but with fancy animated bars <https://htop.dev/>
+*   **hunspell**: CLI spell checker, used by libreoffice <https://hunspell.github.io/>
+*   **hunspell-en_au**: Hunspell dictionaries for "Australian" English spell checking <http://wordlist.aspell.net/dicts/>
 *   **imagemagick**: image manipulation bundle (CLI) <https://www.imagemagick.org/>
 *   **img2pdf**: converting images to PDF, better than imagemagick in some cases <https://gitlab.mister-muffin.de/josch/img2pdf>
-*   **imv**: image viewer (imv = feh + wayland) <https://github.com/eXeC64/imv>
+*   **imv**: image viewer {NOTE: flaky avif support} (imv = feh + wayland) <https://github.com/eXeC64/imv>
 *   **jedi-language-server**: LSP implementation for pyton-jedi <https://github.com/pappasam/jedi-language-server>
 *   **moc**: audio player, control with `mocp` command <https:moc.daper.et>
 *   **mpv**: video player <https://mpv.io/>
 *   **mypy**: static type checker for python <http://www.mypy-lang.org/>
 *   **namcap**: a static analyzer for PKGBUILDS <https://projects.archlinux.org/namcap.git/>
-*   **noto-fonts**: google open source fonts, wide unicode coverage <https://www.google.com/get/noto/>
 *   **noto-fonts-cjk**: google open source fonts for Chinese, Japanese and Korean <https://www.google.com/get/noto/>
+*   **noto-fonts**: google open source fonts, wide unicode coverage <https://www.google.com/get/noto/>
 *   **pass**: password manager that uses gnupg <https://www.passwordstore.org/>
 *   **patch**: apply patch files to sources <https://www.gnu.org/software/patch/>
 *   **perl-authen-sasl**: required for `git send-email` workflow <https://search.cpan.org/dist/Authen-SASL>
@@ -48,6 +50,7 @@ everything from `base-devel` is assumed.
 *   **ttf-liberation**: a good font family <https://github.com/liberationfonts/liberation-fonts>
 *   **udisks2**: manage (removable) disks without superuser <https://www.freedesktop.org/wiki/Software/udisks>
 *   **unzip**: GNU's Not User-friendly (a .zip extractor is bloat?) <https://www.info-zip.org/UnZip.html>
+*   **vis**: a modern, sane and spartan vim replacement <https://github.com/martanne/vis#vis-a-vim-like-text-editor>
 *   **zip**: *sigh*, UnIx PhIlOsOpHy (creates .zip archives, cf: `unzip`) <http://www.info-zip.org/Zip.html>
 
 ## AUR
