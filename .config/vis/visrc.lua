@@ -29,7 +29,14 @@ vis.events.subscribe(vis.events.INIT, function()
     -- options:
     vis:command('set expandtab on')
     vis:command('set tabwidth 4')
-    vis:command('set theme light-16')
+    vis:command('set theme mellow')
+    local handle = io.popen('theme -q')
+    local theme = handle:read()
+    if theme == "dark" then
+        vis:command('set mellow_dark true')
+    else
+        vis:command('set mellow_dark false')
+    end
 
     -- mappings:
     vis:command('map normal <M-;> <Escape>')
@@ -39,8 +46,12 @@ vis.events.subscribe(vis.events.INIT, function()
     vis:command('map visual-line <M-;> <Escape>')
     vis:command('map operator-pending <M-;> <Escape>')
     vis:command('map insert <M-Enter> <C-n>')
+    vis:command('map normal <M-j> <C-w>j')
+    vis:command('map normal <M-k> <C-w>k')
 end)
 
 vis.events.subscribe(vis.events.WIN_OPEN, function(win)
     vis:command('set show-tabs on')
+    vis:command('set relativenumbers on')
+    vis:command('set colorcolumn 88')
 end)
