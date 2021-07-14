@@ -48,6 +48,10 @@ vis.events.subscribe(vis.events.INIT, function()
     vis:command('map insert <M-Enter> <C-n>')
     vis:command('map normal <M-j> <C-w>j')
     vis:command('map normal <M-k> <C-w>k')
+
+    -- TODO: Make these robust (allow repeating with . or a count, etc.)
+    vis:command('map normal " o" o<Escape>')
+    vis:command('map normal " O" O<Escape>')
 end)
 
 vis.events.subscribe(vis.events.WIN_OPEN, function(win)
