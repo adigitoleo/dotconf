@@ -235,9 +235,7 @@ Shuffle = yes
 #
 # Example:    Theme = laras_theme
 #
-# https://github.com/wimstefan/mocp-themes
-# Theme = orange
-Theme = yellow_red_theme
+Theme = red_transparent
 
 # The theme used when running on an xterm.
 #
