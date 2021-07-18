@@ -1,25 +1,29 @@
 #!/bin/sh
-SCRIPTNAME="${0##*/}"
-SYNOPSIS="Usage: $SCRIPTNAME [-h]"
-echoerr() { printf "$SCRIPTNAME: %s\n" "$*" >&2; echo $SYNOPSIS; }
-echohelp() {
-    echo
+readonly SCRIPTNAME="${0##*/}"
+usage() { printf 'Usage: %s [-h]\n' "$SCRIPTNAME"; }
+helpf() {
     echo 'Start custom background processes for wayland.'
     echo 'Call this using the autostart method for your compositor.'
     echo "For example, in dwl you can use dwl -s $SCRIPTNAME."
 }
 
 case "$1" in
-    "-h" | "--help" ) echo $SYNOPSIS; echohelp; exit 0 ;;
+    "-h" | "--help" ) usage && helpf ; exit 0 ;;
 esac
 
 # NOTE: Do NOT start the ssh-agent from this script! Use `ssh-agent <compositor>` instead.
 #       This will ensure that the agent dies with the compositor.
 
-# TODO: Launch statusbars, configure monitors (?).
-
-is_command() { command -v "$1" >/dev/null 2>&1 || echoerr "command '$1' not found"; }
-is_running() { pgrep "$1" >/dev/null 2>&1 ; }
+warn() { # warn [message]... Print message to stderr <https://stackoverflow.com/a/23550347>
+    >&2 printf '%s\n' "${SCRIPTNAME}: $1"
+}
+is_command() { # Check if command exists, for flow control (no stdout messages)
+    1>/dev/null 2>&1 command -v "$1" && [ "$?" -eq 0 ] && return 0 \
+        || { warn "command '${1}' not found" && return 1 ;}
+}
+is_running() { # Check if an instance of a command is running using pgrep
+     is_command pgrep && { 1>/dev/null 2>&1 pgrep "$1" && [ "$?" -eq 0 ] && return 0 ;}
+}
 
 is_running wlsunset || \
     {
