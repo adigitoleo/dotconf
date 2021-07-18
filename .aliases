@@ -9,6 +9,7 @@
 # p = pacman (package manager)
 # v = virtual console
 # x = xorg-specific (X11 server)
+# c = calendar (e.g. using remind)
 # py = python (+ venv, pyenv, ...)
 # jl = julia
 # rg = ripgrep shortcuts (search)
@@ -48,9 +49,11 @@ alias ssh-keygen='ssh-keygen -t ed25519'
 
 # Terminal editor.
 alias e=$EDITOR
+alias v=/bin/vis
 
-# Terminal clock.
-alias t='watch -t -n 1 "figlet -c $(date +"%a   %d   %b") && figlet -c $(date +"%H : %M")"'
+# New terminal instance (same directory).
+alias t='setsid $TERM'
+
 # Suspend and lock (run from a vconsole).
 alias v,lock='systemctl suspend && vlock --all'
 
@@ -59,7 +62,7 @@ alias v,lock='systemctl suspend && vlock --all'
 # (Un)mount drives, e.g. external usb devices (udisks2).
 # Because automounting is not smart enough and always breaks somehow.
 alias d,mount='udisksctl mount --options fmask=0133 dmask=0022 noexec -b'
-alias d,unmount='udisksctl unmount -b'
+alias d,unmount='sync && udisksctl unmount -b'
 alias d,free='lsblk -o NAME,MOUNTPOINT,FSAVAIL'
 
 # Only for X.
@@ -69,6 +72,12 @@ alias x,op='xdg-open'
 # Find and print site urls from elinks history or bookmarks.
 alias e,hist='cut -f2 < ~/.elinks/globhist|fzf'
 alias e,mark='cut -f2 < ~/.elinks/bookmarks|fzf'
+
+# Print this week's calendar
+alias c,day='remind ~/.config/remind/reminders.rem'
+alias c,week='remind -c+1 ~/.config/remind/reminders.rem'
+alias c,fortnight='remind -c+2 ~/.config/remind/reminders.rem'
+alias c,month='remind -c1 ~/.config/remind/reminders.rem'
 
 # Ouroboros and the Virtual Environment.
 alias py=python
@@ -91,3 +100,6 @@ alias mon,right='wlr-randr --output HDMI-A-2 --preferred --pos 0,0 --output HDMI
 
 # Create an archive of <folder>: PATTERN=<folder> && mktar <archive>.tar.gz <folder>
 alias mktar='tar --transform=s/$PATTERN/$date +%Y%m%dT%H%M)/ --exclude={__pycache,.mypy_cache} -vcaf'
+
+# Create backup according to ./.BACKUP (ripgrep patterns) using rsync: backup <destination>
+alias backup='rg --no-config --files $(cat .BACKUP)|rsync -rszauhP --delete --files-from=- .'
