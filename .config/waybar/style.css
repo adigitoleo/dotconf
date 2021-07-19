@@ -1,0 +1,24 @@
+* {
+    font-family: monospace;
+    font-size: 14px;
+    color: #F5BB89;
+    margin-top: 1px;
+}
+
+window#waybar {
+    background-color: rgba(102, 41, 47, 0.25);
+    border-top: 3px solid rgba(128, 128, 128, 0.5);
+}
+
+#clock,
+#memory,
+#cpu,
+#network,
+#custom-remind {
+    padding: 0 1em;
+}
+
+#clock {
+    font-weight: bold;
+    background-color: rgba(15, 9, 8, 0.75);
+}

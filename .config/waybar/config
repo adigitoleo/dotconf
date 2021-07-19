@@ -1,0 +1,35 @@
+{
+    "layer": "bottom",
+    "gtk-layer-shell": false,
+    "output": ["HDMI-A-2"],
+    "position": "bottom",
+    "height": 22,
+    "modules-left": ["custom/remind"],
+    "modules-right": ["network", "cpu", "memory", "clock"],
+    "custom/remind": {
+        "format": "Reminders: {}",
+        "interval": 300,
+        "exec": "remind -s+1 ~/.config/remind/reminders.rem|grep $(date +%Y/%m/%d)|cut -d ' ' -f5-|tr '\n' ' | '",
+        "tooltip": false,
+    },
+    "network": {
+        "format-wifi": "{essid}:{signalStrength}%",
+        /* "format-ethernet": "{ifname}: {ipaddr}/{cidr}", */
+        /* "format-linked": "{ifname} (No IP)", */
+        "format-disconnected": "⚠ Disconnected",
+        "format-alt": "{ifname}:{ipaddr}/{cidr}",
+        "tooltip": false
+    },
+    "cpu": {
+        "format": "CPU:{usage}%",
+        "tooltip": false
+    },
+    "memory": {
+        "format": "RAM:{}%",
+        "tooltip": false
+    },
+    "clock": {
+        "format-alt": "{:%Y-%m-%d}",
+        "tooltip": false
+    },
+}
