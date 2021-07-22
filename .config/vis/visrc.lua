@@ -8,6 +8,7 @@ local spellcheck = require('plugins/spellcheck')
 --      <C-w>w to suggest spelling corrections
 
 local pairs = require('plugins/pairs')
+pairs.autopairs = false
 -- PGKBUILD is in AUR, upstream is <https://repo.or.cz/vis-pairs.git>
 --      turn of automatic closing delimiter insertion:
 --      pairs = require('plugins/pairs')
@@ -39,28 +40,37 @@ vis.events.subscribe(vis.events.INIT, function()
         vis:command('set mellow_dark false')
     end
 
-    -- mappings:
-    vis:map(vis.modes.NORMAL, '<M-;>', '<Escape>')
-    vis:map(vis.modes.INSERT, '<M-;>', '<Escape><Escape>')
-    vis:map(vis.modes.REPLACE, '<M-;>', '<Escape>')
-    vis:map(vis.modes.VISUAL, '<M-;>', '<Escape>')
-    vis:map(vis.modes.VISUAL_LINE, '<M-;>', '<Escape>')
-    vis:map(vis.modes.OPERATOR_PENDING, '<M-;>', '<Escape>')
-    vis:map(vis.modes.INSERT, '<M-Enter>', '<C-n>')
-    vis:map(vis.modes.NORMAL, '<M-j>', '<C-w>j')
-    vis:map(vis.modes.NORMAL, '<M-k>', '<C-w>k')
+    local _normal = vis.modes.NORMAL
+    local _insert = vis.modes.INSERT
+    local _replace = vis.modes.REPLACE
+    local _visual = vis.modes.VISUAL
+    local _vline = vis.modes.VISUAL_LINE
+    local _pending = vis.modes.OPERATOR_PENDING
 
-    -- TODO: Make these robust (allow repeating with . or a count, etc.)
-    vis:map(vis.modes.NORMAL, ' o', 'o<Escape>')
-    vis:map(vis.modes.NORMAL, ' O', 'O<Escape>')
-    vis:map(vis.modes.NORMAL, '<M-f>', ':fzf<Enter>')
+    -- Meta mappings:
+    vis:map(_normal, '<M-;>', '<Escape>')
+    vis:map(_insert, '<M-;>', '<Escape><Escape>')
+    vis:map(_replace, '<M-;>', '<Escape>')
+    vis:map(_visual, '<M-;>', '<Escape>')
+    vis:map(_vline, '<M-;>', '<Escape>')
+    vis:map(_pending, '<M-;>', '<Escape>')
+    vis:map(_insert, '<M-Enter>', '<C-n>')
+    vis:map(_normal, '<M-j>', '<C-w>j')
+    vis:map(_normal, '<M-k>', '<C-w>k')
+    vis:map(_normal, '<M-f>', ':fzf<Enter>')
 
-    vis:map(vis.modes.NORMAL, ' p', '"+p')
-    vis:map(vis.modes.NORMAL, ' y', '"+y')
-    vis:map(vis.modes.VISUAL, ' p', '"+p')
-    vis:map(vis.modes.VISUAL, ' y', '"+y')
-    vis:map(vis.modes.VISUAL_LINE, ' p', '"+p')
-    vis:map(vis.modes.VISUAL_LINE, ' y', '"+y')
+    -- whitespace padding/stripping
+    vis:map(_normal, ' o', 'o<Escape>') -- TODO: allow repeating
+    vis:map(_normal, ' O', 'O<Escape>') -- TODO: allow repeating
+    vis:map(_normal, '<Backspace>', 'gs:x/ +$/ c//<Enter>g<')
+
+    -- quicker clipboard copy/paste
+    vis:map(_normal, ' p', '"+p')
+    vis:map(_normal, ' y', '"+y')
+    vis:map(_visual, ' p', '"+p')
+    vis:map(_visual, ' y', '"+y')
+    vis:map(_vline, ' p', '"+p')
+    vis:map(_vline, ' y', '"+y')
 end)
 
 vis.events.subscribe(vis.events.WIN_OPEN, function(win)
