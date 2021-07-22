@@ -63,6 +63,7 @@ vis.events.subscribe(vis.events.INIT, function()
     vis:map(_normal, ' o', 'o<Escape>') -- TODO: allow repeating
     vis:map(_normal, ' O', 'O<Escape>') -- TODO: allow repeating
     vis:map(_normal, '<Backspace>', 'gs:x/ +$/ c//<Enter>g<')
+    vis:map(_insert, '<S-Tab>', string.rep('<Backspace>', 4))
 
     -- quicker clipboard copy/paste
     vis:map(_normal, ' p', '"+p')
