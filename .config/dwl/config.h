@@ -61,7 +61,7 @@ static const struct xkb_rule_names xkb_rules = {
     .options = "ctrl:nocaps",
     */
     .layout = "us",
-    .options = "altwin:swap_lalt_lwin",
+    .options = "altwin:swap_lalt_lwin,ctrl:swapcaps",
 };
 
 static const int repeat_rate = 25;
