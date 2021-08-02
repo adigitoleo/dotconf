@@ -11,5 +11,7 @@ set window-width 1600
 
 map <C-l> reload
 map <C-i> recolor
+map H jumplist backward
+map L jumplist forward
 map ; focus_inputbar ":"
 map <A-;> abort
