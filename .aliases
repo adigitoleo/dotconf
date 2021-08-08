@@ -86,6 +86,7 @@ alias py,activate='test -f .venv-${PWD##*/}/bin/activate && source .venv-${PWD##
 
 # Die Julia
 alias jl=julia
+alias jl,env='julia --project=$PWD'
 alias jl,bw='julia --color=no'
 alias jl,tmp='julia --startup-file=no --history-file=no'
 
