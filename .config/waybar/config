@@ -5,7 +5,7 @@
     "position": "bottom",
     "height": 22,
     "modules-left": ["custom/remind"],
-    "modules-right": ["network", "cpu", "memory", "clock"],
+    "modules-right": ["cpu", "memory", "clock"],
     "custom/remind": {
         "format": "Reminders: {}",
         "interval": 300,
