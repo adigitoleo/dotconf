@@ -85,10 +85,10 @@ alias py,venv='python -m venv .venv-${PWD##*/} && source .venv-${PWD##*/}/bin/ac
 alias py,activate='test -f .venv-${PWD##*/}/bin/activate && source .venv-${PWD##*/}/bin/activate'
 
 # Die Julia
-alias jl=julia
-alias jl,env='julia --project=$PWD'
-alias jl,bw='julia --color=no'
-alias jl,tmp='julia --startup-file=no --history-file=no'
+alias jl='julia --banner=no'
+alias jl,env='julia --banner=no --project=$PWD'
+alias jl,bw='julia --banner=no --color=no'
+alias jl,tmp='julia --banner=no --startup-file=no --history-file=no'
 
 # Without music, life would be a mistake.
 alias a,mute='amixer set Master toggle'
