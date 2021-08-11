@@ -62,8 +62,8 @@ quit                  = Q
 
 # Menu and interface control keys:
 go                    = ENTER
-menu_down             = j
-menu_up               = k
+menu_down             = j DOWN
+menu_up               = k UP
 menu_page_down        = ^d
 menu_page_up          = ^u
 menu_first_item       = g HOME
@@ -135,8 +135,8 @@ add_directory         = A
 plist_add_stream      = s
 delete_from_playlist  = d
 playlist_full_paths   = P
-plist_move_up         = UP
-plist_move_down       = DOWN
+plist_move_up         = J
+plist_move_down       = K
 save_playlist         = W
 remove_dead_entries   = Y
 clear_playlist        = C
@@ -154,8 +154,8 @@ cancel                = ^x ESCAPE M-;
 hide_message          = ^l
 
 # Softmixer specific keys:
-toggle_softmixer      = w
-toggle_make_mono      = J
+toggle_softmixer      = m
+toggle_make_mono      = |
 
 # Equalizer specific keys:
 toggle_equalizer      = E
