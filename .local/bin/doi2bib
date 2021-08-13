@@ -22,6 +22,12 @@ def _get_args() -> argparse.Namespace:
         help="interpret the operand as an input file containing DOI links",
     )
     parser.add_argument(
+        "-t",
+        "--plaintext",
+        action="store_true",
+        help="request plain text citation instead of BibTeX",
+    )
+    parser.add_argument(
         "doi_or_file",
         metavar="DOI|INPUT_FILE",
         help="single DOI link, or INPUT_FILE if -f was given",
@@ -29,14 +35,19 @@ def _get_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def getbib(doi: str) -> str:
-    """Get BibTeX metadata from a DOI link."""
+def getbib(doi: str, plain: bool = False) -> str:
+    """Get BibTeX metadata or plain text citation from a DOI link."""
     url = doi.rstrip().lstrip()
+    if plain:
+        content_negotiation = "text/x-bibliography"
+    else:
+        content_negotiation = "application/x-bibtex"
+
     if not url.startswith("https://doi.org/"):
         url = "https://doi.org/" + url
     try:
         response = ur.urlopen(
-            ur.Request(url, headers={"Accept": "application/x-bibtex"})
+            ur.Request(url, headers={"Accept": content_negotiation})
         )
     except ue.URLError:
         return "failed to open URL"
@@ -51,10 +62,11 @@ def _main():
                 if line.startswith("#"):  # Treat hash as comment marker.
                     continue
                 if line.rstrip():  # Skip blank lines.
-                    print(getbib(line))
+                    if args.plaintext:
+                        print(getbib(line, plain=args.plaintext))
 
     else:
-        print(getbib(args.doi_or_file))
+        print(getbib(args.doi_or_file, plain=args.plaintext))
 
 
 if __name__ == "__main__":
