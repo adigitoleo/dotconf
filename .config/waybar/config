@@ -9,7 +9,7 @@
     "custom/remind": {
         "format": "Reminders: {}",
         "interval": 300,
-        "exec": "remind -s+1 ~/.config/remind/reminders.rem|grep $(date +%Y/%m/%d)|cut -d ' ' -f5-|tr '\n' ' | '",
+        "exec": "remind -s+1 ~/.config/remind/reminders.rem|grep $(date +%Y/%m/%d)|cut -d ' ' -f6-|tr '\n' '|'",
         "tooltip": false,
     },
     "network": {
