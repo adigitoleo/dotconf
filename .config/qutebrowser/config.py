@@ -25,7 +25,7 @@ c.content.autoplay = False
 c.content.prefers_reduced_motion = True
 c.editor.command = [
     "alacritty",
-    "--class=Floating Terminal,Floating Terminal",
+    "--class=floating-terminal,floating-terminal",
     "-e",
     "nvim",
     "{file}",
@@ -35,6 +35,9 @@ c.downloads.remove_finished = 1000
 if "THIS_IS_A_LAPTOP" in os.environ and os.environ["THIS_IS_A_LAPTOP"]:
     c.qt.highdpi = True
     c.zoom.default = "85%"
+
+# https://github.com/qutebrowser/qutebrowser/issues/1476
+c.qt.force_software_rendering = "qt-quick"
 
 
 # Hardening (at least a little bit...)
@@ -53,7 +56,7 @@ c.content.dns_prefetch = False
 c.tabs.last_close = "startpage"
 c.tabs.mousewheel_switching = False
 c.tabs.position = "left"
-c.tabs.new_position.related = "prev"
+c.tabs.new_position.related = "next"
 c.tabs.new_position.unrelated = "prev"
 c.tabs.title.format_pinned = "{audio}{index}: {current_title}"
 
