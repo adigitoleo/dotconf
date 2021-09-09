@@ -23,6 +23,7 @@ c.completion.shrink = True
 c.session.lazy_restore = True
 c.content.autoplay = False
 c.content.prefers_reduced_motion = True
+c.content.register_protocol_handler = False
 c.editor.command = [
     "alacritty",
     "--class=floating-terminal,floating-terminal",
