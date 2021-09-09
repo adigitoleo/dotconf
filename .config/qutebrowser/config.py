@@ -31,6 +31,26 @@ c.editor.command = [
     "nvim",
     "{file}",
 ]
+c.fileselect.handler = "external"
+c.fileselect.single_file.command = [
+    "alacritty",
+    "--class=floating-terminal,floating-terminal",
+    "--working-directory=/",
+    "-e",
+    "fzf",
+    "--bind",
+    "enter:execute(realpath {1} >{})+abort",
+]
+c.fileselect.multiple_files.command = [
+    "alacritty",
+    "--class=floating-terminal,floating-terminal",
+    "--working-directory=/",
+    "-e",
+    "fzf",
+    "--multi",
+    "--bind",
+    "enter:execute(realpath {+} >{})+abort",
+]
 c.downloads.remove_finished = 1000
 
 if "THIS_IS_A_LAPTOP" in os.environ and os.environ["THIS_IS_A_LAPTOP"]:
