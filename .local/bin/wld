@@ -25,11 +25,11 @@ is_running() { # Check if an instance of a command is running using pgrep
      is_command pgrep && { 1>/dev/null 2>&1 pgrep "$1" && [ "$?" -eq 0 ] && return 0 ;}
 }
 
-is_running wlsunset || \
-    {
-        LOG="$(mktemp --tmpdir=/tmp $SCRIPTNAME-wlsunset-XXXXXX)"
-        is_command wlsunset && wlsunset -l 35.2 -L 149.7 -t 4750 -T 6250 >>"$LOG" 2>&1 ;
-    } &
+# is_running wlsunset || \
+#     {
+#         LOG="$(mktemp --tmpdir=/tmp $SCRIPTNAME-wlsunset-XXXXXX)"
+#         is_command wlsunset && wlsunset -l 35.2 -L 149.7 -t 4750 -T 6250 >>"$LOG" 2>&1 ;
+#     } &
 is_running swaybg || \
     {
         LOG="$(mktemp --tmpdir=/tmp $SCRIPTNAME-swaybg-XXXXXX)"
