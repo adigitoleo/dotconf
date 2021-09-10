@@ -1,4 +1,4 @@
-# Notes for installing Arch Linux #############################################
+# Notes for installing Arch Linux
 
 This is a supplement to the [installation guide] available in the Arch Wiki.
 These tips are not exhaustive.
@@ -31,7 +31,7 @@ Usually need to disable secure boot.
 ## Partitioning and formatting
 
 Use GPT if booting in UEFI mode, it will allow windows dual-boot if necessary.
-UEFI is a modern replacement for BIOS;
+UEFI has superseded BIOS;
 most PC's will boot with UEFI unless in Legacy mode.
 The `systemd-boot` bootloader (recommended) requires UEFI.
 
@@ -215,7 +215,7 @@ Install `git` and set up a minimal, convenient `~/.gitconfig`, e.g.:
         defaultBranch = <branch_name>
     [alias]
         s = status --short
-        l = log -10 --oneline
+        l = log --all --decorate --oneline --graph
         c = commit
         d = diff
         last = log -1 HEAD
@@ -249,6 +249,7 @@ to rotate (clean) log files weekly (optional).
 
 *TODO: AppArmor vs bubblewrap vs TOMOYO comparison*
 https://github.com/Harvie/AppArmor-Profiles
+https://github.com/darrenldl/sandboxing
 
 Install `ufw` for firewall, verify that `iptables.service` is disabled,
 enable and start `ufw.service` and run:
@@ -280,6 +281,8 @@ Unless setting up a server, edit `/etc/sysctl.d/99-network.conf` to contain:
     net.ipv4.conf.default.send_redirects = 0
 
 source: <https://wiki.archlinux.org/index.php/Sysctl#TCP/IP_stack_hardening>
+
+Installing and enabling default apparmor profiles is probably at least a little bit useful? Check the [AppArmor wiki article] for instructions.
 
 
 ## Better font rendering (recommended)
@@ -367,3 +370,4 @@ Make sure the getty@tty1 service is enabled.
 [unetbootin]: https://aur.archlinux.org/packages/unetbootin/
 [imagewriter]: https://aur.archlinux.org/packages/imagewriter/
 [rufus]: http://rufus.ie/
+[AppArmor wiki article](https://wiki.archlinux.org/title/AppArmor)
