@@ -21,10 +21,15 @@ local surround = require('plugins/vis-surround')
 --      delete pair of braces arround word: ds}
 
 local fzf_open = require('plugins/fzf-open')
+fzf_open.fzf_args = "--height=33%"
 -- PKGBUILD is in AUR, upstream is <https://git.sr.ht/~mcepl/vis-fzf-open>
 --      :fzf to search all files in the current sub-tree
 --      accepts normal fzf arguments, e.g. :fzf -p !.class
 --      <Enter> to open file, or <C-s> and <C-v> for horizontal/vertical splits
+
+local fzf_unicode = require('plugins/vis-fzf-unicode')
+fzf_unicode.fzf_args = "--height=33%"
+
 
 vis.events.subscribe(vis.events.INIT, function()
     -- options:
@@ -58,6 +63,7 @@ vis.events.subscribe(vis.events.INIT, function()
     vis:map(_normal, '<M-j>', '<C-w>j')
     vis:map(_normal, '<M-k>', '<C-w>k')
     vis:map(_normal, '<M-f>', ':fzf<Enter>')
+    vis:map(_normal, '<M-a>', ':fzf-unicode<Enter>')
 
     -- whitespace padding/stripping
     vis:map(_normal, ' o', 'o<Escape>') -- TODO: allow repeating
