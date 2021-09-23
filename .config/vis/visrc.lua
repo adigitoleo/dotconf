@@ -62,6 +62,8 @@ vis.events.subscribe(vis.events.INIT, function()
     vis:map(_insert, '<M-Enter>', '<C-n>')
     vis:map(_normal, '<M-j>', '<C-w>j')
     vis:map(_normal, '<M-k>', '<C-w>k')
+    vis:map(_normal, '<M-n>', ':set relativenumbers!<Enter>')
+    vis:map(_normal, '<M-m>', ':set mellow_dark!<Enter>')
     vis:map(_normal, '<M-f>', ':fzf<Enter>')
     vis:map(_normal, '<M-a>', ':fzf-unicode<Enter>')
 
