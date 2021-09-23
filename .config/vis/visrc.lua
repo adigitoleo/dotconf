@@ -68,7 +68,7 @@ vis.events.subscribe(vis.events.INIT, function()
     -- whitespace padding/stripping
     vis:map(_normal, ' o', 'o<Escape>') -- TODO: allow repeating
     vis:map(_normal, ' O', 'O<Escape>') -- TODO: allow repeating
-    vis:map(_normal, '<Backspace>', 'gs:x/ +$/ c//<Enter>g<')
+    vis:map(_normal, '<Backspace>', "''m:x/ +$/ c//<Enter>M")
     vis:map(_insert, '<S-Tab>', string.rep('<Backspace>', 4))
 
     -- quicker clipboard copy/paste
