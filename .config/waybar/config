@@ -9,7 +9,7 @@
     "custom/remind": {
         "format": "Reminders: {}",
         "interval": 60,
-        "exec": "remind -s+1 ~/.config/remind/reminders.rem|grep $(date +%Y/%m/%d)|cut -d ' ' -f6-|tr '\n' '|'",
+        "exec": "waybar,remind",
         "tooltip": false,
     },
     "network": {
@@ -26,7 +26,8 @@
     },
     "memory": {
         "format": "RAM:{}%",
-        "tooltip": false
+        "tooltip": false,
+        "interval": 10,
     },
     "clock": {
         "format": "{:%a %H:%M}",
