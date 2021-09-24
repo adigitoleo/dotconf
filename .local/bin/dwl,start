@@ -5,12 +5,12 @@ echoerr() { printf "$SCRIPTNAME: %s\n" "$*" >&2; echo $SYNOPSIS; }
 echohelp() {
     echo
     echo 'Start dwl with an ssh-agent and other background processes.'
-    echo 'The background processes are set in the `wld` script.'
+    echo 'The background processes are set in the `dwl,bg` script.'
     echo 'Use --noisy to show warnings/errors.'
 }
 
 case "$1" in
     "-h" | "--help" ) echo $SYNOPSIS; echohelp; exit 0 ;;
-    "--noisy" ) ssh-agent dwl -s wld ;;
-    * ) ssh-agent dwl -s wld >/dev/null 2>&1 ;;
+    "--noisy" ) ssh-agent dwl -s dwl,bg ;;
+    * ) ssh-agent dwl -s dwl,bg >/dev/null 2>&1 ;;
 esac
