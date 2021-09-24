@@ -1,6 +1,6 @@
 #!/bin/sh
 SCRIPTNAME="${0##*/}"
-SYNOPSIS="Usage: $SCRIPTNAME [-h] [--noisy]"
+SYNOPSIS="Usage: $SCRIPTNAME [-h]"
 echoerr() { printf "$SCRIPTNAME: %s\n" "$*" >&2; echo $SYNOPSIS; }
 echohelp() {
     echo
@@ -11,6 +11,9 @@ echohelp() {
 
 case "$1" in
     "-h" | "--help" ) echo $SYNOPSIS; echohelp; exit 0 ;;
-    "--noisy" ) ssh-agent dwl -s dwl,bg ;;
-    * ) ssh-agent dwl -s dwl,bg >/dev/null 2>&1 ;;
+    * ) DWL_OUTDIR="$HOME/.config/dwl"
+        [ -d "$DWL_OUTDIR" ] || mkdir -p "$DWL_OUTDIR"
+        LOG="$(mktemp --tmpdir=/tmp dwl-errors-XXXXXX)"
+        ssh-agent dwl -s dwl,bg >"$DWL_OUTDIR/dwlbar" 2>>"$LOG"
+        ;;
 esac

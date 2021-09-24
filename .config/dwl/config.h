@@ -32,6 +32,7 @@ static const Rule rules[] = {
     { "mscore", NULL, 0, 1, -1 },
     { "mypaint", NULL, 0, 1, -1, 360, 100, 1200, 880 },
     { "libreoffice", NULL, 0, 1, -1, 360, 100, 1200, 880},
+    { "gov-nasa-giss-panoply-Panoply", NULL, 0, 1, -1},
     { "matplotlib", NULL, 0, 1, -1 },  /* FIXME: not working */
 };
 
