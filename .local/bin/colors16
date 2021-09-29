@@ -1,0 +1,8 @@
+#!/bin/sh
+START=0
+END=15
+while [ "$START" -le "$END" ]; do
+    printf "\033[38;5;${START}m%s\t\033[m\033[48;5;${START}m%s\033[m\n" \
+        "Color ${START} looks like this:" "          "
+    START=$(( START + 1 ))
+done
