@@ -1,4 +1,5 @@
 #!/bin/sh
+set -euo pipefail
 SCRIPTNAME="${0##*/}"
 SYNOPSIS="Usage: $SCRIPTNAME [-h]"
 echoerr() { printf "$SCRIPTNAME: %s\n" "$*" >&2; echo $SYNOPSIS; }

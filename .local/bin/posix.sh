@@ -1,4 +1,7 @@
 #!/bin/sh
+# NOTE: set -o pipefail is not strictly part of POSIX, yet...
+# See <https://www.austingroupbugs.net/view.php?id=789>
+set -euo pipefail
 # ----------- MESSAGING FUNCTIONS ---------------------------------------------
 readonly SCRIPTNAME="${0##*/}"
 usage() { # Print a short synopsis <https://pubs.opengroup.org/onlinepubs/9699919799/>
@@ -40,15 +43,13 @@ ARGSTR=  # Store argument string during processing
 COUNT_B=0  # Store the number of times that -b was given
 OPT_C=false  # Store a boolean to tell if -c was given
 OPT_D=false  # Store a boolean to tell if -d was given
+
+# More examples at <https://github.com/dylanaraps/pure-sh-bible>
 lstrip() { # lstrip [string] [pattern] Strip pattern from start of string
     FUNCRETURN="${1##$2}"
 }
 rstrip() { # rstrip [string] [pattern] Strip pattern from end of string
     FUNCRETURN="${1%%$2}"
-}
-consume() { # consume [letter] Consume a command line option
-    echo "$ARGSTR"
-    lstrip "$ARGSTR" "$1" && ARGSTR="$FUNCRETURN"
 }
 is_command() { # Check if command exists, for flow control (no stdout messages)
     1>/dev/null 2>&1 command -v "$1" && [ "$?" -eq 0 ] && return 0 \
@@ -66,7 +67,7 @@ while getopts "abc:d:h" OPT ; do
         b ) if [ $COUNT_B -eq 2 ] ; then
                 warn "cannot specify -b more than twice" && exit 1
             else
-                COUNT_B=$(("$COUNT_B" + 1)) && echo 'B'
+                COUNT_B=$(( $COUNT_B + 1 )) && echo 'B'
             fi
             ;;
         c ) $OPT_D && warn "options -c and -d are mutually exclusive" && exit 1
@@ -78,7 +79,7 @@ while getopts "abc:d:h" OPT ; do
         h ) usage && helpf ; exit 0 ;;
     esac
 done
-shift $(($OPTIND - 1))
+shift $(( $OPTIND - 1 ))
 while [ $# -gt 0 ] ; do
     echo "remaining args (operands): $1"
     shift

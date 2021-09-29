@@ -1,4 +1,5 @@
 #!/bin/sh
+set -euo pipefail
 
 julia --startup-file=no --history-file=no -e '
     using LanguageServer; using Pkg;

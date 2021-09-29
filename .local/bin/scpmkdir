@@ -1,4 +1,5 @@
 #!/bin/sh
+set -euo pipefail
 readonly SCRIPTNAME="${0##*/}"
 usage() {
     printf 'Usage: %s ' "$SCRIPTNAME"

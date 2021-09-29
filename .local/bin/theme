@@ -1,4 +1,5 @@
 #!/bin/sh
+set -euo pipefail
 # ----------- MESSAGING FUNCTIONS ---------------------------------------------
 readonly SCRIPTNAME="${0##*/}"
 usage() { # Print a short synopsis <https://pubs.opengroup.org/onlinepubs/9699919799/>

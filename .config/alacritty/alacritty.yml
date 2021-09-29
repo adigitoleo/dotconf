@@ -57,4 +57,4 @@ schemes:
             cyan:       '#D47D49'
             white:      '#ECCD9D'
 
-colors: *light
+colors: *dark

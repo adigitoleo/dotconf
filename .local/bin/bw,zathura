@@ -2,6 +2,7 @@
 # Bubblewrap launcher for sandboxed zathura on wayland.
 # Only opens the first file given, copy-paste works while the file is open.
 # Refuses to open a file that is already open in another instance.
+set -euo pipefail
 
 
 eval doc=\${$#}

@@ -1,6 +1,7 @@
 #!/bin/sh
 # Bubblewrap launcher for sandboxed imv on wayland.
 # Refuses to open a file that is already open in another instance.
+set -euo pipefail
 
 
 eval doc=\${$#}
