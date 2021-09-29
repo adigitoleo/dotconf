@@ -1,6 +1,5 @@
 #!/bin/sh
 set -euo pipefail
-# ----------- MESSAGING FUNCTIONS ---------------------------------------------
 readonly SCRIPTNAME="${0##*/}"
 usage() { # Print a short synopsis <https://pubs.opengroup.org/onlinepubs/9699919799/>
     printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
@@ -23,22 +22,15 @@ helpf() { # Print a longer help string
 warn() { # warn [message]... Print message to stderr <https://stackoverflow.com/a/23550347>
     >&2 printf '%s\n' "${SCRIPTNAME}: $1"
 }
-quote() { # quote [string] Safe shell quoting? <https://www.etalabs.net/sh_tricks.html>
-    printf '%s\n' "$1" | sed "s/'/'\\\\''/g;1s/^/'/;\$s/\$/'/"
-}
 
-# ----------- MAIN ROUTINES ---------------------------------------------------
-FUNCRETURN=  # Store non-integer return values, see also <https://stackoverflow.com/a/18198358>
-ARGSTR=  # Store argument string during processing
-lstrip() { # lstrip [string] [pattern] Strip pattern from start of string
-    FUNCRETURN="${1##$2}"
-}
-rstrip() { # rstrip [string] [pattern] Strip pattern from end of string
-    FUNCRETURN="${1%%$2}"
-}
-consume() { # consume [letter] Consume a command line option
-    lstrip "$ARGSTR" "$1" && ARGSTR="$FUNCRETURN"
-}
+if [ -z "${THEME_SOURCE+_}" ] ; then
+    DEFAULT_THEME_SOURCE="$HOME/.config/alacritty/alacritty.yml"
+    if [ -f "$DEFAULT_THEME_SOURCE" ] ; then
+        THEME_SOURCE="$DEFAULT_THEME_SOURCE"
+    else
+        warn "can't load default theme source: $DEFAULT_THEME_SOURCE" ; exit 1
+    fi
+fi
 theme_query() { awk '/colors:/,/\w/ {print substr($2,2)}' "$THEME_SOURCE" ;}
 theme_set() { # theme_set [theme] Set the theme in $THEME_SOURCE using sed
     case "$1" in
@@ -53,15 +45,6 @@ theme_toggle() {
         'light' ) theme_set dark ;;
     esac
 }
-
-if [ -z "$THEME_SOURCE" ] ; then
-    DEFAULT_THEME_SOURCE="$HOME/.config/alacritty/alacritty.yml"
-    if [ -f "$DEFAULT_THEME_SOURCE" ] ; then
-        THEME_SOURCE="$DEFAULT_THEME_SOURCE"
-    else
-        warn "can't load default theme source: $DEFAULT_THEME_SOURCE" ; exit 1
-    fi
-fi
 
 [ $# -eq 0 ] && usage && exit 1
 # NOTE: Long form options like `--help` are not POSIX compliant.
