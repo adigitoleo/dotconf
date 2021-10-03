@@ -10,7 +10,7 @@ echohelp() {
     echo 'Use --noisy to show warnings/errors.'
 }
 
-case "$1" in
+case "${1+_}" in
     "-h" | "--help" ) echo $SYNOPSIS; echohelp; exit 0 ;;
     * ) DWL_OUTDIR="$HOME/.config/dwl"
         [ -d "$DWL_OUTDIR" ] || mkdir -p "$DWL_OUTDIR"

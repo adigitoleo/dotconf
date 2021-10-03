@@ -8,7 +8,7 @@ helpf() {
     echo "For example, in dwl you can use dwl -s $SCRIPTNAME."
 }
 
-case "$1" in
+case "${1+_}" in
     "-h" | "--help" ) usage && helpf ; exit 0 ;;
 esac
 
