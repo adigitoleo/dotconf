@@ -20,6 +20,13 @@ local surround = require('plugins/vis-surround')
 --      change delimiter pair arround word from single quotes to parens: cs')
 --      delete pair of braces arround word: ds}
 
+local smart_backspace = require('plugins/vis-smart-backspace')
+smart_backspace.tab_width = 4
+-- PKGBUILD is in AUR, upstream is <https://github.com/ingolemo/vis-smart-backspace>
+--      requires explicit tab width setting (default is 8):
+--      smart_backspace = require('plugins/vis-smart-backspace')
+--      smart_backspace.tab_width = 4
+
 local fzf_open = require('plugins/fzf-open')
 fzf_open.fzf_args = "--height=33%"
 -- PKGBUILD is in AUR, upstream is <https://git.sr.ht/~mcepl/vis-fzf-open>
@@ -70,7 +77,6 @@ vis.events.subscribe(vis.events.INIT, function()
     vis:map(_normal, ' o', 'o<Escape>') -- TODO: allow repeating
     vis:map(_normal, ' O', 'O<Escape>') -- TODO: allow repeating
     vis:map(_normal, '<Backspace>', "''m:x/ +$/ c//<Enter>M")
-    vis:map(_insert, '<S-Tab>', string.rep('<Backspace>', 4))
 
     -- quicker clipboard copy/paste
     vis:map(_normal, ' p', '"+p')
