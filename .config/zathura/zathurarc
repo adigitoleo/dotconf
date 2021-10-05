@@ -8,6 +8,8 @@ set inputbar-bg "#66292F"
 set statusbar-bg "#66292F"
 set window-height 900
 set window-width 1600
+set recolor-lightcolor "#3D241F"
+set recolor-darkcolor "F2DDBC"
 
 map <C-l> reload
 map <C-i> recolor
