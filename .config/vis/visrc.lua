@@ -62,6 +62,7 @@ vis.events.subscribe(vis.events.INIT, function()
     -- Meta mappings:
     vis:map(_normal, '<M-;>', '<Escape>')
     vis:map(_insert, '<M-;>', '<Escape><Escape>')
+    vis:map(_insert, '<M-w>', '<Escape><Escape>:w<Enter>i')
     vis:map(_replace, '<M-;>', '<Escape>')
     vis:map(_visual, '<M-;>', '<Escape>')
     vis:map(_vline, '<M-;>', '<Escape>')
