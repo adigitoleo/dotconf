@@ -494,8 +494,8 @@ Keymap = keymap_vimlike
 #             and the directory menu at the bottom.  Playlist will
 #             occupy 10 lines and the directory menu the rest.
 #
-Layout1 = playlist(0,0,100%,80%):directory(0,80%,100%,FILL)
-Layout2 = playlist(0,0,100%,20%):directory(0,20%,100%,FILL)
+Layout1 = playlist(0,0,100%,100%)
+# Layout2 = playlist(0,0,100%,20%):directory(0,20%,100%,FILL)
 # Layout3 = playlist(50%,50%,50%,50%)
 
 # When the song changes, should the menu be scrolled so that the currently
