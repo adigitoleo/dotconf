@@ -71,13 +71,13 @@
 #
 # Example:    MusicDir = "/home/joe/music"
 #
-#MusicDir =
+MusicDir = "${HOME}/Music/playlist.m3u"
 
 # Start in the music directory by default?  If set to 'no', start
 # in the directory being viewed when the was client last active or,
 # as a last resort, the directory in which the client is being started.
 # A single directory on the command line takes precedence.
-#StartInMusicDir = no
+StartInMusicDir = yes
 
 # The number of lines which are retained in an in-memory circular logging
 # buffer.  A value of zero indicates that lines will be written directly
@@ -286,11 +286,11 @@ Theme = red_transparent
 #Precache = yes
 
 # Remember the playlist after exit?
-#SavePlaylist = yes
+SavePlaylist = no
 
 # When using more than one client (interface) at a time, do they share
 # the playlist?
-#SyncPlaylist = yes
+SyncPlaylist = yes
 
 # Choose a keymap file (relative to '~/.moc/' or using an absolute path).
 # An annotated example keymap file is included ('keymap.example').
@@ -500,7 +500,7 @@ Layout2 = playlist(0,0,100%,20%):directory(0,20%,100%,FILL)
 
 # When the song changes, should the menu be scrolled so that the currently
 # played file is visible?
-#FollowPlayedFile = yes
+FollowPlayedFile = yes
 
 # What to do if the interface was started and the server is already playing
 # something from the playlist?  If CanStartInPlaylist is set to 'yes', the
