@@ -95,6 +95,7 @@ light_theme = normal_colors("mellow_light") + bright_colors("mellow_light")
 dark_theme = normal_colors("mellow_dark") + bright_colors("mellow_dark")
 
 c.fonts.default_size = str(term_config["font"]["size"]) + "pt"
+c.fonts.default_family = "monospace"
 
 c.colors.webpage.darkmode.algorithm = "lightness-cielab"
 c.colors.webpage.darkmode.policy.images = "smart"
