@@ -1,20 +1,20 @@
 #!/bin/sh
 set -euo pipefail
-SCRIPTNAME="${0##*/}"
-SYNOPSIS="Usage: $SCRIPTNAME [-h]"
-echoerr() { printf "$SCRIPTNAME: %s\n" "$*" >&2; echo $SYNOPSIS; }
-echohelp() {
+readonly SCRIPTNAME="${0##*/}"
+usage() { printf 'Usage: %s [-h][-s path]\n' "$SCRIPTNAME"; }
+helpf() {
     echo
-    echo 'Start dwl with an ssh-agent and other background processes.'
-    echo 'The background processes are set in the `dwl,bg` script.'
-    echo 'Use --noisy to show warnings/errors.'
+    echo 'Start dwl as a subprocess of an ssh-agent.'
+    echo 'Optionaly run the script at <path> to start other background processes.'
+    echo 'Warnings and errors from dwl will be logged to a file in /tmp.'
 }
+warn() { >&2 printf '%s\n' "${SCRIPTNAME}: $1"; }
 
-case "${1+_}" in
-    "-h" | "--help" ) echo $SYNOPSIS; echohelp; exit 0 ;;
-    * ) DWL_OUTDIR="$HOME/.config/dwl"
-        [ -d "$DWL_OUTDIR" ] || mkdir -p "$DWL_OUTDIR"
-        LOG="$(mktemp --tmpdir=/tmp dwl-errors-XXXXXX)"
-        ssh-agent dwl -s dwl,bg >"$DWL_OUTDIR/dwlbar" 2>>"$LOG"
-        ;;
-esac
+LOG="$(mktemp --tmpdir=/tmp dwl-errors-XXXXXX)"
+[ $# -eq 0 ] && ssh-agent dwl 2>"$LOG" ;;
+while getopts "s:" ; do
+    case "$OPT" in
+        s ) ssh-agent dwl -s "$OPTARG" 2>"$LOG" ;;
+        h ) usage && helpf ; exit 0 ;;
+    esac
+done

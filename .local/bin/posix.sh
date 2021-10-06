@@ -27,30 +27,26 @@ helpf() { # Print a longer help string
     printf '  command -v %s\n' "$SCRIPTNAME"
     echo 'See also <https://github.com/dylanaraps/pure-sh-bible>.'
 }
-warn() { # warn [message]... Print message to stderr <https://stackoverflow.com/a/23550347>
-    >&2 printf '%s\n' "${SCRIPTNAME}: $1"
-}
-tell() { # tell [message]... Print message to stdout
-    printf '%s\n' "${SCRIPTNAME}: $1"
-}
-quote() { # quote [string] Safe shell quoting? <https://www.etalabs.net/sh_tricks.html>
-    printf '%s\n' "$1" | sed "s/'/'\\\\''/g;1s/^/'/;\$s/\$/'/"
-}
+# warn [message]... Print message to stderr <https://stackoverflow.com/a/23550347>
+warn() { >&2 printf '%s\n' "${SCRIPTNAME}: $1"; }
+# tell [message]... Print message to stdout
+tell() { printf '%s\n' "${SCRIPTNAME}: $1"; }
+# quote [string] Safe shell quoting? <https://www.etalabs.net/sh_tricks.html>
+quote() { printf '%s\n' "$1" | sed "s/'/'\\\\''/g;1s/^/'/;\$s/\$/'/"; }
 
 # ----------- MAIN ROUTINES ---------------------------------------------------
+# More examples at <https://github.com/dylanaraps/pure-sh-bible>
 FUNCRETURN=  # Store non-integer return values, see also <https://stackoverflow.com/a/18198358>
 ARGSTR=  # Store argument string during processing
 COUNT_B=0  # Store the number of times that -b was given
 OPT_C=false  # Store a boolean to tell if -c was given
 OPT_D=false  # Store a boolean to tell if -d was given
 
-# More examples at <https://github.com/dylanaraps/pure-sh-bible>
-lstrip() { # lstrip [string] [pattern] Strip pattern from start of string
-    FUNCRETURN="${1##$2}"
-}
-rstrip() { # rstrip [string] [pattern] Strip pattern from end of string
-    FUNCRETURN="${1%%$2}"
-}
+# lstrip [string] [pattern] Strip pattern from start of string
+lstrip() { FUNCRETURN="${1##$2}"; }
+# rstrip [string] [pattern] Strip pattern from end of string
+rstrip() { FUNCRETURN="${1%%$2}"; }
+
 is_command() { # Check if command exists, for flow control (no stdout messages)
     1>/dev/null 2>&1 command -v "$1" && [ "$?" -eq 0 ] && return 0 \
         || { warn "command '${1}' not found" && return 1 ;}
