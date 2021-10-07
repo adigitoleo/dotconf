@@ -43,13 +43,19 @@ vis.events.subscribe(vis.events.INIT, function()
     vis:command('set expandtab on')
     vis:command('set tabwidth 4')
     vis:command('set autoindent on')
-    vis:command('set theme mellow')
-    local handle = io.popen('theme -q')
-    local theme = handle:read()
-    if theme == "dark" then
-        vis:command('set mellow_dark true')
-    else
-        vis:command('set mellow_dark false')
+    local input = io.popen('printf "%s" "$TERM"')
+    local term = input:read()
+    if term ~= "linux" then
+        do
+            vis:command('set theme mellow')
+            local input = io.popen('theme -q')
+            local theme = input:read()
+            if theme == "dark" then
+                vis:command('set mellow_dark true')
+            else
+                vis:command('set mellow_dark false')
+            end
+        end
     end
 
     local _normal = vis.modes.NORMAL
