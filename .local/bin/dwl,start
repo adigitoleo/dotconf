@@ -11,10 +11,10 @@ helpf() {
 warn() { >&2 printf '%s\n' "${SCRIPTNAME}: $1"; }
 
 LOG="$(mktemp --tmpdir=/tmp dwl-errors-XXXXXX)"
-[ $# -eq 0 ] && ssh-agent dwl 2>"$LOG" ;;
-while getopts "s:" ; do
+[ $# -eq 0 ] && >/dev/null 2>"$LOG" ssh-agent dwl
+while getopts "hs:" OPT ; do
     case "$OPT" in
-        s ) ssh-agent dwl -s "$OPTARG" 2>"$LOG" ;;
+        s ) >/dev/null 2>"$LOG" ssh-agent dwl -s "$OPTARG" ;;
         h ) usage && helpf ; exit 0 ;;
     esac
 done
