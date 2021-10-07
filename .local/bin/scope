@@ -1,0 +1,44 @@
+#!/bin/sh
+set -euo pipefail
+readonly SCRIPTNAME="${0##*/}"
+usage() {
+    printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
+}
+helpf() {
+    echo
+    echo 'Run cscope(1) with a fresh database if there are changes to source files.'
+    echo 'Changes are detected using a hash heuristic, which writes sha1 hashes'
+    echo 'to the `scope.hash` file. If there are changes to the files tracked in'
+    echo '`cscope.files`, then the next run of `scope` will first rebuild the database.'
+    echo 'Hashes are calculated using the `git hash-object` command.'
+    echo 'This script will NOT modify the `cscope.files` listing itself,'
+    echo 'which must still be manually refreshed upon changes to source tree structure.'
+}
+warn() { >&2 printf '%s\n' "${SCRIPTNAME}: $1"; }
+
+is_command() {
+    1>/dev/null 2>&1 command -v "$1" && [ "$?" -eq 0 ] && return 0 \
+        || { warn "command '${1}' not found" && return 1 ;}
+}
+
+while getopts "h" OPT ; do
+    usage && helpf && exit 0
+done
+
+is_command git || exit 1
+is_command diff || exit 1
+is_command cscope || exit 1
+
+# Make sure we are in a git repo.
+git -C $PWD rev-parse
+
+# Make sure there is a cscope listing.
+[ -r "cscope.files" ] || { warn "unable to read cscope.files listing" && exit 1; }
+
+if [ -r "scope.hash" ] && [ -r "cscope.in.out" ] && [ -r "cscope.out" ] && [ -r "cscope.po.out" ] && \
+    git hash-object --stdin-paths <cscope.files|diff scope.hash - >/dev/null; then
+        cscope -d
+    else
+        git hash-object --stdin-paths <cscope.files >scope.hash
+        cscope -Rq -i cscope.files
+fi
