@@ -47,14 +47,13 @@ alias p,rmsafe='sudo pacman -Rn --color=auto'
 alias p,rm='sudo pacman -Rns --color=auto'
 alias p,orphans='pacman -Qtdq --color=auto'
 alias aur='auracle'
-alias pacdiff='sudo SUDO_EDITOR="$EDITOR -d" DIFFPROG="sudoedit" pacdiff'
+alias pacdiff='sudo SUDO_EDITOR="nvim -d" DIFFPROG="sudoedit" pacdiff'
 
 # Use ED25519 ssh keys by default.
 alias ssh-keygen='ssh-keygen -t ed25519'
 
 # Terminal editor.
 alias e=$EDITOR
-alias v=/bin/vis
 
 # New terminal instance (same directory).
 alias t='setsid $TERM'

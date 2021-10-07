@@ -6,9 +6,9 @@
 
 
 # Set preferred editor.
-if [ -x "/usr/bin/nvim" ]; then
-    export EDITOR="/usr/bin/nvim"
-    export VISUAL="/usr/bin/nvim"
+if [ -x "/usr/bin/vis" ]; then
+    export EDITOR="/usr/bin/vis"
+    export VISUAL="/usr/bin/vis"
 fi
 
 # Prepend ~/.local/bin to PATH if it exists.
