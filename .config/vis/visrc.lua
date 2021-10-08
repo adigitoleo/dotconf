@@ -1,6 +1,13 @@
 require('vis')
 -- https://github.com/martanne/vis/wiki/Plugins
 
+require('plugins/cscope')
+-- PKGBUILD is in AUR, upstream is <https://git.sr.ht/~emg/vis-cscope>
+--      :cs <letter> <word> for explicit searches of <word>
+--      <C-/><letter> to search for the word under the cursor
+--      <letter> can be 's', 'g', 'd', 'c', 't', 'e', 'f', 'i', or 'a',
+--      which match the 0-9 options in cscope
+
 local spellcheck = require('plugins/spellcheck')
 -- PKGBUILD is in AUR, upstream is <https://github.com/fischerling/vis-spellcheck>
 --      <C-w>e to enable highlighting of bad spelling
