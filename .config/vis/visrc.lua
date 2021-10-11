@@ -1,8 +1,10 @@
 require('vis')
 -- https://github.com/martanne/vis/wiki/Plugins
 
-require('plugins/cscope')
+require('plugins/vis-jumplist')
+require('plugins/vis-cscope')
 -- PKGBUILD is in AUR, upstream is <https://git.sr.ht/~emg/vis-cscope>
+-- NOTE: Currently testing the 'jumplist' branch for inverse :cs pop command.
 --      :cs <letter> <word> for explicit searches of <word>
 --      <C-/><letter> to search for the word under the cursor
 --      <letter> can be 's', 'g', 'd', 'c', 't', 'e', 'f', 'i', or 'a',
