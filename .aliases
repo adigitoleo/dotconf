@@ -56,7 +56,7 @@ alias ssh-keygen='ssh-keygen -t ed25519'
 alias e=$EDITOR
 
 # New terminal instance (same directory).
-alias t='setsid $TERM'
+alias t='1>/dev/null 2>/dev/null setsid $TERM'
 
 # Suspend and lock (run from a vconsole).
 alias v,lock='systemctl suspend && vlock --all'
@@ -71,7 +71,7 @@ alias d,free='lsblk -o NAME,MOUNTPOINT,FSAVAIL'
 
 # Only for X.
 alias x,clip='xclip -sel clip'
-alias x,op='xdg-open'
+alias x,op='1>/dev/null 2>/dev/null setsid xdg-open'
 
 # Find and print site urls from elinks history or bookmarks.
 alias e,hist='cut -f2 < ~/.elinks/globhist|fzf'
