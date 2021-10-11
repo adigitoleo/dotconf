@@ -52,6 +52,8 @@ c.fileselect.multiple_files.command = [
     "enter:execute(realpath {+} >{})+abort",
 ]
 c.downloads.remove_finished = 1000
+# TODO: Re-enable after setting up a notifications daemon?
+c.notifications.enabled = False
 
 if "THIS_IS_A_LAPTOP" in os.environ and os.environ["THIS_IS_A_LAPTOP"]:
     c.qt.highdpi = True
