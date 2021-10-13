@@ -26,6 +26,7 @@ static const Rule rules[] = {
     { "floating-terminal", NULL, 0, 1, -1 },
     { "zathura", NULL, 0, 1, -1 },
     { "imv", NULL, 0, 1, -1 },
+    { "mpv", NULL, 0, 1, -1 },
     { "drracket", NULL, 0, 1, -1, 360, 100, 1200, 880 },
     { "gimp", NULL, 0, 1, -1 },
     { "inkscape", NULL, 0, 1, -1 },
