@@ -53,7 +53,7 @@ c.fileselect.multiple_files.command = [
 ]
 c.downloads.remove_finished = 1000
 # TODO: Re-enable after setting up a notifications daemon?
-c.notifications.enabled = False
+c.content.notifications.enabled = False
 
 if "THIS_IS_A_LAPTOP" in os.environ and os.environ["THIS_IS_A_LAPTOP"]:
     c.qt.highdpi = True
@@ -127,24 +127,6 @@ else:
     c.colors.webpage.bg = light_theme[15]
     c.colors.statusbar.normal.bg = light_theme[5]
     # c.content.user_stylesheets = ["~/.config/qutebrowser/off-white-bg.css"]
-
-
-# Per-domain settings.
-########################################################################################
-
-# Youtube adblock.
-def filter_yt(info: interceptor.Request):
-    """Block the given request if necessary."""
-    url = info.request_url
-    if (
-        url.host() == "www.youtube.com"
-        and url.path() == "/get_video_info"
-        and "&adformat=" in url.query()
-    ):
-        info.block()
-
-
-interceptor.register(filter_yt)
 
 
 # Custom key bindings.
