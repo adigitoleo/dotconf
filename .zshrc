@@ -17,7 +17,7 @@ unsetopt beep
 # Use vi-style modal keymaps.
 bindkey -v
 # Quicker mode switches.
-export KEYTIMEOUT=1
+export KEYTIMEOUT=10
 
 # FUNCTIONS {{{1
 # Runs automatically whenever the directory is changed.
