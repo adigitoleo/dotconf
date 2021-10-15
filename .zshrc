@@ -1,170 +1,129 @@
-#                                  _                            vim:fdm=marker
-#                          _______| |__  _ __ ___
-#                         |_  / __| '_ \| '__/ __|
-#                        _ / /\__ \ | | | | | (__
-#          adigitoleo's (_)___|___/_| |_|_|  \___| for zsh
+# ZSH CONFIGURATION FILE
+# Configuration for individual zsh sessions, NOT login sessions.
+# Use ~/.zprofile or ~/.zlogin for login session configuration.
 
-# Save shell event history (command lines) to a file.
+# Parameters, see `man zshparam`.
 HISTFILE=~/.histfile
-# Max. number of events to save in the interactive session history.
-HISTSIZE=1000
-# Max. number of events to save to the history file.
-SAVEHIST=1000
-# Some sensible defaults, check man zshoptions.
-setopt nomatch notify appendhistory histignorealldups
-# No annoying beep noises.
-unsetopt beep
-# Use vi-style modal keymaps.
+HISTSIZE=10000
+SAVEHIST=10000
+KEYTIMEOUT=10
+
+# Options, see `man zshoptions`.
+setopt NOTIFY NOMATCH NOBGNICE COMPLETE_IN_WORD
+setopt INC_APPEND_HISTORY SHARE_HISTORY HIST_IGNORE_ALL_DUPS HIST_SAVE_NO_DUPS
+unsetopt BEEP
+
+# Key bindings, and vi mode. Always vi mode.
 bindkey -v
-# Quicker mode switches.
-export KEYTIMEOUT=10
-
-# FUNCTIONS {{{1
-# Runs automatically whenever the directory is changed.
-function chpwd {
-    # Activate Python venv if cd lands in the project root.
-    if [[ -d ".venv-${PWD##*/}" ]]; then
-        if [[ -z "$VIRTUAL_ENV" ]]; then
-            source ".venv-${PWD##*/}/bin/activate"
-        # Deactivate other Python venv if still active.
-        elif [[ "$VIRTUAL_ENV" != "$(pwd)/.venv-${PWD##*/}" ]]; then
-            deactivate
-            source ".venv-${PWD##*/}/bin/activate"
-        fi
-    fi
-    # List files after cd.
-    ls --color=auto --group-directories-first
-}
-
-# Make directory and enter it.
-function mkcd { mkdir "$@" && cd "$@[-1]" }
-
-# Change cursor shape based on keymap mode.
-function zle-keymap-select {
-    if [[ ${KEYMAP} == vicmd ]] || [[ $1 = 'block' ]]; then
-        echo -ne "\e[2 q"
-    else
-        echo -ne "\e[5 q"
-    fi
-}
-zle-line-init() { zle-keymap-select 'beam' }
-zle-line-finish() { zle-keymap-select 'block' }
-zle -N zle-keymap-select
-zle -N zle-line-init
-
-# Make <Tab> at empty prompt list contents instead.
-function expand-or-complete-or-list {
-    if [[ $#BUFFER == 0 ]]; then
-        BUFFER="ls "
-        CURSOR=3
-        zle list-choices
-        zle backward-kill-word
-    else
-        zle expand-or-complete
-    fi
-}
-zle -N expand-or-complete-or-list
-bindkey "^I" expand-or-complete-or-list
-
-
-# MAPPINGS {{{1
-# Create a zkbd compatible hash to use special keys, see man 5 terminfo.
-typeset -g -A key
-
-key[Home]="${terminfo[khome]}"
-key[End]="${terminfo[kend]}"
-key[Insert]="${terminfo[kich1]}"
-key[Backspace]="${terminfo[kbs]}"
-key[Delete]="${terminfo[kdch1]}"
-key[Up]="${terminfo[kcuu1]}"
-key[Down]="${terminfo[kcud1]}"
-key[Left]="${terminfo[kcub1]}"
-key[Right]="${terminfo[kcuf1]}"
-key[PageUp]="${terminfo[kpp]}"
-key[PageDown]="${terminfo[knp]}"
-key[Shift-Tab]="${terminfo[kcbt]}"
-
-# Enable intuitive history search.
 autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
 zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
+bindkey '^P' up-line-or-beginning-search
+bindkey '^N' down-line-or-beginning-search
+bindkey -M vicmd 'k' up-line-or-beginning-search
+bindkey -M vicmd 'j' down-line-or-beginning-search
 
-# Set up or fix mappings.
-[[ -n "${key[Home]}"      ]] && bindkey -- "${key[Home]}"      beginning-of-line
-[[ -n "${key[End]}"       ]] && bindkey -- "${key[End]}"       end-of-line
-[[ -n "${key[Insert]}"    ]] && bindkey -- "${key[Insert]}"    overwrite-mode
-[[ -n "${key[Backspace]}" ]] && bindkey -- "${key[Backspace]}" backward-delete-char
-[[ -n "${key[Delete]}"    ]] && bindkey -- "${key[Delete]}"    delete-char
-[[ -n "${key[Up]}"        ]] && bindkey -- "${key[Up]}"        up-line-or-beginning-search
-[[ -n "${key[Down]}"      ]] && bindkey -- "${key[Down]}"      down-line-or-beginning-search
-[[ -n "${key[Left]}"      ]] && bindkey -- "${key[Left]}"      backward-char
-[[ -n "${key[Right]}"     ]] && bindkey -- "${key[Right]}"     forward-char
-[[ -n "${key[PageUp]}"    ]] && bindkey -- "${key[PageUp]}"    beginning-of-buffer-or-history
-[[ -n "${key[PageDown]}"  ]] && bindkey -- "${key[PageDown]}"  end-of-buffer-or-history
-[[ -n "${key[Shift-Tab]}" ]] && bindkey -- "${key[Shift-Tab]}" reverse-menu-complete
+# Make directory (and parents if necessary) and enter it.
+function mkcd { mkdir -p -- "$1" && cd -P -- "$1" }
 
-# Ctrl-P and Ctrl-N as optional substitutes for Up/Down arrows.
-bindkey "^P" up-line-or-beginning-search
-bindkey "^N" down-line-or-beginning-search
+#
+# Asynchronous git status indicator.
+#
 
-# Make j and k in vi mode also do the same thing.
-bindkey -M vicmd "k" up-line-or-beginning-search
-bindkey -M vicmd "j" down-line-or-beginning-search
+_git_branch_status() {  # Adapted from <https://github.com/agkozak/agkozak-zsh-prompt>.
+    emulate -L zsh
+    setopt LOCAL_OPTIONS WARN_CREATE_GLOBAL
+    local ref branch
+    ref=$(command git symbolic-ref --quiet HEAD 2>/dev/null)
+    case $? in
+        0 ) ;;  # Var $ref contains checked-out branch name.
+        128 ) return ;;  # No git repo here.
+        # Otherwise, check for detached HEAD.
+        * ) ref=$(command git rev-parse --short HEAD 2>/dev/null) || return ;;
+    esac
+    branch=${ref#refs/heads/}
 
-# Make sure the terminal is in application mode, when ZLE is
-# active. Only then are the values from $terminfo valid.
-if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
-    autoload -Uz add-zle-hook-widget
-    function zle_application_mode_start { echoti smkx }
-    function zle_application_mode_stop { echoti rmkx }
-    add-zle-hook-widget -Uz zle-line-init zle_application_mode_start
-    add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
-fi
-
-
-# PROMPT {{{1
-# Requires: zsh-pure-prompt-git [AUR].
-if [[ -f "/usr/share/zsh/functions/Prompts/prompt_pure_setup" ]]; then
-    autoload -U promptinit; promptinit
-    print () {  # Hack to remove newlines between successive prompts.
-        [ 0 -eq $# -a 'prompt_pure_precmd' = "${funcstack[-1]}" ] || builtin print "$@";
-    }
-    prompt pure
-    # Show number of background jobs if any, and make default prompt green.
-    RPROMPT="%(1j.[bg:%j] .)"
-    zstyle :prompt:pure:prompt:success color 'green'
-fi
-
-
-# COMPLETION {{{1
-autoload -Uz compinit; compinit
-setopt complete_in_word
-unsetopt auto_menu
-
-# Requires fzf.
-if command -v fzf &>/dev/null; then
-    export FZF_DEFAULT_OPTS='--multi --height 50% --layout=reverse --marker="+"
-        --bind backward-eof:abort,tab:down,shift-tab:up
-        --bind +:toggle-down,alt-\;:abort,ctrl-l:clear-selection+first
-        --bind alt-j:preview-down,alt-k:preview-up
-        --color fg:12,bg:-1,hl:1,fg+:-1,bg+:-1,hl+:1,preview-fg:3
-        --color prompt:2,gutter:-1,pointer:-1,marker:6,spinner:3,info:3
-        --color border:12,header:12
-    '
-    # Make Alt-f use fzf to find completions, e.g. after cd command.
-    source /usr/share/fzf/completion.zsh
-    export FZF_COMPLETION_TRIGGER=''
-    bindkey "^[f" fzf-completion
-    bindkey "^I" $fzf_default_completion
-
-    # Requires ripgrep (rg).
-    if command -v rg &>/dev/null; then
-        export FZF_DEFAULT_COMMAND='rg --files --hidden --no-messages'
+    if [[ -n $branch ]]; then
+        local git_status symbols="" i=1 k
+        git_status="$(LC_ALL=C GIT_OPTIONAL_LOCKS=0 command git status --show-stash 2>&1)"
+        typeset -A messages
+        messages=(
+            'v^'    ' have diverged, '
+            'v'     'Your branch is behind '
+            '^'     'Your branch is ahead of '
+            '+'     'new file: '
+            'x'     'deleted: '
+            '!'     'modified: '
+            '>'     'renamed: '
+            '?'     'Untracked files: '
+            '$'     'Your stash currently has '
+        )
+        for k in 'v^' 'v' '^' '+' 'x' '!' '>' '?' '$'; do
+            case $git_status in *${messages[$k]}* ) symbols+=$k ;; esac
+            (( i++ ))
+        done
+        [[ -n $symbols ]] && symbols="(${symbols})"
+        printf -- '%s %s' "$branch" "$symbols"
     fi
-fi
-# }}}
+}
 
-# Import additional shell aliases.
+_subst_async_callback() {  # Adapted from <https://github.com/agkozak/agkozak-zsh-prompt>.
+    emulate -L zsh
+    setopt LOCAL_OPTIONS NO_IGNORE_BRACES
+    local fd="$1" response
+    IFS='' builtin read -rs -d $'\0' -u "$fd" response
+    zle -F ${fd}; exec {fd}<&-
+    psvar[9]="$response"
+    zle && zle .reset-prompt
+}
+
+_subst_async() {  # Adapted from <https://github.com/agkozak/agkozak-zsh-prompt>.
+    emulate -L zsh
+    setopt LOCAL_OPTIONS NO_IGNORE_BRACES
+    typeset -g ASYNC_FD=13371
+    exec {ASYNC_FD} < <(_git_branch_status)
+    command true  # Bug workaround; see <http://www.zsh.org/mla/workers/2018/msg00966.html>.
+    zle -F "$ASYNC_FD" _subst_async_callback
+}
+
+
+#
+# Add hooks and ZLE customizations.
+#
+autoload -Uz add-zle-hook-widget
+
+_keymap_mode_psvar() {
+    case $KEYMAP in
+        vicmd ) psvar[1]=':' ;;
+        viins|main ) psvar[1]='>' ;;
+    esac
+    zle && { zle .reset-prompt; zle -R }
+}
+add-zle-hook-widget zle-line-init _keymap_mode_psvar
+add-zle-hook-widget zle-keymap-select _keymap_mode_psvar
+
+precmd() {
+    emulate -L zsh
+    # Clear vi mode indicator and git indicators.
+    psvar[1]=''
+    psvar[9]=''
+    # Start async runners.
+    _subst_async
+}
+
+TRAPWINCH() {  # See <https://github.com/ohmyzsh/ohmyzsh/issues/3605#issuecomment-75271013>
+    zle && { zle .reset-prompt; zle -R }
+}
+
+
+# Set PROMPT and RPROMPT.
+setopt PROMPT_SUBST
+PROMPT='%F{3}%n@%m %F{4}%25<..<%~%<< %F{6}%9v%f
+%B%(?.%F{2}.%F{1})%#zsh%1v%b%f '
+RPROMPT='%F{3}%(1j.[bg:%j] .)'
+
+# Load completions and aliases.
+autoload -Uz compinit; compinit
 if [[ -f "$HOME/.aliases" ]]; then
     source "$HOME/.aliases"
 fi
