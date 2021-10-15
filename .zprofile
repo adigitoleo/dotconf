@@ -28,6 +28,8 @@ if is_command fzf && is_command rg; then
         --color border:12,header:12
     '
     export FZF_DEFAULT_COMMAND='rg --files --hidden --no-messages'
+    # Undocumented in manpage, triggers fzf if tab is pressed afterwards.
+    export FZF_COMPLETION_TRIGGER=',,'
 fi
 
 
