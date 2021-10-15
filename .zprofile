@@ -28,12 +28,6 @@ if is_command fzf && is_command rg; then
         --color border:12,header:12
     '
     export FZF_DEFAULT_COMMAND='rg --files --hidden --no-messages'
-
-    if [[ -r /usr/share/fzf/completion.zsh ]]; then
-        source /usr/share/fzf/completion.zsh
-        # Undocumented in manpage, triggers fzf if tab is pressed afterwards.
-        export FZF_COMPLETION_TRIGGER='f;'
-    fi
 fi
 
 

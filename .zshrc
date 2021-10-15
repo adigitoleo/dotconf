@@ -127,3 +127,8 @@ autoload -Uz compinit; compinit
 if [[ -f "$HOME/.aliases" ]]; then
     source "$HOME/.aliases"
 fi
+if [[ -f /usr/share/fzf/completion.zsh ]]; then
+    source /usr/share/fzf/completion.zsh
+    # Undocumented in manpage, triggers fzf if tab is pressed afterwards.
+    export FZF_COMPLETION_TRIGGER=',,'
+fi
