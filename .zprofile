@@ -4,6 +4,38 @@
 # For hardware-specific or non-portable variables, use ./.zprofile.more instead.
 # To autostart graphical servers, use ./.zprofile.more instead.
 
+#
+# Functions.
+#
+warn() { >&2 printf '%s\n' ".zprofile: $1"; }
+is_command() { # Check if command exists, for flow control (no stdout messages)
+    1>/dev/null 2>&1 command -v "$1" && [ "$?" -eq 0 ] && return 0 \
+        || { warn "command '${1}' not found" && return 1 ;}
+}
+
+
+#
+# Fuzzy search.
+#
+
+if is_command fzf && is_command rg; then
+    export FZF_DEFAULT_OPTS='--multi --height 50% --layout=reverse --marker="+"
+        --bind backward-eof:abort,tab:down,shift-tab:up
+        --bind +:toggle-down,alt-\;:abort,ctrl-l:clear-selection+first
+        --bind alt-j:preview-down,alt-k:preview-up
+        --color fg:12,bg:-1,hl:1,fg+:-1,bg+:-1,hl+:1,preview-fg:3
+        --color prompt:2,gutter:-1,pointer:-1,marker:6,spinner:3,info:3
+        --color border:12,header:12
+    '
+    export FZF_DEFAULT_COMMAND='rg --files --hidden --no-messages'
+
+    if [[ -r /usr/share/fzf/completion.zsh ]]; then
+        source /usr/share/fzf/completion.zsh
+        # Undocumented in manpage, triggers fzf if tab is pressed afterwards.
+        export FZF_COMPLETION_TRIGGER='f;'
+    fi
+fi
+
 
 # Set preferred editor.
 if [ -x "/usr/bin/vis" ]; then
