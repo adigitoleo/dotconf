@@ -1,0 +1,46 @@
+#!/bin/sh
+set -euo pipefail
+readonly SCRIPTNAME="${0##*/}"
+usage() {
+    printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
+    printf '       %s [ssh_options...] destination\n' "$SCRIPTNAME"
+}
+helpf() {
+    echo 'Wrapper for ssh that sets up a FIFO clipboard to the remote,'
+    echo 'using ssh ControlMaster. This allows for copy/paste from the remote,'
+    echo 'without installing any clipboard handlers on the remote host.'
+    echo 'Requires `wl-clipboard` (Wayland) on the local machine.'
+}
+
+warn() { >&2 printf '%s\n' "${SCRIPTNAME}: $1"; }
+tell() { printf '%s\n' "${SCRIPTNAME}: $1"; }
+is_command() { # Check if command exists, for flow control (no stdout messages)
+    1>/dev/null 2>&1 command -v "$1" && [ "$?" -eq 0 ] && return 0 \
+        || { warn "command '${1}' not found" && return 1 ;}
+}
+
+is_command ssh || exit 1
+is_command mktemp || exit 1
+is_command wl-copy || exit 1
+SOCKET="$(mktemp -u --tmpdir sshclip.sock.XXXXXXXXXX)"
+FIFO="~/.sshclip"
+
+terminate_socket() {
+    ssh -oControlPath="$1" -O exit SSHCLIP_HOST
+}
+
+ssh -f -oControlMaster=yes -oControlPath="$SOCKET" "$@" 'tail -f /dev/null' \
+    || { warn "unable to open ssh master connection" && exit 1; }
+ssh -S"$SOCKET" SSHCLIP_HOST "sh -c 'test ! -p $FIFO && mkfifo $FIFO'" \
+    || { terminate_socket "$SOCKET"; exit 1; }
+
+(
+    set -euo pipefail
+    while true; do
+        ssh -S"$SOCKET" -tt SSHCLIP_HOST "cat $FIFO" 2>/dev/null | wl-copy
+    done &
+)
+
+ssh -S"$SOCKET" SSHCLIP_HOST || { terminate_socket "$SOCKET"; exit 1; }
+ssh -S"$SOCKET" SSHCLIP_HOST "rm $FIFO"
+terminate_socket "$SOCKET"
