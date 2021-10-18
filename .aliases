@@ -107,4 +107,4 @@ alias mon,right='wlr-randr --output HDMI-A-2 --preferred --pos 0,0 --output HDMI
 alias mktar='tar --transform=s/$PATTERN/$date +%Y%m%dT%H%M)/ --exclude={__pycache,.mypy_cache} -vcaf'
 
 # Create backup according to ./.BACKUP using rsync: backup <destination>
-alias backup='rsync -rszauhP --delete --files-from=$HOME/.BACKUP .'
+alias backup='rsync -rszauhP --no-links --delete --files-from=$HOME/.BACKUP .'
