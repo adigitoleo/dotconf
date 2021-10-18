@@ -1,49 +1,52 @@
+-- CONFIGURATION FILE FOR THE VIS EDITOR
+-- <https://github.com/martanne/vis>
+
 require('vis')
 -- https://github.com/martanne/vis/wiki/Plugins
 
 require('plugins/vis-jumplist')
+-- <https://git.sr.ht/~emg/vis-jumplist>
 require('plugins/vis-cscope')
--- PKGBUILD is in AUR, upstream is <https://git.sr.ht/~emg/vis-cscope>
+-- <https://git.sr.ht/~emg/vis-cscope>
 -- NOTE: Currently testing the 'jumplist' branch for inverse :cs pop command.
 --      :cs <letter> <word> for explicit searches of <word>
 --      <C-/><letter> to search for the word under the cursor
 --      <letter> can be 's', 'g', 'd', 'c', 't', 'e', 'f', 'i', or 'a',
 --      which match the 0-9 options in cscope
 
-local spellcheck = require('plugins/spellcheck')
--- PKGBUILD is in AUR, upstream is <https://github.com/fischerling/vis-spellcheck>
+require('plugins/vis-spellcheck')
+-- <https://github.com/fischerling/vis-spellcheck>
 --      <C-w>e to enable highlighting of bad spelling
 --      <C-w>d to disable highlighting of bad spelling
 --      <C-w>w to suggest spelling corrections
 
-local pairs = require('plugins/pairs')
+local pairs = require('plugins/vis-pairs')
+-- <https://repo.or.cz/vis-pairs.git>
 pairs.autopairs = false
--- PGKBUILD is in AUR, upstream is <https://repo.or.cz/vis-pairs.git>
---      turn of automatic closing delimiter insertion:
---      pairs = require('plugins/pairs')
---      pairs.autopairs = false
+--      turn of automatic closing delimiter insertion
 
-local surround = require('plugins/vis-surround')
--- PKGBUILD is in AUR, upstream is <https://repo.or.cz/vis-surround.git>
+require('plugins/vis-surround')
+-- <https://repo.or.cz/vis-surround.git>
 --      surround word in brackets: ys]aw
 --      change delimiter pair arround word from single quotes to parens: cs')
 --      delete pair of braces arround word: ds}
 
 local smart_backspace = require('plugins/vis-smart-backspace')
 smart_backspace.tab_width = 4
--- PKGBUILD is in AUR, upstream is <https://github.com/ingolemo/vis-smart-backspace>
+-- <https://github.com/ingolemo/vis-smart-backspace>
 --      requires explicit tab width setting (default is 8):
 --      smart_backspace = require('plugins/vis-smart-backspace')
 --      smart_backspace.tab_width = 4
 
-local fzf_open = require('plugins/fzf-open')
+local fzf_open = require('plugins/vis-fzf-open')
 fzf_open.fzf_args = "--height=33%"
--- PKGBUILD is in AUR, upstream is <https://git.sr.ht/~mcepl/vis-fzf-open>
+-- <https://git.sr.ht/~mcepl/vis-fzf-open>
 --      :fzf to search all files in the current sub-tree
 --      accepts normal fzf arguments, e.g. :fzf -p !.class
 --      <Enter> to open file, or <C-s> and <C-v> for horizontal/vertical splits
 
 local fzf_unicode = require('plugins/vis-fzf-unicode')
+-- <https://git.sr.ht/~adigitoleo/vis-fzf-unicode>
 fzf_unicode.fzf_args = "--height=33%"
 
 
