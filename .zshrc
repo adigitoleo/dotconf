@@ -88,7 +88,7 @@ _subst_async() {  # Adapted from <https://github.com/agkozak/agkozak-zsh-prompt>
 
 
 #
-# Add hooks and ZLE customizations.
+# Widgets, hooks and ZLE customizations.
 #
 autoload -Uz add-zle-hook-widget
 
@@ -118,7 +118,7 @@ TRAPWINCH() {  # See <https://github.com/ohmyzsh/ohmyzsh/issues/3605#issuecommen
 
 # Set PROMPT and RPROMPT.
 setopt PROMPT_SUBST
-PROMPT='%F{3}%n@%m %F{4}%25<..<%~%<< %F{6}%9v%f
+PROMPT='%F{4}%n@%m %F{3}%25<..<%~%<< %F{6}%9v%f
 %B%(?.%F{2}.%F{1})%#zsh%1v%b%f '
 RPROMPT='%F{3}%(1j.[bg:%j] .)'
 
