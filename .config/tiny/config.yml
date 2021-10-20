@@ -62,7 +62,7 @@ log_dir: "/home/admin/.tiny_logs"
 # Attributes can be combined (e.g [bold, underline]), and valid values are bold
 # and underline.
 colors:
-    nick: [1, 2, 3, 4, 5, 6, 7, 9, 10, 12, 13, 14]
+    nick: [1, 2, 3, 4, 6, 9, 10, 12, 13, 14]
 
     clear:
         fg: default
@@ -102,12 +102,12 @@ colors:
         attrs: [bold]
 
     faded:
-        fg: silver
+        fg: olive
         bg: default
 
     exit_dialogue:
-        fg: default
-        bg: navy
+        fg: black
+        bg: yellow
 
     highlight:
         fg: red
@@ -128,11 +128,11 @@ colors:
         attrs: [bold]
 
     tab_normal:
-        fg: cyan
+        fg: default
         bg: default
 
     tab_new_msg:
-        fg: yellow
+        fg: maroon
         bg: default
 
     tab_highlight:
