@@ -1,75 +1,91 @@
 -- CONFIGURATION FILE FOR THE VIS EDITOR
 -- <https://github.com/martanne/vis>
 
-require('vis')
 -- https://github.com/martanne/vis/wiki/Plugins
+require('vis')
 
-require('plugins/vis-jumplist')
 -- <https://git.sr.ht/~emg/vis-jumplist>
-require('plugins/vis-cscope')
+require('plugins/vis-jumplist')
 -- <https://git.sr.ht/~emg/vis-cscope>
--- NOTE: Currently testing the 'jumplist' branch for inverse :cs pop command.
---      :cs <letter> <word> for explicit searches of <word>
---      <C-/><letter> to search for the word under the cursor
---      <letter> can be 's', 'g', 'd', 'c', 't', 'e', 'f', 'i', or 'a',
---      which match the 0-9 options in cscope
-
-require('plugins/vis-spellcheck')
+-- Currently testing the 'jumplist' branch for inverse :cs pop command.
+require('plugins/vis-cscope')
 -- <https://github.com/fischerling/vis-spellcheck>
---      <C-w>e to enable highlighting of bad spelling
---      <C-w>d to disable highlighting of bad spelling
---      <C-w>w to suggest spelling corrections
-
-local pairs = require('plugins/vis-pairs')
+require('plugins/vis-spellcheck')
 -- <https://repo.or.cz/vis-pairs.git>
+local pairs = require('plugins/vis-pairs')
 pairs.autopairs = false
---      turn of automatic closing delimiter insertion
-
-require('plugins/vis-surround')
 -- <https://repo.or.cz/vis-surround.git>
---      surround word in brackets: ys]aw
---      change delimiter pair arround word from single quotes to parens: cs')
---      delete pair of braces arround word: ds}
-
+require('plugins/vis-surround')
+-- <https://github.com/ingolemo/vis-smart-backspace>
 local smart_backspace = require('plugins/vis-smart-backspace')
 smart_backspace.tab_width = 4
--- <https://github.com/ingolemo/vis-smart-backspace>
---      requires explicit tab width setting (default is 8):
---      smart_backspace = require('plugins/vis-smart-backspace')
---      smart_backspace.tab_width = 4
-
+-- <https://git.sr.ht/~mcepl/vis-fzf-open>
 local fzf_open = require('plugins/vis-fzf-open')
 fzf_open.fzf_args = "--height=33%"
--- <https://git.sr.ht/~mcepl/vis-fzf-open>
---      :fzf to search all files in the current sub-tree
---      accepts normal fzf arguments, e.g. :fzf -p !.class
---      <Enter> to open file, or <C-s> and <C-v> for horizontal/vertical splits
-
-local fzf_unicode = require('plugins/vis-fzf-unicode')
 -- <https://git.sr.ht/~adigitoleo/vis-fzf-unicode>
+local fzf_unicode = require('plugins/vis-fzf-unicode')
 fzf_unicode.fzf_args = "--height=33%"
 
 
-vis.events.subscribe(vis.events.INIT, function()
-    -- options:
-    vis:command('set expandtab on')
-    vis:command('set tabwidth 4')
-    vis:command('set autoindent on')
-    local input = io.popen('printf "%s" "$TERM"')
-    local term = input:read()
-    if term ~= "linux" then
+-- Set theme (dark/light) based on external command.
+function set_theme()
+    local term = io.popen('printf "%s" "$TERM"')
+    local hastheme = io.popen("command -v theme")
+    if term:read() ~= "linux" and hastheme:read() then
         do
             vis:command('set theme mellow')
-            local input = io.popen('theme -q')
-            local theme = input:read()
-            if theme == "dark" then
+            local theme = io.popen('theme -q')
+            if theme:read() == "dark" then
                 vis:command('set mellow_dark true')
             else
                 vis:command('set mellow_dark false')
             end
+            theme:close()
         end
     end
+    hastheme:close()
+    term:close()
+end
 
+
+-- Create FIFO for code transfer and return its path.
+function fifoinit()
+    local mktemp = io.popen("mktemp -u --tmpdir snippets.XXXXXXXXXX")
+    local fifopath = mktemp:read()
+    local mkfifo = io.popen("mkfifo " .. fifopath)
+    mktemp:close()
+    mkfifo:close()
+    return fifopath
+end
+
+
+-- Write buffer contents to `vis.fifopath`.
+function write_fifo(argv, force, win, selection, range)
+    if not vis.fifopath or vis.fifopath == '' then
+        vis:info("Unable to write to empty `vis.fifopath`.")
+        return false
+    end
+    local status, out, err = vis:pipe(win.file, range, "> " .. vis.fifopath)
+    if not status then
+        vis:info(err)
+        return false
+    end
+    return true
+end
+
+
+vis.events.subscribe(vis.events.INIT, function()
+    -- Options:
+    vis:command('set expandtab on')
+    vis:command('set tabwidth 4')
+    vis:command('set autoindent on')
+    vis.fifopath = fifoinit()
+    set_theme()
+
+    -- Commands:
+    vis:command_register("wf", write_fifo, "Write range to `vis.fifopath`")
+
+    -- Mapping modes:
     local _normal = vis.modes.NORMAL
     local _insert = vis.modes.INSERT
     local _replace = vis.modes.REPLACE
@@ -93,12 +109,12 @@ vis.events.subscribe(vis.events.INIT, function()
     vis:map(_normal, '<M-f>', ':fzf<Enter>')
     vis:map(_normal, '<M-a>', ':fzf-unicode<Enter>')
 
-    -- whitespace padding/stripping
+    -- Whitespace padding/stripping:
     vis:map(_normal, ' o', 'o<Escape>') -- TODO: allow repeating
     vis:map(_normal, ' O', 'O<Escape>') -- TODO: allow repeating
     vis:map(_normal, '<Backspace>', "''m:x/ +$/ c//<Enter>M")
 
-    -- quicker clipboard copy/paste
+    -- Quicker clipboard copy/paste:
     vis:map(_normal, ' p', '"+p')
     vis:map(_normal, ' y', '"+y')
     vis:map(_visual, ' p', '"+p')
@@ -112,4 +128,9 @@ vis.events.subscribe(vis.events.WIN_OPEN, function(win)
     vis:command('set relativenumbers on')
     vis:command('set ignorecase on')
     vis:command('set colorcolumn 88')
+end)
+
+vis.events.subscribe(vis.events.QUIT, function()
+    if not vis.fifopath or vis.fifopath == '' then return true end
+    os.remove(vis.fifopath)
 end)
