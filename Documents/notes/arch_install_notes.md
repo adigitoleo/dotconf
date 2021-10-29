@@ -310,12 +310,6 @@ the other notes files for recommendations), enable some `freetype2` preset optio
     sudo ln -s /usr/share/fontconfig/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
 
 
-Enable FreeType subpixel hinting mode by editing `/etc/profile.d/freetype2.sh`
-and uncommenting:
-
-    export FREETYPE_PROPERTIES="truetype:interpreter-version=40"
-
-
 ## Importing dotfiles (optional)
 
 Clone `yadm` from the AUR after setting up `.gitconfig`.
