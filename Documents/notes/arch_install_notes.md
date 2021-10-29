@@ -305,9 +305,9 @@ Installing and enabling default apparmor profiles is probably at least a little 
 After installing some good fonts like `ttf-liberation` and `noto-fonts` (check
 the other notes files for recommendations), enable some `freetype2` preset options:
 
-    sudo ln -s /etc/fonts/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
-    sudo ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
-    sudo ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
+    sudo ln -s /usr/share/fontconfig/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
+    sudo ln -s /usr/share/fontconfig/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
+    sudo ln -s /usr/share/fontconfig/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
 
 
 Enable FreeType subpixel hinting mode by editing `/etc/profile.d/freetype2.sh`
