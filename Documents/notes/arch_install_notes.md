@@ -12,6 +12,7 @@ Use cat, it's safer than dd and easier to remember:
     cat /path/to/archlinux.iso > /dev/sd<X>; sync
     exit
 
+
 If that doesn't work try [Unetbootin] or the openSUSE [imagewriter] instead.
 For Windows, [Rufus] seems reliable.
 
@@ -41,14 +42,17 @@ For UEFI, remember to format the boot partition as FAT32:
 
     mkfs.vfat -F32 -n EFI /dev/<boot_partition>
 
+
 Label the root partition using `-L` instead:
 
     mkfs.ext4 -L ROOT /dev/<root_partition>
+
 
 Initialise the swap partition as well:
 
     mkswap /dev/<swap_partition>
     swaplabel -L SWAP /dev/<swap_partition>
+
 
 Check the labels:
 
@@ -61,6 +65,7 @@ Remember to mount the boot partition (IMPORTANT!)
 
     mkdir /mnt/boot
     mount /dev/<boot_partition> /mnt/boot
+
 
 Necessary mount point depends on bootloader, /mnt/boot is for systemd-boot.
 
@@ -77,6 +82,7 @@ Check with `lsblk -f`.
 Something like this:
 
     pacstrap /mnt base base-devel linux linux-firmware intel-ucode neovim iwd sudo reflector zsh zsh-completions man-db
+
 
 To get the python host for neovim working, you also need `python-pynvim`.
 
@@ -97,6 +103,7 @@ For wifi, create the file `/etc/systemd/network/20-wireless.network` with:
     DHCP=yes
     IPv6PrivacyExtensions=yes
 
+
 **NOTE: Change `wlan0` to match whatever is reported by `iwctl station list`.**
 
 Enable the network daemon with `systemctl enable systemd-networkd`.
@@ -115,8 +122,8 @@ After chrooting into `/mnt`, run `bootctl --path=/boot install`.
 If you mounted the boot partition somewhere else, change the path accordingly.
 
 Set up automatic bootloader updates by creating the file
-`/etc/pacman.d/hooks/100-systemd-boot.hook` with:
 
+`/etc/pacman.d/hooks/100-systemd-boot.hook` with:
     [Trigger]
     Type = Package
     Operation = Upgrade
@@ -127,6 +134,7 @@ Set up automatic bootloader updates by creating the file
     When = PostTransaction
     Exec = /usr/bin/bootctl update
 
+
 **NOTE: Only works if secure boot is disabled, otherwise check the wiki...**
 
 Next edit `/boot/loader/loader.conf` to contain:
@@ -135,6 +143,7 @@ Next edit `/boot/loader/loader.conf` to contain:
     timeout 4
     console-mode max
     editor no
+
 
 If it works, comment out the `timeout 4` line later to stop seeing the menu.
 
@@ -145,6 +154,7 @@ Now create `/boot/loader/entries/arch.conf` with:
     initrd /intel-ucode.img
     initrd /initramfs-linux.img
     options root="LABEL=ROOT" rw loglevel=3 quiet splash
+
 
 For HiDPI screens, add `fbcon=font:TER16x32` to the options.
 
@@ -168,6 +178,7 @@ the necessary images are in `/boot`, e.g. `ls /boot`:
 
     EFI initramfs-linux-fallback.img initramfs-linux.img intel-ucode.img loader vmlinuz-linux
 
+
 Otherwise reinstall the packages (change the *-ucode* to match processor manufacturer):
 
     pacman -S linux linux-firmware intel-ucode
@@ -175,8 +186,7 @@ Otherwise reinstall the packages (change the *-ucode* to match processor manufac
 
 ## Minimal post-install setup
 
-Set zsh as default shell with `chsh -s /bin/zsh` and relog.
-Get `zsh-completions` and optionally `zsh-pure-prompt` (AUR).
+Get `zsh-completions`, set zsh as default shell with `chsh -s /bin/zsh` and relog.
 
 Set up reflector for automatic mirrorlist refreshing by editing
 `/etc/xdg/reflector/reflector.conf` and setting the desired countries.
@@ -191,6 +201,7 @@ Make admin user who also uses zsh shell by default:
 
     useradd -m -G wheel -s /bin/zsh <name>
     passwd <name>
+
 
 Install `git` and set up a minimal, convenient `~/.gitconfig`, e.g.:
 
@@ -222,6 +233,7 @@ Install `git` and set up a minimal, convenient `~/.gitconfig`, e.g.:
         unstage = reset HEAD --
         nuke = !sh -c 'git branch -d $1 && git push origin :$1' -
 
+
 Set a better login greeter, change `/etc/issue` to:
 
     \d \t (\U) \n:\l
@@ -232,8 +244,8 @@ Set a better login greeter, change `/etc/issue` to:
 Get `pacman-contrib` and `systemctl enable --now paccache.timer`, to clean
 old pacman cache.
 
-Verify that `fstrim` is installed and `systemctl enable --now
-fstrim.timer`, to prolong life of SSD drives.
+Verify that `fstrim` is installed and `systemctl enable --now fstrim.timer`,
+to prolong life of SSD drives.
 
 Make sure the `reflector.timer` is running (see above).
 
@@ -242,7 +254,7 @@ to rotate (clean) log files weekly (optional).
 
 *TODO: Notes about backup timers*
 *TODO: Notes about copying files via ssh*
-*TODO: Notes about rsync and physical backups*
+*TODO: Notes about rsync and physical backups (see backup alias)*
 
 
 ## Firewall and hardening (recommended)
@@ -259,9 +271,11 @@ enable and start `ufw.service` and run:
     ufw limit ssh
     ufw enable
 
+
 Also allow the Tor port if you want:
 
     ufw allow 9050
+
 
 Edit `/etc/sysctl.d/51-kexec-restrict.conf` to contain
 `kernel.kexec_load_disabled = 1` to disable switching kernels at runtime.
@@ -280,6 +294,7 @@ Unless setting up a server, edit `/etc/sysctl.d/99-network.conf` to contain:
     net.ipv4.conf.all.send_redirects = 0
     net.ipv4.conf.default.send_redirects = 0
 
+
 source: <https://wiki.archlinux.org/index.php/Sysctl#TCP/IP_stack_hardening>
 
 Installing and enabling default apparmor profiles is probably at least a little bit useful? Check the [AppArmor wiki article] for instructions.
@@ -288,11 +303,12 @@ Installing and enabling default apparmor profiles is probably at least a little 
 ## Better font rendering (recommended)
 
 After installing some good fonts like `ttf-liberation` and `noto-fonts` (check
-the other notes files for recommendations), enable some preset options:
+the other notes files for recommendations), enable some `freetype2` preset options:
 
     sudo ln -s /etc/fonts/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
     sudo ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
     sudo ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
+
 
 Enable FreeType subpixel hinting mode by editing `/etc/profile.d/freetype2.sh`
 and uncommenting:
@@ -308,6 +324,7 @@ Verify that `ssh` is installed and set up a new key for syncing dotfiles:
 
     ssh-keygen -t ed25519 -C "dotconf@$HOST" -f ~/.ssh/dotconf
 
+
 Generate another key for pushing to AUR if necessary.
 Add the PUBLIC key to the account holding your remote dotfile repo.
 
@@ -316,14 +333,17 @@ new machine by editing `/etc/ssh/sshd_config` and uncommenting the line:
 
     HostKey /etc/ssh/ssh_host_ed25519_key
 
+
 and adding a line at the end to allow LAN access for the new admin user:
 
     AllowUsers      <admin>@192.168.0.0/24
+
 
 where the LAN address should match the first one in the second line of `ip route`.
 After enabling and starting the `sshd` service, connecto via another machine:
 
     ssh <admin>@<LAN_ip_of_new_computer>
+
 
 The LAN ip is what comes after "src" in `ip route`.
 
@@ -336,6 +356,7 @@ Next ssh needs to be told where to find the keys, so make a `~/.ssh/config`:
         User aur
     Host git.sr.ht
         IdentityFile ~/.ssh/dotconf
+
 
 Use yadm to clone the dotfiles with:
 
@@ -352,10 +373,12 @@ Add the following to ~/.zprofile.more
         <command to start compositor>
     fi
 
+
 To automatically set the login user for tty1:
 
     sudo mkdir /etc/systemd/system/getty@tty1.service.d
     sudoedit /etc/systemd/system/getty@tty1.service.d/override.conf
+
 
 Add the contents:
 
@@ -363,11 +386,12 @@ Add the contents:
     ExecStart=
     ExecStart=-/sbin/agetty -n -o <username> %I
 
-Make sure the getty@tty1 service is enabled.
+
+Make sure the `getty@tty1` service is enabled.
 
 
 [installation guide]: https://wiki.archlinux.org/index.php/Installation_guide
 [unetbootin]: https://aur.archlinux.org/packages/unetbootin/
 [imagewriter]: https://aur.archlinux.org/packages/imagewriter/
 [rufus]: http://rufus.ie/
-[AppArmor wiki article](https://wiki.archlinux.org/title/AppArmor)
+[AppArmor wiki article]: (https://wiki.archlinux.org/title/AppArmor)
