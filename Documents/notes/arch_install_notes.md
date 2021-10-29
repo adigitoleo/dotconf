@@ -312,8 +312,7 @@ the other notes files for recommendations), enable some `freetype2` preset optio
 
 ## Importing dotfiles (optional)
 
-Clone `yadm` from the AUR after setting up `.gitconfig`.
-Check the PKGBUILD and run `makepkg -csi` in the `yadm` directory.
+Get `yadm` after setting up `.gitconfig`.
 Verify that `ssh` is installed and set up a new key for syncing dotfiles:
 
     ssh-keygen -t ed25519 -C "dotconf@$HOST" -f ~/.ssh/dotconf
