@@ -29,9 +29,9 @@ fzf_unicode.fzf_args = "--height=33%"
 
 -- Set theme (dark/light) based on external command.
 function set_theme()
-    local term = io.popen('printf "%s" "$TERM"')
-    local hastheme = io.popen("command -v theme")
-    if term:read() ~= "linux" and hastheme:read() then
+    local term = os.getenv("TERM")
+    local has_theme = os.execute("command -v theme")
+    if term ~= "linux" and has_theme then
         do
             vis:command('set theme mellow')
             local theme = io.popen('theme -q')
@@ -43,8 +43,6 @@ function set_theme()
             theme:close()
         end
     end
-    hastheme:close()
-    term:close()
 end
 
 
@@ -52,10 +50,15 @@ end
 function fifoinit()
     local mktemp = io.popen("mktemp -u --tmpdir snippets.XXXXXXXXXX")
     local fifopath = mktemp:read()
-    local mkfifo = io.popen("mkfifo " .. fifopath)
     mktemp:close()
-    mkfifo:close()
-    return fifopath
+    local fifohandle = io.open(fifopath)
+    if fifohandle ~= nil and io.close(fifohandle) then
+        vis:info("Unable to create FIFO at `vis.fifopath`. File exists.")
+        return nil
+    else
+        os.execute("mkfifo " .. fifopath)
+        return fifopath
+    end
 end
 
 
@@ -66,10 +69,20 @@ function write_fifo(argv, force, win, selection, range)
         return false
     end
     local status, out, err = vis:pipe(win.file, range, "> " .. vis.fifopath)
-    if not status then
-        vis:info(err)
+    if not status then vis:info(err) return false end
+    return true
+end
+
+
+-- Spawn terminal with $VISFIFO set to the value of `vis.fifopath`.
+function spawn_fifoterm(argv, force, win, selection, range)
+    if not vis.fifopath or vis.fifopath == '' then
+        vis:info("Unable to set $VISFIFO. Empty `vis.fifopath`.")
         return false
     end
+    local term = os.getenv("TERM")
+    if not term then vis:info("Unable to spawn $TERM.") return false end
+    os.execute("(VISFIFO=" .. vis.fifopath .. " 1>/dev/null 2>/dev/null " .. term .. ")&")
     return true
 end
 
@@ -84,6 +97,11 @@ vis.events.subscribe(vis.events.INIT, function()
 
     -- Commands:
     vis:command_register("wf", write_fifo, "Write range to `vis.fifopath`")
+    vis:command_register(
+        "ft",
+         spawn_fifoterm,
+         "Spawn terminal with $VISFIFO set to the value of `vis.fifopath`."
+    )
 
     -- Mapping modes:
     local _normal = vis.modes.NORMAL
@@ -95,6 +113,7 @@ vis.events.subscribe(vis.events.INIT, function()
 
     -- Meta mappings:
     vis:map(_normal, '<M-;>', '<Escape>')
+    vis:map(_normal, '<M-w>', ':w<Enter>')
     vis:map(_insert, '<M-;>', '<Escape>')
     vis:map(_insert, '<M-w>', '<Escape><Escape>:w<Enter>i')
     vis:map(_insert, '<C-c>', '<Escape><Escape>')
