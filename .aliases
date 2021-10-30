@@ -21,10 +21,10 @@
 
 alias colors8='msgcat --color=test|head -11'
 alias ls='ls --color=auto --group-directories-first'
+alias d='diff --color=always -u'
 alias grep='grep --color=auto'
 alias ip='ip --color=auto'
 alias lsblk='lsblk -o NAME,MAJ:MIN,RM,SIZE,RO,TYPE,MOUNTPOINT,FSTYPE,FSVER'
-alias pacman='pacman --color=auto'
 alias tree='tree --dirsfirst'
 alias less='less -iR'
 alias tmux='TERM=xterm-256color tmux'
@@ -39,15 +39,23 @@ alias rg,absglob='rg $PWD --files -g'
 
 # VERSION CONTROL AND SYSTEM ADMIN {{{1
 
-alias p='pacman --color=auto'
 alias y=yadm
-alias d='diff --color=always -u'
-alias p,get='sudo pacman -Syu --color=auto'
-alias p,rmsafe='sudo pacman -Rn --color=auto'
-alias p,rm='sudo pacman -Rns --color=auto'
-alias p,orphans='pacman -Qtdq --color=auto'
-alias aur='auracle'
-alias pacdiff='sudo SUDO_EDITOR="nvim -d" DIFFPROG="sudoedit" pacdiff'
+
+if 1>/dev/null 2>&1 command -v pacman ; then
+    alias pacman='pacman --color=auto'
+    alias p='pacman --color=auto'
+    alias p,get='sudo pacman -Syu --color=auto'
+    alias p,rmsafe='sudo pacman -Rn --color=auto'
+    alias p,rm='sudo pacman -Rns --color=auto'
+    alias p,orphans='pacman -Qtdq --color=auto'
+    alias aur='auracle'
+    alias pacdiff='sudo SUDO_EDITOR="nvim -d" DIFFPROG="sudoedit" pacdiff'
+elif 1>/dev/null 2>&1 command -v xbps-install ; then
+    alias p='xbps-query'
+    alias p,get='sudo xbps-install -Su'
+    alias p,rmsafe='xbps-remove'
+    alias p,rm='sudo xbps-remove -R'
+fi
 
 # Use ED25519 ssh keys by default.
 alias ssh-keygen='ssh-keygen -t ed25519'
