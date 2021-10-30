@@ -32,7 +32,7 @@ terminate_socket() {
 ssh -f -oControlMaster=yes -oControlPath="$SOCKET" "$@" 'tail -f /dev/null' \
     || { warn "unable to open ssh master connection" && exit 1; }
 ssh -S"$SOCKET" SSHCLIP_HOST "sh -c 'test ! -p $FIFO && mkfifo $FIFO'" \
-    || { terminate_socket "$SOCKET"; exit 1; }
+    || { warn "unable to create $FIFO on SSSHCLIP_HOST"; terminate_socket "$SOCKET"; exit 1; }
 
 (
     set -euo pipefail
