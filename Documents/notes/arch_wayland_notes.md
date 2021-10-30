@@ -13,7 +13,7 @@ provides a nice, lightweight and simple tiling WM experience.
 The AUR package is maintained by the core dev.
 
 Compiling dwl with XWayland support is possible
-(`sed -i 's/#CFLAGS += -DXWAYLAND/CFLAGS += -DXWAYLAND/' config.mk`),
+(`sed -i -e '/-DXWAYLAND/s/^#//' config.mk`),
 which allows to run legacy X11 programs using **xorg-xwayland** <https://xorg.freedesktop.org>.
 
 
