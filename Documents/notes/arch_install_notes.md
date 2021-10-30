@@ -219,7 +219,11 @@ Install `git` and set up a minimal, convenient `~/.gitconfig`, e.g.:
         insteadOf = "aur:"
     ; Requires openssh package.
     ; [url "ssh://aur@aur.archlinux.org/"]
-    ;     pushInsteadOf = "aur:"
+    ;     pushInsteadOf = "https://aur.archlinux.org/"
+    ; [url "git@github.com:"]
+    ;     pushInsteadOf = "https://github.com/"
+    ; [url "git@git.sr.ht:"]
+    ;     pushInsteadOf = "https://git.sr.ht/"
     [pull]
         ff = only
     [init]
@@ -312,48 +316,58 @@ the other notes files for recommendations), enable some `freetype2` preset optio
 
 ## Importing dotfiles (optional)
 
-Get `yadm` after setting up `.gitconfig`.
-Verify that `ssh` is installed and set up a new key for syncing dotfiles:
-
-    ssh-keygen -t ed25519 -C "dotconf@$HOST" -f ~/.ssh/dotconf
-
-
-Generate another key for pushing to AUR if necessary.
-Add the PUBLIC key to the account holding your remote dotfile repo.
-
-For this you usually need a web browser, so it's best to set up `sshd` on the
-new machine by editing `/etc/ssh/sshd_config` and uncommenting the line:
+Install a ssh program like `openssh` if you don't have one, and set up the `sshd` service.
+Edit `/etc/ssh/sshd_config` and uncomment the line:
 
     HostKey /etc/ssh/ssh_host_ed25519_key
 
+and edit other things if you want, check the Arch wiki [SSH protection] article for some ideas.
 
-and adding a line at the end to allow LAN access for the new admin user:
-
-    AllowUsers      <admin>@192.168.0.0/24
-
-
-where the LAN address should match the first one in the second line of `ip route`.
-After enabling and starting the `sshd` service, connecto via another machine:
+After enabling and starting the `sshd` service, try to connect via another machine:
 
     ssh <admin>@<LAN_ip_of_new_computer>
 
-
 The LAN ip is what comes after "src" in `ip route`.
+
+Copy PGP keys to the new machine with `scp`:
+
+    scp -rp ~/.gnupg <new_machine>:
+
+Alternatively, only transfer selected keys with:
+
+    gpg --export-secret-key <key_id> | ssh <new_machine> gpg --import
+
+Get `pass` to manage passwords, and set up a password store:
+
+    pass init "<key_id>"
+
+Generate a password for a new ssh key, e.g.:
+
+    pass generate "ssh/sourcehut@$HOST"
+
+Set up a new key for the remote host that holds the dotfiles, e.g. sourcehut:
+
+    ssh-keygen -t ed25519 -C "sourcehut@$HOST" -f ~/.ssh/sourcehut -P $( pass ssh/sourcehut@$HOST )
 
 Next ssh needs to be told where to find the keys, so make a `~/.ssh/config`:
 
     Host *
         AddKeysToAgent yes
     Host aur.archlinux.org
-        IdentityFile ~/.ssh/aur
         User aur
+        IdentityFile ~/.ssh/aur
     Host git.sr.ht
-        IdentityFile ~/.ssh/dotconf
+        IdentityFile ~/.ssh/sourcehut
 
 
 Use yadm to clone the dotfiles with:
 
     yadm clone <remote_repository>
+
+and resolve local conflicts if necessary.
+
+Generate another key for pushing to AUR if necessary.
+Add the PUBLIC key to the account holding your remote dotfile repo.
 
 
 ## Automatically start graphical server (optional)
@@ -388,3 +402,4 @@ Make sure the `getty@tty1` service is enabled.
 [imagewriter]: https://aur.archlinux.org/packages/imagewriter/
 [rufus]: http://rufus.ie/
 [AppArmor wiki article]: (https://wiki.archlinux.org/title/AppArmor)
+[SSH protection]: (https://wiki.archlinux.org/title/OpenSSH#Protection)
