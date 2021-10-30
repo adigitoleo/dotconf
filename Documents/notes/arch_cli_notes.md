@@ -26,8 +26,8 @@ everything from `base-devel` is assumed.
 *   **mpv**: video player <https://mpv.io/>
 *   **mypy**: static type checker for python <http://www.mypy-lang.org/>
 *   **namcap**: a static analyzer for PKGBUILDS <https://projects.archlinux.org/namcap.git/>
-*   **noto-fonts-cjk**: google open source fonts for Chinese, Japanese and Korean <https://www.google.com/get/noto/>
 *   **noto-fonts**: google open source fonts, wide unicode coverage <https://www.google.com/get/noto/>
+*   **noto-fonts-cjk**: google open source fonts for Chinese, Japanese and Korean <https://www.google.com/get/noto/>
 *   **pass**: password manager that uses gnupg <https://www.passwordstore.org/>
 *   **patch**: apply patch files to sources <https://www.gnu.org/software/patch/>
 *   **perl-authen-sasl**: required for `git send-email` workflow <https://search.cpan.org/dist/Authen-SASL>
@@ -51,17 +51,16 @@ everything from `base-devel` is assumed.
 *   **udisks2**: manage (removable) disks without superuser <https://www.freedesktop.org/wiki/Software/udisks>
 *   **unzip**: GNU's Not User-friendly (a .zip extractor is bloat?) <https://www.info-zip.org/UnZip.html>
 *   **vis**: a modern, sane and spartan vim replacement <https://github.com/martanne/vis#vis-a-vim-like-text-editor>
+*   **yadm**: dotfiles manager (git wrapper with some extras) <https://github.com/TheLocehiliosan/yadm>
 *   **zip**: *sigh*, UnIx PhIlOsOpHy (creates .zip archives, cf: `unzip`) <http://www.info-zip.org/Zip.html>
 
 ## AUR
 
-*   **amp**: Modern but simple vim-like editor for the terminal <https://github.com/jmacdonald/amp>
 *   **auracle-git**: AUR package info/query (can also check for outdated PKGBUILDS) <https://github.com/falconindy/auracle.git>
-*   **exfat-utils-nofuse**: use kernel support for exFAT (replaces `exfat-utils`) <https://github.com/relan/exfat>
+*   **exfat-utils-nofuse**: use kernel (>5.4) support for exFAT (replaces `exfat-utils`) <https://github.com/relan/exfat>
 *   **fortran-language-server**: LSP (auto-complete etc.) for Fortran90 or newer <https://github.com/hansec/fortran-language-server>
 *   **g810-led-git**: RGB control for fancy Logitech keyboards <https://github.com/MatMoul/g810-led>
 *   **quivira**: a nice font *shrug* <http://www.quivira-font.com/index.php>
 *   **rx**: Vim-like pixel editor <http://cloudhead.io/rx/>
 *   **tiny**: Minimalist console IRC client written in Rust <https://github.com/osa1/tiny>
-*   **yadm**: dotfiles manager (git wrapper with some extras) <https://github.com/TheLocehiliosan/yadm>
 *   **zsh-pure-prompt**: Pretty, minimal and fast ZSH prompt <https://github.com/sindresorhus/pure>
