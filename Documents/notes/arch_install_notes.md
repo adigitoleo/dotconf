@@ -331,11 +331,14 @@ The LAN ip is what comes after "src" in `ip route`.
 
 Copy PGP keys to the new machine with `scp`:
 
-    scp -rp ~/.gnupg <new_machine>:
+    gpg --export-secret-keys >keyfile
+    scp keyfile <user@new_machine>:
 
-Alternatively, only transfer selected keys with:
+and import them on the other side:
 
-    gpg --export-secret-key <key_id> | ssh <new_machine> gpg --import
+    ssh <user@new_machine>
+    gpg --import keyfile
+    rm keyfile
 
 Get `pass` to manage passwords, and set up a password store:
 
