@@ -263,9 +263,15 @@ to rotate (clean) log files weekly (optional).
 
 ## Firewall and hardening (recommended)
 
-*TODO: AppArmor vs bubblewrap vs TOMOYO comparison*
-https://github.com/Harvie/AppArmor-Profiles
-https://github.com/darrenldl/sandboxing
+You might want to install and enable AppArmor, some apps provide profiles...
+It probably can't hurt, but it's also not very useful without aduting and creating profiles.
+Check the [AppArmor wiki article] for instructions.
+
+For the userspace, there is bubblewrap.
+Create a script, and run (but it will take some time to become familiar with the options).
+Might also want to create new .desktop files (e.g. in .local/share/applications) to run the scripts.
+
+Some examples at: <https://github.com/darrenldl/sandboxing>.
 
 Install `ufw` for firewall, verify that `iptables.service` is disabled,
 enable and start `ufw.service` and run:
@@ -300,8 +306,6 @@ Unless setting up a server, edit `/etc/sysctl.d/99-network.conf` to contain:
 
 
 source: <https://wiki.archlinux.org/index.php/Sysctl#TCP/IP_stack_hardening>
-
-Installing and enabling default apparmor profiles is probably at least a little bit useful? Check the [AppArmor wiki article] for instructions.
 
 
 ## Better font rendering (recommended)
