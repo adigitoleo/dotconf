@@ -290,7 +290,7 @@ Also allow the Tor port if you want:
 Edit `/etc/sysctl.d/51-kexec-restrict.conf` to contain
 `kernel.kexec_load_disabled = 1` to disable switching kernels at runtime.
 
-Unless setting up a server, edit `/etc/sysctl.d/99-network.conf` to contain:
+Unless setting up a router, edit `/etc/sysctl.d/99-network.conf` to contain:
 
     net.ipv4.tcp_syncookies = 1
     net.ipv4.conf.default.rp_filter = 1
