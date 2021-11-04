@@ -1,5 +1,6 @@
 #!/bin/sh
-set -euo pipefail
+#set -euo pipefail
+set -eu
 
 rg --files --hidden --no-messages|fzf --layout=reverse \
     --bind "backward-eof:abort,tab:down,shift-tab:up,alt-;:cancel" \

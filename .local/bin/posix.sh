@@ -1,7 +1,8 @@
 #!/bin/sh
 # NOTE: set -o pipefail is not strictly part of POSIX, yet...
 # See <https://www.austingroupbugs.net/view.php?id=789>
-set -euo pipefail
+# set -euo pipefail
+set -eu
 # ----------- MESSAGING FUNCTIONS ---------------------------------------------
 readonly SCRIPTNAME="${0##*/}"
 usage() { # Print a short synopsis <https://pubs.opengroup.org/onlinepubs/9699919799/>

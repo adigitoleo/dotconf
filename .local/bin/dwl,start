@@ -1,5 +1,6 @@
 #!/bin/sh
-set -euo pipefail
+#set -euo pipefail
+set -eu
 readonly SCRIPTNAME="${0##*/}"
 usage() { printf 'Usage: %s [-h][-s path]\n' "$SCRIPTNAME"; }
 helpf() {

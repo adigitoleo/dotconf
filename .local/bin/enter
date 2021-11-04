@@ -1,5 +1,6 @@
 #!/bin/sh
-set -euo pipefail
+#set -euo pipefail
+set -eu
 readonly SCRIPTNAME="${0##*/}"
 usage() {
     printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
@@ -35,7 +36,8 @@ ssh -S"$SOCKET" SSHCLIP_HOST "sh -c 'test ! -p $FIFO && mkfifo $FIFO'" \
     || { warn "unable to create $FIFO on SSSHCLIP_HOST"; terminate_socket "$SOCKET"; exit 1; }
 
 (
-    set -euo pipefail
+    #set -euo pipefail
+    set -eu pipefail
     while true; do
         ssh -S"$SOCKET" -tt SSHCLIP_HOST "cat $FIFO" 2>/dev/null | wl-copy
     done &

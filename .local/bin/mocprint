@@ -1,5 +1,6 @@
 #!/bin/bash
-set -euo pipefail
+#set -euo pipefail
+set -eu
 
 # Normal: mocp -Q "%song - %artist"
 # Fallback: basename $( mocp -Q "%file")
