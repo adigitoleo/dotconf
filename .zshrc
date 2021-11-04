@@ -67,13 +67,13 @@ _git_branch_status() {  # Adapted from <https://github.com/agkozak/agkozak-zsh-p
     fi
 }
 
-_subst_async_callback() {  # Adapted from <https://github.com/agkozak/agkozak-zsh-prompt>.
+_set_git_branch_status() {  # Adapted from <https://github.com/agkozak/agkozak-zsh-prompt>.
     emulate -L zsh
     setopt LOCAL_OPTIONS NO_IGNORE_BRACES
     local fd="$1" response
     IFS='' builtin read -rs -d $'\0' -u "$fd" response
     zle -F ${fd}; exec {fd}<&-
-    psvar[9]="$response"
+    psvar[8]="$response"
     zle && zle .reset-prompt
 }
 
@@ -83,33 +83,34 @@ _subst_async() {  # Adapted from <https://github.com/agkozak/agkozak-zsh-prompt>
     typeset -g ASYNC_FD=13371
     exec {ASYNC_FD} < <(_git_branch_status)
     command true  # Bug workaround; see <http://www.zsh.org/mla/workers/2018/msg00966.html>.
-    zle -F "$ASYNC_FD" _subst_async_callback
+    zle -F "$ASYNC_FD" _set_git_branch_status
 }
 
 
 #
 # Widgets, hooks and ZLE customizations.
 #
-autoload -Uz add-zle-hook-widget
+autoload -Uz add-zle-hook-widget add-zsh-hook
 
-_keymap_mode_psvar() {
+_set_keymap_prompt() {
     case $KEYMAP in
-        vicmd ) psvar[1]=':' ;;
-        viins|main ) psvar[1]='>' ;;
+        vicmd ) psvar[9]=':' ;;
+        viins|main ) psvar[9]='>' ;;
     esac
     zle && { zle .reset-prompt; zle -R }
 }
-add-zle-hook-widget zle-line-init _keymap_mode_psvar
-add-zle-hook-widget zle-keymap-select _keymap_mode_psvar
+add-zle-hook-widget zle-line-init _set_keymap_prompt
+add-zle-hook-widget zle-keymap-select _set_keymap_prompt
 
-precmd() {
+_precmd() {
     emulate -L zsh
     # Clear vi mode indicator and git indicators.
-    psvar[1]=''
+    psvar[8]=''
     psvar[9]=''
     # Start async runners.
     _subst_async
 }
+add-zsh-hook precmd _precmd
 
 TRAPWINCH() {  # See <https://github.com/ohmyzsh/ohmyzsh/issues/3605#issuecomment-75271013>
     zle && { zle .reset-prompt; zle -R }
@@ -118,8 +119,8 @@ TRAPWINCH() {  # See <https://github.com/ohmyzsh/ohmyzsh/issues/3605#issuecommen
 
 # Set PROMPT and RPROMPT.
 setopt PROMPT_SUBST
-PROMPT='%F{4}%n@%m %F{3}%25<..<%~%<< %F{6}%9v%f
-%B%(?.%F{2}.%F{1})%#zsh%1v%b%f '
+PROMPT='%F{4}%n@%m %F{3}%25<..<%~%<< %F{6}%8v%f
+%B%(?.%F{2}.%F{1})%#zsh%9v%b%f '
 RPROMPT='%F{3}%(1j.[bg:%j] .)'
 
 # Load completions and aliases.
