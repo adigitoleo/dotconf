@@ -16,7 +16,15 @@ config = config  # pylint: disable=undefined-variable,self-assigning-variable
 # General settings.
 ########################################################################################
 
-c.url.start_pages = ["https://www.archlinux.org/"]
+# This works on at least Arch and Void...
+with open("/etc/os-release") as file:
+    OSNAME = file.readline()
+
+if "Arch" in OSNAME:
+    c.url.start_pages = ["https://www.archlinux.org/"]
+elif "void" in OSNAME:
+    c.url.start_pages = ["https://voidlinux.org/news/"]
+ 
 c.url.default_page = "qute://history/"
 c.auto_save.session = True
 c.completion.shrink = True
