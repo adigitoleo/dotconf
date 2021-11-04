@@ -119,7 +119,8 @@ TRAPWINCH() {  # See <https://github.com/ohmyzsh/ohmyzsh/issues/3605#issuecommen
 
 # Set PROMPT and RPROMPT.
 setopt PROMPT_SUBST
-PROMPT='%($(if [[ -v SSH_TTY ]]; then true; else false; fi)?.%F{4}.%K{4}%F{7})%n@%m%K{reset} %F{3}%25<..<%~%<< %F{6}%8v%f
+_is_ssh_host() { if [[ -v SSH_TTY ]]; then return false; else return true; fi; }
+PROMPT='%($(_is_ssh_host)?.%K{4}%F{7}.%F{4})%n@%m%K{reset} %F{3}%25<..<%~%<< %F{6}%8v%f
 %B%(?.%F{2}.%F{1})%#zsh%9v%b%f '
 RPROMPT='%F{3}%(1j.[bg:%j] .)'
 
