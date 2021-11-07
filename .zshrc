@@ -119,9 +119,15 @@ TRAPWINCH() {  # See <https://github.com/ohmyzsh/ohmyzsh/issues/3605#issuecommen
 
 # Set PROMPT and RPROMPT.
 setopt PROMPT_SUBST
-PROMPT='%F{4}%n@%m %F{3}%25<..<%~%<< %F{6}%8v%f
+if [ $TERM = "linux" ]; then
+    PROMPT='%n@%m %25<..<%~%<< %8v%f
 %B%(?.%F{2}.%F{1})%#zsh%9v%b%f '
-RPROMPT='%F{3}%(1j.[bg:%j] .)'
+    RPROMPT='%(1j.[bg:%j] .)'
+else
+    PROMPT='%F{4}%n@%m %F{3}%25<..<%~%<< %F{6}%8v%f
+%B%(?.%F{2}.%F{1})%#zsh%9v%b%f '
+    RPROMPT='%F{3}%(1j.[bg:%j] .)'
+fi
 
 # Load completions and aliases.
 autoload -Uz compinit; compinit
