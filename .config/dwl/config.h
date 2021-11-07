@@ -23,19 +23,19 @@ static const Rule rules[] = {
     { "Gimp",     NULL,       0,            1,           -1        0    0    500     400 },
     { "firefox",  NULL,       1 << 8,       0,           -1       200  100    0       0 },
     */
-    { "floating-terminal", NULL, 0, 1, -1 },
-    { "zathura", NULL, 0, 1, -1 },
-    { "imv", NULL, 0, 1, -1 },
-    { "mpv", NULL, 0, 1, -1 },
+    { "floating-terminal", NULL, 0, 1, -1, 0, 0, 0, 0 },
+    { "zathura", NULL, 0, 1, -1, 0, 0, 0, 0 },
+    { "imv", NULL, 0, 1, -1, 0, 0, 0, 0 },
+    { "mpv", NULL, 0, 1, -1, 0, 0, 0, 0 },
     { "drracket", NULL, 0, 1, -1, 360, 100, 1200, 880 },
-    { "gimp", NULL, 0, 1, -1 },
-    { "inkscape", NULL, 0, 1, -1 },
-    { "mscore", NULL, 0, 1, -1 },
+    { "gimp", NULL, 0, 1, -1, 0, 0, 0, 0 },
+    { "inkscape", NULL, 0, 1, -1, 0, 0, 0, 0 },
+    { "mscore", NULL, 0, 1, -1, 0, 0, 0, 0 },
     { "mypaint", NULL, 0, 1, -1, 360, 100, 1200, 880 },
     { "libreoffice", NULL, 0, 1, -1, 360, 100, 1200, 880 },
-    { "gov-nasa-giss-panoply-Panoply", NULL, 0, 1, -1 },
+    { "gov-nasa-giss-panoply-Panoply", NULL, 0, 1, -1, 0, 0, 0, 0 },
     { "audacity", NULL, 0, 1, -1, 360, 100, 1200, 880 },
-    { "matplotlib", NULL, 0, 1, -1 },  /* FIXME: not working */
+    { "matplotlib", NULL, 0, 1, -1, 0, 0, 0, 0 },  /* FIXME: not working */
 };
 
 /* layout(s) */
