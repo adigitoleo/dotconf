@@ -109,6 +109,7 @@ _precmd() {
     psvar[9]=''
     # Start async runners.
     _subst_async
+    [ -n "${SSH_TTY+_}" ] && psvar[1]='11' || psvar[1]='15'
 }
 add-zsh-hook precmd _precmd
 
@@ -124,7 +125,7 @@ if [ $TERM = "linux" ]; then
 %B%(?.%F{2}.%F{1})%#zsh%9v%b%f '
     RPROMPT='%(1j.[bg:%j] .)'
 else
-    PROMPT='%F{4}%n@%m %F{3}%25<..<%~%<< %F{6}%8v%f
+    PROMPT='%K{%1v}%F{4}%n@%m%k %F{3}%25<..<%~%<< %F{6}%8v%f
 %B%(?.%F{2}.%F{1})%#zsh%9v%b%f '
     RPROMPT='%F{3}%(1j.[bg:%j] .)'
 fi
