@@ -1,7 +1,6 @@
 {
     "layer": "bottom",
     "gtk-layer-shell": false,
-    "output": ["HDMI-A-2"],
     "position": "bottom",
     "height": 22,
     "modules-left": ["custom/remind"],
