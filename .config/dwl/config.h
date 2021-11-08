@@ -89,7 +89,7 @@ static const int natural_scrolling = 0;
 /* commands */
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *quickterm[] = { "alacritty", "--class", "floating-terminal,floating-terminal", NULL };
-static const char *guilauncher[] = { "alacritty", "--class", "floating-terminal,floating-terminal", "--working-directory", "/usr/share/applications", "-e", "fzfmenu.sh", NULL };
+static const char *guilauncher[] = { "alacritty", "--class", "floating-terminal,floating-terminal", "-e", "fzfmenu.sh", NULL };
 static const char *fileopener[] = { "alacritty", "--class", "floating-terminal,floating-terminal", "-e", "fzfopen.sh", NULL };
 static const char *mocpwindow[] = { "alacritty", "--class", "floating-terminal,floating-terminal", "-e", "mocp", NULL };
 
