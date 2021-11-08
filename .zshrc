@@ -107,9 +107,9 @@ _precmd() {
     # Clear vi mode indicator and git indicators.
     psvar[8]=''
     psvar[9]=''
+    [ -n "${SSH_TTY+_}" ] && psvar[1]='11' || psvar[1]='15'
     # Start async runners.
     _subst_async
-    [ -n "${SSH_TTY+_}" ] && psvar[1]='11' || psvar[1]='15'
 }
 add-zsh-hook precmd _precmd
 
@@ -121,7 +121,7 @@ TRAPWINCH() {  # See <https://github.com/ohmyzsh/ohmyzsh/issues/3605#issuecommen
 # Set PROMPT and RPROMPT.
 setopt PROMPT_SUBST
 if [ $TERM = "linux" ]; then
-    PROMPT='%n@%m %25<..<%~%<< %8v%f
+    PROMPT='%F{3}%n@%m %25<..<%~%<< %8v%f
 %B%(?.%F{2}.%F{1})%#zsh%9v%b%f '
     RPROMPT='%(1j.[bg:%j] .)'
 else
