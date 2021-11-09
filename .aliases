@@ -101,7 +101,6 @@ alias jl='julia --banner=no'
 alias jl,env='julia --banner=no --project=$PWD'
 alias jl,bw='julia --banner=no --color=no'
 alias jl,tmp='julia --banner=no --startup-file=no --history-file=no'
-alias jl,cartography='julia --banner=no -J$HOME/.julia/sysimages/cartography/julia-cartography.so'
 
 # Without music, life would be a mistake.
 alias a,mute='amixer set Master toggle'
