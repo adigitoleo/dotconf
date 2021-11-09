@@ -17,25 +17,28 @@ static const float focuscolor[]     = {1.0, 0.0, 0.0, 1.0};
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
 static const Rule rules[] = {
-    /* app_id     title       tags mask     isfloating   monitor   x    y   width   height */
-    /* x, y, width, height = 0 ->  use default */
+    /* Requires floatrules.patch for setting initial geometry */
+    /* { app_id, title, tags, mask, isfloating, monitor, x, y, width, height } */
+    /* if {x,y,width,height} = 0 then use app defaults */
     /* examples:
-    { "Gimp",     NULL,       0,            1,           -1        0    0    500     400 },
-    { "firefox",  NULL,       1 << 8,       0,           -1       200  100    0       0 },
+    { "Gimp", NULL, 0, 1, -1, 0, 0, 500, 400 },
+    { "firefox", NULL, 1 << 8, 0, -1, 200, 100, 0, 0, },
     */
-    { "floating-terminal", NULL, 0, 1, -1, 0, 0, 0, 0 },
-    { "zathura", NULL, 0, 1, -1, 0, 0, 0, 0 },
-    { "imv", NULL, 0, 1, -1, 0, 0, 0, 0 },
-    { "mpv", NULL, 0, 1, -1, 0, 0, 0, 0 },
+    { "audacity", NULL, 0, 1, -1, 360, 100, 1200, 880 },
     { "drracket", NULL, 0, 1, -1, 360, 100, 1200, 880 },
+    { "floating-terminal", NULL, 0, 1, -1, 0, 0, 0, 0 },
     { "gimp", NULL, 0, 1, -1, 0, 0, 0, 0 },
+    { "gov-nasa-giss-panoply-Panoply", NULL, 0, 1, -1, 0, 0, 0, 0 },
+    { "imv", NULL, 0, 1, -1, 0, 0, 0, 0 },
     { "inkscape", NULL, 0, 1, -1, 0, 0, 0, 0 },
+    { "jupyter-qtconsole", NULL, 0, 1, -1, 0, 0, 0, 0 },
+    { "libreoffice", NULL, 0, 1, -1, 360, 100, 1200, 880 },
+    { "matplotlib", NULL, 0, 1, -1, 0, 0, 0, 0 }, /* https://github.com/ipython/ipython/issues/10976 */
+    { "mpv", NULL, 0, 1, -1, 0, 0, 0, 0 },
     { "mscore", NULL, 0, 1, -1, 0, 0, 0, 0 },
     { "mypaint", NULL, 0, 1, -1, 360, 100, 1200, 880 },
-    { "libreoffice", NULL, 0, 1, -1, 360, 100, 1200, 880 },
-    { "gov-nasa-giss-panoply-Panoply", NULL, 0, 1, -1, 0, 0, 0, 0 },
-    { "audacity", NULL, 0, 1, -1, 360, 100, 1200, 880 },
-    { "matplotlib", NULL, 0, 1, -1, 0, 0, 0, 0 },  /* FIXME: not working */
+    { "wlclock", NULL, 0, 1, -1, 0, 0, 0, 0 },
+    { "zathura", NULL, 0, 1, -1, 0, 0, 0, 0 },
 };
 
 /* layout(s) */
@@ -87,20 +90,22 @@ static const int natural_scrolling = 0;
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static const char *termcmd[]  = { "alacritty", NULL };
-static const char *quickterm[] = { "alacritty", "--class", "floating-terminal,floating-terminal", NULL };
-static const char *guilauncher[] = { "alacritty", "--class", "floating-terminal,floating-terminal", "-e", "fzfmenu.sh", NULL };
 static const char *fileopener[] = { "alacritty", "--class", "floating-terminal,floating-terminal", "-e", "fzfopen.sh", NULL };
+static const char *guilauncher[] = { "alacritty", "--class", "floating-terminal,floating-terminal", "-e", "fzfmenu.sh", NULL };
 static const char *mocpwindow[] = { "alacritty", "--class", "floating-terminal,floating-terminal", "-e", "mocp", NULL };
+static const char *quickterm[] = { "alacritty", "--class", "floating-terminal,floating-terminal", NULL };
+static const char *termcmd[]  = { "alacritty", NULL };
+static const char *wlclock[] = { "wlclock", NULL };
 
 static const Key keys[] = {
     /* Note that Shift changes certain key codes: c -> C, 2 -> at, etc. */
     /* modifier                  key                 function        argument */
-    { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Return,     spawn,          {.v = termcmd} },
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_D,          spawn,          {.v = guilauncher} },
-    { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_O,          spawn,          {.v = fileopener} },
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_F,          spawn,          {.v = quickterm} },
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_M,          spawn,          {.v = mocpwindow} },
+    { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_O,          spawn,          {.v = fileopener} },
+    { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Return,     spawn,          {.v = termcmd} },
+    { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_T,          spawn,          {.v = wlclock} },
     { MODKEY,                    XKB_KEY_j,          focusstack,     {.i = +1} },
     { MODKEY,                    XKB_KEY_k,          focusstack,     {.i = -1} },
     { MODKEY,                    XKB_KEY_i,          incnmaster,     {.i = +1} },

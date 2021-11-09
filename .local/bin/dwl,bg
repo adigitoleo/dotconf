@@ -41,8 +41,3 @@ is_running mocp || \
         LOG="$(mktemp --tmpdir=/tmp $SCRIPTNAME-mocp-XXXXXX)"
         is_command mocp && mocp -S >"$LOG" 2>&1 ;
     } &
-is_running waybar || \
-    {
-        LOG="$(mktemp --tmpdir=/tmp $SCRIPTNAME-waybar-XXXXXX)"
-        is_command waybar && waybar >"$LOG" 2>&1 ;
-}
