@@ -23,3 +23,9 @@ end
 function modules(m::Module)
     return ccall(:jl_module_usings, Any, (Any,), m)
 end
+
+
+"""Get a dictionary of dependencies of a package and their UUIDs."""
+function dependencies(package)
+    return Pkg.dependencies()[Pkg.project().dependencies[package]].dependencies
+end
