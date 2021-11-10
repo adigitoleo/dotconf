@@ -51,11 +51,11 @@ _git_branch_status() {  # Adapted from <https://github.com/agkozak/agkozak-zsh-p
             'v^'    ' have diverged, '
             'v'     'Your branch is behind '
             '^'     'Your branch is ahead of '
-            '+'     'new file: '
-            'x'     'deleted: '
-            '!'     'modified: '
-            '>'     'renamed: '
-            '?'     'Untracked files: '
+            '+'     'new file:'
+            'x'     'deleted:'
+            '!'     'modified:'
+            '>'     'renamed:'
+            '?'     'Untracked files:'
             '$'     'Your stash currently has '
         )
         for k in 'v^' 'v' '^' '+' 'x' '!' '>' '?' '$'; do
