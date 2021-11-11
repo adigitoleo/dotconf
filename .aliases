@@ -60,6 +60,9 @@ fi
 # Use ED25519 ssh keys by default.
 alias ssh-keygen='ssh-keygen -t ed25519'
 
+# Distinguish text from binary files (defer to grep).
+alias is_text_file='grep -qIF ""'
+
 # Terminal editor.
 alias e=$EDITOR
 
