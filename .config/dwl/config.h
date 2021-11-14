@@ -37,6 +37,7 @@ static const Rule rules[] = {
     { "mpv", NULL, 0, 1, -1, 0, 0, 0, 0 },
     { "mscore", NULL, 0, 1, -1, 0, 0, 0, 0 },
     { "mypaint", NULL, 0, 1, -1, 360, 100, 1200, 880 },
+    { "Steam", NULL, 0, 1, -1, 0, 0, 0, 0 },
     { "wlclock", NULL, 0, 1, -1, 0, 0, 0, 0 },
     { "zathura", NULL, 0, 1, -1, 0, 0, 0, 0 },
 };
