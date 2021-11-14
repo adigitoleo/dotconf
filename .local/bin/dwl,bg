@@ -36,6 +36,16 @@ is_running swaybg || \
         LOG="$(mktemp --tmpdir=/tmp $SCRIPTNAME-swaybg-XXXXXX)"
         is_command swaybg && swaybg -m fill -i "$HOME/Pictures/wallpapers/chauvet_lions_66292F.jpg" >"$LOG" 2>&1 ;
     } &
+is_running pipewire || \
+    {
+        LOG="$(mktemp --tmpdir=/tmp $SCRIPTNAME-pipewire-XXXXXX)"
+        is_command pipewire && pipewire >"$LOG" 2>&1 ;
+    } &
+is_running pipewire-pulse || \
+    {
+        LOG="$(mktemp --tmpdir=/tmp $SCRIPTNAME-pipewire-pulse-XXXXXX)"
+        is_command pipewire-pulse && pipewire-pulse >"$LOG" 2>&1 ;
+    } &
 is_running mocp || \
     {
         LOG="$(mktemp --tmpdir=/tmp $SCRIPTNAME-mocp-XXXXXX)"
