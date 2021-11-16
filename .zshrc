@@ -107,7 +107,7 @@ _precmd() {
     # Clear vi mode indicator and git indicators.
     psvar[8]=''
     psvar[9]=''
-    [ -n "${SSH_TTY+_}" ] && psvar[1]='11' || psvar[1]='15'
+    [ -n "${SSH_TTY+_}" ] && psvar[1]='11' || psvar[1]='bg'
     # Start async runners.
     _subst_async
 }
