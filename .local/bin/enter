@@ -1,5 +1,4 @@
 #!/bin/sh
-#set -euo pipefail
 set -eu
 readonly SCRIPTNAME="${0##*/}"
 usage() {
@@ -7,14 +6,25 @@ usage() {
     printf '       %s [ssh_options...] destination\n' "$SCRIPTNAME"
 }
 helpf() {
+    echo
     echo 'Wrapper for ssh that sets up a FIFO clipboard to the remote,'
-    echo 'using ssh ControlMaster. This allows for copy/paste from the remote,'
-    echo 'without installing any clipboard handlers on the remote host.'
-    echo 'Requires `wl-clipboard` (Wayland) on the local machine.'
+    echo 'using ssh ControlMaster. This allows for convenient one-way copying'
+    echo 'from the remote, without any clipboard handlers on the remote host.'
+    echo 'Simply write stuff to ~/.sshclip on the remote, and paste locally.'
+    echo 'Requires `wl-clipboard` on the local host. Also, if WAYLAND_DISPLAY'
+    echo 'is set locally and waypipe is available both locally and on the remote,'
+    echo 'then a waypipe connection will be opened. This allows for forwarding'
+    echo 'GUI applications over the network. For this to work, XDG_RUNTIME_DIR'
+    echo 'must be set on the remote host.'
+    echo 'See more at <https://gitlab.freedesktop.org/mstoeckl/waypipe>.'
+    echo
+    echo 'Adapted from <https://xicod.com/2021/02/09/clipboard-over-ssh.html>.'
 }
 
+[ $# -eq 0 ] && usage && exit 1
+[ "$1" == "-h" ] && usage && helpf && exit 0
+
 warn() { >&2 printf '%s\n' "${SCRIPTNAME}: $1"; }
-tell() { printf '%s\n' "${SCRIPTNAME}: $1"; }
 is_command() { # Check if command exists, for flow control (no stdout messages)
     1>/dev/null 2>&1 command -v "$1" && [ "$?" -eq 0 ] && return 0 \
         || { warn "command '${1}' not found" && return 1 ;}
@@ -23,18 +33,33 @@ is_command() { # Check if command exists, for flow control (no stdout messages)
 is_command ssh || exit 1
 is_command mktemp || exit 1
 is_command wl-copy || exit 1
+
+# Avoid spaces or other silly characters in any of these!
 SOCKET="$(mktemp -u --tmpdir sshclip.sock.XXXXXXXXXX)"
 FIFO="~/.sshclip"
+WAYPIPE_SERVER_SOCKET="$(mktemp -u --tmpdir waypipe-server.sock.XXXXXXXXXX)"
+WAYPIPE_CLIENT_SOCKET="$(mktemp -u --tmpdir waypipe-client.sock.XXXXXXXXXX)"
+WAYPIPE_DISPLAY_NAME="wayland-${WAYPIPE_SERVER_SOCKET##*.}"
 
-terminate_socket() {
-    ssh -oControlPath="$1" -O exit SSHCLIP_HOST
+clean_exit() {
+    # Clean up side effects.
+    ssh -S"$SOCKET" SSHCLIP_HOST "rm $FIFO"
+    [ -S "$WAYPIPE_CLIENT_SOCKET" ] && rm "$WAYPIPE_CLIENT_SOCKET"
+    # Terminate all ssh connections.
+    ssh -oControlPath="$SOCKET" -O exit SSHCLIP_HOST
+    # Terminate waypipe client, if still running.
+    kill 0
 }
+trap clean_exit EXIT
 
+# Open ssh master connection through $SOCKET and stream from /dev/null to keep it open.
 ssh -f -oControlMaster=yes -oControlPath="$SOCKET" "$@" 'tail -f /dev/null' \
     || { warn "unable to open ssh master connection" && exit 1; }
+# Create $FIFO on the remote via the socket, or fail if a file with that name exists.
 ssh -S"$SOCKET" SSHCLIP_HOST "sh -c 'test ! -p $FIFO && mkfifo $FIFO'" \
-    || { warn "unable to create $FIFO on SSSHCLIP_HOST"; terminate_socket "$SOCKET"; exit 1; }
+    || { warn "unable to create $FIFO on SSSHCLIP_HOST"; exit 1; }
 
+# Listen to $FIFO in background subshell and send contents to local clipboard.
 (
     #set -euo pipefail
     set -eu pipefail
@@ -43,6 +68,16 @@ ssh -S"$SOCKET" SSHCLIP_HOST "sh -c 'test ! -p $FIFO && mkfifo $FIFO'" \
     done &
 )
 
-ssh -S"$SOCKET" SSHCLIP_HOST || { terminate_socket "$SOCKET"; exit 1; }
-ssh -S"$SOCKET" SSHCLIP_HOST "rm $FIFO"
-terminate_socket "$SOCKET"
+# Start the ssh login session.
+if [ "$WAYLAND_DISPLAY" ] \
+    && is_command waypipe \
+    && ssh -S"$SOCKET" SSHCLIP_HOST '>/dev/null command -v waypipe' ; then
+    # If both local and remote have a waypipe binary, use waypipe for graphics forwarding.
+    # See more at <https://gitlab.freedesktop.org/mstoeckl/waypipe>.
+    waypipe -s "$WAYPIPE_CLIENT_SOCKET" client &
+    ssh -t -R "$WAYPIPE_SERVER_SOCKET":"$WAYPIPE_CLIENT_SOCKET" -S"$SOCKET" SSHCLIP_HOST \
+        waypipe --login-shell --unlink-socket -s "$WAYPIPE_SERVER_SOCKET" \
+            --display "$WAYPIPE_DISPLAY_NAME" server
+else
+    ssh -S"$SOCKET" SSHCLIP_HOST
+fi
