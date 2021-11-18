@@ -107,7 +107,8 @@ _precmd() {
     # Clear vi mode indicator and git indicators.
     psvar[8]=''
     psvar[9]=''
-    [ -n "${SSH_TTY+_}" ] && psvar[1]='11' || psvar[1]='bg'
+    [ -n "${SSH_TTY+_}" ] && { psvar[1]='4' && psvar[2]='15' } \
+        || { psvar[1]='bg' && psvar[2]='4' }
     # Start async runners.
     _subst_async
 }
@@ -125,7 +126,7 @@ if [ $TERM = "linux" ]; then
 %B%(?.%F{2}.%F{1})%#zsh%9v%b%f '
     RPROMPT='%(1j.[bg:%j] .)'
 else
-    PROMPT='%K{%1v}%F{4}%n@%m%k %F{3}%25<..<%~%<< %F{6}%8v%f
+    PROMPT='%K{%1v}%F{%2v}%n@%m%k %F{3}%25<..<%~%<< %F{6}%8v%f
 %B%(?.%F{2}.%F{1})%#zsh%9v%b%f '
     RPROMPT='%F{3}%(1j.[bg:%j] .)'
 fi
