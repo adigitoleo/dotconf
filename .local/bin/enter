@@ -61,8 +61,7 @@ ssh -S"$SOCKET" SSHCLIP_HOST "sh -c 'test ! -p $FIFO && mkfifo $FIFO'" \
 
 # Listen to $FIFO in background subshell and send contents to local clipboard.
 (
-    #set -euo pipefail
-    set -eu pipefail
+    set -euo pipefail
     while true; do
         ssh -S"$SOCKET" -tt SSHCLIP_HOST "cat $FIFO" 2>/dev/null | wl-copy
     done &
