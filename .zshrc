@@ -92,6 +92,13 @@ _subst_async() {  # Adapted from <https://github.com/agkozak/agkozak-zsh-prompt>
 #
 autoload -Uz add-zle-hook-widget add-zsh-hook
 
+_vi_yank_clip() {
+    zle vi-yank
+    >/dev/null command -v wl-copy && printf "%s" "$CUTBUFFER"|wl-copy
+}
+zle -N _vi_yank_clip
+bindkey -M vicmd 'y' _vi_yank_clip
+
 _set_keymap_prompt() {
     case $KEYMAP in
         vicmd ) psvar[9]=':' ;;
