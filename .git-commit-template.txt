@@ -1,0 +1,20 @@
+
+# <type>: <single line subject> (use imperative verbs, start with capital letter,
+#                                omit trailing period)
+# <multiline body>
+# (can use '-' for bullet points, and '[#N]' to reference issue number N)
+
+# Types of commits:
+#   fix         (bug fix)
+#   feat        (new feature)
+#   remove      (feature removal)
+#   refactor    (internal abstraction change, no intended API change)
+#   style       (formatting/cosmetic change)
+#   docs        (documentation change)
+#   build       (build system change, dependency change)
+#   perf        (performance improvement)
+#   test        (test change, fix for broken test)
+#   ci          (CI configuration/script change)
+
+# Enable this template using:
+#   git config --global commit.template <path to template file>
