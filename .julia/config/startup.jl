@@ -1,3 +1,5 @@
+using Pkg
+
 # Reduce color space of most REPL components from 16 to 8.
 # Line numbers is stacktraces are still unreadable in dark themes...
 Base.text_colors[:white] = Base.text_colors[:yellow]
@@ -26,6 +28,9 @@ end
 
 
 """Get a dictionary of dependencies of a package and their UUIDs."""
-function dependencies(package)
+function dependencies(package::AbstractString)
+    if package == Pkg.project().name
+        return Pkg.project().dependencies
+    end
     return Pkg.dependencies()[Pkg.project().dependencies[package]].dependencies
 end
