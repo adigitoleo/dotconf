@@ -29,9 +29,9 @@ helpf() { # Print a longer help string
     echo 'See also <https://github.com/dylanaraps/pure-sh-bible>.'
 }
 # warn [message]... Print message to stderr <https://stackoverflow.com/a/23550347>
-warn() { >&2 printf '%s\n' "${SCRIPTNAME}: $1"; }
+warn() { >&2 printf '%s\n' "$SCRIPTNAME: $1"; }
 # tell [message]... Print message to stdout
-tell() { printf '%s\n' "${SCRIPTNAME}: $1"; }
+tell() { printf '%s\n' "$SCRIPTNAME: $1"; }
 # quote [string] Safe shell quoting? <https://www.etalabs.net/sh_tricks.html>
 quote() { printf '%s\n' "$1" | sed "s/'/'\\\\''/g;1s/^/'/;\$s/\$/'/"; }
 
@@ -50,7 +50,7 @@ rstrip() { FUNCRETURN="${1%%$2}"; }
 
 is_command() { # Check if command exists, for flow control (no stdout messages)
     1>/dev/null 2>&1 command -v "$1" && [ "$?" -eq 0 ] && return 0 \
-        || { warn "command '${1}' not found" && return 1 ;}
+        || { warn "command '$1' not found" && return 1 ;}
 }
 count_files() { # count_files [glob] Count files matching glob
     [ -e "$1" ] && FUNCRETURN="$#" || return 1
