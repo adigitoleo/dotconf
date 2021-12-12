@@ -24,7 +24,9 @@ bindkey -M vicmd 'k' up-line-or-beginning-search
 bindkey -M vicmd 'j' down-line-or-beginning-search
 
 # Make directory (and parents if necessary) and enter it.
-function mkcd { mkdir -p -- "$1" && cd -P -- "$1" }
+mkcd() { mkdir -p -- "$1" && cd -P -- "$1" }
+# Ignore whatever ripgrep would in tree output.
+rg,tree() { rg --files $@|tree --fromfile --dirsfirst }
 
 #
 # Asynchronous git status indicator.
