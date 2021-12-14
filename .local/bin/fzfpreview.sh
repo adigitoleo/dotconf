@@ -2,7 +2,7 @@
 
 is_command() { command -v "$1" >/dev/null 2>&1 || echoerr "Preview unavailable"; }
 
-case "$(file "$1")" in
+case "$(file "$1"|cut -d':' -f2-)" in
     *"text"*)
         head -200 "$1" ;;
     *"PDF document"*)
