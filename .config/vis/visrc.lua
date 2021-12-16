@@ -112,26 +112,21 @@ vis.events.subscribe(vis.events.INIT, function()
     local _pending = vis.modes.OPERATOR_PENDING
 
     -- Meta mappings:
-    vis:map(_normal, '<M-;>', '<Escape>')
+    vis:map(_normal, '<M-;>', '<vis-mode-normal-escape>')
     vis:map(_normal, '<M-w>', ':w<Enter>')
-    vis:map(_insert, '<M-;>', '<Escape>')
-    vis:map(_insert, '<M-w>', '<Escape><Escape>:w<Enter>i')
+    vis:map(_insert, '<M-;>', '<vis-mode-normal>')
+    vis:map(_insert, '<M-w>', '<vis-mode-normal>:w<vis-mode-insert>')
     vis:map(_insert, '<C-c>', '<Escape><Escape>')
-    vis:map(_replace, '<M-;>', '<Escape>')
-    vis:map(_visual, '<M-;>', '<Escape>')
-    vis:map(_vline, '<M-;>', '<Escape>')
-    vis:map(_pending, '<M-;>', '<Escape>')
-    vis:map(_normal, '<M-j>', '<C-w>j')
-    vis:map(_normal, '<M-k>', '<C-w>k')
+    vis:map(_replace, '<M-;>', '<vis-mode-normal>')
+    vis:map(_visual, '<M-;>', '<vis-mode-normal>')
+    vis:map(_vline, '<M-;>', '<vis-mode-normal>')
+    vis:map(_pending, '<M-;>', '<vis-mode-normal-escape>')
+    vis:map(_normal, '<M-j>', '<vis-window-next>')
+    vis:map(_normal, '<M-k>', '<vis-window-prev>')
     vis:map(_normal, '<M-n>', ':set relativenumbers!<Enter>')
     vis:map(_normal, '<M-m>', ':set mellow_dark!<Enter>')
     vis:map(_normal, '<M-f>', ':fzf<Enter>')
     vis:map(_normal, '<M-a>', ':fzf-unicode<Enter>')
-
-    -- Whitespace padding/stripping:
-    vis:map(_normal, ' o', 'o<Escape>') -- TODO: allow repeating
-    vis:map(_normal, ' O', 'O<Escape>') -- TODO: allow repeating
-    vis:map(_normal, '<Backspace>', "''m:x/ +$/ c//<Enter>M")
 
     -- Quicker clipboard copy/paste:
     vis:map(_normal, ' p', '"+p')
@@ -140,6 +135,11 @@ vis.events.subscribe(vis.events.INIT, function()
     vis:map(_visual, ' y', '"+y')
     vis:map(_vline, ' p', '"+p')
     vis:map(_vline, ' y', '"+y')
+    -- Alternative jumplist navigation:
+    vis:map(_normal, 'H', '<vis-jumplist-prev>')
+    vis:map(_normal, 'L', '<vis-jumplist-next>')
+    -- Whitespace padding/stripping:
+    vis:map(_normal, '<Backspace>', "''m:x/ +$/ c//<Enter>M")
 end)
 
 vis.events.subscribe(vis.events.WIN_OPEN, function(win)
