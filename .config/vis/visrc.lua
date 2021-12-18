@@ -138,6 +138,9 @@ vis.events.subscribe(vis.events.INIT, function()
     -- Alternative jumplist navigation:
     vis:map(_normal, 'H', '<vis-jumplist-prev>')
     vis:map(_normal, 'L', '<vis-jumplist-next>')
+    -- Navigating to sentence clause punctuation:
+    vis:map(_normal, 'g(', '?[.,;:!?]( |\n)<Enter>')
+    vis:map(_normal, 'g)', '/[.,;:!?]( |\n)<Enter>')
     -- Whitespace padding/stripping:
     vis:map(_normal, '<Backspace>', "''m:x/ +$/ c//<Enter>M")
 end)
