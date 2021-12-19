@@ -71,7 +71,7 @@
 #
 # Example:    MusicDir = "/home/joe/music"
 #
-MusicDir = "${HOME}/Music/playlist.m3u"
+MusicDir = "${HOME}/Music/"
 
 # Start in the music directory by default?  If set to 'no', start
 # in the directory being viewed when the was client last active or,
@@ -286,7 +286,7 @@ Theme = red_transparent
 #Precache = yes
 
 # Remember the playlist after exit?
-SavePlaylist = no
+SavePlaylist = yes
 
 # When using more than one client (interface) at a time, do they share
 # the playlist?
