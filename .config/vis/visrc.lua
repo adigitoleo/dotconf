@@ -87,6 +87,7 @@ function spawn_fifoterm(argv, force, win, selection, range)
 end
 
 
+------ Startup settings ------
 vis.events.subscribe(vis.events.INIT, function()
     -- Options:
     vis:command('set expandtab on')
@@ -143,8 +144,12 @@ vis.events.subscribe(vis.events.INIT, function()
     vis:map(_normal, 'g)', '/[.,;:!?]( |\n)<Enter>')
     -- Whitespace padding/stripping:
     vis:map(_normal, '<Backspace>', "''m:x/ +$/ c//<Enter>M")
+    -- Ignorecase is sometimes unhelpful:
+    vis:map(_normal, 'gc', ':set ignorecase!<Enter>')
 end)
 
+
+------ Default window settings ------
 vis.events.subscribe(vis.events.WIN_OPEN, function(win)
     vis:command('set show-tabs on')
     vis:command('set relativenumbers on')
@@ -152,6 +157,8 @@ vis.events.subscribe(vis.events.WIN_OPEN, function(win)
     vis:command('set colorcolumn 88')
 end)
 
+
+------ Exit hooks ------
 vis.events.subscribe(vis.events.QUIT, function()
     if not vis.fifopath or vis.fifopath == '' then return true end
     os.remove(vis.fifopath)
