@@ -46,8 +46,14 @@ c.fileselect.single_file.command = [
     "--working-directory=/",
     "-e",
     "fzf",
+    "--height",
+    "100%",
     "--bind",
     "enter:execute(realpath {1} >{})+abort",
+    "--preview",
+    "fzfpreview.sh {1}",
+    "--preview-window",
+    "down:60%:sharp",
 ]
 c.fileselect.multiple_files.command = [
     "alacritty",
@@ -55,9 +61,15 @@ c.fileselect.multiple_files.command = [
     "--working-directory=/",
     "-e",
     "fzf",
+    "--height",
+    "100%",
     "--multi",
     "--bind",
     "enter:execute(realpath {+} >{})+abort",
+    "--preview",
+    "fzfpreview.sh {+}",
+    "--preview-window",
+    "down:60%:sharp",
 ]
 c.downloads.remove_finished = 1000
 # TODO: Re-enable after setting up a notifications daemon?
