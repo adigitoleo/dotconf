@@ -1,0 +1,57 @@
+#!/bin/sh
+#set -euo pipefail
+set -eu
+readonly SCRIPTNAME="${0##*/}"
+usage() {
+    printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
+    printf '       %s ' "$SCRIPTNAME"
+    echo '[-d tmpdir]'
+}
+helpf() {
+    echo 'Options:'
+    printf '\t-d <tmpdir>\t%s\n' 'output the log files to the <tmpdir> directory'
+    echo
+    echo 'Start background processes (daemons) for a wayland session.'
+    echo 'Call this using the autostart method for your compositor.'
+    echo "For example, in dwl you can use dwl -s $SCRIPTNAME."
+    echo 'If your compositor does not provide startup hooks,'
+    echo 'you should find an equivalent way to run this script'
+    echo 'before launching the compositor.'
+    echo
+    echo 'The list of daemons to be launched is read from'
+    echo '$XDG_CONFIG_HOME/$SCRIPTNAME/config. If unset,'
+    echo '$XDG_CONFIG_HOME defaults to ~/.config.'
+    echo 'The file must contain one command per line.'
+    echo 'Both stdout and stderr of each command will be logged'
+    echo 'to a file in <tmpdir>, or /tmp by default.'
+    echo "The file prefix will contain '$SCRIPTNAME' and the command name."
+    echo
+    echo 'Requires the pgrep utility, see <https://gitlab.com/procps-ng/procps>.'
+}
+
+TMPDIR='/tmp'
+while getopts "hd:" OPT; do
+    case "$OPT" in
+        h ) usage && helpf ; exit 0 ;;
+        d ) TMPDIR="$OPTARG" ;;
+    esac
+done
+shift $(( $OPTIND - 1 ))
+
+warn() { >&2 printf '%s\n' "$SCRIPTNAME: $1"; }
+
+is_command() { # Check if command exists, for flow control (no stdout messages)
+    1>/dev/null 2>&1 command -v "$1" && [ "$?" -eq 0 ] && return 0 \
+        || { warn "command '$1' not found" && return 1; }
+}
+is_command pgrep || exit 1
+
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/$SCRIPTNAME/config"
+if [ ! -r "$CONFIG" ]; then warn "unable to read config file at $CONFIG"; exit 1; fi
+while IFS= read -r line || [ -n "$line" ]; do
+    CMD="${line%% *}"
+    is_command "$CMD" || continue
+    >/dev/null 2>&1 pgrep -fx "$line" && continue
+    LOG="$(mktemp --tmpdir=$TMPDIR $SCRIPTNAME-$CMD-XXXXXX)"
+    >"$LOG" 2>&1 eval "$line" &
+done < "$CONFIG"
