@@ -1,0 +1,4 @@
+profile {
+    output "MSI MAG161V" position -1920,0 scale 1.4
+    output "Samsung Electric Company C24F390" position 0,0
+}
