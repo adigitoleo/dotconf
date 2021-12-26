@@ -15,11 +15,11 @@ helpf() {
     echo 'This script will NOT modify the `cscope.files` listing itself,'
     echo 'which must still be manually refreshed upon changes to source tree structure.'
 }
-warn() { >&2 printf '%s\n' "${SCRIPTNAME}: $1"; }
+warn() { >&2 printf '%s\n' "$SCRIPTNAME: $1"; }
 
 is_command() {
     1>/dev/null 2>&1 command -v "$1" && [ "$?" -eq 0 ] && return 0 \
-        || { warn "command '${1}' not found" && return 1 ;}
+        || { warn "command '$1' not found" && return 1 ;}
 }
 
 while getopts "h" OPT ; do
