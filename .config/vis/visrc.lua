@@ -142,6 +142,8 @@ vis.events.subscribe(vis.events.INIT, function()
     -- Navigating to sentence clause punctuation:
     vis:map(_normal, 'g(', '?[.,;:!?]( |\n)<Enter>')
     vis:map(_normal, 'g)', '/[.,;:!?]( |\n)<Enter>')
+    vis:map(_visual, 'g(', '?[.,;:!?]( |\n)<Enter>')
+    vis:map(_visual, 'g)', '/[.,;:!?]( |\n)<Enter>')
     -- Whitespace padding/stripping:
     vis:map(_normal, '<Backspace>', "''m:x/ +$/ c//<Enter>M")
     -- Ignorecase is sometimes unhelpful:
