@@ -82,7 +82,7 @@ function spawn_fifoterm(argv, force, win, selection, range)
     end
     local term = os.getenv("TERM")
     if not term then vis:info("Unable to spawn $TERM.") return false end
-    os.execute("trap '' SIGINT && (VISFIFO=" .. vis.fifopath .. " 1>/dev/null 2>/dev/null " .. term .. ")&")
+    os.execute("trap '' INT && (VISFIFO=" .. vis.fifopath .. " 1>/dev/null 2>/dev/null " .. term .. ")&")
     return true
 end
 
