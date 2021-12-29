@@ -37,7 +37,7 @@ defaults:
     tls: true
 
 # Where to put log files
-log_dir: "/home/admin/.tiny_logs"
+log_dir: "$HOME/.tiny_logs"
 
 # (Optional) Limits the maximum number of messages stored for each UI tab. Defaults to unlimited.
 # scrollback: 512
