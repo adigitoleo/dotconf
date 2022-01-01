@@ -154,25 +154,19 @@ else:
 
 config.unbind("J")
 config.unbind("K")
+config.unbind("<Ctrl-N>")
+config.unbind("<Ctrl-P>")
 
 # Change tab-next to plain Tab, requires the following issue to be solved:
 # https://github.com/qutebrowser/qutebrowser/issues/4579
-config.bind("<Alt-Tab>", "tab-focus last")
-config.bind("<Ctrl-J>", "tab-next")
-config.bind("<Ctrl-K>", "tab-prev")
-config.bind("<Alt-]>", "tab-next")
-config.bind("<Alt-[>", "tab-prev")
-config.bind("<Alt-n>", "tab-next")
-config.bind("<Alt-p>", "tab-prev")
-config.bind("<Alt-d>", "tab-close")
+config.bind("<Ctrl-N>", "tab-next")
+config.bind("<Ctrl-P>", "tab-prev")
 
-config.bind("<Alt-h>", "home")
-
-config.bind("xr", "restart")
-config.bind("xt", "config-cycle tabs.show always never")
+config.bind("<Space>r", "restart")
+config.bind("<Space>t", "config-cycle tabs.show always never")
 
 config.bind("<Ctrl-l>", "search")  # Clears search highlighting.
-config.bind("<Alt-;>", "clear-keychain ;; search ;; fullscreen --leave")
+config.bind("¶", "clear-keychain ;; search ;; fullscreen --leave")
 
 for m in ["caret", "command", "hint", "insert", "prompt", "register", "yesno"]:
     config.bind("<Alt-;>", "mode-leave", mode=m)

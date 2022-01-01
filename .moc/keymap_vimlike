@@ -150,7 +150,7 @@ history_up            = UP
 history_down          = DOWN
 delete_to_start       = ^u
 delete_to_end         = ^k
-cancel                = ^x ESCAPE M-;
+cancel                = ^x ^c ESCAPE ¶
 hide_message          = ^l
 
 # Softmixer specific keys:

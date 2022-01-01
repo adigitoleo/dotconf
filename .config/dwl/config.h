@@ -69,6 +69,7 @@ static const struct xkb_rule_names xkb_rules = {
     .options = "ctrl:nocaps",
     */
     .layout = "us",
+    .variant = "altgr-intl",
     .options = "altwin:swap_lalt_lwin,ctrl:swapcaps",
 };
 
