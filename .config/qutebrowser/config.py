@@ -157,8 +157,6 @@ config.unbind("K")
 config.unbind("<Ctrl-N>")
 config.unbind("<Ctrl-P>")
 
-# Change tab-next to plain Tab, requires the following issue to be solved:
-# https://github.com/qutebrowser/qutebrowser/issues/4579
 config.bind("<Ctrl-N>", "tab-next")
 config.bind("<Ctrl-P>", "tab-prev")
 
@@ -169,7 +167,7 @@ config.bind("<Ctrl-l>", "search")  # Clears search highlighting.
 config.bind("¶", "clear-keychain ;; search ;; fullscreen --leave")
 
 for m in ["caret", "command", "hint", "insert", "prompt", "register", "yesno"]:
-    config.bind("<Alt-;>", "mode-leave", mode=m)
+    config.bind("¶", "mode-leave", mode=m)
 
 
 # Don't load the autoconfig, maintain all configuration here (must be last).
