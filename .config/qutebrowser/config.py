@@ -160,8 +160,8 @@ config.unbind("<Ctrl-P>")
 config.bind("<Ctrl-N>", "tab-next")
 config.bind("<Ctrl-P>", "tab-prev")
 
-config.bind("<Space>r", "restart")
-config.bind("<Space>t", "config-cycle tabs.show always never")
+config.bind("gr", "restart")
+config.bind("tt", "config-cycle tabs.show always never")
 
 config.bind("<Ctrl-l>", "search")  # Clears search highlighting.
 config.bind("¶", "clear-keychain ;; search ;; fullscreen --leave")
