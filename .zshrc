@@ -15,6 +15,7 @@ unsetopt BEEP
 
 # Key bindings, and vi mode. Always vi mode.
 bindkey -v
+bindkey ¶ vi-cmd-mode
 autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
 zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
