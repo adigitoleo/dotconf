@@ -73,8 +73,8 @@ colors:
         bg: default
 
     err_msg:
-        fg: default
-        bg: maroon
+        fg: red
+        bg: default
         attrs: [bold]
 
     topic:
@@ -87,7 +87,7 @@ colors:
         bg: default
 
     join:
-        fg: lime
+        fg: green
         bg: default
         attrs: [bold]
 
