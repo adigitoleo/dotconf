@@ -505,13 +505,13 @@ augroup END
 " MAPPINGS {{{1
 " De gustibus: general fixes and tweaks. {{{2
 " Ergonomic, smart mode switches.
-inoremap <M-;> <Esc>
+inoremap ¶ <Esc>
 nnoremap ; <Cmd>FuzzyCmd<Cr>
-nnoremap <M-;> :
+nnoremap ¶ :
 xnoremap ; :
-xnoremap <M-;> <Esc>
-cnoremap <M-;> <C-c>
-tnoremap <M-:> <C-\><C-n>
+xnoremap ¶ <Esc>
+cnoremap ¶ <C-c>
+tnoremap ° <C-\><C-n>
 nnoremap q; q:
 nnoremap Q <Nop>
 " Some shell-style improvements to command mode mappings.
