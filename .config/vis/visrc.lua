@@ -114,7 +114,6 @@ vis.events.subscribe(vis.events.INIT, function()
 
     -- Meta mappings:
     vis:map(_normal, '¶', '<vis-mode-normal-escape>')
-    vis:map(_normal, ';', ':')
     vis:map(_insert, '¶', '<vis-mode-normal>')
     vis:map(_insert, '<C-c>', '<Escape><Escape>')
     vis:map(_replace, '¶', '<vis-mode-normal>')
