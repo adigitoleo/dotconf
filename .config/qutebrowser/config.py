@@ -165,9 +165,11 @@ config.bind("tt", "config-cycle tabs.show always never")
 
 config.bind("<Ctrl-l>", "search")  # Clears search highlighting.
 config.bind("¶", "clear-keychain ;; search ;; fullscreen --leave")
+config.bind("<Ctrl-c>", "clear-keychain ;; search ;; fullscreen --leave")
 
 for m in ["caret", "command", "hint", "insert", "prompt", "register", "yesno"]:
     config.bind("¶", "mode-leave", mode=m)
+    config.bind("<Ctrl-c>", "mode-leave", mode=m)
 
 
 # Don't load the autoconfig, maintain all configuration here (must be last).
