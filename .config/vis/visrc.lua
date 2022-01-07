@@ -11,6 +11,8 @@ require('plugins/vis-jumplist')
 require('plugins/vis-cscope')
 -- <https://github.com/fischerling/vis-spellcheck>
 require('plugins/vis-spellcheck')
+-- <https://github.com/erf/vis-cursors>
+require('plugins/vis-cursors')
 -- <https://repo.or.cz/vis-pairs.git>
 local pairs = require('plugins/vis-pairs')
 pairs.autopairs = false
@@ -96,6 +98,8 @@ vis.events.subscribe(vis.events.INIT, function()
     vis:map(_normal, '<Backspace>', "''m:x/ +$/ c//<Enter>M")
     -- Ignorecase is sometimes unhelpful:
     vis:map(_normal, 'gc', ':set ignorecase!<Enter>')
+    -- Reload current file from disk:
+    vis:map(_normal, 'gr', ':e!<Enter>')
 end)
 
 
