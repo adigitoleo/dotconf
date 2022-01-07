@@ -1,0 +1,35 @@
+#!/bin/sh
+set -eu
+readonly SCRIPTNAME="${0##*/}"
+usage() { printf 'Usage: %s [-h|-q|file.jl]\n' "$SCRIPTNAME"; }
+helpf() {
+    echo 'Options:'
+    echo '-q                send an exit command to the DaemonMode.jl server'
+    echo 
+    echo 'Use JuliaFormatter.jl to auto-format a Julia source file.'
+    echo 'Requires DaemonMode.jl for running a daemonized Julia session.'
+}
+
+[ $# -eq 0 ] && usage && exit 1
+while getopts "hq" OPT; do
+    case "$OPT" in
+        h ) usage && helpf; exit 0 ;;
+        q ) >/dev/null 2>&1 julia --startup-file=no -e 'using DaemonMode; runexpr("exit()")'
+            exit 0 ;;
+    esac
+done
+
+is_command() { # Check if command exists, for flow control (no stdout messages)
+    1>/dev/null 2>&1 command -v "$1" && [ "$?" -eq 0 ] && return 0 \
+        || { warn "command '$1' not found" && return 1; }
+}
+is_command lsof || exit 1
+is_command grep || exit 1
+
+if ! lsof -i tcp:3000 | grep -q julia; then
+    >/dev/null 2>&1 setsid --fork \
+        julia --startup-file=no -e 'using JuliaFormatter,DaemonMode; serve()'
+    sleep 1
+fi
+
+julia --startup-file=no -e "using DaemonMode; runexpr(\"\"\"format_file(\"$1\")\"\"\")"
