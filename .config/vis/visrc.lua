@@ -46,63 +46,13 @@ function set_theme()
 end
 
 
--- Create FIFO for code transfer and return its path.
-function fifoinit()
-    local mktemp = io.popen("mktemp -u --tmpdir snippets.XXXXXXXXXX")
-    local fifopath = mktemp:read()
-    mktemp:close()
-    local fifohandle = io.open(fifopath)
-    if fifohandle ~= nil and io.close(fifohandle) then
-        vis:info("Unable to create FIFO at `vis.fifopath`. File exists.")
-        return nil
-    else
-        os.execute("mkfifo " .. fifopath)
-        return fifopath
-    end
-end
-
-
--- Write buffer contents to `vis.fifopath`.
-function write_fifo(argv, force, win, selection, range)
-    if not vis.fifopath or vis.fifopath == '' then
-        vis:info("Unable to write to empty `vis.fifopath`.")
-        return false
-    end
-    local status, out, err = vis:pipe(win.file, range, "> " .. vis.fifopath)
-    if not status then vis:info(err) return false end
-    return true
-end
-
-
--- Spawn terminal with $VISFIFO set to the value of `vis.fifopath`.
-function spawn_fifoterm(argv, force, win, selection, range)
-    if not vis.fifopath or vis.fifopath == '' then
-        vis:info("Unable to set $VISFIFO. Empty `vis.fifopath`.")
-        return false
-    end
-    local term = os.getenv("TERM")
-    if not term then vis:info("Unable to spawn $TERM.") return false end
-    os.execute("trap '' INT && (VISFIFO=" .. vis.fifopath .. " 1>/dev/null 2>/dev/null " .. term .. ")&")
-    return true
-end
-
-
 ------ Startup settings ------
 vis.events.subscribe(vis.events.INIT, function()
     -- Options:
     vis:command('set expandtab on')
     vis:command('set tabwidth 4')
     vis:command('set autoindent on')
-    vis.fifopath = fifoinit()
     set_theme()
-
-    -- Commands:
-    vis:command_register("wf", write_fifo, "Write range to `vis.fifopath`")
-    vis:command_register(
-        "ft",
-         spawn_fifoterm,
-         "Spawn terminal with $VISFIFO set to the value of `vis.fifopath`."
-    )
 
     -- Mapping modes:
     local _normal = vis.modes.NORMAL
@@ -155,11 +105,4 @@ vis.events.subscribe(vis.events.WIN_OPEN, function(win)
     vis:command('set relativenumbers on')
     vis:command('set ignorecase on')
     vis:command('set colorcolumn 88')
-end)
-
-
------- Exit hooks ------
-vis.events.subscribe(vis.events.QUIT, function()
-    if not vis.fifopath or vis.fifopath == '' then return true end
-    os.remove(vis.fifopath)
 end)
