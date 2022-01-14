@@ -105,6 +105,10 @@ alias jl,env='julia --banner=no --project=$PWD'
 alias jl,bw='julia --banner=no --color=no'
 alias jl,tmp='julia --banner=no --startup-file=no --history-file=no'
 
+# Nim
+## INim <https://github.com/inim-repl/INim>
+alias inim='$HOME/.nimble/bin/inim'
+
 # Without music, life would be a mistake.
 alias a,mute='amixer set Master toggle'
 alias a,mixer=alsamixer
