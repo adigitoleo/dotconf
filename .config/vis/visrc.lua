@@ -76,10 +76,20 @@ vis.events.subscribe(vis.events.INIT, function()
     vis:map(_pending, '¶', '<vis-mode-normal-escape>')
     vis:map(_normal, 'ï', '<vis-window-next>')
     vis:map(_normal, 'œ', '<vis-window-prev>')
+
+    -- Command mappings:
+    vis:map(_normal, ' w', ':w<Enter>')
     vis:map(_normal, ' n', ':set relativenumbers!<Enter>')
     vis:map(_normal, ' d', ':set mellow_dark!<Enter>')
     vis:map(_normal, ' f', ':fzf<Enter>')
     vis:map(_normal, ' u', ':fzf-unicode<Enter>')
+    vis:map(_normal, ' c', ':set ignorecase!<Enter>')
+    vis:map(_normal, ' x', function(keys)
+        local word = vis.win.file:text_object_word(vis.win.selection.pos)
+        if word then
+            vis:feedkeys(":x/\\<" .. vis.win.file:content(word) .. "\\>")
+        end
+    end, "Pre-fill command prompt with pattern to select all matches of word under cursor")
 
     -- Quicker clipboard copy/paste:
     vis:map(_normal, ' p', '"+p')
@@ -98,8 +108,6 @@ vis.events.subscribe(vis.events.INIT, function()
     vis:map(_visual, 'g)', '/[.,;:!?]( |\n)<Enter>')
     -- Whitespace padding/stripping:
     vis:map(_normal, '<Backspace>', "''m:x/ +$/ c//<Enter>M")
-    -- Ignorecase is sometimes unhelpful:
-    vis:map(_normal, 'gc', ':set ignorecase!<Enter>')
     -- Reload current file from disk:
     vis:map(_normal, 'gr', ':e!<Enter>')
 end)
