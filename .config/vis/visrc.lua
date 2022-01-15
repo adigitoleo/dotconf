@@ -13,6 +13,8 @@ require('plugins/vis-cscope')
 require('plugins/vis-spellcheck')
 -- <https://github.com/erf/vis-cursors>
 require('plugins/vis-cursors')
+-- <https://gitlab.com/mcepl/vis-jump>
+require('plugins/vis-jump')
 -- <https://repo.or.cz/vis-pairs.git>
 local pairs = require('plugins/vis-pairs')
 pairs.autopairs = false
