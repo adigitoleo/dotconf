@@ -16,6 +16,7 @@ static const float focuscolor[]     = {1.0, 0.0, 0.0, 1.0};
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
+/* window rules */
 static const Rule rules[] = {
     /* Requires floatrules.patch for setting initial geometry */
     /* { app_id, title, tags, mask, isfloating, monitor, x, y, width, height } */
@@ -24,7 +25,6 @@ static const Rule rules[] = {
     { "Gimp", NULL, 0, 1, -1, 0, 0, 500, 400 },
     { "firefox", NULL, 1 << 8, 0, -1, 200, 100, 0, 0, },
     */
-    { "audacity", NULL, 0, 1, -1, 360, 100, 1200, 880 },
     { "drracket", NULL, 0, 1, -1, 360, 100, 1200, 880 },
     { "floating-terminal", NULL, 0, 1, -1, 0, 0, 0, 0 },
     { "gimp", NULL, 0, 1, -1, 0, 0, 0, 0 },
@@ -50,11 +50,11 @@ static const Layout layouts[] = {
     { "[M]",      monocle },
 };
 
-/* monitors
- * The order in which monitors are defined determines their position.
- * Non-configured monitors are always added to the left. */
+/* monitors */
 static const MonitorRule monrules[] = {
     /* name       mfact nmaster scale layout       rotate/reflect x y */
+    /* The order in which monitors are defined determines their position. */
+    /* Non-configured monitors are always added to the left. */
     /* mfact sets the default column ratio */
     /* example of a HiDPI laptop monitor:
     { "eDP1",    0.5,  1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL, 0, 0 },
@@ -88,9 +88,6 @@ static const int natural_scrolling = 0;
     { MODKEY|WLR_MODIFIER_SHIFT, SKEY,           tag,             {.ui = 1 << TAG} }, \
     { MODKEY|WLR_MODIFIER_CTRL|WLR_MODIFIER_SHIFT,SKEY,toggletag, {.ui = 1 << TAG} }
 
-/* helper for spawning shell commands in the pre dwm-5.0 fashion */
-#define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
-
 /* commands */
 static const char *fileopener[] = { "alacritty", "--class", "floating-terminal,floating-terminal", "-e", "fzfopen.sh", NULL };
 static const char *guilauncher[] = { "alacritty", "--class", "floating-terminal,floating-terminal", "-e", "fzfmenu.sh", NULL };
@@ -99,6 +96,7 @@ static const char *quickterm[] = { "alacritty", "--class", "floating-terminal,fl
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *wlclock[] = { "wlclock", NULL };
 
+/* key bindings */
 static const Key keys[] = {
     /* Note that Shift changes certain key codes: c -> C, 2 -> at, etc. */
     /* modifier                  key                 function        argument */
@@ -142,6 +140,7 @@ static const Key keys[] = {
     CHVT(7), CHVT(8), CHVT(9), CHVT(10), CHVT(11), CHVT(12),
 };
 
+/* mouse bindings */
 static const Button buttons[] = {
     { MODKEY, BTN_LEFT,   moveresize,     {.ui = CurMove} },
     { MODKEY, BTN_MIDDLE, togglefloating, {0} },
