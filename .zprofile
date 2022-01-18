@@ -44,6 +44,11 @@ if [ -d "$HOME/.local/bin" ]; then
     export PATH="$HOME/.local/bin:$PATH"
 fi
 
+# Prepend ~/.nimble/bin to PATH if it exists.
+if [ -d "$HOME/.nimble/bin" ]; then
+    export PATH="$HOME/.nimble/bin:$PATH"
+fi
+
 # Use ~/.go instead of ~/go for GOPATH if it exists.
 if [ -d "$HOME/.go" ]; then
     export GOPATH="$HOME/.go"
