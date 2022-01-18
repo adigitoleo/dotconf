@@ -14,7 +14,8 @@
 #   build       (build system change, dependency change)
 #   perf        (performance improvement)
 #   test        (test change, fix for broken test)
-#   ci          (CI configuration/script change)
+#   dev         (CI configuration or devtool script change)
+#   release     (release commit, should always be tagged)
 
 # Enable this template using:
 #   git config --global commit.template <path to template file>
