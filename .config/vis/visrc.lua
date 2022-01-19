@@ -98,9 +98,6 @@ vis.events.subscribe(vis.events.INIT, function()
     vis:map(_visual, ' y', '"+y')
     vis:map(_vline, ' p', '"+p')
     vis:map(_vline, ' y', '"+y')
-    -- Alternative jumplist navigation:
-    vis:map(_normal, 'H', '<vis-jumplist-prev>')
-    vis:map(_normal, 'L', '<vis-jumplist-next>')
     -- Navigating to sentence clause punctuation:
     vis:map(_normal, 'g(', '?[.,;:!?]( |\n)<Enter>')
     vis:map(_normal, 'g)', '/[.,;:!?]( |\n)<Enter>')
