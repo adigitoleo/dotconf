@@ -29,10 +29,14 @@ alias tree='tree --dirsfirst'
 alias less='less -iR'
 alias tmux='TERM=xterm-256color tmux'
 
-# rg,glob 'pattern'
+# rg,glob 'pattern' : find filenames in current directory that match glob
 alias rg,glob='rg --files -g'
-# rg,absglob 'pattern'
+# rg,absglob 'pattern' : same as rg,glob but print absolute paths
 alias rg,absglob='rg $PWD --files -g'
+# rg,find [opts] 'pattern' : find filenames recursively
+alias rg,find='rg --files|rg'
+# rg,absfind [opts] 'pattern' : same as rg,find but print absolute paths
+alias rg,absfind='rg --files $PWD|rg'
 
 
 # VERSION CONTROL AND SYSTEM ADMIN {{{1
