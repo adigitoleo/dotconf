@@ -98,8 +98,9 @@ alias c,month='remind -c1 ~/.config/remind/reminders.rem'
 
 # Ouroboros and the Virtual Environment.
 alias py=python
-alias py,venv='$(pyenv prefix||printf "/usr")/bin/python -m venv .venv-${PWD##*/} && source .venv-${PWD##*/}/bin/activate && pip install --upgrade pip pylint mypy black'
+alias py,venv='$(pyenv prefix||printf "/usr")/bin/python -m venv .venv-${PWD##*/} && source .venv-${PWD##*/}/bin/activate && pip install --upgrade pip flake8 mypy black'
 alias py,activate='test -f .venv-${PWD##*/}/bin/activate && source .venv-${PWD##*/}/bin/activate'
+alias py,lint='pylint -E --output-format=colorized'
 alias by='bpython'
 alias pylint='pylint --output-format=colorized'
 
