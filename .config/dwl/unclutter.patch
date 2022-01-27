@@ -1,17 +1,17 @@
---- dwl.c.orig	2021-02-17 06:20:42.000000000 +1100
-+++ dwl.c	2021-03-10 17:01:00.068331154 +1100
-@@ -241,6 +241,8 @@
+--- a/dwl.c
++++ b/dwl.c
+@@ -242,6 +242,8 @@
+ static void focusstack(const Arg *arg);
  static void fullscreennotify(struct wl_listener *listener, void *data);
  static Client *focustop(Monitor *m);
- static void getxdecomode(struct wl_listener *listener, void *data);
 +static void handlecursoractivity();
 +static int hidecursor(void *data);
  static void incnmaster(const Arg *arg);
  static void inputdevice(struct wl_listener *listener, void *data);
  static int keybinding(uint32_t mods, xkb_keysym_t sym);
-@@ -324,6 +326,9 @@
- static struct wlr_xcursor_manager *xcursor_mgr;
- #endif
+@@ -326,6 +328,9 @@
+ static struct wlr_cursor *cursor;
+ static struct wlr_xcursor_manager *cursor_mgr;
  
 +static struct wl_event_source *hide_source;
 +static bool cursor_hidden = false;
@@ -27,16 +27,15 @@
  	/* Notify the client with pointer focus of the axis event. */
  	wlr_seat_pointer_notify_axis(seat,
  			event->time_msec, event->orientation, event->delta,
-@@ -642,6 +648,8 @@
+@@ -641,6 +647,7 @@
+ 	const Button *b;
  
  	wlr_idle_notify_activity(idle, seat);
- 
 +	handlecursoractivity();
-+
+ 
  	switch (event->state) {
  	case WLR_BUTTON_PRESSED:;
- 		/* Change focus if the button was _pressed_ over a client */
-@@ -1207,6 +1215,25 @@
+@@ -1170,6 +1177,25 @@
  }
  
  void
@@ -62,7 +61,7 @@
  incnmaster(const Arg *arg)
  {
  	selmon->nmaster = MAX(selmon->nmaster + arg->i, 0);
-@@ -1403,6 +1430,7 @@
+@@ -1358,6 +1384,7 @@
  	// time is 0 in internal calls meant to restore pointer focus.
  	if (time) {
  		wlr_idle_notify_activity(idle, seat);
@@ -70,15 +69,15 @@
  
  		/* Update selmon (even while dragging a window) */
  		if (sloppyfocus)
-@@ -1834,6 +1862,7 @@
+@@ -1853,6 +1880,7 @@
  	 * monitor when displayed here */
  	wlr_cursor_warp_closest(cursor, NULL, cursor->x, cursor->y);
  	wlr_xcursor_manager_set_cursor_image(cursor_mgr, "left_ptr", cursor);
 +	handlecursoractivity();
  
- 	/* Set the WAYLAND_DISPLAY environment variable to our socket and run the
- 	 * startup command if requested. */
-@@ -2084,6 +2113,9 @@
+ 	/* Run the Wayland event loop. This does not return until you exit the
+ 	 * compositor. Starting the backend rigged up all of the necessary event
+@@ -2101,6 +2129,9 @@
  	wl_signal_add(&cursor->events.axis, &cursor_axis);
  	wl_signal_add(&cursor->events.frame, &cursor_frame);
  
