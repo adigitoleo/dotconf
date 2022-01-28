@@ -286,6 +286,10 @@ Also allow the Tor port if you want:
 
     ufw allow 9050
 
+If there is spam in the logs because of `224.0.0.N` type traffic (multicast traffic)
+then it might be worth allowing traffic to those addresses from the local gateway:
+
+    sudo ufw allow proto udp to 224.0.0.0/24 from 192.168.0.0/24
 
 Edit `/etc/sysctl.d/51-kexec-restrict.conf` to contain
 `kernel.kexec_load_disabled = 1` to disable switching kernels at runtime.
