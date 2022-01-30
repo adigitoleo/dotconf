@@ -1,7 +1,7 @@
 # Read `man 5 sway` for a complete reference.
 
-output * bg ~/Pictures/wallpapers/chauvet_lions_66292F.jpg fill
 focus_follows_mouse no
+seat * hide_cursor when-typing enable
 default_border pixel 3
 default_floating_border pixel 3
 client.focused #F5BB89 #F5BB89 #66292F #F5BB89

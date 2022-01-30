@@ -44,6 +44,7 @@ is_command() { # Check if command exists, for flow control (no stdout messages)
     1>/dev/null 2>&1 command -v "$1" && [ "$?" -eq 0 ] && return 0 \
         || { warn "command '$1' not found" && return 1; }
 }
+is_command pkill || exit 1
 is_command pgrep || exit 1
 
 CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/$SCRIPTNAME/config"
@@ -51,7 +52,7 @@ if [ ! -r "$CONFIG" ]; then warn "unable to read config file at $CONFIG"; exit 1
 while IFS= read -r line || [ -n "$line" ]; do
     CMD="${line%% *}"
     is_command "$CMD" || continue
-    >/dev/null 2>&1 pgrep -fx "$line" && continue
+    >/dev/null 2>&1 pgrep -fx "$line" && pkill -fx "$line"
     LOG="$(mktemp --tmpdir=$TMPDIR $SCRIPTNAME-$CMD-XXXXXX)"
     >"$LOG" 2>&1 eval "$line" &
 done < "$CONFIG"
