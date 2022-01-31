@@ -1,3 +1,7 @@
+# SWAY CONFIG
+# Requirements:
+# - wld script, <https://git.sr.ht/~adigitoleo/dotconf/tree/master/item/.local/bin/wld>
+# - autotiling plugin, <https://github.com/nwg-piotr/autotiling>
 # Read `man 5 sway` for a complete reference.
 
 focus_follows_mouse no
@@ -144,6 +148,6 @@ bar {
     }
 }
 
-exec_always --no-startup-id wld
+exec --no-startup-id wld
 exec_always --no-startup-id autotiling
 include /etc/sway/config.d/*

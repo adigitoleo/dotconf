@@ -29,6 +29,10 @@ helpf() {
     echo 'Requires the pgrep utility, see <https://gitlab.com/procps-ng/procps>.'
 }
 
+# Known issues:
+# - if run from sway with exec_always,
+#   a spurrious instance of swaybg remains after reloading the sway config
+
 TMPDIR='/tmp'
 while getopts "hd:" OPT; do
     case "$OPT" in
