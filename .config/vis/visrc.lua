@@ -77,12 +77,14 @@ vis.events.subscribe(vis.events.INIT, function()
     vis:map(_normal, 'ï', '<vis-window-next>')
     vis:map(_normal, 'œ', '<vis-window-prev>')
 
+    -- Insert macros:
+    vis:map(_insert, '<C-f>', fzf_unicode.action)
+
     -- Command mappings:
     vis:map(_normal, ' w', ':w<Enter>')
     vis:map(_normal, ' n', ':set relativenumbers!<Enter>')
     vis:map(_normal, ' d', ':set mellow_dark!<Enter>')
     vis:map(_normal, ' f', ':fzf<Enter>')
-    vis:map(_normal, ' u', ':fzf-unicode<Enter>')
     vis:map(_normal, ' c', ':set ignorecase!<Enter>')
     vis:map(_normal, ' x', function(keys)
         local word = vis.win.file:text_object_word(vis.win.selection.pos)
