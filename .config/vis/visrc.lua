@@ -77,6 +77,10 @@ vis.events.subscribe(vis.events.INIT, function()
     vis:map(_normal, 'ï', '<vis-window-next>')
     vis:map(_normal, 'œ', '<vis-window-prev>')
 
+    -- Leave a few lines buffer after zb or zt, #999:
+    vis:map(_normal, 'gb', 'zb3<C-e>')
+    vis:map(_normal, 'gt', 'zt3<C-y>')
+
     -- Insert macros:
     vis:map(_insert, '<C-f>', fzf_unicode.action)
 
