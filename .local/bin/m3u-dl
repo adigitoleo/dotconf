@@ -1,0 +1,111 @@
+#!/bin/sh
+set -eu
+readonly SCRIPTNAME="${0##*/}"
+usage() {
+    printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
+    printf '       %s ' "$SCRIPTNAME"
+    echo '[-y|-n][-o path] playlist [options...]'
+}
+helpf() {
+    echo 'Options:'
+    echo '-y                write files despite <path> already existing'
+    echo '-n                opposite of `-y`'
+    echo '-o <path>         save output files under the given directory path'
+    echo
+    echo 'Operands:'
+    echo '  <playlist>      m3u playlist file with mp3 URLs'
+    echo
+    echo 'Download mp3 files specified in an m3u playlist.'
+    echo 'Saves files to a folder called `mp3files` by default.'
+    echo 'The options `-y` and `-n` disable interactivity (reading from stdin).'
+    echo 'Additional options after <playlist> will be passed to the curl command.'
+    echo 'The curl options `--silent` and `--show-error` are always used.'
+}
+
+warn() { >&2 printf '%s\n' "$SCRIPTNAME: $1"; }
+tell() { printf '%s\n' "$SCRIPTNAME: $1"; }
+ask() {
+    default=0
+    choices="[y]/n"
+    if [ $2 -eq 1 ]; then
+        default=1
+        choices="y/[n]"
+    fi
+    printf '%s: %s %s: ' "$SCRIPTNAME" "$1" "$choices"
+    read answer
+    case $answer in
+        y|Y ) return 0;;
+        n|N ) return 1;;
+        * ) return $default;;
+    esac
+}
+is_command() { # Check if command exists, for flow control (no stdout messages)
+    if 1>/dev/null 2>&1 command -v "$1"; then
+        return 0
+    else
+        warn "command '$1' not found"; return 1
+    fi
+}
+
+TOTAL=0
+countlines() {
+    while IFS= read -r line || [ -n "$line" ]; do
+        case "$line" in
+            http* ) TOTAL=$((TOTAL + 1)) ;;
+        esac
+    done < "$1"
+}
+
+[ $# -eq 0 ] && usage && exit 1
+is_command curl || exit 1
+
+PLAYLIST=
+OUTDIR="mp3files"
+WRITEINTO=2  # 2 for unspecified, prompt on stdin
+while getopts "hyno:" OPT; do
+    case $OPT in
+        o ) OUTDIR="$OPTARG";;
+        y ) WRITEINTO=0;;
+        n ) if [ $WRITEINTO -eq 0 ]; then
+                warn "options -y and -n are mutually exclusive"
+                exit 1
+            else
+                WRITEINTO=1
+            fi
+            ;;
+        h ) usage && helpf; exit 0;;
+        *) usage;;
+    esac
+done
+shift $(($OPTIND - 1))
+PLAYLIST="$1"
+shift
+
+test -f "$PLAYLIST" || { warn "playlist file '$PLAYLIST' not found"; exit 1; }
+
+if [ -d "$OUTDIR" ]; then
+    warn "directory '$OUTDIR' already exists"
+    if [ $WRITEINTO -eq 2 ]; then
+        ask "try to write files there anyway?" 1 || exit 1
+    elif [ $WRITEINTO -eq 1 ]; then
+        exit 1
+    fi
+else
+    mkdir -p "$OUTDIR"
+fi
+
+countlines "$PLAYLIST"
+tell "downloading $TOTAL files..."
+COUNT=0
+while IFS= read -r line || [ -n "$line" ]; do
+    case "$line" in
+        http* ) filename="${line##*/}"
+            tell "[$COUNT/$TOTAL] $filename"
+            case "$filename" in
+                *.mp3 ) curl -o "${OUTDIR%/}/$filename" "$line" --silent --show-error $@;;
+                *) warn "skipping $filename, not an mp3 file";;
+            esac
+            COUNT=$((COUNT + 1))
+            ;;
+    esac
+done < "$PLAYLIST"
