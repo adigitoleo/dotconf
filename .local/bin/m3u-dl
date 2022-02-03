@@ -19,7 +19,7 @@ helpf() {
     echo 'Saves files to a folder called `mp3files` by default.'
     echo 'The options `-y` and `-n` disable interactivity (reading from stdin).'
     echo 'Additional options after <playlist> will be passed to the curl command.'
-    echo 'The curl options `--silent` and `--show-error` are always used.'
+    echo 'The curl options `-L`, `--silent` and `--show-error` are always used.'
 }
 
 warn() { >&2 printf '%s\n' "$SCRIPTNAME: $1"; }
@@ -96,13 +96,13 @@ fi
 
 countlines "$PLAYLIST"
 tell "downloading $TOTAL files..."
-COUNT=0
+COUNT=1
 while IFS= read -r line || [ -n "$line" ]; do
     case "$line" in
         http* ) filename="${line##*/}"
             tell "[$COUNT/$TOTAL] $filename"
             case "$filename" in
-                *.mp3 ) curl -o "${OUTDIR%/}/$filename" "$line" --silent --show-error $@;;
+                *.mp3 ) curl -L -o "${OUTDIR%/}/$filename" "$line" --silent --show-error $@;;
                 *) warn "skipping $filename, not an mp3 file";;
             esac
             COUNT=$((COUNT + 1))
