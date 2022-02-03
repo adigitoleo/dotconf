@@ -9,13 +9,15 @@ SAVEHIST=10000
 KEYTIMEOUT=10
 
 # Options, see `man zshoptions`.
-setopt NOTIFY NOMATCH NOBGNICE COMPLETE_IN_WORD
+setopt NOTIFY NOMATCH NOBGNICE
+setopt MENU_COMPLETE AUTO_LIST LIST_PACKED COMPLETE_IN_WORD
 setopt INC_APPEND_HISTORY SHARE_HISTORY HIST_IGNORE_ALL_DUPS HIST_SAVE_NO_DUPS
 unsetopt BEEP
 
 # Key bindings, and vi mode. Always vi mode.
 bindkey -v
 bindkey ¶ vi-cmd-mode
+bindkey '^[[Z' reverse-menu-complete
 autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
 zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
