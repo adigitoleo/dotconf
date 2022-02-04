@@ -1,4 +1,4 @@
-" * * * * * * * * * * * * * *      vim:fen       * * * * * * * * * * * * * * "
+" * * * * * * * * * * * * * *                    * * * * * * * * * * * * * * "
 " * * *                                                                * * * "
 " * *                     NEOVIM CONFIGURATION FILE                      * * "
 " *                                                                        * "
@@ -15,8 +15,6 @@ if executable('/usr/bin/python3')
     " NOTE: This python binary should have access to the `pynvim` module.
 endif
 
-" TODO: Wrapper script instead of FZF_DEFAULT_COMMAND, don't index binary files.
-" TODO: Get ALE to use my julials script for diagnostics
 " TODO: Set up offline thesaurus files, :h 'thesaurus'
 " TODO: Make *Feed functions more robust by using fprint instead of echo.
 " TODO: Add an on_exit caller to :Run that notifies of finished jobs.
@@ -457,7 +455,7 @@ augroup filetype_rules
     " Verify that ':filetype' returns 'plugin:ON'.
     autocmd FileType sh,zsh setlocal textwidth=79
     autocmd FileType qf setlocal number norelativenumber cursorline textwidth=0
-    autocmd FileType vim setlocal textwidth=78 foldmethod=marker
+    autocmd FileType vim setlocal textwidth=78 foldmethod=marker foldenable
     autocmd FileType bash,sh setlocal foldmethod=marker
     autocmd FileType make setlocal noexpandtab
     autocmd FileType markdown setlocal foldlevel=1 foldenable
@@ -522,27 +520,13 @@ nnoremap <silent> zL :call <SID>HorizontalScrollMode('L')<CR>
 nnoremap <silent> <Space> <Cmd>mode<Cr>
 
 " Meta mappings: buffer navigation and control. {{{2
-" Write focused buffer if modified.
-nnoremap <M-s> <Cmd>up<Cr>
-inoremap <M-s> <Cmd>up<Cr>
-" Add/remove indentation in insert mode.
-inoremap <M-,> <C-d>
-inoremap <M-.> <C-t>
-" Navigate buffers (next, previous, most recent - if still loaded).
-nnoremap <M-]> <Cmd>bn<Cr>
-nnoremap <M-[> <Cmd>bp<Cr>
-nnoremap <M-Tab> <Cmd>FuzzySwitch<Cr>
-" Ergonomic alternative for expanding abbreviations.
-inoremap <M-]> <C-]>
 " Window navigation and relocation.
-for key in ["h", "l", "j", "k", "t", "w"]
-    exec 'nnoremap <M-' .. key .. '> <Cmd>wincmd ' .. key .. '<Cr>'
-    exec 'tnoremap <M-' .. key .. '> <Cmd>wincmd ' .. key .. '<Cr>'
-    exec 'nnoremap <M-' .. toupper(key) .. '> <Cmd>wincmd ' .. toupper(key) .. '<Cr>'
-    exec 'tnoremap <M-' .. toupper(key) .. '> <Cmd>wincmd ' .. toupper(key) .. '<Cr>'
-endfor
-nnoremap <M-b> <Cmd>wincmd b<Cr>
-nnoremap <M-p> <Cmd>wincmd p<Cr>
+nnoremap ï <Cmd>wincmd w<Cr>
+nnoremap œ <Cmd>wincmd W<Cr>
+tnoremap ï <Cmd>wincmd w<Cr>
+tnoremap œ <Cmd>wincmd W<Cr>
+nnoremap ñ <Cmd>wincmd b<Cr>
+nnoremap ö <Cmd>wincmd p<Cr>
 
 " Leader mappings: run commands and call functions. {{{2
 let mapleader = "\<Space>"
@@ -554,8 +538,10 @@ nnoremap <expr>     <Leader>a 'a' .. nr2char(getchar()) .. '<Esc>'
 nnoremap            <Leader>c <Cmd>set cursorcolumn!<Cr>
 " Change working directory of focused window to directory containing focused file/buffer (fall back to HOME).
 nnoremap <expr>     <Leader>d '<Cmd>lcd ' .. (empty(&buftype) && !empty(bufname()) ? '%:p:h' : '') .. '<Bar>pwd<Cr>'
+" Open FuzzyFind quickly.
+nnoremap            <Leader>f <Cmd>FuzzyFind<Cr>
 " Toggle folding in focused buffer.
-nnoremap            <Leader>f <Cmd>setlocal foldenable!<Cr>
+nnoremap            <Leader>h <Cmd>setlocal foldenable!<Cr>
 " Insert char before cursor [count] times.
 nnoremap <expr>     <Leader>i 'i' .. nr2char(getchar()) .. '<Esc>'
 " Toggle cursor line indicator.
@@ -572,6 +558,8 @@ noremap             <Leader>P "0P
 " Toggle spellchecker.
 nnoremap <silent>   <Leader>s <Cmd>setlocal spell!<Cr>
 " See :function CopyFile.
+" Write focused buffer if modified.
+nnoremap <silent>   <Leader>w <Cmd>up<Cr>
 nnoremap <silent>   <Leader>y <Cmd>call CopyFile()<Cr>
 " Toggle soft-wrapping of long lines to the view width.
 nnoremap <silent>   <Leader>z <Cmd>setlocal wrap!<Cr>
@@ -649,7 +637,6 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'inkarkat/vim-AdvancedSorters'  " Sort by multiline patterns, etc.
     " Dev tooling and filetype plugins. {{{3
     Plug 'dense-analysis/ale'  " Async code linting.
-    Plug 'mzlogin/vim-markdown-toc'  " Pandoc/GFM table of contents generator.
     Plug 'chmp/mdnav'  " Markdown: internal hyperlink navigation.
     Plug 'alvan/vim-closetag'  " Auto-close (x)html tags.
     Plug 'cespare/vim-toml'  " Syntax highlighting for TOML configs.
@@ -672,7 +659,7 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'adigitoleo/vim-mellow'
     Plug 'adigitoleo/vim-mellow-statusline', {'tag': '*'}
     " Plug 'itchyny/lightline.vim'
-    Plug 'adigitoleo/vim-helpier'
+    " Plug 'adigitoleo/vim-helpier'
     " }}}
 call plug#end()
 " Check that plugins are installed before configuring.
