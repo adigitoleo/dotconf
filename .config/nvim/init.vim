@@ -1,10 +1,7 @@
-"                                  vim:fen
-"  * * * * * * * * *   _       _ _          _             * * * * * * * * *  "
-"  * * * * * * * * *  (_)_ __ (_) |_ __   _(_)_ __ ___    * * * * * * * * *  "
-"  * * * * * * * * *  | | '_ \| | __|\ \ / / | '_ ` _ \   * * * * * * * * *  "
-"  * * * * * * * * *  | | | | | | |_  \ V /| | | | | | |  * * * * * * * * *  "
-"        adigitoleo's |_|_| |_|_|\__|(_)_/ |_|_| |_| |_| for neovim 0.4      "
-
+" * * * * * * * * * * * * * *      vim:fen       * * * * * * * * * * * * * * "
+" * * *                                                                * * * "
+" * *                     NEOVIM CONFIGURATION FILE                      * * "
+" *                                                                        * "
 " NOTE: Plugins are served using vim-plug. See the PLUGINS selection for more.
 "       To set up vim-plug, first set g:VIM_PLUG_PATH and g:PLUGIN_HOME to the
 "       desired paths (below). Next, ensure the correct plugin dependencies
@@ -12,9 +9,6 @@
 
 let g:VIM_PLUG_PATH = expand(stdpath('config') .. '/autoload/plug.vim')
 let g:PLUGIN_HOME = expand(stdpath('data') .. '/plugged')
- " Set scrolloff here so that TermLeave can reset it,
- " this is needed until <https://github.com/neovim/neovim/pull/11854> arrives.
-let g:SCROLLOFF = 3
 
 if executable('/usr/bin/python3')
     let g:python3_host_prog = '/usr/bin/python3'
@@ -23,7 +17,6 @@ endif
 
 " TODO: Wrapper script instead of FZF_DEFAULT_COMMAND, don't index binary files.
 " TODO: Get ALE to use my julials script for diagnostics
-" TODO: Write plugin for correct syntax highlighting of setup.cfg files.
 " TODO: Set up offline thesaurus files, :h 'thesaurus'
 " TODO: Make *Feed functions more robust by using fprint instead of echo.
 " TODO: Add an on_exit caller to :Run that notifies of finished jobs.
@@ -67,43 +60,43 @@ function! s:BufList() abort " {{{2
 endfunction
 
 function! s:FileFeed(sources, mods, sep) abort "{{{2
-" Get shell command to generate parsed and filtered file names.
-" a:sources -- list, each source is a sublist of file names
-" a:mods -- string, see :h filename-modifiers and :h fnamemodify()
-" a:sep -- string, separator to use for the file list e.g. '\n' or ' '
+    " Get shell command to generate parsed and filtered file names.
+    " a:sources -- list, each source is a sublist of file names
+    " a:mods -- string, see :h filename-modifiers and :h fnamemodify()
+    " a:sep -- string, separator to use for the file list e.g. '\n' or ' '
 
-" Respect &wildignore and ignore unnamed/help buffers.
-let l:ignore = split(&wildignore, ',') + ['^$', $VIMRUNTIME]
-if strchars(expand("%" .. a:mods))  " Exclude current buffer if named
-    let l:ignore += [expand("%" .. a:mods)]
-endif
+    " Respect &wildignore and ignore unnamed/help buffers.
+    let l:ignore = split(&wildignore, ',') + ['^$', $VIMRUNTIME]
+    if strchars(expand("%" .. a:mods))  " Exclude current buffer if named
+        let l:ignore += [expand("%" .. a:mods)]
+    endif
 
-let l:files = []
-for l:source in a:sources
-    for l:file in l:source
-        if filereadable(l:file)
-            let l:file = fnamemodify(l:file, a:mods)
-            if count(l:files, l:file) == 0  " Don't add duplicate filenames
-                let l:files += [l:file]
+    let l:files = []
+    for l:source in a:sources
+        for l:file in l:source
+            if filereadable(l:file)
+                let l:file = fnamemodify(l:file, a:mods)
+                if count(l:files, l:file) == 0  " Don't add duplicate filenames
+                    let l:files += [l:file]
+                endif
             endif
-        endif
+        endfor
     endfor
-endfor
 
-for l:irule in l:ignore
-    " Remove wildignore globs, filter() already matches on substrings.
-    let l:irule = substitute(l:irule, '\*', '', 'g')
-    " Escape dots since fnameescape() doesn't do it.
-    let l:irule = substitute(l:irule, '\.', '\\\.', 'g')
-    " Filter out blacklist matches.
-    call filter(l:files, 'v:val !~? "'.fnameescape(l:irule).'"')
-endfor
-" Return as shell command to allow async streaming into fzf.
-if !empty(l:files)
-    return 'echo -e "' .. join(l:files, a:sep) .. '"'
-else
-    return 'true'
-endif
+    for l:irule in l:ignore
+        " Remove wildignore globs, filter() already matches on substrings.
+        let l:irule = substitute(l:irule, '\*', '', 'g')
+        " Escape dots since fnameescape() doesn't do it.
+        let l:irule = substitute(l:irule, '\.', '\\\.', 'g')
+        " Filter out blacklist matches.
+        call filter(l:files, 'v:val !~? "'.fnameescape(l:irule).'"')
+    endfor
+    " Return as shell command to allow async streaming into fzf.
+    if !empty(l:files)
+        return 'echo -e "' .. join(l:files, a:sep) .. '"'
+    else
+        return 'true'
+    endif
 endfunction
 
 function! s:TermFeed() abort "{{{2
@@ -304,7 +297,7 @@ set matchpairs+=<:>
 set shortmess+=cI
 set shortmess-=F
 set formatoptions-=t
-let &scrolloff=g:SCROLLOFF
+let &scrolloff=3
 let &showbreak='--'
 set listchars+=trail:\ ,precedes:<,extends:>
 set pumheight=15
@@ -327,10 +320,6 @@ set foldtext=NeatFoldText() " Use custom foldtext.
 if executable('rg')
     set grepprg=rg\ --vimgrep\ --smart-case\ --follow
 endif
-" Use blinking (if available) cursor and different mode shapes (:h guicursor).
-set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
-    \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
-    \,sm:block-blinkwait175-blinkoff150-blinkon175
 
 " COMMANDS {{{1
 " Fuzzy finder (fzf) integration. {{{2
@@ -457,8 +446,7 @@ augroup terminal_buffer_rules
     autocmd!
     autocmd TermOpen * setlocal nonumber norelativenumber signcolumn=no
     autocmd TermOpen * startinsert
-    autocmd TermEnter * set scrolloff=0
-    autocmd TermLeave * let &scrolloff=g:SCROLLOFF
+    autocmd TermEnter * setlocal scrolloff=0
     autocmd BufEnter,WinEnter term://* startinsert | setlocal nobuflisted
 augroup END
 
@@ -483,12 +471,6 @@ augroup filetype_rules
     autocmd FileType xml,html setlocal tabstop=2
     autocmd FileType desktop set commentstring=#\ %s
     autocmd FileType fortran setlocal textwidth=92
-augroup END
-
-" LSP and linting. {{{2
-augroup lsp_and_linting
-    autocmd!
-    autocmd FileType python,fortran,julia let b:vcm_tab_complete = "omni"
 augroup END
 
 " Miscellaneous. {{{2
@@ -667,7 +649,6 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'inkarkat/vim-AdvancedSorters'  " Sort by multiline patterns, etc.
     " Dev tooling and filetype plugins. {{{3
     Plug 'dense-analysis/ale'  " Async code linting.
-    Plug 'natebosch/vim-lsc'  " Async LSP client.
     Plug 'mzlogin/vim-markdown-toc'  " Pandoc/GFM table of contents generator.
     Plug 'chmp/mdnav'  " Markdown: internal hyperlink navigation.
     Plug 'alvan/vim-closetag'  " Auto-close (x)html tags.
@@ -699,14 +680,6 @@ if empty(glob(g:PLUGIN_HOME.'/*'))
     finish
 endif
 
-" LSP settings. {{{2
-let g:lsc_auto_map = {'defaults': 1, 'Completion': 'omnifunc'}
-let g:lsc_auto_completeopt = 'menu,menuone,noinsert,noselect'
-let g:lsc_server_commands = {
-            \ 'python': 'pyls',
-            \ 'fortran': 'fortls --lowercase_intrinsics',
-            \ 'julia': 'julials',
-            \}
 " Linting settings. {{{2
 augroup ale_highlights
     autocmd!
@@ -795,9 +768,6 @@ let g:helpier_buftype_matches = ["help", "quickfix"]
 
 " }}}}}}
 
-let g:mellow_custom_parts = [
-            \ [function('strftime', ['%H:%M']), '%2*', 1, 0],
-            \]
 let g:mellow_show_bufnr = 0
 
 if $TERM == "alacritty"
