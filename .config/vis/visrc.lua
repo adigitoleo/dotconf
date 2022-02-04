@@ -13,8 +13,6 @@ require('plugins/vis-cscope')
 require('plugins/vis-spellcheck')
 -- <https://github.com/erf/vis-cursors>
 require('plugins/vis-cursors')
--- <https://gitlab.com/mcepl/vis-jump>
-require('plugins/vis-jump')
 -- <https://repo.or.cz/vis-pairs.git>
 local pairs = require('plugins/vis-pairs')
 pairs.autopairs = false
@@ -113,6 +111,20 @@ vis.events.subscribe(vis.events.INIT, function()
     vis:map(_normal, '<Backspace>', "''m:x/ +$/ c//<Enter>M")
     -- Reload current file from disk:
     vis:map(_normal, 'gr', ':e!<Enter>')
+    -- Open URL in browser:
+    vis:map(_normal, 'gx', function()
+        local pos = vis.win.selection.col
+        local str = vis.win.file.lines[vis.win.selection.line]
+        local len = string.len(str)
+        local URLchars = '[^a-zA-Z0-9%?._=+;&/:@#-]'
+        local to = str:find(URLchars, pos)
+        if to == nil then to = len else to = to - 1 end
+        local from = str:reverse():find(URLchars, len - pos + 1)
+        if from == nil then from = 1 else from = len - from + 2 end
+        local URL = str:sub(from, to)
+        os.execute("setsid xdg-open '" .. URL .. "'")
+        vis:redraw()
+    end, "Open URL under cursor in browser")
 end)
 
 
