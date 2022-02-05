@@ -1,7 +1,11 @@
 profile {
+    output "Unknown Q27G2G4" position -3040,0 scale 1.1875 mode 2560x1440@143.9Hz
+    output "MSI MAG161V" position 0,0 scale 1.4
+}
+profile {
     output "MSI MAG161V" position -1372,0 scale 1.4
     output "Samsung Electric Company C24F390" position 0,0
 }
 profile {
-    output "MSI MAG161V" position -1372,0 scale 1.4
+    output "MSI MAG161V" position 0,0 scale 1.4
 }
