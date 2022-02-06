@@ -85,7 +85,7 @@ vis.events.subscribe(vis.events.INIT, function()
     -- Command mappings:
     vis:map(_normal, ' w', ':w<Enter>')
     vis:map(_normal, ' n', ':set relativenumbers!<Enter>')
-    vis:map(_normal, ' d', ':set mellow_dark!<Enter>')
+    vis:map(_normal, ' t', ':set mellow_dark!<Enter>')
     vis:map(_normal, ' f', ':fzf<Enter>')
     vis:map(_normal, ' c', ':set ignorecase!<Enter>')
     vis:map(_normal, ' x', function(keys)
