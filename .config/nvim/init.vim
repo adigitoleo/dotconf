@@ -557,9 +557,11 @@ noremap             <Leader>p "0p
 noremap             <Leader>P "0P
 " Toggle spellchecker.
 nnoremap <silent>   <Leader>s <Cmd>setlocal spell!<Cr>
-" See :function CopyFile.
+" Sync theme to system.
+nnoremap <silent>   <Leader>t <Cmd>SyncTheme<Cr>
 " Write focused buffer if modified.
 nnoremap <silent>   <Leader>w <Cmd>up<Cr>
+" See :function CopyFile.
 nnoremap <silent>   <Leader>y <Cmd>call CopyFile()<Cr>
 " Toggle soft-wrapping of long lines to the view width.
 nnoremap <silent>   <Leader>z <Cmd>setlocal wrap!<Cr>
@@ -617,7 +619,7 @@ endif
 let g:plug_window = 'SmartSplit'
 call plug#begin(g:PLUGIN_HOME)
     " Ergonomics and general fixes. {{{3
-    Plug 'ackyshake/VimCompletesMe'  " Smart, context-aware <Tab> completion.
+    "Plug 'ackyshake/VimCompletesMe'  " Smart, context-aware <Tab> completion.
     Plug 'ncm2/float-preview.nvim'  " Use a floating window for preview-window.
     Plug 'tpope/vim-abolish'  " Word variant manipulation.
     Plug 'tpope/vim-commentary'  " Quickly comment/uncomment code.
