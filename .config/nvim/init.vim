@@ -270,6 +270,27 @@ function! StartTUI(prog, ...) abort "{{{2
     endif
 endfunction
 
+function! NewFloating() abort "{{{2
+    " Open a new floating window.
+    let l:buf = nvim_create_buf(v:false, v:true)
+    let l:row = &lines / 4
+    let l:col = &columns / 4
+    let l:height = &lines / 2
+    let l:width = &columns / 2
+    let l:win = nvim_open_win(
+        \l:buf,
+        \v:true,
+        \{
+        \   'relative': 'editor',
+        \   'border': 'single',
+        \   'row': l:row,
+        \   'col': l:col,
+        \   'width': l:width,
+        \   'height': l:height
+        \}
+    \)
+endfunction
+
 " OPTIONS {{{1
 " Global booleans. {{{2
 set noshowmode
@@ -487,7 +508,6 @@ augroup END
 " Ergonomic, smart mode switches.
 inoremap ¶ <Esc>
 nnoremap ; <Cmd>FuzzyCmd<Cr>
-nnoremap ¶ :
 xnoremap ; :
 xnoremap ¶ <Esc>
 cnoremap ¶ <C-c>
@@ -662,6 +682,7 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'adigitoleo/vim-mellow-statusline', {'tag': '*'}
     " Plug 'itchyny/lightline.vim'
     " Plug 'adigitoleo/vim-helpier'
+    Plug '~/vcs/vim-floaterm'
     " }}}
 call plug#end()
 " Check that plugins are installed before configuring.
