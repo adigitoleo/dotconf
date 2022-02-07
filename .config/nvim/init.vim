@@ -302,7 +302,6 @@ set hidden
 set nojoinspaces
 set noincsearch
 set linebreak
-set nowrap
 set list
 " Global configs. {{{2
 if has('mouse')
