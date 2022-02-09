@@ -62,6 +62,7 @@ bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. 
 # Move your focus around
 bindsym $mod+$down exec ~/.config/sway/wincycle.py next
 bindsym $mod+$up exec ~/.config/sway/wincycle.py prev
+bindsym $mod+comma focus output right
 # Or use $mod+[up|down|left|right]
 bindsym $mod+Left focus left
 bindsym $mod+Down focus down
@@ -80,7 +81,6 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # Switch to workspace
-bindsym $mod+comma focus output left
 bindsym $mod+Tab exec ~/.config/sway/workspacecycle.py next
 bindsym $mod+Shift+Tab exec ~/.config/sway/workspacecycle.py prev
 bindsym $mod+1 workspace number 1
@@ -94,6 +94,7 @@ bindsym $mod+8 workspace number 8
 bindsym $mod+9 workspace number 9
 bindsym $mod+0 workspace number 10
 # Move focused container to workspace
+bindsym $mod+Shift+comma move container to output right
 bindsym $mod+Shift+1 move container to workspace number 1
 bindsym $mod+Shift+2 move container to workspace number 2
 bindsym $mod+Shift+3 move container to workspace number 3
