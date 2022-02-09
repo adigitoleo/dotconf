@@ -735,6 +735,9 @@ let g:python_highlight_builtin_types = 0
 let g:python_highlight_space_errors = 0
 let g:python_highlight_indent_errors = 0
 
+" Julia settings {{{2
+let g:julia_indent_align_brackets = 0
+
 " Motion settings. {{{2
 " Use clever s and S mappings to free up ; and , for other uses.
 let g:sneak#s_next = 1
