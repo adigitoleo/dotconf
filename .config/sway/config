@@ -57,7 +57,7 @@ bindsym $mod+Shift+f exec $floatterm
 
 floating_modifier $mod normal
 bindsym $mod+Shift+r reload
-bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+bindsym $mod+Shift+q exit
 
 # Move your focus around
 bindsym $mod+$down exec ~/.config/sway/wincycle.py next
@@ -81,8 +81,9 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # Switch to workspace
-bindsym $mod+Tab exec ~/.config/sway/workspacecycle.py next
-bindsym $mod+Shift+Tab exec ~/.config/sway/workspacecycle.py prev
+bindsym $mod+n workspace next_on_output
+bindsym $mod+p workspace prev_on_output
+bindsym $mod+Tab workspace back_and_forth
 bindsym $mod+1 workspace number 1
 bindsym $mod+2 workspace number 2
 bindsym $mod+3 workspace number 3
@@ -95,6 +96,7 @@ bindsym $mod+9 workspace number 9
 bindsym $mod+0 workspace number 10
 # Move focused container to workspace
 bindsym $mod+Shift+comma move container to output right
+bindsym $mod+Shift+Tab move container to workspace back_and_forth
 bindsym $mod+Shift+1 move container to workspace number 1
 bindsym $mod+Shift+2 move container to workspace number 2
 bindsym $mod+Shift+3 move container to workspace number 3
