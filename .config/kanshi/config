@@ -12,3 +12,7 @@ profile {
 profile {
     output "MSI MAG161V" position 0,0 scale 1.4
 }
+profile {
+    output "Dell Inc. DELL U2419H 2MQYV13" position 0,0
+    output "Dell Inc. DELL U2419H GMQYV13" position 1920,0
+}
