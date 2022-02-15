@@ -5,6 +5,13 @@
 # To autostart graphical servers, use ./.zprofile.more instead.
 
 # Fuzzy search.
+is_command() { # Check if command exists, for flow control (no stdout messages)
+    if 1>/dev/null 2>&1 command -v "$1"; then
+        return 0
+    else
+        warn "command '$1' not found"; return 1
+    fi
+}
 if is_command fzf && is_command rg; then
     export FZF_DEFAULT_OPTS='--multi --height 50% --layout=reverse --marker="+"
         --bind backward-eof:abort,tab:down,shift-tab:up
