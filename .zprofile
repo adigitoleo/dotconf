@@ -4,20 +4,7 @@
 # For hardware-specific or non-portable variables, use ./.zprofile.more instead.
 # To autostart graphical servers, use ./.zprofile.more instead.
 
-#
-# Functions.
-#
-warn() { >&2 printf '%s\n' ".zprofile: $1"; }
-is_command() { # Check if command exists, for flow control (no stdout messages)
-    1>/dev/null 2>&1 command -v "$1" && [ "$?" -eq 0 ] && return 0 \
-        || { warn "command '${1}' not found" && return 1 ;}
-}
-
-
-#
 # Fuzzy search.
-#
-
 if is_command fzf && is_command rg; then
     export FZF_DEFAULT_OPTS='--multi --height 50% --layout=reverse --marker="+"
         --bind backward-eof:abort,tab:down,shift-tab:up
