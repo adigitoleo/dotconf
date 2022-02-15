@@ -17,9 +17,12 @@ helpf() {
 }
 warn() { >&2 printf '%s\n' "$SCRIPTNAME: $1"; }
 
-is_command() {
-    1>/dev/null 2>&1 command -v "$1" && [ "$?" -eq 0 ] && return 0 \
-        || { warn "command '$1' not found" && return 1 ;}
+is_command() { # Check if command exists, for flow control (no stdout messages)
+    if 1>/dev/null 2>&1 command -v "$1"; then
+        return 0
+    else
+        warn "command '$1' not found"; return 1
+    fi
 }
 
 while getopts "h" OPT ; do

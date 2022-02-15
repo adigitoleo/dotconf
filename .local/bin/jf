@@ -20,8 +20,11 @@ while getopts "hq" OPT; do
 done
 
 is_command() { # Check if command exists, for flow control (no stdout messages)
-    1>/dev/null 2>&1 command -v "$1" && [ "$?" -eq 0 ] && return 0 \
-        || { warn "command '$1' not found" && return 1; }
+    if 1>/dev/null 2>&1 command -v "$1"; then
+        return 0
+    else
+        warn "command '$1' not found"; return 1
+    fi
 }
 is_command lsof || exit 1
 is_command grep || exit 1
