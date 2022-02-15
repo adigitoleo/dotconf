@@ -1,4 +1,0 @@
-#!/bin/sh
-#set -euo pipefail
-set -eu
-remind -s+1 ~/.config/remind/reminders.rem|grep $(date +%Y/%m/%d)|cut -d ' ' -f6-|head -c -1|tr '\n' '|'
