@@ -2,7 +2,11 @@
 START=0
 END=15
 while [ "$START" -le "$END" ]; do
-    printf "\033[38;5;${START}m%s\t\033[m\033[48;5;${START}m%s\033[m\n" \
-        "Color ${START} looks like this:" "          "
+    printf "\033[38;5;${START}m%s\t\033[m\033[48;5;${START}m%s\033[m" \
+        "Color ${START}:" "    "
+    for n in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
+        printf "\033[38;5;${n};48;5;${START}m%s\033[m" " Aa "
+    done
+    echo
     START=$(( START + 1 ))
 done
