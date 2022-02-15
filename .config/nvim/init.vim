@@ -761,7 +761,7 @@ augroup END
 " Don't open folds when restoring cursor position.
 let g:lastplace_open_folds = 0
 " Use the latex to unicode converter provided by julia.vim for other filetypes.
-let g:latex_to_unicode_file_types = ["julia", "markdown"]
+let g:latex_to_unicode_file_types = ["julia", "markdown", "python"]
 " Always use 80 char textwidth when writing comments/documentation.
 if has_key(plugs, "vim-OnSyntaxChange")
     call OnSyntaxChange#Install('Comment', '^Comment$\|Doc[sS]tring', 0, 'i')
