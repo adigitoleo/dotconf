@@ -121,6 +121,8 @@ c.fonts.default_family = "monospace"
 c.fonts.web.size.default_fixed = 14
 c.fonts.web.size.minimum = 14
 
+c.colors.hints.bg = "rgba(200, 200, 200, 0.5)"
+c.colors.hints.fg = "rgba(200, 0, 0, 0.75)"
 c.colors.webpage.darkmode.algorithm = "lightness-cielab"
 c.colors.webpage.darkmode.policy.images = "smart"
 c.colors.webpage.darkmode.threshold.background = 100
