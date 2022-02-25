@@ -122,7 +122,8 @@ c.fonts.web.size.default_fixed = 14
 c.fonts.web.size.minimum = 14
 
 c.colors.hints.bg = "rgba(200, 200, 200, 0.6)"
-c.colors.hints.fg = "rgba(0, 0, 0, 1)"
+c.colors.hints.fg = "black"
+c.colors.hints.match.fg = "darkRed"
 c.colors.webpage.darkmode.algorithm = "lightness-cielab"
 c.colors.webpage.darkmode.policy.images = "smart"
 c.colors.webpage.darkmode.threshold.background = 100
