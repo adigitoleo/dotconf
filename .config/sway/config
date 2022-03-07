@@ -46,6 +46,8 @@ for_window [app_id="zathura"] floating enable
 input * xkb_layout us
 input * xkb_variant altgr-intl
 input * xkb_options altwin:swap_lalt_lwin,ctrl:swapcaps
+input type:touchpad tap enabled
+input type:touchpad natural_scroll enabled
 
 ### Key bindings
 bindsym $mod+Shift+Return exec $term

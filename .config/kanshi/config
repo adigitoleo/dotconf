@@ -16,3 +16,6 @@ profile {
     output "Dell Inc. DELL U2419H 2MQYV13" position 0,0
     output "Dell Inc. DELL U2419H GMQYV13" position 1920,0
 }
+profile {
+    output "Unknown 0x048C" position 0,0 scale 1.28
+}
