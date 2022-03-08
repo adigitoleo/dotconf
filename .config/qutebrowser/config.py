@@ -75,7 +75,7 @@ c.downloads.remove_finished = 1000
 # TODO: Re-enable after setting up a notifications daemon?
 c.content.notifications.enabled = False
 
-if "THIS_IS_A_LAPTOP" in os.environ and os.environ["THIS_IS_A_LAPTOP"]:
+if "QB_FORCE_HIDPI" in os.environ and os.environ["QB_FORCE_HIDPI"]:
     c.qt.highdpi = True
     c.zoom.default = "85%"
 
