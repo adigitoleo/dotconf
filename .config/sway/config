@@ -140,7 +140,7 @@ bindsym $mod+r mode "resize"
 # Read `man 5 sway-bar` for more information about this section.
 bar {
     # When the status_command prints a new line to stdout, swaybar updates.
-    status_command while date +'%A %Y-%m-%d %I:%M %p '; do sleep 1; done
+    status_command while wl-bar.sh; do sleep 1; done
 
     colors {
         font monospace bold
