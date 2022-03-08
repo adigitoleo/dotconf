@@ -337,7 +337,7 @@ After enabling and starting the `sshd` service, try to connect via another machi
 
 The LAN ip is what comes after "src" in `ip route`.
 
-Copy PGP keys to the new machine with `scp`:
+Copy PGP keys to the new machine with `scp` (close the ssh session first).
 
     gpg --export-secret-keys >keyfile
     scp keyfile <user@new_machine>:
@@ -346,11 +346,14 @@ and import them on the other side:
 
     ssh <user@new_machine>
     gpg --import keyfile
+    gpg --edit-key <email-address-of-key>
+    # Enter `trust` at the prompt, then `5` for ultimate trust
     rm keyfile
 
 Get `pass` to manage passwords, and set up a password store:
 
     pass init "<key_id>"
+    pass git init
 
 Generate a password for a new ssh key, e.g.:
 
@@ -370,6 +373,15 @@ Next ssh needs to be told where to find the keys, so make a `~/.ssh/config`:
     Host git.sr.ht
         IdentityFile ~/.ssh/sourcehut
 
+Add the key on the remote host, e.g. sourcehut. Then pull the password store:
+
+    pass git remote add origin <git@git.sr.ht:~<username>/<remote>
+    pass git pull origin main --rebase
+
+The rebase should skip the first commit (from `pass git init`).
+Push the new password:
+
+    pass git push -u origin main
 
 Use yadm to clone the dotfiles with:
 
