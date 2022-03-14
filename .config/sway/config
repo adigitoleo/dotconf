@@ -74,6 +74,8 @@ bindsym $mod+Left focus left
 bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
+# Focus next child in container (focus prev is NOT the inverse, sadly).
+bindsym $mod+c focus next
 
 # Move the focused window
 bindsym $mod+Shift+Left move left
