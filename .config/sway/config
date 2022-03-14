@@ -12,8 +12,8 @@ seat * hide_cursor when-typing enable
 default_border pixel 3
 default_floating_border pixel 3
 client.focused #BF472C #BF472C #F5BB89 #BF472C
-client.focused_inactive #66292F #66292F #BF472C #66292F
-client.unfocused #66292F #66292F #F5BB89 #66292F
+client.focused_inactive #66292F #66292F #F5BB89 #66292F
+client.unfocused #66292F #66292F #A67458 #66292F
 client.urgent #FF7477 #FF7477 #AF0032 #FF7477
 
 ### Variables
