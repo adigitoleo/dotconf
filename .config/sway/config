@@ -80,6 +80,10 @@ bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
+# Or mark a window and then swap positions with it
+bindsym $mod+m mark --add swapmark
+bindsym $mod+Shift+s 'swap container with mark swapmark;\
+    [con_mark="swapmark"] focus; unmark swapmark'
 
 # Switch to workspace
 bindsym $mod+n workspace next_on_output
