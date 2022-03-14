@@ -25,7 +25,7 @@ schemes:
             black:      '#3D241F'
             red:        '#FF7477'
             green:      '#84BF40'
-            yellow:     '#f5BB89'  # TODO: Better light yellow? '#F5BB89' is not readable...
+            yellow:     '#F3AE72'
             blue:       '#8A7B85'
             magenta:    '#8A4B53'
             cyan:       '#D47D49'
@@ -51,10 +51,10 @@ schemes:
             black:      '#3D241F'
             red:        '#FF7477'
             green:      '#84BF40'
-            yellow:     '#F5BB89'
+            yellow:     '#F3AE72'
             blue:       '#9F939B'
             magenta:    '#8A4B53'
             cyan:       '#D47D49'
             white:      '#ECCD9D'
 
-colors: *light
+colors: *dark

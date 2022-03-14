@@ -11,8 +11,8 @@ focus_follows_mouse no
 seat * hide_cursor when-typing enable
 default_border pixel 3
 default_floating_border pixel 3
-client.focused #BF472C #BF472C #F5BB89 #BF472C
-client.focused_inactive #66292F #66292F #F5BB89 #66292F
+client.focused #BF472C #BF472C #F3AE72 #BF472C
+client.focused_inactive #66292F #66292F #F3AE72 #66292F
 client.unfocused #66292F #66292F #A67458 #66292F
 client.urgent #FF7477 #FF7477 #AF0032 #FF7477
 
@@ -152,11 +152,11 @@ bar {
 
     colors {
         font monospace bold
-        statusline #F5BB89
+        statusline #F3AE72
         background #66292F
-        focused_workspace #F5BB89 #F5BB89 #66292F
+        focused_workspace #F3AE72 #F3AE72 #66292F
         active_workspace #A67458 #A67458 #66292F
-        inactive_workspace #66292F #66292F #F5BB89
+        inactive_workspace #66292F #66292F #F3AE72
         urgent_workspace #FF7477 #FF7477 #AF0032
     }
 }
