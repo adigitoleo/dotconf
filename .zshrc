@@ -114,17 +114,26 @@ _set_keymap_prompt() {
 add-zle-hook-widget zle-line-init _set_keymap_prompt
 add-zle-hook-widget zle-keymap-select _set_keymap_prompt
 
-_precmd() {
-    emulate -L zsh
+_run_async() {
     # Clear vi mode indicator and git indicators.
     psvar[8]=''
     psvar[9]=''
-    [ -n "${SSH_TTY+_}" ] && { psvar[1]='4' && psvar[2]='15' } \
+    [[ -n "${SSH_TTY+_}" ]] && { psvar[1]='4' && psvar[2]='15' } \
         || { psvar[1]='bg' && psvar[2]='4' }
     # Start async runners.
     _subst_async
 }
-add-zsh-hook precmd _precmd
+add-zsh-hook precmd _run_async
+
+_set_title() {
+    # Show working directory in title bar of terminal emulator
+    # <https://zsh.sourceforge.io/FAQ/zshfaq03.html>
+    [[ -t 1 ]] || return
+    case $TERM in
+        alacritty|xterm*|rxvt*|(dt|k|a|E)term ) print -Pn "\e]2;${(C)TERM}: %n@%m %~\a" ;;
+    esac
+}
+add-zsh-hook precmd _set_title
 
 TRAPWINCH() {  # See <https://github.com/ohmyzsh/ohmyzsh/issues/3605#issuecomment-75271013>
     zle && { zle .reset-prompt; zle -R }
