@@ -43,7 +43,6 @@ for_window [app_id="mpv"] floating enable
 for_window [app_id="mscore"] floating enable
 for_window [app_id="mypaint"] floating enable
 for_window [app_id="qt5ct"] floating enable
-for_window [app_id="zathura"] floating enable
 
 ### Input configuration
 # Read `man 5 sway-input` for a complete reference.
