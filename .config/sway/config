@@ -2,6 +2,8 @@
 # Requirements:
 # - wld script, <https://git.sr.ht/~adigitoleo/dotconf/tree/master/item/.local/bin/wld>
 # - autotiling plugin, <https://github.com/nwg-piotr/autotiling>
+# - swaylock <https://github.com/swaywm/swaylock>
+# - swayidle <https://github.com/swaywm/swayidle>
 # Read `man 5 sway` for a complete reference.
 
 focus_follows_mouse no
@@ -20,6 +22,7 @@ set $down j
 set $up k
 set $right l
 set $term alacritty
+set $lock 'swaylock -c 3d241f'
 set $floatterm 'alacritty --class floating-terminal,floating-terminal'
 set $menu 'alacritty --class floating-terminal,floating-terminal -e fzfmenu.sh'
 set $open 'alacritty --class floating-terminal,floating-terminal -e fzfopen.sh'
@@ -60,6 +63,7 @@ bindsym $mod+Shift+f exec $floatterm
 floating_modifier $mod normal
 bindsym $mod+Shift+r reload
 bindsym $mod+Shift+q exit
+bindsym $mod+l exec $lock
 
 # Move your focus around
 bindsym $mod+$down exec ~/.config/sway/wincycle.py next
@@ -154,5 +158,6 @@ bar {
 }
 
 exec --no-startup-id wld
+exec swayidle -w timeout 600 $lock before-sleep $lock
 exec_always --no-startup-id autotiling
 include /etc/sway/config.d/*
