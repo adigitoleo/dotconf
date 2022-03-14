@@ -1,5 +1,6 @@
 set selection-clipboard clipboard
 set font "monospace normal 11"
+set window-title-basename true
 set show-recent 0
 set adjust-open "width"
 set pages-per-row 2
