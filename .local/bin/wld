@@ -1,5 +1,4 @@
 #!/bin/sh
-#set -euo pipefail
 set -eu
 readonly SCRIPTNAME="${0##*/}"
 usage() {
@@ -44,7 +43,7 @@ shift $(( $OPTIND - 1 ))
 
 warn() { >&2 printf '%s\n' "$SCRIPTNAME: $1"; }
 
-is_command() { # Check if command exists, for flow control (no stdout messages)
+is_command() {
     if 1>/dev/null 2>&1 command -v "$1"; then
         return 0
     else
@@ -62,4 +61,5 @@ while IFS= read -r line || [ -n "$line" ]; do
     >/dev/null 2>&1 pgrep -fx "$line" && pkill -fx "$line"
     LOG="$(mktemp --tmpdir=$TMPDIR $SCRIPTNAME-$CMD-XXXXXX)"
     >"$LOG" 2>&1 eval "$line" &
+    printf "%s: starting '%s' in process %s\n" "$SCRIPTNAME" "$line" "$!"
 done < "$CONFIG"
