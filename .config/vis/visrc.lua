@@ -79,7 +79,7 @@ vis.events.subscribe(vis.events.INIT, function()
     vis:map(_normal, 'gb', 'zb3<C-e>')
     vis:map(_normal, 'gt', 'zt3<C-y>')
 
-    -- Insert macros:
+    -- Insert-mode macros:
     vis:map(_insert, '<C-f>', fzf_unicode.action)
 
     -- Command mappings:
@@ -107,7 +107,7 @@ vis.events.subscribe(vis.events.INIT, function()
     vis:map(_normal, 'g)', '/[.,;:!?]( |\n)<Enter>')
     vis:map(_visual, 'g(', '?[.,;:!?]( |\n)<Enter>')
     vis:map(_visual, 'g)', '/[.,;:!?]( |\n)<Enter>')
-    -- Whitespace padding/stripping:
+    -- Whitespace stripping:
     vis:map(_normal, '<Backspace>', "''m:x/ +$/ c//<Enter>M")
     -- Reload current file from disk:
     vis:map(_normal, 'gr', ':e!<Enter>')
@@ -125,6 +125,20 @@ vis.events.subscribe(vis.events.INIT, function()
         os.execute("setsid xdg-open '" .. URL .. "'")
         vis:redraw()
     end, "Open URL under cursor in browser")
+
+    -- Fat finger command aliases:
+    vis:command_register("New", function(argv, force, win, selection, range)
+        vis:command('new')
+    end, "Alias for :new")
+    vis:command_register("Vnew", function(argv, force, win, selection, range)
+        vis:command('vnew')
+    end, "Alias for :vnew")
+    vis:command_register("Split", function(argv, force, win, selection, range)
+        vis:command('split ' .. table.concat(argv, ' '))
+    end, "Alias for :split")
+    vis:command_register("Vsplit", function(argv, force, win, selection, range)
+        vis:command('vsplit ' .. table.concat(argv, ' '))
+    end, "Alias for :vsplit")
 end)
 
 
