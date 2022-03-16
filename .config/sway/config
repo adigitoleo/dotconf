@@ -8,6 +8,7 @@
 
 font monospace bold 11
 focus_follows_mouse no
+focus_wrapping force
 seat * hide_cursor when-typing enable
 default_border pixel 3
 default_floating_border pixel 3
@@ -66,18 +67,19 @@ bindsym $mod+Shift+q exit
 bindsym $mod+Shift+l exec $lock
 
 # Move your focus around
-bindsym $mod+$down exec ~/.config/sway/wincycle.py next
-bindsym $mod+$up exec ~/.config/sway/wincycle.py prev
 bindsym $mod+comma focus output right
+bindsym $mod+$left focus left
+bindsym $mod+$right focus right
+bindsym $mod+$up focus up
+bindsym $mod+$down focus down
 # Or use $mod+[up|down|left|right]
 bindsym $mod+Left focus left
 bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
-# Focus prev|next child in container
-focus_wrapping force
-bindsym $mod+n focus next
-bindsym $mod+p focus prev
+# Focus parent|child
+bindsym $mod+p focus parent
+bindsym $mod+c focus child
 
 # Move the focused window
 bindsym $mod+Shift+Left move left
@@ -122,8 +124,6 @@ bindsym $mod+f fullscreen
 bindsym $mod+t layout toggle split tabbed
 bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
-bindsym $mod+h focus parent
-bindsym $mod+l focus child
 mode "resize" {
     # left will shrink the containers width
     # right will grow the containers width
