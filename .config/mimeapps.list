@@ -5,3 +5,4 @@ application/postscript=org.pwmt.zathura.desktop
 image/png=imv.desktop
 image/jpeg=imv.desktop
 image/gif=imv.desktop
+image/svg+xml=libreoffice-draw.desktop

@@ -30,6 +30,8 @@ bindkey -M vicmd 'j' down-line-or-beginning-search
 mkcd() { mkdir -p -- "$1" && cd -P -- "$1" }
 # Ignore whatever ripgrep would in tree output.
 rg,tree() { rg --files $@|tree --fromfile --dirsfirst }
+# Remove white background from PNG image in-place (requires imagemagick).
+rmbg() { convert -transparent white "$1" "$1" }
 
 #
 # Asynchronous git status indicator.
