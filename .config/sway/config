@@ -1,6 +1,6 @@
 # SWAY CONFIG
 # Requirements:
-# - wld script, <https://git.sr.ht/~adigitoleo/dotconf/tree/master/item/.local/bin/wld>
+# - wl-init script, <https://git.sr.ht/~adigitoleo/dotconf/tree/master/item/.local/bin/wl-init>
 # - autotiling plugin, <https://github.com/nwg-piotr/autotiling>
 # - swaylock <https://github.com/swaywm/swaylock>
 # - swayidle <https://github.com/swaywm/swayidle>
@@ -164,7 +164,7 @@ bar {
     }
 }
 
-exec --no-startup-id wld
+exec --no-startup-id wl-init
 exec swayidle -w timeout 600 $lock before-sleep $lock
 exec_always --no-startup-id autotiling
 include /etc/sway/config.d/*
