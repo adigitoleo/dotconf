@@ -8,7 +8,9 @@ helpf() {
     echo 'Aliases are defined in ~/.password-store/login_aliases.txt.'
 }
 
+try() { trap 'kill $$' EXIT; eval "$@"; }
+
 [ $# -gt 0 ] || { helpf; exit 1 ;}
-grep "$1" ~/.password-store/login_aliases.txt|cut -d: -f2-|wl-copy -n
+try grep "$1" ~/.password-store/login_aliases.txt|cut -d: -f2-|wl-copy -n
 grep "$1" ~/.password-store/login_aliases.txt|cut -d: -f2-|xargs \
     printf "%s: copied '%s' to clipboard\n" "$SCRIPTNAME"
