@@ -36,7 +36,7 @@ c.editor.command = [
     "alacritty",
     "--class=floating-terminal,floating-terminal",
     "-e",
-    "nvim",
+    "vis",
     "{file}",
 ]
 c.fileselect.handler = "external"
