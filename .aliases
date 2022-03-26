@@ -113,7 +113,6 @@ alias jl,tmp='julia --banner=no --startup-file=no --history-file=no'
 # Without music, life would be a mistake.
 alias a,mute='amixer set Master toggle'
 alias a,mixer=alsamixer
-alias m='mocp 2>/dev/null'
 
 # Create an archive of <folder>: PATTERN=<folder> && mktar <archive>.tar.gz <folder>
 alias mktar='tar --transform=s/$PATTERN/$date +%Y%m%dT%H%M)/ --exclude={__pycache,.mypy_cache} -vcaf'

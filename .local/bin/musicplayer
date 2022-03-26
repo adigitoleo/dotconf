@@ -1,0 +1,5 @@
+#!/bin/sh
+# Launch tmux with musikcube or attach to existing session
+
+2>/dev/null tmux -L music attach-session -t music || \
+    tmux -L music new-session -s music 'musikcube'

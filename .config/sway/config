@@ -28,7 +28,7 @@ set $lock 'swaylock -c 3d241f'
 set $floatterm 'alacritty --class floating-terminal,floating-terminal'
 set $menu 'alacritty --class floating-terminal,floating-terminal -e fzfmenu.sh'
 set $open 'alacritty --class floating-terminal,floating-terminal -e fzfopen.sh'
-set $music 'alacritty --class floating-terminal,floating-terminal -e mocp'
+set $music 'alacritty --class floating-terminal,floating-terminal -e musicplayer'
 
 ### Window rules
 for_window [app_id="drracket"] floating enable
