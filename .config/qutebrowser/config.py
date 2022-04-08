@@ -16,15 +16,7 @@ config = config  # pylint: disable=undefined-variable,self-assigning-variable
 # General settings.
 ########################################################################################
 
-# This works on at least Arch and Void...
-with open("/etc/os-release") as file:
-    OSNAME = file.readline()
-
-if "Arch" in OSNAME:
-    c.url.start_pages = ["https://www.archlinux.org/"]
-elif "void" in OSNAME:
-    c.url.start_pages = ["https://voidlinux.org/news/"]
- 
+c.url.start_pages = ["http://192.168.20.6:8050/"]
 c.url.default_page = "qute://history/"
 c.auto_save.session = True
 c.completion.shrink = True
@@ -131,7 +123,8 @@ c.colors.webpage.darkmode.threshold.text = 200
 
 THEME = subprocess.run(["theme", "-q"], capture_output=True, check=True).stdout
 if "dark" in str(THEME):
-    c.colors.webpage.darkmode.enabled = True
+    # Darkmode and preferred_color_scheme don't talk to each other right now.
+    # c.colors.webpage.darkmode.enabled = True
     c.colors.webpage.preferred_color_scheme = "dark"
     # Set the default bg to a dark color as well to prevent white flashes.
     c.colors.webpage.bg = dark_theme[8]
