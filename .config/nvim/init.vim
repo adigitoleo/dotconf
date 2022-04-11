@@ -638,7 +638,7 @@ endif
 let g:plug_window = 'SmartSplit'
 call plug#begin(g:PLUGIN_HOME)
     " Ergonomics and general fixes. {{{3
-    "Plug 'ackyshake/VimCompletesMe'  " Smart, context-aware <Tab> completion.
+    Plug 'ackyshake/VimCompletesMe'  " Smart, context-aware <Tab> completion.
     Plug 'ncm2/float-preview.nvim'  " Use a floating window for preview-window.
     Plug 'tpope/vim-abolish'  " Word variant manipulation.
     Plug 'tpope/vim-commentary'  " Quickly comment/uncomment code.
@@ -658,6 +658,7 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'inkarkat/vim-AdvancedSorters'  " Sort by multiline patterns, etc.
     " Dev tooling and filetype plugins. {{{3
     Plug 'dense-analysis/ale'  " Async code linting.
+    Plug 'wfxr/minimap.vim'  " A code minimap, like what cool Atom kids have.
     Plug 'chmp/mdnav'  " Markdown: internal hyperlink navigation.
     Plug 'alvan/vim-closetag'  " Auto-close (x)html tags.
     Plug 'cespare/vim-toml'  " Syntax highlighting for TOML configs.
