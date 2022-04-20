@@ -80,7 +80,7 @@ ocr() { # ocr [input] [output] Run OCR on input PDF and write to output PDF
     for FILE in "${TEMP_DIR}"/* ; do
         echo "$FILE" >> "$TEMP_LIST"
     done
-    if [ -z "$OCR_LANG" ] ; then
+    if [ -n "$OCR_LANG" ] ; then
         tesseract -l "$OCR_LANG" "$TEMP_LIST" "$2" pdf \
             || { warn 'tesseract failed, aborting' \
                 && rm -rf "$TEMP_DIR" ; rm "$TEMP_LIST" ; return 1 ; }
