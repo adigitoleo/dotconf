@@ -609,6 +609,9 @@ nnoremap g] g<C-]>
 " Jump to first/last character of current line.
 noremap ]l g_
 noremap [l ^
+" Navigate to sentence clause punctuation.
+noremap g( ?[.,;:!?]\( \\|\n\)<Cr>
+noremap g) /[.,;:!?]\( \\|\n\)<Cr>
 
 " PLUGINS {{{1
 " Set builtin plugin options. {{{2
