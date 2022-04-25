@@ -8,7 +8,6 @@ func Eatchar(pat)
     return (c =~ a:pat) ? '' : c
 endfunc
 
-iabbrev <buffer> $ $$<Left><C-r>=Eatchar('\s')<Cr>
 iabbrev <buffer> :doc \begin{document}<Cr><Cr>\end{document}<Up>
 iabbrev <buffer> :fig \begin{figure}\label{fig:}<Cr>\end{figure}<Up><End><Left><C-r>=Eatchar('\s')<Cr>
 iabbrev <buffer> :eq \begin{equation}\label{eq:}<Cr>\end{equation}<Up><End><Left><C-r>=Eatchar('\s')<Cr>
