@@ -319,7 +319,7 @@ let &scrolloff=3
 let &showbreak='--'
 set listchars+=trail:\ ,precedes:<,extends:>
 set pumheight=15
-set completeopt=menu
+set completeopt=menu,noselect,preview
 set helpheight=0
 set synmaxcol=200
 " Indentation. {{{2
@@ -565,6 +565,8 @@ nnoremap            <Leader>h <Cmd>setlocal foldenable!<Cr>
 nnoremap <expr>     <Leader>i 'i' .. nr2char(getchar()) .. '<Esc>'
 " Toggle cursor line indicator.
 nnoremap            <Leader>l <Cmd>set cursorline!<Cr>
+" Run :make! (the ! disables the stupid errorfile jump btw)
+nnoremap            <Leader>m <Cmd>make!<Cr>
 " Toggle line numbers for focused buffer.
 nnoremap <silent>   <Leader>n <Cmd>set number! relativenumber!<Cr>
 " Add [count] blank line(s) below.
@@ -762,7 +764,7 @@ augroup END
 " Don't open folds when restoring cursor position.
 let g:lastplace_open_folds = 0
 " Use the latex to unicode converter provided by julia.vim for other filetypes.
-let g:latex_to_unicode_file_types = ["julia", "markdown", "python"]
+let g:latex_to_unicode_file_types = ["julia", "markdown", "python", "tex"]
 " Always use 80 char textwidth when writing comments/documentation.
 if has_key(plugs, "vim-OnSyntaxChange")
     call OnSyntaxChange#Install('Comment', '^Comment$\|Doc[sS]tring', 0, 'i')
