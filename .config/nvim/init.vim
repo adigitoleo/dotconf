@@ -643,7 +643,6 @@ endif
 let g:plug_window = 'SmartSplit'
 call plug#begin(g:PLUGIN_HOME)
     " Ergonomics and general fixes. {{{3
-    Plug 'ackyshake/VimCompletesMe'  " Smart, context-aware <Tab> completion.
     Plug 'ncm2/float-preview.nvim'  " Use a floating window for preview-window.
     Plug 'tpope/vim-abolish'  " Word variant manipulation.
     Plug 'tpope/vim-commentary'  " Quickly comment/uncomment code.
@@ -685,9 +684,6 @@ call plug#begin(g:PLUGIN_HOME)
     " Contributing/maintaining. {{{3
     Plug 'adigitoleo/vim-mellow'
     Plug 'adigitoleo/vim-mellow-statusline', {'tag': '*'}
-    " Plug 'itchyny/lightline.vim'
-    " Plug 'adigitoleo/vim-helpier'
-    Plug '~/vcs/vim-floaterm'
     " }}}
 call plug#end()
 " Check that plugins are installed before configuring.
@@ -745,8 +741,6 @@ let g:python_highlight_indent_errors = 0
 let g:julia_indent_align_brackets = 0
 
 " Motion settings. {{{2
-" Use clever s and S mappings to free up ; and , for other uses.
-let g:sneak#s_next = 1
 " Respect 'ignorecase' and 'smartcase' settings.
 let g:sneak#use_ic_scs = 1
 
@@ -780,10 +774,6 @@ if has_key(plugs, "vim-OnSyntaxChange")
                     \ | setlocal formatoptions-=t
     augroup END
 endif
-
-" Testing/development. {{{2
-let g:helpier_buftype_matches = ["help", "quickfix"]
-
 " }}}}}}
 
 let g:mellow_show_bufnr = 0
