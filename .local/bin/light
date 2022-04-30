@@ -1,0 +1,6 @@
+#!/bin/sh
+# Set screen brightness: light [brightness in %]
+
+while IFS= read -r line; do
+   echo $(( $1 * $line / 100 )) | 1>/dev/null sudo tee /sys/class/backlight/intel_backlight/brightness
+done < /sys/class/backlight/intel_backlight/max_brightness
