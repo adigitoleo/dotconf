@@ -16,7 +16,7 @@ config = config  # pylint: disable=undefined-variable,self-assigning-variable
 # General settings.
 ########################################################################################
 
-c.url.start_pages = ["http://192.168.20.6:8050/"]
+c.url.start_pages = ["https://start.duckduckgo.com"]
 c.url.default_page = "qute://history/"
 c.auto_save.session = True
 c.completion.shrink = True
