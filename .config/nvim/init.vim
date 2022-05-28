@@ -699,8 +699,12 @@ augroup ale_highlights
     autocmd ColorScheme mellow hi link ALEErrorSign NonText
     autocmd ColorScheme mellow hi link ALEWarningSign CursorColumn
 augroup END
-" Don't highlight TODO and FIXME comments, that's done by the colorscheme.
-let g:ale_exclude_highlights = ['TODO']
+let g:ale_exclude_highlights = [
+            \'TODO',
+            \'line too long',
+            \'missing.*py.typed',
+            \'non-ASCII character',
+            \]
 " Latex settings. {{{2
 let g:tex_flavor = 'latex'
 let g:vimtex_fold_enabled = 1
