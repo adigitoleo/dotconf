@@ -80,7 +80,6 @@ alias v,lock='systemctl suspend && vlock --all'
 # Because automounting is not smart enough and always breaks somehow.
 alias d,mount='udisksctl mount --options fmask=0133 dmask=0022 noexec -b'
 alias d,unmount='sync && udisksctl unmount -b'
-alias d,free='lsblk -o NAME,MOUNTPOINT,FSAVAIL'
 
 # Only for X.
 alias x,clip='xclip -sel clip'
