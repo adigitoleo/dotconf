@@ -5,17 +5,21 @@ usage() { printf 'Usage: %s [-h|-q|file.jl]\n' "$SCRIPTNAME"; }
 helpf() {
     echo 'Options:'
     echo '-q                send an exit command to the DaemonMode.jl server'
-    echo 
+    echo '-d <directory>    format all files in <directory> (recursive)'
+    echo
     echo 'Use JuliaFormatter.jl to auto-format a Julia source file.'
     echo 'Requires DaemonMode.jl for running a daemonized Julia session.'
 }
 
 [ $# -eq 0 ] && usage && exit 1
-while getopts "hq" OPT; do
+IS_DIRECTORY=1
+while getopts "hqd" OPT; do
     case "$OPT" in
         h ) usage && helpf; exit 0 ;;
         q ) >/dev/null 2>&1 julia --startup-file=no -e 'using DaemonMode; runexpr("exit()")'
             exit 0 ;;
+        d ) IS_DIRECTORY=0; shift ;;
+        * ) usage; exit 1 ;;
     esac
 done
 
@@ -35,4 +39,8 @@ if ! lsof -i tcp:3000 | grep -q julia; then
     sleep 1
 fi
 
-julia --startup-file=no -e "using DaemonMode; runexpr(\"\"\"format_file(\"$1\")\"\"\")"
+if [ $IS_DIRECTORY -eq 0 ]; then
+    julia --startup-file=no -e "using DaemonMode; runexpr(\"\"\"format(\"$1\")\"\"\")"
+else
+    julia --startup-file=no -e "using DaemonMode; runexpr(\"\"\"format_file(\"$1\")\"\"\")"
+fi
