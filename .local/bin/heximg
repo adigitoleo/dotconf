@@ -1,0 +1,1 @@
+convert -size 20x20 xc:"$1" /tmp/c.png && xdg-open /tmp/c.png && rm /tmp/c.png
