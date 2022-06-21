@@ -28,6 +28,7 @@ alias lsblk='lsblk -o NAME,MAJ:MIN,RM,SIZE,RO,TYPE,MOUNTPOINT,FSTYPE,FSVER'
 alias tree='tree --dirsfirst'
 alias less='less -iR'
 alias tmux='TERM=xterm-256color tmux'
+alias l='tree -L 2|less'
 
 # rg,glob 'pattern' : find filenames in current directory that match glob
 alias rg,glob='rg --files -g'
