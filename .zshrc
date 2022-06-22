@@ -154,6 +154,9 @@ else
     RPROMPT='%F{3}%(1j.[bg:%j] .)'
 fi
 
+# Set PS2 (continuation prompt)
+PS2='%F{5}%_>%f '
+
 # Load completions and aliases.
 autoload -Uz compinit; compinit
 if [[ -f /usr/share/fzf/completion.zsh ]]; then
