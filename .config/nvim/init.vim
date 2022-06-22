@@ -714,9 +714,11 @@ let g:vimtex_view_method = 'zathura'
 let g:vimtex_fold_types = {
             \   'cmd_single' : {'enabled' : 0},
             \   'cmd_multi' : {'enabled' : 0},
+            \   'items' : {'enabled' : 0},
             \   'envs': {
             \       'blacklist': [
             \           'equation', 'figure', 'enumerate',
+            \           'equation*', 'figure*', 'itemize',
             \           'pmatrix', 'bmatrix', 'vmatrix', 'Bmatrix', 'Vmatrix',
             \           'scope', 'displayquote', 'verbatim',
             \       ],
