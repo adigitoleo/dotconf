@@ -6,14 +6,17 @@ These tips are not exhaustive.
 
 ## Set up live USB installer
 
-Use cat, it's safer than dd and easier to remember:
+Can use `cat` (as root) as an alternative to `dd`,
+technically this is slightly safer?
 
     sudo -i
     cat /path/to/archlinux.iso > /dev/sd<X>; sync
     exit
 
+Have had problems with this still, might be better to use [bootiso].
+It is in the AUR (06/2022).
 
-If that doesn't work try [Unetbootin] or the openSUSE [imagewriter] instead.
+Or use GUI (ew) [Unetbootin] or the openSUSE [imagewriter] instead.
 For Windows, [Rufus] seems reliable.
 
 
@@ -230,7 +233,7 @@ Install `git` and set up a minimal, convenient `~/.gitconfig`, e.g.:
         defaultBranch = <branch_name>
     [alias]
         s = status --short
-        l = log --all --decorate --oneline --graph
+        l = log --decorate --oneline --graph
         c = commit
         d = diff
         last = log -1 HEAD
@@ -258,7 +261,7 @@ to rotate (clean) log files weekly (optional).
 
 *TODO: Notes about backup timers*
 *TODO: Notes about copying files via ssh*
-*TODO: Notes about rsync and physical backups (see backup alias)*
+*TODO: Notes about rsync and physical backups (see `backup` alias)*
 
 
 ## Firewall and hardening (recommended)
@@ -421,6 +424,7 @@ Make sure the `getty@tty1` service is enabled.
 
 
 [installation guide]: https://wiki.archlinux.org/index.php/Installation_guide
+[bootiso]: https://github.com/jsamr/bootiso
 [unetbootin]: https://aur.archlinux.org/packages/unetbootin/
 [imagewriter]: https://aur.archlinux.org/packages/imagewriter/
 [rufus]: http://rufus.ie/

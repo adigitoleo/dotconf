@@ -16,6 +16,15 @@ Compiling dwl with XWayland support is possible
 (`sed -i -e '/-DXWAYLAND/s/^#//' config.mk`),
 which allows to run legacy X11 programs using **xorg-xwayland** <https://xorg.freedesktop.org>.
 
+These dotfiles also support a minimal `sway` setup.
+Not as light as dwl but has a larger community,
+and you can reload the configuration without recompiling.
+Dwl also doesn't have stacked (tabbed) containers.
+Sway has `swaymsg` which is a live diagnostic cli tool.
+However, the tiling algorithm in dwl is better (automatic).
+Check the sway configs here and also the [autotiling](https://github.com/nwg-piotr/autotiling) script on GitHub for some attempts to make it better.
+Things still fall apart when you resize containers though...
+
 
 ## Compatibility
 
@@ -42,6 +51,7 @@ which allows to run legacy X11 programs using **xorg-xwayland** <https://xorg.fr
     NOTE: Building the AUR package can take some time, don't rush updates
 *   **libreoffice-still**: MS office clone, should support wayland for v5+
     <https://www.libreoffice.org/>
+    *   **libreoffice-draw** is a pretty nice vector graphics editor
 *   **obs-studio** with **wlrobs** (AUR): screen recording
     <https://obsproject.com>
     <https://hg.sr.ht/~scoopta/wlrobs>
@@ -51,9 +61,7 @@ which allows to run legacy X11 programs using **xorg-xwayland** <https://xorg.fr
 
 ## CLI tools and dev libraries
 
-*   **pyside2**: python qt5 bindings
-    <https://www.qt.io>
-*   **swaybg**: set desktop background for sway (static image or color)
+*   **swaybg**: set desktop background (not only for sway)
     <https://github.com/swaywm/swaybg>
 *   **wlsunset**: gamma adjustments for wayland (replaces `redshift`)
     <https://sr.ht/~kennylevinsen/wlsunset>
@@ -62,25 +70,15 @@ which allows to run legacy X11 programs using **xorg-xwayland** <https://xorg.fr
 *   **grim**: screenshot utility for wayland
     <https://github.com/emersion/grim>
     *   *TIP*: works well with slurp like `grim -g "$(slurp)"`
-*   **wlr-randr** (AUR): monitor/graphical output management (replaces `xrandr`)
+*   **wlr-randr** (AUR): video output diagnostics (replaces `xrandr`)
     <https://github.com/emersion/wlr-randr>
+*   **kanshi**: automatic profiles for monitors (same author as wlr-randr)
+    <https://wayland.emersion.fr/kanshi/>
 
 
-## TODO: Verify if these are supported
+## Unstable support
 
 *   **darktable-git** (AUR): professional photo editor (raster graphics)
     <http://www.darktable.org/>
     NOTE: Building the AUR package can take some time, don't rush updates
-*   **pavucontrol-qt**: GUI for pulseaudio, should support wayland (???)
-    <https://github.com/lxqt/pavucontrol-qt>
-*   **dia**: diagram creation program (vector graphics)
-    <http://live.gnome.org/Dia>
-
-
-## Not supported (might run using xwayland)
-
-*   **krita**: digital painting program (raster graphics)
-    <https://krita.org/en/>
-    <https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=955730>
-*   **inkscape**: vector graphics editor (vector graphics)
-    <https://inkscape.org/>
+    Wayland support: https://github.com/darktable-org/darktable/issues/3655
