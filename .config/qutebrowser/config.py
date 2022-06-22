@@ -28,7 +28,7 @@ c.editor.command = [
     "alacritty",
     "--class=floating-terminal,floating-terminal",
     "-e",
-    "vis",
+    "nvim",
     "{file}",
 ]
 c.fileselect.handler = "external"
@@ -74,7 +74,7 @@ if "QB_FORCE_HIDPI" in os.environ and os.environ["QB_FORCE_HIDPI"]:
 # https://github.com/qutebrowser/qutebrowser/issues/1476
 c.qt.force_software_rendering = "qt-quick"
 # https://github.com/qutebrowser/qutebrowser/issues/7147
-c.qt.workarounds.remove_service_workers = True
+# c.qt.workarounds.remove_service_workers = True
 
 
 # Hardening (at least a little bit...)
