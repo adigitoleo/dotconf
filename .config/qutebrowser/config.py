@@ -118,15 +118,9 @@ c.fonts.web.size.minimum = 14
 c.colors.hints.bg = "rgba(200, 200, 200, 0.6)"
 c.colors.hints.fg = "black"
 c.colors.hints.match.fg = "darkRed"
-c.colors.webpage.darkmode.algorithm = "lightness-cielab"
-c.colors.webpage.darkmode.policy.images = "smart"
-c.colors.webpage.darkmode.threshold.background = 100
-c.colors.webpage.darkmode.threshold.text = 200
 
 THEME = subprocess.run(["theme", "-q"], capture_output=True, check=True).stdout
 if "dark" in str(THEME):
-    # Darkmode and preferred_color_scheme don't talk to each other right now.
-    # c.colors.webpage.darkmode.enabled = True
     c.colors.webpage.preferred_color_scheme = "dark"
     # Set the default bg to a dark color as well to prevent white flashes.
     c.colors.webpage.bg = dark_theme[8]
@@ -146,7 +140,6 @@ if "dark" in str(THEME):
 else:
     c.colors.webpage.bg = light_theme[15]
     c.colors.statusbar.normal.bg = light_theme[5]
-    # c.content.user_stylesheets = ["~/.config/qutebrowser/off-white-bg.css"]
 
 
 # Custom key bindings.
