@@ -1,0 +1,7 @@
+#!/bin/sh
+# Play a list of music files from stdin using ffplay(1)
+
+trap 'exit' INT
+while IFS= read -r line;
+    do ffplay -vn -sn -nodisp -autoexit -hide_banner "$line";
+done
