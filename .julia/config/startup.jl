@@ -34,3 +34,11 @@ function dependencies(package::AbstractString)
     end
     return Pkg.dependencies()[Pkg.project().dependencies[package]].dependencies
 end
+
+"""Run a command and view its output in the `less` pager."""
+function pager(input::AbstractString)
+    run(pipeline(`echo $(input)`, `less`))
+    return nothing  # Don't barf on stdout
+end
+pager(input) = pager(repr("text/plain", input))
+macro d(input) return :( pager(@doc $input) ) end
