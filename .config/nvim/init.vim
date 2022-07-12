@@ -717,8 +717,8 @@ let g:vimtex_fold_types = {
             \   'items' : {'enabled' : 0},
             \   'envs': {
             \       'blacklist': [
-            \           'equation', 'figure', 'enumerate',
-            \           'equation*', 'figure*', 'itemize',
+            \           'equation', 'align', 'figure', 'enumerate', 'split',
+            \           'equation*', 'align*', 'figure*', 'itemize',
             \           'pmatrix', 'bmatrix', 'vmatrix', 'Bmatrix', 'Vmatrix',
             \           'scope', 'displayquote', 'verbatim',
             \       ],
