@@ -150,6 +150,8 @@ config.unbind("K")
 config.unbind("<Ctrl-N>")
 config.unbind("<Ctrl-P>")
 
+config.unbind("<Ctrl-Q>")
+
 config.bind("<Ctrl-N>", "tab-next")
 config.bind("<Ctrl-P>", "tab-prev")
 
