@@ -1,4 +1,21 @@
 #!/bin/sh
+set -eu
+helpf() {
+    echo 'Print color swatches showing foreground/background combinations'
+    echo 'of the first 16 (i.e. ANSI) colors configured for your terminal'
+    echo 'session. See'
+    echo
+    echo 'https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797#color-codes'
+    echo
+    echo 'for more information.'
+}
+while getopts "h" OPT; do
+    case "$OPT" in
+        h ) helpf ; exit 0 ;;
+        * ) helpf ; exit 1 ;;
+    esac
+done
+
 START=0
 END=15
 while [ "$START" -le "$END" ]; do

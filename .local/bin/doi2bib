@@ -57,7 +57,7 @@ def getbib(doi: str, plain: bool = False) -> str:
 def _main():
     args = _get_args()
     if args.fromfile:
-        with open(args.doi_or_file) as file:
+        with open(args.doi_or_file, encoding="utf-8") as file:
             for line in file:
                 if line.startswith("#"):  # Treat hash as comment marker.
                     continue

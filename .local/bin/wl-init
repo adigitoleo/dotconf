@@ -37,9 +37,10 @@ while getopts "hd:" OPT; do
     case "$OPT" in
         h ) usage && helpf ; exit 0 ;;
         d ) TMPDIR="$OPTARG" ;;
+        * ) usage ; exit 1 ;;
     esac
 done
-shift $(( $OPTIND - 1 ))
+shift $(( OPTIND - 1 ))
 
 warn() { >&2 printf '%s\n' "$SCRIPTNAME: $1"; }
 
