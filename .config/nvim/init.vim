@@ -692,12 +692,15 @@ if empty(glob(g:PLUGIN_HOME.'/*'))
 endif
 
 " Linting settings. {{{2
+nnoremap ]e <Plug>(ale_next_wrap)
+nnoremap [e <Plug>(ale_previous_wrap)
 augroup ale_highlights
     autocmd!
     autocmd ColorScheme mellow hi link ALEError Visual
     autocmd ColorScheme mellow hi link ALEWarning Visual
     autocmd ColorScheme mellow hi link ALEErrorSign NonText
     autocmd ColorScheme mellow hi link ALEWarningSign CursorColumn
+    autocmd VimResume * call map(nvim_list_bufs(), 'ale#Queue(0, "lint_file", v:val)')
 augroup END
 let g:ale_exclude_highlights = [
             \'TODO',
