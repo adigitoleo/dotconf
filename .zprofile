@@ -15,7 +15,7 @@ is_command() { # Check if command exists, for flow control (no stdout messages)
 if is_command fzf && is_command rg; then
     export FZF_DEFAULT_OPTS='--multi --height 50% --layout=reverse --marker="+"
         --bind backward-eof:abort,tab:down,shift-tab:up
-        --bind +:toggle-down,¶:abort,ctrl-l:clear-selection+first
+        --bind +:toggle-down,¶:abort,alt-\;:abort,ctrl-l:clear-selection+first
         --bind alt-j:preview-down,alt-k:preview-up
         --color fg:12,bg:-1,hl:1,fg+:-1,bg+:-1,hl+:1,preview-fg:3
         --color prompt:2,gutter:-1,pointer:-1,marker:6,spinner:3,info:3

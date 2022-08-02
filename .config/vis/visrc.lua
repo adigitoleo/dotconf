@@ -68,14 +68,22 @@ vis.events.subscribe(vis.events.INIT, function()
 
     -- Meta mappings:
     vis:map(_normal, '¶', '<vis-mode-normal-escape>')
+    vis:map(_normal, '<M-;>', '<vis-mode-normal-escape>')
     vis:map(_insert, '¶', '<vis-mode-normal>')
+    vis:map(_insert, '<M-;>', '<vis-mode-normal>')
     vis:map(_insert, '<C-c>', '<Escape><Escape>')
     vis:map(_replace, '¶', '<vis-mode-normal>')
+    vis:map(_replace, '<M-;>', '<vis-mode-normal>')
     vis:map(_visual, '¶', '<vis-mode-normal>')
+    vis:map(_visual, '<M-;>', '<vis-mode-normal>')
     vis:map(_vline, '¶', '<vis-mode-normal>')
+    vis:map(_vline, '<M-;>', '<vis-mode-normal>')
     vis:map(_pending, '¶', '<vis-mode-normal-escape>')
+    vis:map(_pending, '<M-;>', '<vis-mode-normal-escape>')
     vis:map(_normal, 'ï', '<vis-window-next>')
+    vis:map(_normal, '<M-j>', '<vis-window-next>')
     vis:map(_normal, 'œ', '<vis-window-prev>')
+    vis:map(_normal, '<M-k>', '<vis-window-prev>')
 
     -- Leave a few lines buffer after zb or zt, #999:
     vis:map(_normal, 'gb', 'zb3<C-e>')

@@ -506,11 +506,15 @@ augroup END
 " De gustibus: general fixes and tweaks. {{{2
 " Ergonomic, smart mode switches.
 inoremap ¶ <Esc>
+inoremap <M-;> <Esc>
 nnoremap ; <Cmd>FuzzyCmd<Cr>
 xnoremap ; :
 xnoremap ¶ <Esc>
+xnoremap <M-;> <Esc>
 cnoremap ¶ <C-c>
+cnoremap <M-;> <C-c>
 tnoremap ° <C-\><C-n>
+tnoremap <M-S-;> <C-\><C-n>
 nnoremap q; q:
 nnoremap Q <Nop>
 " Some shell-style improvements to command mode mappings.
@@ -541,11 +545,13 @@ nnoremap <silent> <Space> <Cmd>mode<Cr>
 " Meta mappings: buffer navigation and control. {{{2
 " Window navigation and relocation.
 nnoremap ï <Cmd>wincmd w<Cr>
+nnoremap <M-j> <Cmd>wincmd w<Cr>
 nnoremap œ <Cmd>wincmd W<Cr>
-tnoremap ï <Cmd>wincmd w<Cr>
-tnoremap œ <Cmd>wincmd W<Cr>
-nnoremap ñ <Cmd>wincmd b<Cr>
+nnoremap <M-k> <Cmd>wincmd W<Cr>
+nnoremap ñ <Cmd>wincmd n<Cr>
+nnoremap <M-n> <Cmd>wincmd n<Cr>
 nnoremap ö <Cmd>wincmd p<Cr>
+nnoremap <M-p> <Cmd>wincmd p<Cr>
 
 " Leader mappings: run commands and call functions. {{{2
 let mapleader = "\<Space>"
