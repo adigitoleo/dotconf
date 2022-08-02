@@ -15,6 +15,7 @@
 // @exclude     https://*.sr.ht/*
 // @exclude     https://outlook.*
 // @exclude     https://*.slack.com/*
+// @exclude     https://adigitoleo.*
 
 //
 // ==/UserScript==
