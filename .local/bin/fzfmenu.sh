@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 helpf() {
-    echo 'Select and run a desktop application using gtk-launch(1).'
+    echo 'Select and run a desktop application using dex(1).'
     echo 'The application list is built using `.desktop` files from'
     echo '`/usr/share/applications`. Also requires find(1) and fzf(1).'
 }
@@ -12,8 +12,12 @@ while getopts "h" OPT; do
     esac
 done
 
-find /usr/share/applications -type f -name '*.desktop' | \
-    while IFS= read -r line || [ -n "$line" ];
-        do grep '^Name=' "$line"|sed 's/Name=//';
-    done|fzf --height 100% \
-    --bind "enter:execute(grep 'Name={}'|setsid gtk-launch 2>/dev/null &)+abort"
+# TODO: Preview window with app name?
+# Unfortunately, the xdg-dekstop spec is spectacularly stupid,
+# and forces us to parse the whole .desktop file to find even simple info:
+# %zsh: grep '^Name=' /usr/share/applications/org.qutebrowser.qutebrowser.desktop
+# Name=qutebrowser
+# Name=New Window
+# Name=Preferences
+find /usr/share/applications -type f -name '*.desktop'|fzf --height 100% \
+    --bind "enter:execute(dex {})+abort"
