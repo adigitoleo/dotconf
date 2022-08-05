@@ -20,4 +20,4 @@ done
 # Name=New Window
 # Name=Preferences
 find /usr/share/applications -type f -name '*.desktop'|fzf --height 100% \
-    --bind "enter:execute(dex {})+abort"
+    --bind "enter:execute(setsid dex {})+abort"
