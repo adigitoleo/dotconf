@@ -33,6 +33,18 @@ Things still fall apart when you resize containers though...
 *   **waypipe**: a proxy for Wayland clients, needed for GUI over ssh/network
     <https://gitlab.freedesktop.org/mstoeckl/waypipe>
 
+Because the current "wisdom" on how to escape dependency hell
+involves copious amounts of bundling/vendoring,
+some programs that ship with their own graphical frameworks (e.g. Qt)
+still don't work even after installing these compatibility layers.
+For example, to fix Plots.jl for Julia it is necessary to tell it
+to use the system installed version of the GR library rather than its own:
+
+```
+ENV["JULIA_GR_PROVIDER"] = "GR"
+using Pkg; Pkg.build("GR")
+```
+
 
 ## Desktop programs
 
