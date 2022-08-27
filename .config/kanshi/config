@@ -1,21 +1,18 @@
-profile {
+profile home {
     output "Unknown Q27G2G4" position -2179,0 scale 1.175 mode 2560x1440@143.9Hz
     output "MSI MAG161V" position 0,360 scale 1.4
 }
-profile {
+profile home-aoc {
     output "Unknown Q27G2G4" position 0,0 scale 1.175 mode 2560x1440@143.9Hz
 }
-profile {
+profile home-samsung {
     output "MSI MAG161V" position -1372,0 scale 1.4
     output "Samsung Electric Company C24F390" position 0,0
 }
-profile {
+profile msi {
     output "MSI MAG161V" position 0,0 scale 1.4
 }
-profile {
+profile work {
     output "Dell Inc. DELL U2419H 2MQYV13" position 0,0
     output "Dell Inc. DELL U2419H GMQYV13" position 1920,0
-}
-profile {
-    output "Unknown 0x048C" position 0,0 scale 1.28
 }
