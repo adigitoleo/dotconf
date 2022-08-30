@@ -559,6 +559,8 @@ let maplocalleader = ","
 
 " Insert char after cursor [count] times.
 nnoremap <expr>     <Leader>a 'a' .. nr2char(getchar()) .. '<Esc>'
+" Use FuzzySwitch to switch buffers.
+nnoremap            <Leader>b <Cmd>FuzzySwitch<Cr>
 " Toggle cursor column indicator.
 nnoremap            <Leader>c <Cmd>set cursorcolumn!<Cr>
 " Change working directory of focused window to directory containing focused file/buffer (fall back to HOME).
@@ -582,6 +584,8 @@ nnoremap <expr>     <Leader>O '<Cmd>keepjumps normal! ' .. v:count .. 'O<Cr>'
 " Paste last yanked text ignoring cut text.
 noremap             <Leader>p "0p
 noremap             <Leader>P "0P
+" Use FuzzyRecent to open recent files.
+nnoremap            <Leader>r <Cmd>FuzzyRecent<Cr>
 " Toggle spellchecker.
 nnoremap <silent>   <Leader>s <Cmd>setlocal spell!<Cr>
 " Sync theme to system.
@@ -714,6 +718,8 @@ let g:ale_exclude_highlights = [
             \'missing.*py.typed',
             \'non-ASCII character',
             \]
+let g:ale_linters = {'python': ['flake8', 'mypy']}
+let g:ale_python_flake8_options = "--max-line-length 88"
 " Latex settings. {{{2
 let g:tex_flavor = 'latex'
 let g:vimtex_fold_enabled = 1
