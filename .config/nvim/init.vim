@@ -781,6 +781,8 @@ augroup END
 " Miscellaneous {{{2
 " Don't open folds when restoring cursor position.
 let g:lastplace_open_folds = 0
+" Use a wider minimap.
+let g:minimap_width = 14
 " Use the latex to unicode converter provided by julia.vim for other filetypes.
 let g:latex_to_unicode_file_types = ["julia", "markdown", "python", "tex"]
 " Always use 80 char textwidth when writing comments/documentation.
