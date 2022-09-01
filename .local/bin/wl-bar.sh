@@ -37,9 +37,9 @@ fi
 
 # Show active sshfs mounts, I always forget about them.
 if 1>/dev/null 2>&1 command -v findmnt; then
-    SSHFS_INFO="$(findmnt -n -t fuse.sshfs -o TARGET|tr '\n' ' '|sed 's|'${HOME}'|~|g')|"
+    SSHFS_INFO="$(findmnt -n -t fuse.sshfs -o TARGET|tr '\n' ' '|sed 's|'${HOME}'|~|g')"
     if [ -n "$SSHFS_INFO" ]; then
-        STATUS_CMD="${STATUS_CMD} ⇄ $SSHFS_INFO"
+        STATUS_CMD="${STATUS_CMD} ⇄ $SSHFS_INFO|"
     fi
 else
     warn "command 'findmnt' not found"
