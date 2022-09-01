@@ -6,6 +6,8 @@ readonly SCRIPTNAME="${0##*/}"
 warn() { >&2 printf '%s\n' "$SCRIPTNAME: $1"; }
 
 STATUS_CMD=
+
+# Battery information for laptops.
 BATTERY_INFO_DIR="/sys/class/power_supply/BAT0"
 if [ -d "$BATTERY_INFO_DIR" ]; then
     ENERGY_NOW_FILE="$BATTERY_INFO_DIR/energy_now"
@@ -33,5 +35,12 @@ if [ -d "$BATTERY_INFO_DIR" ]; then
     fi
 fi
 
-STATUS_CMD="$STATUS_CMD $(date +'%A %Y-%m-%d %I:%M %p ')"
-printf '%s\n' "$STATUS_CMD"
+# Show active sshfs mounts, I always forget about them.
+if 1>/dev/null 2>&1 command -v findmnt; then
+    STATUS_CMD="${STATUS_CMD} ⇄ $(findmnt -n -t fuse.sshfs -o TARGET|tr '\n' ' '|sed 's|'${HOME}'|~|g')|"
+else
+    warn "command 'findmnt' not found"
+fi
+
+STATUS_CMD="${STATUS_CMD} $(date +'%A %Y-%m-%d %I:%M %p ')"
+printf '%s\n' "$STATUS_CMD"|tr -s ' '
