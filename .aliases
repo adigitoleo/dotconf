@@ -67,6 +67,7 @@ alias is_text_file='grep -qIF ""'
 
 # Terminal editor.
 alias e=$EDITOR
+alias v=nvim
 
 # New terminal instance (same directory).
 alias t='1>/dev/null 2>/dev/null setsid $TERM'
