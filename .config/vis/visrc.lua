@@ -34,8 +34,10 @@ fzf_unicode.fzf_args = "--height=33%"
 -- Set theme (dark/light) based on external command.
 function set_theme()
     local term = os.getenv("TERM")
+    local truecolor = os.getenv("COLORTERM")
+    local nvim = os.getenv("NVIM")
     local has_theme = os.execute("command -v theme")
-    if term ~= "linux" and has_theme then
+    if term ~= "linux" and truecolor == "truecolor" and nvim == nil and has_theme then
         do
             vis:command('set theme mellow')
             local theme = io.popen('theme -q')
@@ -46,6 +48,8 @@ function set_theme()
             end
             theme:close()
         end
+    else
+        vis:command('set theme default-16')
     end
 end
 
