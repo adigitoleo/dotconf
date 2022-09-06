@@ -18,7 +18,6 @@
 # COLORS AND OUTPUT FORMATTING {{{1
 # https://wiki.archlinux.org/index.php/Color_output_in_console
 
-alias colors8='msgcat --color=test|head -11'
 alias ls='ls --color=auto --group-directories-first'
 alias d='diff --color=always -u'
 alias grep='grep --color=auto'
