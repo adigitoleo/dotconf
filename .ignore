@@ -1,0 +1,6 @@
+*-mount/
+.cache/
+*log/
+*logs/
+*.log
+*.logs

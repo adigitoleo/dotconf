@@ -21,7 +21,7 @@ if is_command fzf && is_command rg; then
         --color prompt:2,gutter:-1,pointer:-1,marker:6,spinner:3,info:3
         --color border:12,header:12
     '
-    export FZF_DEFAULT_COMMAND='rg --files --hidden --no-messages'
+    export FZF_DEFAULT_COMMAND='rg --files --hidden --type all --no-messages'
     # Undocumented in manpage, triggers fzf if tab is pressed afterwards.
     export FZF_COMPLETION_TRIGGER=',,'
 fi
@@ -30,7 +30,7 @@ fi
 # Set preferred editor.
 if [ -x "/usr/bin/vis" ]; then
     export EDITOR="/usr/bin/vis"
-    export VISUAL="/usr/bin/vis"
+    export VISUAL="/usr/bin/nvim"
 fi
 
 # Prepend ~/.local/bin to PATH if it exists.
