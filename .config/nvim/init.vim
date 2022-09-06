@@ -274,9 +274,9 @@ function! NewFloating() abort "{{{2
     " Open a new floating window.
     let l:buf = nvim_create_buf(v:false, v:true)
     let l:row = &lines / 4
-    let l:col = &columns / 4
+    let l:col = &columns > 10 ? 4 : 0
     let l:height = &lines / 2
-    let l:width = &columns / 2
+    let l:width = &columns > 10 ? &columns - 8 : &columns
     let l:win = nvim_open_win(
         \l:buf,
         \v:true,
@@ -620,8 +620,11 @@ nnoremap g] g<C-]>
 noremap ]l g_
 noremap [l ^
 " Navigate to sentence clause punctuation.
-noremap g( ?[.,;:!?]\( \\|\n\)<Cr>
-noremap g) /[.,;:!?]\( \\|\n\)<Cr>
+noremap g( <Cmd>keeppatterns ?[.,;:!?]\( \\|\n\)<Cr>
+noremap g) <Cmd>keeppatterns /[.,;:!?]\( \\|\n\)<Cr>
+" Navigate to TODO / FIXME comments.
+nnoremap ]t <Cmd>keeppatterns /TODO\\|FIXME<Cr>
+nnoremap [t <Cmd>keeppatterns ?TODO\\|FIXME<Cr>
 
 " PLUGINS {{{1
 " Set builtin plugin options. {{{2
@@ -666,7 +669,7 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'aymericbeaumet/vim-symlink'  " Follow symlinks (linux).
     Plug 'chrisbra/unicode.vim'  " Easy unicode and digraph handling.
     Plug 'arp242/jumpy.vim'  " Better and extended mappings for ]], g], etc.
-    Plug 'inkarkat/vim-ingo-library'  " A vimscript library for \/ \/ \/
+    Plug 'inkarkat/vim-ingo-library'  " A vimscript library for inkarkat plugins.
     Plug 'inkarkat/vim-OnSyntaxChange'  " Events when changing syntax group.
     Plug 'inkarkat/vim-SearchHighlighting'  " Better hlsearch and `*`.
     Plug 'inkarkat/vim-AdvancedSorters'  " Sort by multiline patterns, etc.
@@ -679,7 +682,7 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'vim-python/python-syntax'  " Python: improved syntax highlighting.
     Plug 'hattya/python-indent.vim'  " Python: improved autoindenting.
     if executable('lua')
-        Plug 'euclidianAce/BetterLua.vim'  " Lua: improved syntax highlighting.
+        Plug 'euclidianAce/BetterLua.vim'  " Improved syntax highlighting.
     endif
     if executable('latex')
         Plug 'lervag/vimtex'  " Comprehensive LaTeX integration.
@@ -693,7 +696,7 @@ call plug#begin(g:PLUGIN_HOME)
     endif
     " Contributing/maintaining. {{{3
     Plug 'adigitoleo/vim-mellow'
-    Plug 'adigitoleo/vim-mellow-statusline', {'tag': '*'}
+    Plug 'adigitoleo/vim-mellow-statusline'
     " }}}
 call plug#end()
 " Check that plugins are installed before configuring.
@@ -783,6 +786,11 @@ augroup END
 let g:lastplace_open_folds = 0
 " Use a wider minimap.
 let g:minimap_width = 14
+" Show more stuff in the minimap.
+" let g:minimap_git_colors = 1  " https://github.com/wfxr/minimap.vim/issues/168
+" let g:minimap_diffadd_color = "DiffAdd"
+" let g:minimap_diffremove_color = "DiffDelete"
+" let g:minimap_diff_color = "DiffChange"
 " Use the latex to unicode converter provided by julia.vim for other filetypes.
 let g:latex_to_unicode_file_types = ["julia", "markdown", "python", "tex"]
 " Always use 80 char textwidth when writing comments/documentation.
