@@ -46,7 +46,14 @@ WAYPIPE_DISPLAY_NAME="wayland-${WAYPIPE_SERVER_SOCKET##*.}"
 
 clean_exit() {
     # Clean up side effects.
-    ssh -S"$SOCKET" SSHCLIP_HOST "rm $FIFO"
+    if ssh -S"$SOCKET" SSHCLIP_HOST "test -p $FIFO"; then
+        MSG="delete $FIFO on the remote? [n]/y: "
+        DELETE_FIFO="n"
+        read -r -p "$MSG" DELETE_FIFO
+        case "$DELETE_FIFO" in y|yes|Y|Yes )
+            ssh -S"$SOCKET" SSHCLIP_HOST "rm $FIFO" ;;
+        esac
+    fi
     [ -S "$WAYPIPE_CLIENT_SOCKET" ] && rm "$WAYPIPE_CLIENT_SOCKET"
     # Terminate all ssh connections.
     ssh -oControlPath="$SOCKET" -O exit SSHCLIP_HOST
@@ -58,9 +65,37 @@ trap clean_exit EXIT
 # Open ssh master connection through $SOCKET and stream from /dev/null to keep it open.
 ssh -f -oControlMaster=yes -oControlPath="$SOCKET" "$@" 'tail -f /dev/null' \
     || { warn "unable to open ssh master connection" && exit 1; }
-# Create $FIFO on the remote via the socket, or fail if a file with that name exists.
-ssh -S"$SOCKET" SSHCLIP_HOST "sh -c 'test ! -p $FIFO && mkfifo $FIFO'" \
-    || { warn "unable to create $FIFO on SSSHCLIP_HOST"; exit 1; }
+
+while true; do
+    # Check for existing $FIFO.
+    EXISTS_FIFO="n"
+    ssh -S"$SOCKET" SSHCLIP_HOST "sh -c 'test -p $FIFO'" && EXISTS_FIFO="y"
+    if [ "$EXISTS_FIFO" == "n" ]; then
+        # Check if the $FIFO path is in use.
+        EXISTS_FILE="n"
+        ssh -S"$SOCKET" SSHCLIP_HOST "sh -c 'test -e $FIFO'" && EXISTS_FILE="y"
+        # Create $FIFO or prompt for new path.
+        if [ "$EXISTS_FILE" == "y" ]; then
+            MSG="$SCRIPTNAME: file $FIFO already exists on remote, enter a different path: "
+            read -r -p "$MSG" FIFO
+            continue
+        else
+            ssh -S"$SOCKET" SSHCLIP_HOST "sh -c 'mkfifo $FIFO'" && break
+        fi
+    else
+        # Use $FIFO or prompt for new path.
+        MSG="$SCRIPTNAME: listen on existing fifo at $FIFO on the remote? [y]/n: "
+        read -r -p "$MSG" USE_SSHCLIP
+        case "$USE_SSHCLIP" in
+            ""|y|Y|yes|Yes ) break ;;
+        esac
+        read -r -p "$SCRIPTNAME: new path for clipboard FIFO on the remote: " FIFO
+        continue
+    fi
+done
+
+# Reassign the cleanup function becase $FIFO might have changed.
+trap clean_exit EXIT
 
 # Listen to $FIFO in background subshell and send contents to local clipboard.
 (
