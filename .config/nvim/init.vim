@@ -193,9 +193,10 @@ endfunction
 
 function! CleanEmptyBuffers() abort "{{{2
     " Delete empty buffers that are not open in any window.
-    " <https://stackoverflow.com/a/10102604/12519962>
+    " Based on <https://stackoverflow.com/a/10102604/12519962>
+    " Best to run on CursorHold instead of WinEnter or something like that.
     let buffers = filter(range(1, bufnr('$')),
-                \ 'buflisted(v:val) && empty(bufname(v:val)) &&
+                \ 'bufexists(v:val) && empty(bufname(v:val)) &&
                 \ bufwinnr(v:val)<0 && !getbufvar(v:val, "&mod")'
                 \ )
     if !empty(buffers)
@@ -496,7 +497,7 @@ augroup misc
     autocmd!
     autocmd BufWritePost * exec "normal! " .. &foldenable ? "zx" : ""
     autocmd BufWritePost * if exists(":TagGen") > 0 | exec "TagGen" | fi
-    autocmd WinLeave * call CleanEmptyBuffers()
+    autocmd CursorHold * call CleanEmptyBuffers()
     autocmd VimEnter,BufWinEnter * let &colorcolumn = "+" .. join(range(&columns)[1:], ",+")
     autocmd InsertLeave,CompleteDone * silent! pclose
     autocmd VimResized * wincmd =
