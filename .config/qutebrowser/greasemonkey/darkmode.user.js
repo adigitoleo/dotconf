@@ -16,6 +16,7 @@
 // @exclude     https://outlook.*
 // @exclude     https://*.slack.com/*
 // @exclude     https://adigitoleo.*
+// @exclude     https://vimcolorschemes.com/*
 
 //
 // ==/UserScript==
