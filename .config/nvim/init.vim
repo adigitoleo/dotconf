@@ -262,43 +262,52 @@ function! SmartSplit(...) abort "{{{2
     endif
 endfunction
 
-function! Floating(...) abort "{{{2
-    " Open (or focus) a floating window.
-    if a:0 == 1 && a:1 == "help"
-        if exists("t:floathelp_win") && win_id2win(t:floathelp_win) > 0
-            call win_gotoid(t:floathelp_win) | return
+function! Floating(buftag, ...) abort "{{{2
+    " Focus or create a floating window, a:1 sets the buftype.
+    if exists("t:floating_buffers") && has_key(t:floating_buffers, a:buftag)
+                \ && bufexists(t:floating_buffers[a:buftag])
+        let l:buf = t:floating_buffers[a:buftag]
+    else
+        if exists("t:floating_buffers") && has_key(t:floating_buffers, a:buftag)
+                    \ && !bufexists(t:floating_buffers[a:buftag])
+            unlet t:floating_buffers[a:buftag]
         endif
+        let l:buf = nvim_create_buf(v:false, v:true)
+        if a:0 == 1 | call nvim_buf_set_option(l:buf, 'buftype', a:1) | endif
     endif
-    " Use a small offset for successive floating windows, works best for ~4 max.
-    let n_floating = len(filter(nvim_tabpage_list_wins(0), {k, v->nvim_win_get_config(v).relative!=""}))
-    let l:buf = nvim_create_buf(v:false, v:true)
-    let l:row = &lines / 4
-    let l:col = &columns > 12 ? 5 : 0
-    let l:height = &lines / 2
-    let l:width = &columns > 12 ? &columns - 10 : &columns
-    let l:win = nvim_open_win(
-        \l:buf,
-        \v:true,
-        \{
-        \   'relative': 'editor',
-        \   'border': 'single',
-        \   'row': l:row + n_floating,
-        \   'col': l:col + n_floating,
-        \   'width': l:width,
-        \   'height': l:height
-        \}
-    \)
-    if a:0 == 1
-        call nvim_buf_set_option(l:buf, 'buftype', a:1)
-        if a:1 == "help" | call nvim_tabpage_set_var(0, 'floathelp_win', l:win) | endif
+    let l:winconfig = {
+                \   'relative': 'editor',
+                \   'border': 'single',
+                \   'row': &lines / 4,
+                \   'col': 5,
+                \   'width': &columns - 10,
+                \   'height': &lines / 2
+                \}
+    if exists("t:floating_window") && win_id2win(t:floating_window) > 0
+        call win_gotoid(t:floating_window)
+        call nvim_win_set_buf(t:floating_window, l:buf)
+    else
+        let l:win = nvim_open_win(l:buf, v:true, l:winconfig)
+        call nvim_tabpage_set_var(0, 'floating_window', l:win)
     endif
+    set nowrap nolist
+    if !exists("t:floating_buffers")
+        call nvim_tabpage_set_var(0, 'floating_buffers', {a:buftag : l:buf})
+    elseif !has_key(t:floating_buffers, a:buftag)
+        let t:floating_buffers[a:buftag] = l:buf
+    else
+        return v:true
+    endif
+    return v:false
 endfunction
 
 function! StartTUI(prog, ...) abort "{{{2
     " Execute a TUI program a:prog with optional arguments using termopen().
     if executable(a:prog)
         let l:cmdstr = a:0 ? join(extend([a:prog], a:000)) : a:prog
-        call Floating()
+        let l:has_buf = Floating(a:prog)
+        if l:has_buf | return | endif
+        call nvim_buf_set_option(0, 'modified', v:false)
         call termopen('export TERM=' .. $TERM .. ' && ' .. l:cmdstr, {"on_exit": function("<SID>TermQuit")})
     endif
 endfunction
@@ -446,7 +455,7 @@ command! -nargs=* Julia call StartTUI("julia", <f-args>)
 
 " Misc. {{{2
 " Help, my window is floating!
-command! -complete=help -nargs=? H call Floating("help") | help <args>
+command! -complete=help -nargs=? H call Floating("help", "help") | help <args>
 " Insert current date in ISO (YYYY-MM-DD) format.
 command! InsertDate silent! exec "normal! a" .. strftime('%Y-%m-%d') .. "<Esc>"
 " See :function FillLine.
@@ -487,7 +496,6 @@ augroup filetype_rules
     autocmd!
     " Consider using ftplugin scripts for complex stuff, `:h ftplugin`.
     " Verify that ':filetype' returns 'plugin:ON'.
-    autocmd FileType help set nowrap
     autocmd FileType sh,zsh setlocal textwidth=79
     autocmd FileType qf setlocal number norelativenumber cursorline textwidth=0
     autocmd FileType vim setlocal textwidth=78 foldmethod=marker foldenable
