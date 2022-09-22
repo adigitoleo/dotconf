@@ -9,6 +9,7 @@ helpf() {
 }
 
 [ $# -gt 0 ] || { helpf; exit 1 ;}
+case "$1" in "-h"|"--help") helpf; exit;; esac
 if grep -q "$1" ~/.password-store/login_aliases.txt; then
     grep "$1" ~/.password-store/login_aliases.txt|cut -d: -f2-|wl-copy -n
     grep "$1" ~/.password-store/login_aliases.txt|cut -d: -f2-|xargs \
