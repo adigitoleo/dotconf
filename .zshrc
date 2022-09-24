@@ -25,6 +25,8 @@ bindkey '^P' up-line-or-beginning-search
 bindkey '^N' down-line-or-beginning-search
 bindkey -M vicmd 'k' up-line-or-beginning-search
 bindkey -M vicmd 'j' down-line-or-beginning-search
+bindkey '^A' beginning-of-line
+bindkey '^E' end-of-line
 
 # Make directory (and parents if necessary) and enter it.
 mkcd() { mkdir -p -- "$1" && cd -P -- "$1" }
