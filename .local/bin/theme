@@ -2,14 +2,14 @@
 #set -euo pipefail
 set -eu
 readonly SCRIPTNAME="${0##*/}"
-usage() { # Print a short synopsis <https://pubs.opengroup.org/onlinepubs/9699919799/>
+usage() {
     printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
     printf '       %s ' "$SCRIPTNAME"
     echo '[-q|-t|-s theme]'
 }
-helpf() { # Print a longer help string
+helpf() {
     echo 'Options:'
-    echo '-q                query the current theme from $THEME_SOURCE'
+    echo '-q                query the current theme from THEME_SOURCE'
     echo '-s <theme>        set the theme to either dark or light explicitly'
     echo '-t                toggle between dark and light themes'
     echo
@@ -53,5 +53,6 @@ while getopts "qs:th" OPT ; do
         s ) theme_set "$OPTARG" & exit 0 ;;
         t ) theme_toggle && exit 0 ;;
         h ) usage && helpf ; exit 0 ;;
+        * ) usage ; exit 1 ;;
     esac
 done
