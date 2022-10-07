@@ -305,7 +305,7 @@ function! StartTUI(prog, ...) abort "{{{2
     " Execute a TUI program a:prog with optional arguments using termopen().
     if executable(a:prog)
         let l:cmdstr = a:0 ? join(extend([a:prog], a:000)) : a:prog
-        let l:has_buf = Floating(a:prog)
+        let l:has_buf = Floating(l:cmdstr)
         if l:has_buf | return | endif
         call nvim_buf_set_option(0, 'modified', v:false)
         call termopen('export TERM=' .. $TERM .. ' && ' .. l:cmdstr, {"on_exit": function("<SID>TermQuit")})
