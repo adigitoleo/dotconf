@@ -5,11 +5,11 @@
 # To autostart graphical servers, use ./.zprofile.more instead.
 
 # Fuzzy search.
-is_command() { # Check if command exists, for flow control (no stdout messages)
+is_command() {
     if 1>/dev/null 2>&1 command -v "$1"; then
         return 0
     else
-        warn "command '$1' not found"; return 1
+        >&2 printf '%s\n' "$HOME/.zprofile: command '$1' not found"; return 1
     fi
 }
 if is_command fzf && is_command rg; then
