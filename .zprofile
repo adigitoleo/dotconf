@@ -21,7 +21,7 @@ if is_command fzf && is_command rg; then
         --color prompt:2,gutter:-1,pointer:-1,marker:6,spinner:3,info:3
         --color border:12,header:12
     '
-    export FZF_DEFAULT_COMMAND='rg -uuu --files --no-messages'
+    export FZF_DEFAULT_COMMAND='rg --files --hidden --binary --no-messages --no-ignore-vcs'
     # Undocumented in manpage, triggers fzf if tab is pressed afterwards.
     export FZF_COMPLETION_TRIGGER=',,'
 fi
