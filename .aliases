@@ -6,10 +6,10 @@
 # d = disk controls (mount/unmount etc.)
 # e = elinks (text browser utilities), note that bare `e` should run $EDITOR instead
 # p = pacman (package manager)
+# q = qutebrowser (web browser)
 # v = virtual console
 # w = wayland specific
 # x = xorg-specific (X11 server)
-# c = calendar (e.g. using remind)
 # py = python (+ venv, pyenv, ...)
 # jl = julia
 # rg = ripgrep shortcuts (search)
@@ -65,8 +65,8 @@ alias ssh-keygen='ssh-keygen -t ed25519'
 alias is_text_file='grep -qIF ""'
 
 # Terminal editor.
-alias e=$EDITOR
-alias v=nvim
+alias e=\$EDITOR
+alias v=\$VISUAL
 
 # New terminal instance (same directory).
 alias t='1>/dev/null 2>/dev/null setsid $TERM'
@@ -92,11 +92,9 @@ alias w,img='>/dev/null 2>/dev/null setsid -f swayimg -w 000000'
 alias e,hist='cut -f2 < ~/.elinks/globhist|fzf'
 alias e,mark='cut -f2 < ~/.elinks/bookmarks|fzf'
 
-# Print this week's calendar
-alias c,day='remind ~/.config/remind/reminders.rem'
-alias c,week='remind -c+1 ~/.config/remind/reminders.rem'
-alias c,fortnight='remind -c+2 ~/.config/remind/reminders.rem'
-alias c,month='remind -c1 ~/.config/remind/reminders.rem'
+# Launch qutebrowser debugging instances (dark or light CSS mode).
+alias q,light='setsid -f qutebrowser -T'
+alias q,dark='setsid -f qutebrowser -T -s "colors.webpage.preferred_color_scheme" "dark"'
 
 # Ouroboros and the Virtual Environment.
 alias py=python
@@ -117,7 +115,10 @@ alias a,mute='amixer set Master toggle'
 alias a,mixer=alsamixer
 
 # Create an archive of <folder>: PATTERN=<folder> && mktar <archive>.tar.gz <folder>
-alias mktar='tar --transform=s/$PATTERN/$date +%Y%m%dT%H%M)/ --exclude={__pycache,.mypy_cache} -vcaf'
+alias mktar='tar --transform=s/$PATTERN/$(date +%Y%m%dT%H%M)/ --exclude={__pycache,.mypy_cache} -vcaf'
 
 # Create backup according to ./.BACKUP using rsync: backup <destination>
 alias backup='rsync -rszauhP --no-links --delete --files-from=$HOME/.BACKUP .'
+
+# Send stdin to pastebin at https://x0.at/
+alias tobin='curl -F "file=@-;filename=.txt" https://x0.at/'
