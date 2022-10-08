@@ -392,8 +392,9 @@ if type(function('fzf#run'))
         \ s:FZFspecgen(s:FileFeed([v:oldfiles, s:BufList()], ':~:.', '\n'),
         \ '', "Recent files: "), <bang>0))
     " Open files in <dir> (or :pwd by default).
+    if !executable("rg")|echoerr "FuzzyFind command requires ripgrep"|endif
     command! -complete=dir -nargs=? -bang FuzzyFind call fzf#run(fzf#wrap(
-        \ s:FZFspecgen($FZF_DEFAULT_COMMAND .. ' ;' .. s:TermFeed(), <q-args>),
+        \ s:FZFspecgen("rg --files --type all --hidden --no-messages" .. ' ;' .. s:TermFeed(), <q-args>),
         \ <bang>0))
     " Switch between listed buffers or loaded `:terminal` buffers.
     command! -bang FuzzySwitch call fzf#run(fzf#wrap(
