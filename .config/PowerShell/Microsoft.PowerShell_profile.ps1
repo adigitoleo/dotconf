@@ -23,5 +23,13 @@ Set-PSReadlineOption -Colors @{
 Set-PSReadlineOption -EditMode Vi
 
 # More Linux-ish shortcuts, note that Ctrl+<x> for some letter <x> must use the lowercase letter.
-Set-PSReadlineKeyHandler -Key Ctrl+p -Function PreviousHistory
-Set-PSReadlineKeyHandler -Key Ctrl+n -Function NextHistory
+Set-PSReadlineKeyHandler -Key Ctrl+p -Function HistorySearchBackward
+Set-PSReadlineKeyHandler -Key Ctrl+n -Function HistorySearchForward
+
+# Use blue color for prompt, default at https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_prompts?view=powershell-7.2#the-default-prompt
+function prompt {
+   $color = [char]27
+    "$color[34m" + $(if (Test-Path variable:/PSDebugContext) { '[DBG]: ' }
+      else { '' }) + 'PS ' + $(Get-Location) +
+        $(if ($NestedPromptLevel -ge 1) { '>>' }) + '>' + "$color[0m "
+}
