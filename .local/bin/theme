@@ -50,7 +50,7 @@ theme_toggle() {
 while getopts "qs:th" OPT ; do
     case "$OPT" in
         q ) theme_query && exit 0 ;;
-        s ) theme_set "$OPTARG" & exit 0 ;;
+        s ) theme_set "$OPTARG" && exit 0 ;;
         t ) theme_toggle && exit 0 ;;
         h ) usage && helpf ; exit 0 ;;
         * ) usage ; exit 1 ;;
