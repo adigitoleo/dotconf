@@ -1,0 +1,48 @@
+#!/bin/sh
+set -eu
+readonly SCRIPTNAME="${0##*/}"
+usage() {
+    printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
+    printf '       %s -t|-f destination\n' "$SCRIPTNAME"
+}
+helpf() {
+    echo
+    echo 'Send/receive qutebrowser bookmarks and quickmarks to/from the'
+    echo 'destination using rsync(1).'
+}
+
+send_qb_meta() {
+    printf '%s\n' "rsync -aszuhP $HOME/.config/qutebrowser/bookmarks/urls \
+        ${1%%\"${1##*[!/]}\"}/.config/qutebrowser/bookmarks/urls"
+    rsync -aszuhP $HOME/.config/qutebrowser/bookmarks/urls \
+        ${1%%"${1##*[!/]}"}/.config/qutebrowser/bookmarks/urls
+    printf '%s\n' "rsync -aszuhP $HOME/.config/qutebrowser/quickmarks \
+        ${1%%\"${1##*[!/]}\"}/.config/qutebrowser/quickmarks"
+    rsync -aszuhP $HOME/.config/qutebrowser/quickmarks \
+        ${1%%"${1##*[!/]}"}/.config/qutebrowser/quickmarks
+}
+
+receive_qb_meta() {
+    printf '%s\n' "rsync -aszuhP ${1%%\"${1##*[!/]}\"}/.config/qutebrowser/bookmarks/urls \
+        $HOME/.config/qutebrowser/bookmarks/urls"
+    rsync -asvzuhP ${1%%"${1##*[!/]}"}/.config/qutebrowser/bookmarks/urls \
+        $HOME/.config/qutebrowser/bookmarks/urls
+    printf '%s\n' "rsync -asvzuhP ${1%%\"${1##*[!/]}\"}/.config/qutebrowser/quickmarks \
+        $HOME/.config/qutebrowser/quickmarks"
+    rsync -asvzuhP ${1%%"${1##*[!/]}"}/.config/qutebrowser/quickmarks \
+        $HOME/.config/qutebrowser/quickmarks
+}
+
+[ $# -eq 0 ] && usage && exit 1
+1>/dev/null 2>&1 command -v rsync || {
+    printf "$SCRIPTNAME: %s\n" 'requires rsync, https://github.com/WayneD/rsync/' \
+    && exit 1
+}
+while getopts "ht:f:" OPT ; do
+    case "$OPT" in
+        t ) send_qb_meta "$OPTARG" && exit 0 ;;
+        f ) receive_qb_meta "$OPTARG" && exit 0 ;;
+        h ) usage && helpf ; exit 0 ;;
+        * ) usage && exit 1 ;;
+    esac
+done
