@@ -52,7 +52,7 @@ if 1>/dev/null 2>&1 command -v pacman ; then
     alias aur='auracle'
     alias pacdiff='sudo SUDO_EDITOR="nvim -d" DIFFPROG="sudoedit" pacdiff'
 elif 1>/dev/null 2>&1 command -v xbps-install ; then
-    alias p='xbps-query'
+    alias p,search='xbps-query -Rs'
     alias p,get='sudo xbps-install -Su'
     alias p,rmsafe='xbps-remove'
     alias p,rm='sudo xbps-remove -R'
