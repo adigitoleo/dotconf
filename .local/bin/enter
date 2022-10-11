@@ -22,7 +22,7 @@ helpf() {
 }
 
 [ $# -eq 0 ] && usage && exit 1
-[ "$1" == "-h" ] && usage && helpf && exit 0
+[ "$1" = "-h" ] && usage && helpf && exit 0
 
 warn() { >&2 printf '%s\n' "$SCRIPTNAME: $1"; }
 is_command() { # Check if command exists, for flow control (no stdout messages)
@@ -70,12 +70,12 @@ while true; do
     # Check for existing $FIFO.
     EXISTS_FIFO="n"
     ssh -S"$SOCKET" SSHCLIP_HOST "sh -c 'test -p $FIFO'" && EXISTS_FIFO="y"
-    if [ "$EXISTS_FIFO" == "n" ]; then
+    if [ "$EXISTS_FIFO" = "n" ]; then
         # Check if the $FIFO path is in use.
         EXISTS_FILE="n"
         ssh -S"$SOCKET" SSHCLIP_HOST "sh -c 'test -e $FIFO'" && EXISTS_FILE="y"
         # Create $FIFO or prompt for new path.
-        if [ "$EXISTS_FILE" == "y" ]; then
+        if [ "$EXISTS_FILE" = "y" ]; then
             MSG="$SCRIPTNAME: file $FIFO already exists on remote, enter a different path: "
             read -r -p "$MSG" FIFO
             continue
@@ -99,7 +99,6 @@ trap clean_exit EXIT
 
 # Listen to $FIFO in background subshell and send contents to local clipboard.
 (
-    set -euo pipefail
     while true; do
         ssh -S"$SOCKET" -tt SSHCLIP_HOST "cat $FIFO" 2>/dev/null | wl-copy
     done &
