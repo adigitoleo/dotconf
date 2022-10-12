@@ -706,6 +706,9 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'cespare/vim-toml'  " Syntax highlighting for TOML configs.
     Plug 'vim-python/python-syntax'  " Python: improved syntax highlighting.
     Plug 'hattya/python-indent.vim'  " Python: improved autoindenting.
+    if executable('nim')
+        Plug 'alaviss/nim.nvim'  " Comprehensive Nim integration.
+    endif
     if executable('lua')
         Plug 'euclidianAce/BetterLua.vim'  " Improved syntax highlighting.
     endif
