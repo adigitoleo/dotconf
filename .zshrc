@@ -122,8 +122,11 @@ _run_async() {
     # Clear vi mode indicator and git indicators.
     psvar[8]=''
     psvar[9]=''
+    # Disctinct background for remote sessions (that set SSH_TTY).
     [[ -n "${SSH_TTY+_}" ]] && { psvar[1]='4' && psvar[2]='15' } \
         || { psvar[1]='bg' && psvar[2]='4' }
+    # Distinct color for non-login user (e.g. after su - <user>).
+    who|2>/dev/null 1>&2 grep $(whoami) || psvar[2]='9'
     # Start async runners.
     _subst_async
 }
