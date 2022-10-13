@@ -121,6 +121,7 @@ c.colors.hints.match.fg = "darkRed"
 
 THEME = subprocess.run(["theme", "-q"], capture_output=True, check=True).stdout
 if "dark" in str(THEME):
+    c.colors.webpage.darkmode.enabled = True
     c.colors.webpage.preferred_color_scheme = "dark"
     # Set the default bg to a dark color as well to prevent white flashes.
     c.colors.webpage.bg = dark_theme[8]
