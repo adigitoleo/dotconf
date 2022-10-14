@@ -87,7 +87,8 @@ alias x,clip='xclip -sel clip'
 alias x,op='1>/dev/null 2>/dev/null setsid xdg-open'
 
 # Only for wayland.
-alias w,img='>/dev/null 2>/dev/null setsid -f swayimg -w 000000'
+alias w,img='>/dev/null 2>/dev/null setsid -f swayimg -w 000000 -i'
+alias w,img-large='>/dev/null 2>/dev/null setsid -f swayimg -w 000000 -g32,128,2048,1024 -i'
 
 # Find and print site urls from elinks history or bookmarks.
 alias e,hist='cut -f2 < ~/.elinks/globhist|fzf'

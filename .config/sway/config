@@ -38,6 +38,7 @@ for_window [app_id="floating-terminal"] floating enable
 for_window [app_id="gimp"] floating enable
 for_window [app_id="gov-nasa-giss-panoply-Panoply"] floating enable
 for_window [app_id="imv"] floating enable
+for_window [app_id="swayimg"] floating enable
 for_window [app_id="inkscape"] floating enable
 for_window [app_id="jupyter-qtconsole"] floating enable
 for_window [app_id="libreoffice"] floating enable
