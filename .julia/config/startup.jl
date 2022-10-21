@@ -36,5 +36,5 @@ function dependencies(package::AbstractString)
     return Pkg.dependencies()[Pkg.project().dependencies[package]].dependencies
 end
 
-"""Run a command and view its output using `TerminalPager`."""
+"""View documentation using `TerminalPager`."""
 macro d(input) return :( pager(@doc $input) ) end
