@@ -1,4 +1,5 @@
 using Pkg
+using TerminalPager
 
 # Reduce color space of most REPL components from 16 to 8.
 # Line numbers is stacktraces are still unreadable in dark themes...
@@ -35,10 +36,5 @@ function dependencies(package::AbstractString)
     return Pkg.dependencies()[Pkg.project().dependencies[package]].dependencies
 end
 
-"""Run a command and view its output in the `less` pager."""
-function pager(input::AbstractString)
-    run(pipeline(`echo $(input)`, `less`))
-    return nothing  # Don't barf on stdout
-end
-pager(input) = pager(repr("text/plain", input))
+"""Run a command and view its output using `TerminalPager`."""
 macro d(input) return :( pager(@doc $input) ) end
