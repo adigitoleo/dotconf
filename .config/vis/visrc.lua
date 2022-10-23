@@ -89,6 +89,10 @@ vis.events.subscribe(vis.events.INIT, function()
     vis:map(_normal, 'œ', '<vis-window-prev>')
     vis:map(_normal, '<M-k>', '<vis-window-prev>')
 
+    -- Better command mode and jump repeat mappings.
+    vis:map(_normal, ';', '<vis-prompt-show>')
+    vis:map(_normal, 's', '<vis-motion-totill-repeat>')
+
     -- Leave a few lines buffer after zb or zt, #999:
     vis:map(_normal, 'gb', 'zb3<C-e>')
     vis:map(_normal, 'gt', 'zt3<C-y>')
