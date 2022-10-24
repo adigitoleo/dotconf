@@ -446,7 +446,8 @@ if executable('theme')  " Toggle global TUI theme using external script.
                 \| let &background = get(systemlist('theme -q'), 0, 'light')
     command! SyncTheme silent! let &background = get(systemlist('theme -q'), 0, 'light')
 endif
-command! -nargs=* Term if strlen(<q-args>) > 0 | call StartTUI($SHELL, '-c', <f-args>)
+command! -nargs=* -complete=shellcmd Term
+            \ if strlen(<q-args>) > 0 | call StartTUI($SHELL, '-c', <f-args>)
             \ | else | call StartTUI($SHELL) | endif
 command! -nargs=* Elinks call StartTUI("elinks", <f-args>)
 command! -nargs=* Aerc call StartTUI("aerc", <f-args>)
