@@ -301,15 +301,24 @@ function! Floating(buftag, ...) abort "{{{2
     return v:false
 endfunction
 
-function! StartTUI(prog, ...) abort "{{{2
-    " Execute a TUI program a:prog with optional arguments using termopen().
-    if executable(a:prog)
-        let l:cmdstr = a:0 ? join(extend([a:prog], a:000)) : a:prog
-        let l:has_buf = Floating(l:cmdstr)
-        if l:has_buf | return | endif
-        call nvim_buf_set_option(0, 'modified', v:false)
-        call termopen('export TERM=' .. $TERM .. ' && ' .. l:cmdstr, {"on_exit": function("<SID>TermQuit")})
+function! StartTerm(...) abort "{{{2
+    " Create a floating terminal and optionally execute a shell command.
+    if a:0
+        if executable(a:1)
+            let l:cmdstr = a:0 > 1 ? join(a:000) : a:1
+        else
+            echoerr "no executable command called " .. a:1 | return
+        endif
+    else
+        let l:cmdstr = &shell
     endif
+    let l:has_buf = Floating(l:cmdstr)
+    if l:has_buf | return | endif
+    call nvim_buf_set_option(0, 'modified', v:false)
+    call termopen(
+                \ 'export TERM=' .. $TERM .. ' && ' .. l:cmdstr,
+                \ a:0 ? {} : {"on_exit": function("<SID>TermQuit")},
+                \)
 endfunction
 
 " OPTIONS {{{1
@@ -446,14 +455,12 @@ if executable('theme')  " Toggle global TUI theme using external script.
                 \| let &background = get(systemlist('theme -q'), 0, 'light')
     command! SyncTheme silent! let &background = get(systemlist('theme -q'), 0, 'light')
 endif
-command! -nargs=* -complete=shellcmd Term
-            \ if strlen(<q-args>) > 0 | call StartTUI($SHELL, '-c', <f-args>)
-            \ | else | call StartTUI($SHELL) | endif
-command! -nargs=* Elinks call StartTUI("elinks", <f-args>)
-command! -nargs=* Aerc call StartTUI("aerc", <f-args>)
-command! -nargs=* IPython call StartTUI("ipython", "--no-autoindent", <f-args>)
-command! -nargs=* BPython call StartTUI("bpython", <f-args>)
-command! -nargs=* Julia call StartTUI("julia", <f-args>)
+command! -nargs=* -complete=shellcmd Term call StartTerm(<f-args>)
+command! -nargs=* Elinks call StartTerm("elinks", <f-args>)
+command! -nargs=* Aerc call StartTerm("aerc", <f-args>)
+command! -nargs=* IPython call StartTerm("ipython", "--no-autoindent", <f-args>)
+command! -nargs=* BPython call StartTerm("bpython", <f-args>)
+command! -nargs=* Julia call StartTerm("julia", <f-args>)
 
 " Misc. {{{2
 " Help, my window is floating!
