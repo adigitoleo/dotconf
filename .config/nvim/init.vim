@@ -305,7 +305,7 @@ function! StartTerm(...) abort "{{{2
     " Create a floating terminal and optionally execute a shell command.
     if a:0
         if executable(a:1)
-            let l:cmdstr = a:0 > 1 ? join(a:000) : a:1
+            let l:cmdstr = a:0 > 1 ? expandcmd(join(a:000)) : a:1
         else
             echoerr "no executable command called " .. a:1 | return
         endif
