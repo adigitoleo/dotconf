@@ -100,7 +100,7 @@ alias q,dark='setsid -f qutebrowser -T -s "colors.webpage.preferred_color_scheme
 
 # Ouroboros and the Virtual Environment.
 alias py=python
-alias py,venv='$(pyenv prefix||printf "/usr")/bin/python -m venv .venv-${PWD##*/} && source .venv-${PWD##*/}/bin/activate && pip install --upgrade pip flake8 mypy black'
+alias py,venv='$(2>/dev/null pyenv prefix||printf "/usr")/bin/python -m venv .venv-${PWD##*/} && source .venv-${PWD##*/}/bin/activate && pip install --upgrade pip flake8 mypy black'
 alias py,activate='test -f .venv-${PWD##*/}/bin/activate && source .venv-${PWD##*/}/bin/activate'
 alias py,lint='pylint -E --output-format=colorized'
 alias by='bpython'
