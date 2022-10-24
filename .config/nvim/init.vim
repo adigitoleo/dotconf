@@ -15,9 +15,7 @@ if executable('/usr/bin/python3')
     " NOTE: This python binary should have access to the `pynvim` module.
 endif
 
-" TODO: Set up offline thesaurus files, :h 'thesaurus'
 " TODO: Make *Feed functions more robust by using fprint instead of echo.
-" TODO: Add an on_exit caller to :Run that notifies of finished jobs.
 
 " FUNCTIONS {{{1
 function! InitPlug() abort "{{{2
@@ -456,11 +454,6 @@ if executable('theme')  " Toggle global TUI theme using external script.
     command! SyncTheme silent! let &background = get(systemlist('theme -q'), 0, 'light')
 endif
 command! -nargs=* -complete=shellcmd Term call StartTerm(<f-args>)
-command! -nargs=* Elinks call StartTerm("elinks", <f-args>)
-command! -nargs=* Aerc call StartTerm("aerc", <f-args>)
-command! -nargs=* IPython call StartTerm("ipython", "--no-autoindent", <f-args>)
-command! -nargs=* BPython call StartTerm("bpython", <f-args>)
-command! -nargs=* Julia call StartTerm("julia", <f-args>)
 
 " Misc. {{{2
 " Help, my window is floating!
@@ -473,8 +466,6 @@ command! FillLine call FillLine()
 command! TitleCase silent! .s/\v(.*)/\L\1/|.s/\v<(\a)(\a{3,})/\u\1\L\2/g
 " Change current line to sentence case.
 command! SentenceCase silent! .s/\v(.*)/\L\1/|.s/\v<(\a)(\a*)/\u\1\L\2/
-" Save and execute focused buffer as job (needs shebang + executable permissions).
-command! Run exec 'up|call jobstart(expand("%:p"))'
 " Strip trailing whitespace.
 command! StripTrails silent! keeppatterns %s/\s\+$//e
 " Smart buffer splitting based on terminal width.

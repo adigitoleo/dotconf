@@ -104,7 +104,6 @@ alias py,venv='$(2>/dev/null pyenv prefix||printf "/usr")/bin/python -m venv .ve
 alias py,activate='test -f .venv-${PWD##*/}/bin/activate && source .venv-${PWD##*/}/bin/activate'
 alias py,lint='pylint -E --output-format=colorized'
 alias by='bpython'
-alias pylint='pylint --output-format=colorized'
 
 # Die Julia
 alias jl='julia --banner=no'
