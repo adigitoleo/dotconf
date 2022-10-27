@@ -15,8 +15,6 @@ if executable('/usr/bin/python3')
     " NOTE: This python binary should have access to the `pynvim` module.
 endif
 
-" TODO: Make *Feed functions more robust by using fprint instead of echo.
-
 " FUNCTIONS {{{1
 function! InitPlug() abort "{{{2
     " Initialise plugin manager setup <https://github.com/junegunn/vim-plug>.
