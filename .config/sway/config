@@ -33,6 +33,7 @@ set $menu 'alacritty --class floating-terminal,floating-terminal -e fzfmenu.sh'
 set $open 'alacritty --class floating-terminal,floating-terminal -e fzfopen.sh'
 
 ### Window rules
+for_window [title="^.*"] title_format " %title"
 for_window [app_id="drracket"] floating enable
 for_window [app_id="floating-terminal"] floating enable
 for_window [app_id="gimp"] floating enable
