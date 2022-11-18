@@ -18,5 +18,5 @@ iabbrev <buffer> :tikz \begin{tikzpicture}<Cr>\end{tikzpicture}<Up><End><Cr>
 iabbrev <buffer> :style [% Set up local styles.<Cr>]<Up><End><Cr>
 iabbrev <buffer> :( \left(\right)<Left><Left><Left><Left><Left><Left><Left><C-r>=Eatchar('\s')<Cr>
 iabbrev <buffer> :[ \left[\right]<Left><Left><Left><Left><Left><Left><Left><C-r>=Eatchar('\s')<Cr>
-iabbrev <buffer> :{ \left{\right}<Left><Left><Left><Left><Left><Left><Left><C-r>=Eatchar('\s')<Cr>
+iabbrev <buffer> :{ \left\{\right\}<Left><Left><Left><Left><Left><Left><Left><Left><C-r>=Eatchar('\s')<Cr>
 iabbrev <buffer> :cr <Left><Delete>~\cref{}<Left><C-r>=Eatchar('\s')<Cr>
