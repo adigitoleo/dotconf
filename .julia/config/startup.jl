@@ -1,5 +1,6 @@
 using Pkg
 using TerminalPager
+using UnicodePlots
 
 # Reduce color space of most REPL components from 16 to 8.
 # Line numbers is stacktraces are still unreadable in dark themes...
@@ -11,6 +12,9 @@ Base.text_colors[:light_yellow] = Base.text_colors[:yellow]
 Base.text_colors[:light_black] = Base.text_colors[:normal]
 Base.text_colors[:light_blue] = Base.text_colors[:blue]
 Base.text_colors[:light_green] = Base.text_colors[:green]
+
+# Use truecolors for named colors in UnicodePlots
+UnicodePlots.USE_LUT[]=true
 
 """List available named colors from Base.colors."""
 function colornames()
