@@ -31,6 +31,7 @@ set $lock 'swaylock -i $HOME/Pictures/wallpapers/chauvet_lions_dark.jpg'
 set $floatterm 'alacritty --class floating-terminal,floating-terminal -o window.opacity=0.8'
 set $menu 'alacritty --class floating-terminal,floating-terminal -o window.opacity=0.8 -e fzfmenu.sh'
 set $open 'alacritty --class floating-terminal,floating-terminal -o window.opacity=0.8 -e fzfopen.sh'
+set $explorer 'alacritty --class floating-terminal,floating-terminal -o window.opacity=0.8 -e "nnn -C -e"'
 
 ### Window rules
 for_window [title="^.*"] title_format " %title"
@@ -67,6 +68,7 @@ bindsym $mod+Shift+c kill
 bindsym $mod+Shift+d exec $menu
 bindsym $mod+Shift+o exec $open
 bindsym $mod+Shift+f exec $floatterm
+bindsym $mod+Shift+e exec $explorer
 
 floating_modifier $mod normal
 bindsym $mod+Shift+r reload; exec wl-init
