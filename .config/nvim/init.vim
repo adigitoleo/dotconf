@@ -510,6 +510,7 @@ augroup filetype_rules
     autocmd FileType xml,html setlocal tabstop=2
     autocmd FileType desktop set commentstring=#\ %s
     autocmd FileType fortran setlocal textwidth=92
+    autocmd FileType nim setlocal softtabstop=-1 shiftwidth=0
 augroup END
 
 " Miscellaneous. {{{2
