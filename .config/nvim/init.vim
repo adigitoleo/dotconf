@@ -259,6 +259,11 @@ function! SmartSplit(...) abort "{{{2
 endfunction
 
 function! Floating(buftag, ...) abort "{{{2
+    " Check for adequate parent window size.
+    if &columns < 25 || &lines < 30
+        echoerr "failed to open floating window; vim window is too small"
+        return v:true
+    endif
     " Focus or create a floating window, a:1 sets the buftype.
     if exists("t:floating_buffers") && has_key(t:floating_buffers, a:buftag)
                 \ && bufexists(t:floating_buffers[a:buftag])
@@ -274,10 +279,10 @@ function! Floating(buftag, ...) abort "{{{2
     let l:winconfig = {
                 \   'relative': 'editor',
                 \   'border': 'single',
-                \   'row': &lines / 4,
+                \   'row': 5,
                 \   'col': 5,
                 \   'width': &columns - 10,
-                \   'height': &lines / 2
+                \   'height': &lines - 12,
                 \}
     if exists("t:floating_window") && win_id2win(t:floating_window) > 0
         call win_gotoid(t:floating_window)
@@ -551,17 +556,17 @@ xnoremap / <Esc>/\%V
 " Redo (can't use U, see :h U).
 nnoremap yu <Cmd>redo<Cr>
 " CTRL-L also clears search highlighting.
-nnoremap <silent> <C-l> <Cmd>:nohlsearch<Cr><C-l>
+nnoremap <silent> <C-l> <Cmd>nohlsearch<Cr><C-l>
 " Disable middle mouse paste.
 noremap <MiddleMouse> <Nop>
 noremap <2-MiddleMouse> <Nop>
 noremap <3-MiddleMouse> <Nop>
 noremap <4-MiddleMouse> <Nop>
 " HorizontalScrollMode allows continuous scrolling with the indicated char.
-nnoremap <silent> zh :call <SID>HorizontalScrollMode('h')<CR>
-nnoremap <silent> zl :call <SID>HorizontalScrollMode('l')<CR>
-nnoremap <silent> zH :call <SID>HorizontalScrollMode('H')<CR>
-nnoremap <silent> zL :call <SID>HorizontalScrollMode('L')<CR>
+nnoremap <silent> zh :call <SID>HorizontalScrollMode('h')<Cr>
+nnoremap <silent> zl :call <SID>HorizontalScrollMode('l')<Cr>
+nnoremap <silent> zH :call <SID>HorizontalScrollMode('H')<Cr>
+nnoremap <silent> zL :call <SID>HorizontalScrollMode('L')<Cr>
 " Tap space to clear messages.
 nnoremap <silent> <Space> <Cmd>mode<Cr>
 
@@ -651,7 +656,8 @@ nnoremap [t <Cmd>keeppatterns ?TODO\\|FIXME<Cr>
 
 " PLUGINS {{{1
 " Set builtin plugin options. {{{2
-let g:loaded_netrwPlugin = 1  " Hack to disable buggy netrw completely.
+let g:loaded_netrw = 1  " Hack to disable buggy netrw completely.
+let g:loaded_netrwPlugin = 1  " See :help netrw-noload.
 " Markdown {{{3
 let g:markdown_fenced_languages = [
             \'vim', 'python', 'sh', 'zsh', 'bash=sh', 'julia', 'fortran',
@@ -696,6 +702,7 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'inkarkat/vim-OnSyntaxChange'  " Events when changing syntax group.
     Plug 'inkarkat/vim-SearchHighlighting'  " Better hlsearch and `*`.
     Plug 'inkarkat/vim-AdvancedSorters'  " Sort by multiline patterns, etc.
+    Plug 'dhruvasagar/vim-open-url'  " Open URL's in browser without netrw.
     " Dev tooling and filetype plugins. {{{3
     Plug 'dense-analysis/ale'  " Async code linting.
     Plug 'wfxr/minimap.vim'  " A code minimap, like what cool Atom kids have.
@@ -747,7 +754,7 @@ let g:ale_exclude_highlights = [
             \'missing.*py.typed',
             \'non-ASCII character',
             \]
-let g:ale_linters = {'python': ['flake8', 'mypy']}
+let g:ale_linters = {'python': ['flake8', 'mypy'], 'nim': []}
 let g:ale_python_flake8_options = "--max-line-length 88 --ignore=E203,W503"
 let g:ale_python_mypy_options = "--ignore-missing-imports"
 " Latex settings. {{{2
