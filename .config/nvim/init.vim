@@ -711,9 +711,6 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'cespare/vim-toml'  " Syntax highlighting for TOML configs.
     Plug 'vim-python/python-syntax'  " Python: improved syntax highlighting.
     Plug 'hattya/python-indent.vim'  " Python: improved autoindenting.
-    if executable('nim')
-        Plug 'alaviss/nim.nvim'  " Comprehensive Nim integration.
-    endif
     if executable('lua')
         Plug 'euclidianAce/BetterLua.vim'  " Improved syntax highlighting.
     endif
@@ -754,7 +751,7 @@ let g:ale_exclude_highlights = [
             \'missing.*py.typed',
             \'non-ASCII character',
             \]
-let g:ale_linters = {'python': ['flake8', 'mypy'], 'nim': []}
+let g:ale_linters = {'python': ['flake8', 'mypy']}
 let g:ale_python_flake8_options = "--max-line-length 88 --ignore=E203,W503"
 let g:ale_python_mypy_options = "--ignore-missing-imports"
 " Latex settings. {{{2
