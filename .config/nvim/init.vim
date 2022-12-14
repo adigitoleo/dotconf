@@ -843,7 +843,11 @@ let g:mellow_show_bufnr = 0
 if $COLORTERM == "truecolor"
     set termguicolors
     " Inherit 'background' (dark/light mode) from terminal emulator.
-    let &background = get(systemlist('theme -q'), 0, 'light')
+    if executable('theme')
+        let &background = get(systemlist('theme -q'), 0)
+    else
+        set background=light
+    endif
     let g:mellow_user_colors = 1
     colorscheme mellow
     " let g:lightline = {'colorscheme': 'mellow'}
