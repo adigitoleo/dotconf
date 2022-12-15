@@ -25,6 +25,9 @@ Set-PSReadlineOption -EditMode Vi
 # More Linux-ish shortcuts, note that Ctrl+<x> for some letter <x> must use the lowercase letter.
 Set-PSReadlineKeyHandler -Key Ctrl+p -Function HistorySearchBackward
 Set-PSReadlineKeyHandler -Key Ctrl+n -Function HistorySearchForward
+Set-PSReadLineKeyHandler -Chord "Alt+;" -Function ViCommandMode
+Set-PSReadLineKeyHandler -Key Ctrl+e -Function EndOfLine
+Set-PSReadLineKeyHandler -Key Ctrl-a -Function BeginningOfLine
 
 # Use blue color for prompt, default at https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_prompts?view=powershell-7.2#the-default-prompt
 function prompt {
