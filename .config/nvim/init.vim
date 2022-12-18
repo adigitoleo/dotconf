@@ -516,6 +516,7 @@ augroup filetype_rules
     autocmd FileType desktop set commentstring=#\ %s
     autocmd FileType fortran setlocal textwidth=92
     autocmd FileType nim setlocal softtabstop=-1 shiftwidth=0
+    autocmd FileType cpp setlocal tabstop=2
 augroup END
 
 " Miscellaneous. {{{2
@@ -704,6 +705,7 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'inkarkat/vim-AdvancedSorters'  " Sort by multiline patterns, etc.
     Plug 'dhruvasagar/vim-open-url'  " Open URL's in browser without netrw.
     " Dev tooling and filetype plugins. {{{3
+    Plug 'nvim-lua/plenary.nvim'  " Lua functions/plugin dev library.
     Plug 'dense-analysis/ale'  " Async code linting.
     Plug 'wfxr/minimap.vim'  " A code minimap, like what cool Atom kids have.
     Plug 'chmp/mdnav'  " Markdown: internal hyperlink navigation.
@@ -711,9 +713,8 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'cespare/vim-toml'  " Syntax highlighting for TOML configs.
     Plug 'vim-python/python-syntax'  " Python: improved syntax highlighting.
     Plug 'hattya/python-indent.vim'  " Python: improved autoindenting.
-    if executable('lua')
-        Plug 'euclidianAce/BetterLua.vim'  " Improved syntax highlighting.
-    endif
+    Plug 'euclidianAce/BetterLua.vim'  " Lua: improved syntax highlighting.
+    Plug 'jakemason/ouroboros'  " Switch between .c/.cpp and header files.
     if executable('latex')
         Plug 'lervag/vimtex'  " Comprehensive LaTeX integration.
     endif
@@ -752,6 +753,7 @@ let g:ale_exclude_highlights = [
             \'non-ASCII character',
             \]
 let g:ale_linters = {'python': ['flake8', 'mypy']}
+let g:ale_fixers = {'cpp': ['clang-format']}
 let g:ale_python_flake8_options = "--max-line-length 88 --ignore=E203,W503"
 let g:ale_python_mypy_options = "--ignore-missing-imports"
 " Latex settings. {{{2
