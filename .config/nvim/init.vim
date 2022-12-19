@@ -752,10 +752,13 @@ let g:ale_exclude_highlights = [
             \'missing.*py.typed',
             \'non-ASCII character',
             \]
-let g:ale_linters = {'python': ['flake8', 'mypy']}
-let g:ale_fixers = {'cpp': ['clang-format']}
+let g:ale_linters = {'python': ['flake8', 'mypy'], 'cpp': ['cc', 'clang', 'cppcheck']}
+let g:ale_fixers = {'cpp': ['clang-format'], 'lua': ['stylua']}
+let g:ale_linters_ignore = {'cpp': ['clangcheck', 'clangtidy']}
 let g:ale_python_flake8_options = "--max-line-length 88 --ignore=E203,W503"
 let g:ale_python_mypy_options = "--ignore-missing-imports"
+let g:ale_cpp_cc_options = "-std=c++17 -Wall"
+let g:ale_cpp_clangd_options = "-std=c++17 -Wall"
 " Latex settings. {{{2
 let g:tex_flavor = 'latex'
 let g:vimtex_fold_enabled = 1
