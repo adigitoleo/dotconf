@@ -3,3 +3,8 @@
 if exists(":Ouroboros")
     nnoremap <LocalLeader>h <Cmd>Ouroboros<Cr>
 endif
+
+" Use xmake to build, https://xmake.io/#/
+if executable('xmake')
+    setlocal makeprg=xmake\ clean\ &&\ xmake\ b\ &&\ setsid\ -f\ xmake\ r
+endif
