@@ -404,7 +404,7 @@ if type(function('fzf#run'))
     " Open files in <dir> (or :pwd by default).
     if !executable("rg")|echoerr "FuzzyFind command requires ripgrep"|endif
     command! -complete=dir -nargs=? -bang FuzzyFind call fzf#run(fzf#wrap(
-        \ s:FZFspecgen("rg --files --type all --hidden --no-messages" .. ' ;' .. s:TermFeed(), <q-args>),
+        \ s:FZFspecgen("rg --files --hidden --no-messages" .. ' ;' .. s:TermFeed(), <q-args>),
         \ <bang>0))
     " Switch between listed buffers or loaded `:terminal` buffers.
     command! -bang FuzzySwitch call fzf#run(fzf#wrap(
