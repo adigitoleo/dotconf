@@ -648,9 +648,6 @@ nnoremap g] g<C-]>
 " Jump to first/last character of current line.
 noremap ]l g_
 noremap [l ^
-" Navigate to sentence clause punctuation.
-noremap g( <Cmd>keeppatterns ?[.,;:!?]\( \\|\n\)<Cr>
-noremap g) <Cmd>keeppatterns /[.,;:!?]\( \\|\n\)<Cr>
 " Navigate to TODO / FIXME comments.
 nnoremap ]t <Cmd>keeppatterns /TODO\\|FIXME<Cr>
 nnoremap [t <Cmd>keeppatterns ?TODO\\|FIXME<Cr>
