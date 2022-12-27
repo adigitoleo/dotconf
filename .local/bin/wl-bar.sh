@@ -45,5 +45,11 @@ else
     warn "command 'findmnt' not found"
 fi
 
+# Check for files with '.new' in the name under /etc (Void config updates).
+NEWETC_COUNT="$(ls /etc|grep '.new'|wc -l)"
+if [ "$NEWETC_COUNT" -gt 0 ]; then
+    STATUS_CMD="${STATUS_CMD} + /etc |"
+fi
+
 STATUS_CMD="${STATUS_CMD} $(date +'%A %Y-%m-%d %I:%M %p ')"
 printf '%s\n' "$STATUS_CMD"|tr -s ' '
