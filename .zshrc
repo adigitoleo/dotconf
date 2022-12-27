@@ -57,7 +57,7 @@ _git_branch_status() {  # Adapted from <https://github.com/agkozak/agkozak-zsh-p
         git_status="$(LC_ALL=C GIT_OPTIONAL_LOCKS=0 command git status --show-stash 2>&1)"
         typeset -A messages
         messages=(
-            'v^'    ' have diverged, '
+            'v^'    ' have diverged,'
             'v'     'Your branch is behind '
             '^'     'Your branch is ahead of '
             '+'     'new file:'
