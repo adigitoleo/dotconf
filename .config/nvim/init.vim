@@ -515,7 +515,7 @@ augroup filetype_rules
     autocmd FileType xml,html setlocal tabstop=2
     autocmd FileType desktop set commentstring=#\ %s
     autocmd FileType fortran setlocal textwidth=92
-    autocmd FileType nim setlocal softtabstop=-1 shiftwidth=0
+    autocmd FileType nim setlocal softtabstop=-1 shiftwidth=0 commentstring=#\ %s
     autocmd FileType cpp setlocal tabstop=2
 augroup END
 
@@ -750,12 +750,13 @@ let g:ale_exclude_highlights = [
             \'non-ASCII character',
             \]
 let g:ale_linters = {'python': ['flake8', 'mypy'], 'cpp': ['cc', 'clang', 'cppcheck']}
-let g:ale_fixers = {'cpp': ['clang-format'], 'lua': ['stylua']}
+let g:ale_fixers = {'cpp': ['clang-format'], 'lua': ['stylua'], 'nim': ['nimpretty']}
 let g:ale_linters_ignore = {'cpp': ['clangcheck', 'clangtidy']}
 let g:ale_python_flake8_options = "--max-line-length 88 --ignore=E203,W503"
 let g:ale_python_mypy_options = "--ignore-missing-imports"
 let g:ale_cpp_cc_options = "-std=c++17 -Wall"
 let g:ale_cpp_clangd_options = "-std=c++17 -Wall"
+let g:ale_nim_nimpretty_options = "--maxLineLen:100"
 " Latex settings. {{{2
 let g:tex_flavor = 'latex'
 let g:vimtex_fold_enabled = 1
