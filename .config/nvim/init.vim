@@ -252,9 +252,9 @@ function! SmartSplit(...) abort "{{{2
     " Open new split and choose vertical or horizontal layout automatically.
     " a:1 -- string (optional), file name of buffer to open in split
     if !empty(a:1)
-        exec (winwidth(0) > 120 ? 'vert ' : '') .. 'sbuffer ' .. a:1
+        exec (winwidth(0) > 160 ? 'vert ' : '') .. 'sbuffer ' .. a:1
     else
-        exec (winwidth(0) > 120 ? 'vert ' : '') .. 'split|enew'
+        exec (winwidth(0) > 160 ? 'vert ' : '') .. 'split|enew'
     endif
 endfunction
 
@@ -482,7 +482,7 @@ command! -nargs=+ Grep exec 'silent grep! <q-args>' | copen
 " Like the above but search only in open buffers.
 command! -nargs=+ BufGrep exec 'silent grep! <q-args> ' .. join(s:BufList(), ' ') | copen
 " Edit a new buffer in the same directory as the focused buffer.
-command! -nargs=1 EditNear exec 'edit %:h/' .. <q-args>
+command! -nargs=1 -complete=file EditNear exec 'edit %:h/' .. <q-args>
 
 " AUTOCOMMANDS {{{1
 " Special terminal buffer settings and overrides. {{{2
@@ -683,7 +683,6 @@ endif
 let g:plug_window = 'SmartSplit'
 call plug#begin(g:PLUGIN_HOME)
     " Ergonomics and general fixes. {{{3
-    Plug 'ncm2/float-preview.nvim'  " Use a floating window for preview-window.
     Plug 'tpope/vim-abolish'  " Word variant manipulation.
     Plug 'tpope/vim-commentary'  " Quickly comment/uncomment code.
     Plug 'tpope/vim-eunuch'  " UNIX helpers.
@@ -732,7 +731,7 @@ if empty(glob(g:PLUGIN_HOME.'/*'))
     finish
 endif
 
-" Linting settings. {{{2
+" ALE linter settings. {{{2
 nnoremap ]e <Plug>(ale_next_wrap)
 nnoremap [e <Plug>(ale_previous_wrap)
 augroup ale_highlights
@@ -749,6 +748,12 @@ let g:ale_exclude_highlights = [
             \'missing.*py.typed',
             \'non-ASCII character',
             \]
+let g:ale_cursor_detail = 1
+let g:ale_virtualtext_cursor = 0
+let g:ale_echo_cursor = 0
+let g:ale_floating_preview = 1
+let g:ale_close_preview_on_insert = 1
+let g:ale_floating_window_border = [' ', '.', '.', '.', '', '', ' ', '']
 let g:ale_linters = {'python': ['flake8', 'mypy'], 'cpp': ['cc', 'clang', 'cppcheck']}
 let g:ale_fixers = {'cpp': ['clang-format'], 'lua': ['stylua'], 'nim': ['nimpretty']}
 let g:ale_linters_ignore = {'cpp': ['clangcheck', 'clangtidy']}
@@ -757,7 +762,7 @@ let g:ale_python_mypy_options = "--ignore-missing-imports"
 let g:ale_cpp_cc_options = "-std=c++17 -Wall"
 let g:ale_cpp_clangd_options = "-std=c++17 -Wall"
 let g:ale_nim_nimpretty_options = "--maxLineLen:100"
-" Latex settings. {{{2
+" VimTex latex settings. {{{2
 let g:tex_flavor = 'latex'
 let g:vimtex_fold_enabled = 1
 let g:vimtex_quickfix_mode = 0  " See #1595
