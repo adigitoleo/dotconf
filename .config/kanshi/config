@@ -1,16 +1,16 @@
 profile home {
-    output "Unknown Q27G2G4 0x000064B2" position -2560,0 mode 2560x1440@143.9Hz
-    output "Unknown MSI MAG161V AA1H010800597" position 0,360 scale 1.4
+    output "AOC Q27G2G4 0x000064B2" position -2560,0 mode 2560x1440@143.9Hz
+    output "Microstep MSI MAG161V AA1H010800597" position 0,360 scale 1.4
 }
 profile home-aoc {
-    output "Unknown Q27G2G4 0x000064B2" position 0,0 mode 2560x1440@143.9Hz
+    output "AOC Q27G2G4 0x000064B2" position 0,0 mode 2560x1440@143.9Hz
 }
 profile home-samsung {
-    output "Unknown MSI MAG161V AA1H010800597" position -1372,0 scale 1.4
+    output "Microstep MSI MAG161V AA1H010800597" position -1372,0 scale 1.4
     output "Samsung Electric Company C24F390" position 0,0
 }
 profile msi {
-    output "Unknown MSI MAG161V AA1H010800597" position 0,0 scale 1.4
+    output "Microstep MSI MAG161V AA1H010800597" position 0,0 scale 1.4
 }
 profile work {
     output "Dell Inc. DELL U2419H 2MQYV13" position 0,0
