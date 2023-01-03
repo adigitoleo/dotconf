@@ -123,3 +123,6 @@ alias tobin='curl -F "file=@-;filename=.txt" https://x0.at/'
 
 # Invert RGB channel of a png image (stdin) using imagemagick.
 alias rgb-neg='convert - -channel RGB -negate -'
+
+# Cenetered 80-column display in nvimpager.
+alias s='nvimpager -- -O3 -c "setl bt=nofile|setl bufhidden=hide|setl noswapfile|wincmd x|setl bt=nofile|setl bufhidden=hide|setl noswapfile|wincmd l|vert res 80|setl winfixwidth|wincmd =|hi! link WinSeparator Ignore|hi! link NonText Ignore"'
