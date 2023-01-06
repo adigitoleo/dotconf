@@ -502,8 +502,8 @@ augroup filetype_rules
     autocmd FileType sh,zsh setlocal textwidth=79
     autocmd FileType qf setlocal number norelativenumber cursorline textwidth=0
     autocmd FileType vim setlocal textwidth=78 foldmethod=marker foldenable
-    autocmd FileType bash,sh setlocal foldmethod=marker
-    autocmd FileType make setlocal noexpandtab
+    autocmd FileType bash,sh setlocal foldmethod=marker textwidth=100
+    autocmd FileType make setlocal noexpandtab textwidth=79
     autocmd FileType markdown setlocal foldlevel=1 foldenable
     autocmd FileType python setlocal textwidth=88 foldmethod=syntax
     autocmd FileType julia setlocal textwidth=92
@@ -515,8 +515,8 @@ augroup filetype_rules
     autocmd FileType xml,html setlocal tabstop=2
     autocmd FileType desktop set commentstring=#\ %s
     autocmd FileType fortran setlocal textwidth=92
-    autocmd FileType nim setlocal softtabstop=-1 shiftwidth=0 commentstring=#\ %s
-    autocmd FileType cpp setlocal tabstop=2
+    autocmd FileType nim setlocal softtabstop=-1 shiftwidth=0 commentstring=#\ %s textwidth=100
+    autocmd FileType cpp setlocal tabstop=2 textwidth=100
 augroup END
 
 " Miscellaneous. {{{2
@@ -831,7 +831,7 @@ let g:minimap_width = 14
 " let g:minimap_diffremove_color = "DiffDelete"
 " let g:minimap_diff_color = "DiffChange"
 " Use the latex to unicode converter provided by julia.vim for other filetypes.
-let g:latex_to_unicode_file_types = ["julia", "markdown", "python", "tex"]
+let g:latex_to_unicode_file_types = ["julia", "markdown", "python", "tex", "nim"]
 " Always use 80 char textwidth when writing comments/documentation.
 if has_key(plugs, "vim-OnSyntaxChange")
     call OnSyntaxChange#Install('Comment', '^Comment$\|Doc[sS]tring', 0, 'i')
