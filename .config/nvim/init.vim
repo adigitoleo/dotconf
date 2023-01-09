@@ -504,7 +504,7 @@ augroup filetype_rules
     autocmd FileType vim setlocal textwidth=78 foldmethod=marker foldenable
     autocmd FileType bash,sh setlocal foldmethod=marker textwidth=100
     autocmd FileType make setlocal noexpandtab textwidth=79
-    autocmd FileType markdown setlocal foldlevel=1 foldenable
+    autocmd FileType markdown setlocal foldlevel=1
     autocmd FileType python setlocal textwidth=88 foldmethod=syntax
     autocmd FileType julia setlocal textwidth=92
     autocmd FileType plaintex setlocal filetype=tex
