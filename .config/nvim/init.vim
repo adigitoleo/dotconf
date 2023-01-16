@@ -233,16 +233,18 @@ function! FillLine() abort "{{{2
 endfunction
 
 function! CopyFile() abort "{{{2
-    " Copy file name, path or directory to clipboard.
+    " Copy file contents, name, path or directory to clipboard.
     let l:msg = "Copy to clipboard:"
-    let l:opt = "&Path\n&File name\n&Directory\n&Quit"
+    let l:opt = "&Contents\n&Path\n&File name\n&Directory\n&Quit"
     let l:choice = confirm(l:msg, l:opt)
 
     if l:choice == 1
-        let @+=expand('%:p')
+        silent call execute('%yank "')
     elseif l:choice == 2
-        let @+=expand('%:t')
+        let @+=expand('%:p')
     elseif l:choice == 3
+        let @+=expand('%:t')
+    elseif l:choice == 4
         let @+=expand('%:p:h')
     endif
     echo getreg()
