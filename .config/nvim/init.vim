@@ -583,6 +583,15 @@ nnoremap ñ <Cmd>wincmd n<Cr>
 nnoremap <M-n> <Cmd>wincmd n<Cr>
 nnoremap ö <Cmd>wincmd p<Cr>
 nnoremap <M-p> <Cmd>wincmd p<Cr>
+" Tab navigation.
+nnoremap Ï <Cmd>tabnext<Cr>
+tnoremap Ï <Cmd>tabnext<Cr>
+nnoremap <M-J> <Cmd>tabnext<Cr>
+tnoremap <M-J> <Cmd>tabnext<Cr>
+nnoremap Œ <Cmd>tabprev<Cr>
+tnoremap Œ <Cmd>tabprev<Cr>
+nnoremap <M-K> <Cmd>tabprev<Cr>
+tnoremap <M-K> <Cmd>tabprev<Cr>
 
 " Leader mappings: run commands and call functions. {{{2
 let mapleader = "\<Space>"
