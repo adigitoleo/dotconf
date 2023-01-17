@@ -38,6 +38,11 @@ if [ -d "$HOME/.local/bin" ]; then
     export PATH="$HOME/.local/bin:$PATH"
 fi
 
+# Prepend ~/.local/share/man to MANPATH if it exists.
+if [ -d "$HOME/.local/share/man" ]; then
+    export MANPATH="$HOME/.local/share/man:$MANPATH"
+fi
+
 # Prepend ~/.nimble/bin to PATH if it exists.
 if [ -d "$HOME/.nimble/bin" ]; then
     export PATH="$HOME/.nimble/bin:$PATH"
