@@ -1,3 +1,4 @@
+using Revise
 using Pkg
 using TerminalPager
 using UnicodePlots
