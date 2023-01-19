@@ -706,10 +706,6 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'aymericbeaumet/vim-symlink'  " Follow symlinks (linux).
     Plug 'chrisbra/unicode.vim'  " Easy unicode and digraph handling.
     Plug 'arp242/jumpy.vim'  " Better and extended mappings for ]], g], etc.
-    Plug 'inkarkat/vim-ingo-library'  " A vimscript library for inkarkat plugins.
-    Plug 'inkarkat/vim-OnSyntaxChange'  " Events when changing syntax group.
-    Plug 'inkarkat/vim-SearchHighlighting'  " Better hlsearch and `*`.
-    Plug 'inkarkat/vim-AdvancedSorters'  " Sort by multiline patterns, etc.
     Plug 'dhruvasagar/vim-open-url'  " Open URL's in browser without netrw.
     " Dev tooling and filetype plugins. {{{3
     Plug 'nvim-lua/plenary.nvim'  " Lua functions/plugin dev library.
@@ -837,24 +833,12 @@ let g:lastplace_open_folds = 0
 " Use a wider minimap.
 let g:minimap_width = 14
 " Show more stuff in the minimap.
-" let g:minimap_git_colors = 1  " https://github.com/wfxr/minimap.vim/issues/168
-" let g:minimap_diffadd_color = "DiffAdd"
-" let g:minimap_diffremove_color = "DiffDelete"
-" let g:minimap_diff_color = "DiffChange"
+let g:minimap_git_colors = 1  " https://github.com/wfxr/minimap.vim/issues/168
+let g:minimap_diffadd_color = "DiffAdd"
+let g:minimap_diffremove_color = "DiffDelete"
+let g:minimap_diff_color = "DiffChange"
 " Use the latex to unicode converter provided by julia.vim for other filetypes.
 let g:latex_to_unicode_file_types = ["julia", "markdown", "python", "tex", "nim"]
-" Always use 80 char textwidth when writing comments/documentation.
-if has_key(plugs, "vim-OnSyntaxChange")
-    call OnSyntaxChange#Install('Comment', '^Comment$\|Doc[sS]tring', 0, 'i')
-    augroup auto_wrap_comments
-        " Set textwidth to 80 when editing.
-        autocmd User SyntaxCommentEnterI if &textwidth > 0
-                    \ | setlocal textwidth=80 formatoptions+=t | endif
-        " Remove it again when leaving insert mode.
-        autocmd User SyntaxCommentLeaveI exec 'filetype detect'
-                    \ | setlocal formatoptions-=t
-    augroup END
-endif
 " }}}}}}
 
 let g:mellow_show_bufnr = 0
