@@ -116,7 +116,7 @@ alias a,mixer=alsamixer
 alias mktar='tar --transform=s/$PATTERN/$(date +%Y%m%dT%H%M)/ --exclude={__pycache,.mypy_cache} -vcaf'
 
 # Create backup according to ./.BACKUP using rsync: backup <destination>
-alias backup='rsync -rszauhP --no-links --delete --files-from=$HOME/.BACKUP .'
+alias backup='rsync -rszauhP --no-links --delete --info=nonreg0 --files-from=$HOME/.BACKUP $HOME'
 
 # Send stdin to pastebin at https://x0.at/
 alias tobin='curl -F "file=@-;filename=.txt" https://x0.at/'
