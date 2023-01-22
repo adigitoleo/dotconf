@@ -27,10 +27,15 @@ if is_command fzf && is_command rg; then
 fi
 
 
-# Set preferred editor.
+# Set preferred editors.
 if [ -x "/usr/bin/vis" ]; then
     export EDITOR="/usr/bin/vis"
     export VISUAL="/usr/bin/nvim"
+fi
+
+# Set colorterm to use truecolors if not already.
+if [ $COLORTERM != "truecolor" ]; then
+    export COLORTERM=truecolor
 fi
 
 # Prepend ~/.local/bin to PATH if it exists.
