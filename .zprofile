@@ -34,7 +34,7 @@ if [ -x "/usr/bin/vis" ]; then
 fi
 
 # Set colorterm to use truecolors if not already.
-if [ $COLORTERM != "truecolor" ]; then
+if [ "$COLORTERM" != "truecolor" ]; then
     export COLORTERM=truecolor
 fi
 
