@@ -37,14 +37,20 @@ function set_theme()
     local truecolor = os.getenv("COLORTERM")
     local nvim = os.getenv("NVIM")
     local has_theme = os.execute("command -v theme")
-    if term ~= "linux" and truecolor == "truecolor" and nvim == nil and has_theme then
+    if has_theme then
         do
-            vis:command('set theme mellow')
             local theme = io.popen('theme -q')
-            if theme:read() == "dark" then
-                vis:command('set mellow_dark true')
+            if term ~= "linux" and truecolor == "truecolor" and nvim == nil then
+                vis:command('set theme mellow')
+                if theme:read() == "dark" then
+                    vis:command('set mellow_dark true')
+                else
+                    vis:command('set mellow_dark false')
+                end
+            elseif theme:read() == "light" then
+                vis:command('set theme light-16')
             else
-                vis:command('set mellow_dark false')
+                vis:command('set theme default-16')
             end
             theme:close()
         end
