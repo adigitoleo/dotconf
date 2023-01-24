@@ -519,6 +519,7 @@ augroup filetype_rules
     autocmd FileType fortran setlocal textwidth=92
     autocmd FileType nim setlocal softtabstop=-1 shiftwidth=0 commentstring=#\ %s textwidth=100
     autocmd FileType cpp setlocal tabstop=2 textwidth=100
+    autocmd Filetype gitconfig setlocal noexpandtab
 augroup END
 
 " Miscellaneous. {{{2
