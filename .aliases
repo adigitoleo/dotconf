@@ -104,7 +104,7 @@ alias py,update='mv -i requirements.txt requirements.bak && pip-compile --resolv
 
 # Die Julia
 alias jl='julia --banner=no'
-alias jl,env='julia --banner=no --project=$PWD'
+alias jl,env='julia --banner=no --startup-file=no --project=$PWD'
 alias jl,bw='julia --banner=no --color=no'
 alias jl,tmp='julia --banner=no --startup-file=no --history-file=no'
 
