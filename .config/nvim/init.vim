@@ -514,7 +514,7 @@ augroup filetype_rules
     autocmd FileType enaml setlocal textwidth=88 filetype=python.enaml
     autocmd FileType yaml setlocal tabstop=2
     autocmd FileType css setlocal tabstop=2
-    autocmd FileType xml,html setlocal tabstop=2
+    autocmd FileType xml,html setlocal tabstop=2 foldmethod=indent
     autocmd FileType desktop set commentstring=#\ %s
     autocmd FileType fortran setlocal textwidth=92
     autocmd FileType nim setlocal softtabstop=-1 shiftwidth=0 commentstring=#\ %s textwidth=100
