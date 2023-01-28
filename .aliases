@@ -126,3 +126,6 @@ alias rgb-neg='convert - -channel RGB -negate -'
 
 # Cenetered 80-column display in nvimpager.
 alias s='nvimpager -- -O3 -c "setl bt=nofile|setl bufhidden=hide|setl noswapfile|wincmd x|setl bt=nofile|setl bufhidden=hide|setl noswapfile|wincmd l|vert res 80|setl winfixwidth|wincmd =|hi! link WinSeparator Ignore|hi! link NonText Ignore"'
+
+# Mpv media player detached instance with larger window, playing in loop, use: m,loop <file>.
+alias m,loop='2>/dev/null 1>&2 setsid -f mpv --geometry=1200x1200 --loop'
