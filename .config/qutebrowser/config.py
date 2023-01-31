@@ -7,8 +7,6 @@ from pathlib import Path
 
 import yaml
 
-from qutebrowser.api import interceptor  # type: ignore
-
 c = c  # pylint: disable=undefined-variable,self-assigning-variable
 config = config  # pylint: disable=undefined-variable,self-assigning-variable
 
@@ -72,7 +70,7 @@ if "QB_FORCE_HIDPI" in os.environ and os.environ["QB_FORCE_HIDPI"]:
     c.zoom.default = "85%"
 
 # https://github.com/qutebrowser/qutebrowser/issues/1476
-c.qt.force_software_rendering = "qt-quick"
+# c.qt.force_software_rendering = "qt-quick"
 # https://github.com/qutebrowser/qutebrowser/issues/7147
 # c.qt.workarounds.remove_service_workers = True
 
@@ -104,11 +102,13 @@ c.tabs.title.format_pinned = "{audio}{index}: {current_title}"
 with (Path.home() / ".config/alacritty/alacritty.yml").open() as file:
     term_config = yaml.safe_load(file)
 
-normal_colors = lambda name: list(term_config["schemes"][name]["normal"].values())
-bright_colors = lambda name: list(term_config["schemes"][name]["bright"].values())
 
-light_theme = normal_colors("mellow_light") + bright_colors("mellow_light")
-dark_theme = normal_colors("mellow_dark") + bright_colors("mellow_dark")
+def get_colors(name):
+    return (
+        list(term_config["schemes"][name]["normal"].values())
+        + list(term_config["schemes"][name]["bright"].values())
+    )
+
 
 c.fonts.default_size = str(term_config["font"]["size"]) + "pt"
 c.fonts.default_family = "monospace"
@@ -121,26 +121,31 @@ c.colors.hints.match.fg = "darkRed"
 
 THEME = subprocess.run(["theme", "-q"], capture_output=True, check=True).stdout
 if "dark" in str(THEME):
-    c.colors.webpage.darkmode.enabled = True
+    colors = get_colors("mellow_dark")
+    # Optional Qt dark mode, works for all sites not just those with dark CSS option,
+    # however overwrites dark CSS, looks more ugly and requires a restart to turn off.
+    if "QB_QT_DARKMODE" in os.environ and os.environ["QB_QT_DARKMODE"]:
+        c.colors.webpage.darkmode.enabled = True
     c.colors.webpage.preferred_color_scheme = "dark"
     # Set the default bg to a dark color as well to prevent white flashes.
-    c.colors.webpage.bg = dark_theme[8]
-    c.colors.statusbar.normal.bg = dark_theme[5]
-    c.colors.tabs.bar.bg = dark_theme[5]
-    c.colors.tabs.odd.bg = dark_theme[5]
-    c.colors.tabs.even.bg = dark_theme[13]
-    c.colors.tabs.pinned.odd.bg = dark_theme[6]
-    c.colors.tabs.pinned.even.bg = dark_theme[14]
+    c.colors.webpage.bg = colors[8]
+    c.colors.statusbar.normal.bg = colors[5]
+    c.colors.tabs.bar.bg = colors[5]
+    c.colors.tabs.odd.bg = colors[5]
+    c.colors.tabs.even.bg = colors[13]
+    c.colors.tabs.pinned.odd.bg = colors[6]
+    c.colors.tabs.pinned.even.bg = colors[14]
 
-    c.colors.tabs.odd.fg = dark_theme[11]
-    c.colors.tabs.even.fg = dark_theme[11]
-    c.colors.tabs.pinned.odd.fg = dark_theme[0]
-    c.colors.tabs.pinned.even.fg = dark_theme[0]
-    c.colors.tabs.selected.even.fg = dark_theme[7]
-    c.colors.tabs.selected.odd.fg = dark_theme[7]
+    c.colors.tabs.odd.fg = colors[11]
+    c.colors.tabs.even.fg = colors[11]
+    c.colors.tabs.pinned.odd.fg = colors[0]
+    c.colors.tabs.pinned.even.fg = colors[0]
+    c.colors.tabs.selected.even.fg = colors[7]
+    c.colors.tabs.selected.odd.fg = colors[7]
 else:
-    c.colors.webpage.bg = light_theme[15]
-    c.colors.statusbar.normal.bg = light_theme[5]
+    colors = get_colors("mellow_light")
+    c.colors.webpage.bg = colors[15]
+    c.colors.statusbar.normal.bg = colors[5]
 
 
 # Custom key bindings.
