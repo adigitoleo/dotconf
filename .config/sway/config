@@ -47,6 +47,8 @@ for_window [app_id="libreoffice"] floating enable
 for_window [app_id="matplotlib"] floating enable
 for_window [app_id="mpv"] floating enable
 for_window [app_id="mscore"] floating enable
+for_window [app_id="audacity"] floating enable
+for_window [app_id="vellum"] floating enable
 for_window [app_id="mypaint"] floating enable
 for_window [app_id="python3"] floating enable
 for_window [app_id="qt5ct"] floating enable
@@ -174,5 +176,5 @@ bar {
 
 exec --no-startup-id wl-init
 exec swayidle -w timeout 600 $lock before-sleep $lock
-exec_always --no-startup-id autotiling
+exec --no-startup-id autotiling
 include /etc/sway/config.d/*
