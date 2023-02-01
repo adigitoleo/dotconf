@@ -124,9 +124,11 @@ if "dark" in str(THEME):
     colors = get_colors("mellow_dark")
     # Optional Qt dark mode, works for all sites not just those with dark CSS option,
     # however overwrites dark CSS, looks more ugly and requires a restart to turn off.
+    # FIXME: Doesn't seem to work?
     if "QB_QT_DARKMODE" in os.environ and os.environ["QB_QT_DARKMODE"]:
         c.colors.webpage.darkmode.enabled = True
-    c.colors.webpage.preferred_color_scheme = "dark"
+    else:
+        c.colors.webpage.preferred_color_scheme = "dark"
     # Set the default bg to a dark color as well to prevent white flashes.
     c.colors.webpage.bg = colors[8]
     c.colors.statusbar.normal.bg = colors[5]
