@@ -15,7 +15,7 @@ default_floating_border pixel 3
 titlebar_border_thickness 3
 titlebar_padding 5 3
 # Colors are border, background, text, indicator[, child_border]
-client.focused #BF472C #BF472C #F3AE72 #BF472C
+client.focused #D47D49 #D47D49 #3D241F #D47D49
 client.focused_inactive #66292F #66292F #F3AE72 #66292F
 client.unfocused #66292F #3D241F #A67458 #66292F
 client.urgent #FF7477 #FF7477 #AF0032 #FF7477
@@ -160,6 +160,9 @@ bindsym $mod+r mode "resize"
 # Status Bar:
 # Read `man 5 sway-bar` for more information about this section.
 bar {
+    position top
+    status_padding 0
+
     # When the status_command prints a new line to stdout, swaybar updates.
     status_command while wl-bar.sh; do sleep 1; done
 
