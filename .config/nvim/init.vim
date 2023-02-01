@@ -305,9 +305,11 @@ function! Floating(buftag, ...) abort "{{{2
 endfunction
 
 function! StartTerm(...) abort "{{{2
-    " Create a floating terminal and optionally execute a shell command.
+    " Create a floating/tabnew terminal and optionally execute a shell command.
     if a:0
-        if executable(a:1)
+        if a:1 ==# "-t"
+            exec 'tabnew|terminal ' .. expandcmd(join(a:000[1:])) | return
+        elseif executable(a:1)
             let l:cmdstr = a:0 > 1 ? expandcmd(join(a:000)) : a:1
         else
             echoerr "no executable command called " .. a:1 | return
@@ -526,11 +528,11 @@ augroup END
 augroup misc
     autocmd!
     autocmd BufWritePost * exec "normal! " .. &foldenable ? "zx" : ""
-    autocmd BufWritePost * if exists(":TagGen") > 0 | exec "TagGen" | fi
     autocmd CursorHold * call CleanEmptyBuffers()
     autocmd VimEnter,BufWinEnter * let &colorcolumn = "+" .. join(range(&columns)[1:], ",+")
     autocmd InsertLeave,CompleteDone * silent! pclose
     autocmd VimResized * wincmd =
+    autocmd TabEnter * stopinsert
     autocmd ColorScheme mellow hi link NormalFloat Normal
 augroup END
 
