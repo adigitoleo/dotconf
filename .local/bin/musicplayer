@@ -76,7 +76,7 @@ if [ "$FILENAME" = "" ]; then
 fi
 
 JOB=
-echo "-=-_=- ~${FILENAME##/home/leon} -=-_=-"
+echo "-=-_=- ${FILENAME/$HOME/\~} -=-_=-"
 if [ "${FILENAME##*.}" = "mp3" ]; then
     is_command ffplay || exit 1
     sleep 5 && 2>/dev/null ffplay -vn -sn -nodisp -autoexit -hide_banner "$FILENAME"
