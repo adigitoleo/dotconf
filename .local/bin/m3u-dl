@@ -5,6 +5,7 @@ usage() {
     printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
     printf '       %s ' "$SCRIPTNAME"
     echo '[-y|-n][-o path] playlist [options...]'
+    echo
 }
 helpf() {
     echo 'Options:'

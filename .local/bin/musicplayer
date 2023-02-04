@@ -1,13 +1,86 @@
-#!/bin/sh
-# Play a list of music files from stdin using ffplay(1)
+#!/bin/zsh
+set -eu
+readonly SCRIPTNAME="${0##*/}"
+usage() {
+    printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
+    printf '       %s ' "$SCRIPTNAME"
+    echo '[-p port][-f file | DIRECTORY]'
+    echo
+}
+helpf() {
+    echo 'Options:'
+    echo '-p <port>         port number to use for sending commands to fzf(1),'
+    echo '                  default: 6266'
+    echo '-f <file>         audio file, supports .opus, .mp3 or .flac'
+    echo
+    echo 'Operands:'
+    echo '  <DIRECTORY>     music directory, for playlist mode using rg(1)'
+    echo '                  and fzf(1)'
+    echo
+    echo 'Decode and play a compressed audio file. Required executables:'
+    echo ' - aplay(1) for .opus and .flac files'
+    echo ' - opusdec(1) for .opus files'
+    echo ' - ffplay(1) for .mp3 files'
+    echo ' - flac(1) for .flac files'
+}
 
-trap 'exit' INT
-if [ $# -gt 0 ]; then
-    for file in "$@"; do
-        ffplay -vn -sn -nodisp -autoexit -hide_banner "$file";
-    done
-else
-    while IFS= read -r file; do
-        ffplay -vn -sn -nodisp -autoexit -hide_banner "$file";
-    done
+warn() { >&2 printf '%s\n' "$SCRIPTNAME: $1"; }
+is_command() { # Check if command exists, for flow control (no stdout messages)
+    if 1>/dev/null 2>&1 command -v "$1"; then
+        return 0
+    else
+        warn "command '$1' not found"; return 1
+    fi
+}
+
+FILENAME=
+FZF_PORT=6266
+[ $# -eq 0 ] && usage && exit 1
+while getopts "hp:f:" OPT; do
+    case $OPT in
+        h ) usage && helpf; exit 0;;
+        p ) FZF_PORT="$OPTARG";;
+        f ) FILENAME="$OPTARG";;
+        * ) usage; exit 1;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+# Playlist mode, sets up a listing using fzf and uses a recursive call with -f
+# to play the selected file.
+RG_PREFIX="rg --files "
+if [ "$FILENAME" = "" ]; then
+    is_command rg || exit 1
+    INITIAL_QUERY="$1" FZF_DEFAULT_COMMAND="$RG_PREFIX $INITIAL_QUERY"
+    fzf --listen "$FZF_PORT" \
+        --bind "ctrl-r:reload:$RG_PREFIX {q} || true" \
+        --query "$INITIAL_QUERY" \
+        --preview-window up,2 --preview "$SCRIPTNAME -f {}" \
+        && kill -a musicplayer && exit 0
+    exit 0
 fi
+
+JOB=
+echo "-=-_=- ~${FILENAME##/home/leon} -=-_=-"
+if [ "${FILENAME##*.}" = "mp3" ]; then
+    is_command ffplay || exit 1
+    sleep 5 && 2>/dev/null ffplay -vn -sn -nodisp -autoexit -hide_banner "$FILENAME"
+    JOB=$!
+elif [ "${FILENAME##*.}" = "opus" ]; then
+    is_command opusdec || exit 1
+    is_command aplay || exit 1
+    sleep 5 && opusdec --quiet --force-wav "$FILENAME" -|aplay --quiet -
+    JOB=$!
+elif [ "${FILENAME##*.}" = "flac" ]; then
+    is_command flac || exit 1
+    is_command aplay || exit 1
+    sleep 5 && flac -dcs "$FILENAME"|aplay --quiet -
+    JOB=$!
+else
+    warn "audio file format unrecognised or not supported" && sleep 5
+fi
+
+# Move to next file automatically,
+# requires fzf to be started with --listen <FZF_PORT>
+curl -XPOST localhost:"$FZF_PORT" -d 'down';
+
+trap "test -n $JOB && kill $JOB" EXIT HUP TERM INT
