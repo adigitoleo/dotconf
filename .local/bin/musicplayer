@@ -4,14 +4,17 @@ readonly SCRIPTNAME="${0##*/}"
 usage() {
     printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
     printf '       %s ' "$SCRIPTNAME"
-    echo '[-p port][-f file | DIRECTORY]'
+    echo '[-p port][-s][-r] DIRECTORY ...'
+    echo '[-f file]'
     echo
 }
 helpf() {
     echo 'Options:'
+    echo '-f <file>         audio file, supports .opus, .mp3 or .flac'
     echo '-p <port>         port number to use for sending commands to fzf(1),'
     echo '                  default: 6266'
-    echo '-f <file>         audio file, supports .opus, .mp3 or .flac'
+    echo '-s                shuffle file list using shuf(1)'
+    echo '-r                repeat from the beginning of the list when finished'
     echo
     echo 'Operands:'
     echo '  <DIRECTORY>     music directory, for playlist mode using rg(1)'
@@ -35,27 +38,40 @@ is_command() { # Check if command exists, for flow control (no stdout messages)
 
 FILENAME=
 FZF_PORT=6266
+SHUFFLE=1
+REPEAT=1
 [ $# -eq 0 ] && usage && exit 1
-while getopts "hp:f:" OPT; do
+while getopts "hsrp:f:" OPT; do
     case $OPT in
         h ) usage && helpf; exit 0;;
-        p ) FZF_PORT="$OPTARG";;
         f ) FILENAME="$OPTARG";;
+        p ) FZF_PORT="$OPTARG";;
+        s ) SHUFFLE=0;;
+        r ) REPEAT=0;;
         * ) usage; exit 1;;
     esac
 done
 shift $(( OPTIND - 1 ))
 # Playlist mode, sets up a listing using fzf and uses a recursive call with -f
 # to play the selected file.
-RG_PREFIX="rg --files "
 if [ "$FILENAME" = "" ]; then
     is_command rg || exit 1
-    INITIAL_QUERY="$1" FZF_DEFAULT_COMMAND="$RG_PREFIX $INITIAL_QUERY"
-    fzf --listen "$FZF_PORT" \
-        --bind "ctrl-r:reload:$RG_PREFIX {q} || true" \
-        --query "$INITIAL_QUERY" \
-        --preview-window up,2 --preview "$SCRIPTNAME -f {}" \
-        && kill -a musicplayer && exit 0
+    FZF_DEFAULT_COMMAND="rg --files -g '*.mp3' -g '*.flac' -g '*.opus' $@"
+    if [ $SHUFFLE -eq 0 ]; then
+        is_command shuf || exit 1
+        FZF_DEFAULT_COMMAND="${FZF_DEFAULT_COMMAND}|shuf"
+    fi
+    if [ $REPEAT -eq 0 ]; then
+        fzf --listen "$FZF_PORT" --cycle \
+            --bind "ctrl-r:reload:$FZF_DEFAULT_COMMAND || true" \
+            --preview-window up,2 --preview "$SCRIPTNAME -f {}" \
+            && kill -a musicplayer && exit 0
+    else
+        fzf --listen "$FZF_PORT" \
+            --bind "ctrl-r:reload:$FZF_DEFAULT_COMMAND || true" \
+            --preview-window up,2 --preview "$SCRIPTNAME -f {}" \
+            && kill -a musicplayer && exit 0
+    fi
     exit 0
 fi
 
@@ -81,6 +97,6 @@ fi
 
 # Move to next file automatically,
 # requires fzf to be started with --listen <FZF_PORT>
-curl -XPOST localhost:"$FZF_PORT" -d 'down';
+curl -XPOST localhost:"$FZF_PORT" -d 'down'
 
-trap "test -n $JOB && kill $JOB" EXIT HUP TERM INT
+trap "test $JOB = '' || kill $JOB" EXIT HUP TERM INT
