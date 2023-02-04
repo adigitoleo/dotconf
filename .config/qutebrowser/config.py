@@ -127,17 +127,17 @@ if "dark" in str(THEME):
     # FIXME: Doesn't seem to work?
     if "QB_QT_DARKMODE" in os.environ and os.environ["QB_QT_DARKMODE"]:
         c.colors.webpage.darkmode.enabled = True
+        # Set the default bg to a dark color as well to prevent white flashes.
+        c.colors.webpage.bg = colors[8]
     else:
         c.colors.webpage.preferred_color_scheme = "dark"
-    # Set the default bg to a dark color as well to prevent white flashes.
-    c.colors.webpage.bg = colors[8]
+
     c.colors.statusbar.normal.bg = colors[5]
     c.colors.tabs.bar.bg = colors[5]
     c.colors.tabs.odd.bg = colors[5]
     c.colors.tabs.even.bg = colors[13]
     c.colors.tabs.pinned.odd.bg = colors[6]
     c.colors.tabs.pinned.even.bg = colors[14]
-
     c.colors.tabs.odd.fg = colors[11]
     c.colors.tabs.even.fg = colors[11]
     c.colors.tabs.pinned.odd.fg = colors[0]
