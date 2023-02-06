@@ -97,6 +97,6 @@ fi
 
 # Move to next file automatically,
 # requires fzf to be started with --listen <FZF_PORT>
-curl -XPOST localhost:"$FZF_PORT" -d 'down'
+test "$JOB" = "" || curl -XPOST localhost:"$FZF_PORT" -d 'down'
 
 trap "test $JOB = '' || kill $JOB" EXIT HUP TERM INT
