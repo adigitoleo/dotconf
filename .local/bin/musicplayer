@@ -25,6 +25,8 @@ helpf() {
     echo ' - opusdec(1) for .opus files'
     echo ' - ffplay(1) for .mp3 files'
     echo ' - flac(1) for .flac files'
+    echo 'An URL to a radio stream can also be given to the -f option,'
+    echo 'and it will be played using ffplay(1).'
 }
 
 warn() { >&2 printf '%s\n' "$SCRIPTNAME: $1"; }
@@ -76,7 +78,7 @@ if [ "$FILENAME" = "" ]; then
 fi
 
 JOB=
-echo "-=-_=- ${FILENAME/$HOME/\~} -=-_=-"
+echo "$SCRIPTNAME: playing ${FILENAME/$HOME/\~}"
 if [ "${FILENAME##*.}" = "mp3" ]; then
     is_command ffplay || exit 1
     sleep 5 && 2>/dev/null ffplay -vn -sn -nodisp -autoexit -hide_banner "$FILENAME"
@@ -84,19 +86,23 @@ if [ "${FILENAME##*.}" = "mp3" ]; then
 elif [ "${FILENAME##*.}" = "opus" ]; then
     is_command opusdec || exit 1
     is_command aplay || exit 1
-    sleep 5 && opusdec --quiet --force-wav "$FILENAME" -|aplay --quiet -
+    opusdec --quiet --force-wav "$FILENAME" -|aplay --quiet -
     JOB=$!
 elif [ "${FILENAME##*.}" = "flac" ]; then
     is_command flac || exit 1
     is_command aplay || exit 1
-    sleep 5 && flac -dcs "$FILENAME"|aplay --quiet -
+    flac -dcs "$FILENAME"|aplay --quiet -
+    JOB=$!
+elif [ "${FILENAME%%:*}" = "https" ]; then
+    is_command ffplay || exit 1
+    2>/dev/null ffplay -vn -sn -nodisp -autoexit -hide_banner "$FILENAME"
     JOB=$!
 else
-    warn "audio file format unrecognised or not supported" && sleep 5
+    warn "audio file format unrecognised or not supported"
 fi
 
 # Move to next file automatically,
 # requires fzf to be started with --listen <FZF_PORT>
-test "$JOB" = "" || curl -XPOST localhost:"$FZF_PORT" -d 'down'
+test "$JOB" = "" || { sleep 5 && curl -XPOST localhost:"$FZF_PORT" -d 'down'; }
 
-trap "test $JOB = '' || kill $JOB" EXIT HUP TERM INT
+trap "test \"$JOB\" = \"\" || kill $JOB" EXIT HUP TERM INT
