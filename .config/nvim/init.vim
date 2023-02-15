@@ -374,6 +374,21 @@ if executable('rg')
     set grepprg=rg\ --vimgrep\ --smart-case\ --follow
 endif
 
+if executable('wl-copy') && executable('wl-paste')
+    let g:clipboard = {
+                \   'name': 'Wayland primary selection',
+                \   'copy': {
+                \      '+': ['wl-copy', '-p'],
+                \      '*': ['wl-copy', '-p'],
+                \    },
+                \   'paste': {
+                \      '+': ['wl-paste', '-p'],
+                \      '*': ['wl-paste', '-p'],
+                \   },
+                \   'cache_enabled': 0,
+                \ }
+endif
+
 " COMMANDS {{{1
 " Fuzzy finder (fzf) integration. {{{2
 " <https://github.com/junegunn/fzf/blob/master/README-VIM.md>
