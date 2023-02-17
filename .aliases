@@ -73,7 +73,7 @@ alias v=\$VISUAL
 alias t='1>/dev/null 2>/dev/null setsid $TERM'
 # Tmux, because more terminal sessions are always better.
 alias t,home='tmux new -s $HOST -n phd -c ~/Documents/PhD\; new-window -n website -c ~/vcs/adigitoleo.srht.site\; new-window -n pydrex -c ~/vcs/PyDRex\; new-window -n sws -c ~/Sync/hazcode/sciware/seis/sws'
-alias t,todo='tmux -L todo new -s todo -n todo -c ~/vcs/todo\; new-window "htop -u $(whoami)"\; new-window -n music\; new-window "julia"'
+alias t,todo='tmux -L todo new -s todo -n todo -c ~/vcs/todo\; new-window "htop -u $(whoami)"\; new-window -n music -c ~/Music\; new-window "julia"'
 
 # Suspend and lock (run from a vconsole).
 alias v,lock='systemctl suspend && vlock --all'
