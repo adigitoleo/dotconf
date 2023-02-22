@@ -46,7 +46,7 @@ else
 fi
 
 # Check for files with '.new' in the name under /etc (Void config updates).
-NEWETC_COUNT="$(ls /etc|grep '.new'|wc -l)"
+NEWETC_COUNT="$(2>/dev/null ls /etc/**|grep '\.new'|wc -l)"
 if [ "$NEWETC_COUNT" -gt 0 ]; then
     STATUS_CMD="${STATUS_CMD} + /etc |"
 fi
