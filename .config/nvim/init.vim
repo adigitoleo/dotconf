@@ -88,7 +88,7 @@ function! s:FileFeed(sources, mods) abort "{{{2
     if !empty(l:files)
         return has('windows') ? l:files : 'echo -e "' .. join(l:files, '\n') .. '"'
     else
-        return 'true'
+        return has('windows') ? '' : 'true'
     endif
 endfunction
 
@@ -109,9 +109,9 @@ function! s:TermFeed() abort "{{{2
 
     " Return as shell command to allow async streaming into fzf.
     if !empty(l:terminals)
-        return has('windows') ? l:terminals : 'echo -e "'[ .. join(l:terminals, '\n') .. '"'
+        return has('windows') ? 'echo "' .. join(l:terminals, '<Cr>') .. '"' : 'echo -e "' .. join(l:terminals, '\n') .. '"'
     else
-        return 'true'
+        return has('windows') ? '' : 'true'
     endif
 endfunction
 
@@ -434,7 +434,7 @@ if type(function('fzf#run'))
     " Open files in <dir> (or :pwd by default).
     if !executable("rg")|echoerr "FuzzyFind command requires ripgrep"|endif
     command! -complete=dir -nargs=? -bang FuzzyFind call fzf#run(fzf#wrap(
-        \ s:FZFspecgen("rg --files --hidden --no-messages" .. ' ;' .. s:TermFeed(), <q-args>),
+        \ s:FZFspecgen("rg --files --hidden --no-messages", <q-args>),
         \ <bang>0))
     " Switch between listed buffers or loaded `:terminal` buffers.
     command! -bang FuzzySwitch call fzf#run(fzf#wrap(
