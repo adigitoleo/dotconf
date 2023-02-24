@@ -53,11 +53,10 @@ function! s:BufList() abort " {{{2
     return l:bufnames
 endfunction
 
-function! s:FileFeed(sources, mods, sep) abort "{{{2
+function! s:FileFeed(sources, mods) abort "{{{2
     " Get shell command to generate parsed and filtered file names.
     " a:sources -- list, each source is a sublist of file names
     " a:mods -- string, see :h filename-modifiers and :h fnamemodify()
-    " a:sep -- string, separator to use for the file list e.g. '\n' or ' '
 
     " Respect &wildignore and ignore unnamed/help buffers.
     let l:ignore = split(&wildignore, ',') + ['^$', $VIMRUNTIME]
@@ -87,7 +86,7 @@ function! s:FileFeed(sources, mods, sep) abort "{{{2
     endfor
     " Return as shell command to allow async streaming into fzf.
     if !empty(l:files)
-        return 'echo -e "' .. join(l:files, a:sep) .. '"'
+        return has('windows') ? l:files : 'echo -e "' .. join(l:files, '\n') .. '"'
     else
         return 'true'
     endif
@@ -110,7 +109,7 @@ function! s:TermFeed() abort "{{{2
 
     " Return as shell command to allow async streaming into fzf.
     if !empty(l:terminals)
-        return 'echo -e "' .. join(l:terminals, '\n') .. '"'
+        return has('windows') ? l:terminals : 'echo -e "'[ .. join(l:terminals, '\n') .. '"'
     else
         return 'true'
     endif
@@ -140,7 +139,7 @@ function! s:CmdFeed() abort "{{{2
         endif
     endfor
     " Return as shell command to allow async streaming into fzf.
-    return 'echo -e "' .. join(l:cmdlist, '\n') .. '"'
+    return has('windows') ? l:cmdlist : 'echo -e "' .. join(l:cmdlist, '\n') .. '"'
 endfunction
 
 function! s:TermQuit(job_id, code, event) dict "{{{2
@@ -320,10 +319,14 @@ function! StartTerm(...) abort "{{{2
     let l:has_buf = Floating(l:cmdstr)
     if l:has_buf | return | endif
     call nvim_buf_set_option(0, 'modified', v:false)
-    call termopen(
-                \ 'export TERM=' .. $TERM .. ' && ' .. l:cmdstr,
-                \ a:0 ? {} : {"on_exit": function("<SID>TermQuit")},
-                \)
+    if has('windows')
+        call termopen(l:cmdstr, a:0 ? {} : {"on_exit": function("<SID>TermQuit")})
+    else
+        call termopen(
+                    \ 'export TERM=' .. $TERM .. ' && ' .. l:cmdstr,
+                    \ a:0 ? {} : {"on_exit": function("<SID>TermQuit")},
+                    \)
+    endif
 endfunction
 
 " OPTIONS {{{1
@@ -341,6 +344,14 @@ set list
 " Global configs. {{{2
 if has('mouse')
     set mouse=a
+endif
+if has('windows')
+    " From :h shell-powershell.
+    let &shell = executable('pwsh') ? 'pwsh' : 'powershell'
+    let &shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;'
+    let &shellredir = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
+    let &shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
+    set shellquote= shellxquote=
 endif
 set spelllang=en_au
 set spellfile=~/.config/nvim/after/spell/extras.en.utf-8.add
@@ -418,7 +429,7 @@ if type(function('fzf#run'))
 
     " Open recent files (v:oldfiles) or listed buffers.
     command! -bang FuzzyRecent call fzf#run(fzf#wrap(
-        \ s:FZFspecgen(s:FileFeed([v:oldfiles, s:BufList()], ':~:.', '\n'),
+        \ s:FZFspecgen(s:FileFeed([v:oldfiles, s:BufList()], ':~:.'),
         \ '', "Recent files: "), <bang>0))
     " Open files in <dir> (or :pwd by default).
     if !executable("rg")|echoerr "FuzzyFind command requires ripgrep"|endif
@@ -427,7 +438,7 @@ if type(function('fzf#run'))
         \ <bang>0))
     " Switch between listed buffers or loaded `:terminal` buffers.
     command! -bang FuzzySwitch call fzf#run(fzf#wrap(
-        \ s:FZFspecgen(s:FileFeed([s:BufList()], ':~:.', '\n') .. ' ;' .. s:TermFeed(),
+        \ s:FZFspecgen(s:FileFeed([s:BufList()], ':~:.') .. ' ;' .. s:TermFeed(),
         \ '', "Open buffers: "), <bang>0))
 
     " Search for (most) cmdline mode commands. See s:CmdFeed() for details.
@@ -435,6 +446,7 @@ if type(function('fzf#run'))
     " appended to the match. Can't use ranges (nor from visual mode).
 
     function! s:FuzzyCmd_accept(fzf_out)
+        if len(a:fzf_out) < 2 | return | endif
         let l:query = a:fzf_out[0]
         let l:key = a:fzf_out[1]
         let l:completion = get(a:fzf_out, 2, '')
@@ -712,6 +724,9 @@ endif
 let g:plug_window = 'SmartSplit'
 call plug#begin(g:PLUGIN_HOME)
     " Ergonomics and general fixes. {{{3
+    if has('windows')
+        Plug 'junegunn/fzf'  " Fuzzy search, manual plugin.
+    endif
     Plug 'tpope/vim-abolish'  " Word variant manipulation.
     Plug 'tpope/vim-commentary'  " Quickly comment/uncomment code.
     Plug 'tpope/vim-eunuch'  " UNIX helpers.
@@ -729,7 +744,6 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'nvim-lua/plenary.nvim'  " Lua functions/plugin dev library.
     Plug 'dense-analysis/ale'  " Async code linting.
     Plug 'wfxr/minimap.vim'  " A code minimap, like what cool Atom kids have.
-    Plug 'chmp/mdnav'  " Markdown: internal hyperlink navigation.
     Plug 'alvan/vim-closetag'  " Auto-close (x)html tags.
     Plug 'cespare/vim-toml'  " Syntax highlighting for TOML configs.
     Plug 'vim-python/python-syntax'  " Python: improved syntax highlighting.
@@ -861,13 +875,22 @@ let g:latex_to_unicode_file_types = ["julia", "markdown", "python", "tex", "nim"
 
 let g:mellow_show_bufnr = 0
 
-if $COLORTERM == "truecolor"
+if $COLORTERM == "truecolor" || has('windows')
     set termguicolors
     " Inherit 'background' (dark/light mode) from terminal emulator.
     if executable('theme')
         let &background = get(systemlist('theme -q'), 0)
     else
-        set background=light
+        if has('windows') && &shell == "pwsh"
+            let s:hour24 = system('Get-Date -Format HH')
+            if s:hour24 > 21 || s:hour24 < 9
+                set background=dark
+            else
+                set background=light
+            endif
+        else
+            set background=light
+        endif
     endif
     let g:mellow_user_colors = 1
     colorscheme mellow
