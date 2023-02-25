@@ -86,9 +86,9 @@ function! s:FileFeed(sources, mods) abort "{{{2
     endfor
     " Return as shell command to allow async streaming into fzf.
     if !empty(l:files)
-        return has('windows') ? l:files : 'echo -e "' .. join(l:files, '\n') .. '"'
+        return has('win32') ? l:files : 'echo -e "' .. join(l:files, '\n') .. '"'
     else
-        return has('windows') ? '' : 'true'
+        return has('win32') ? '' : 'true'
     endif
 endfunction
 
@@ -109,9 +109,9 @@ function! s:TermFeed() abort "{{{2
 
     " Return as shell command to allow async streaming into fzf.
     if !empty(l:terminals)
-        return has('windows') ? 'echo "' .. join(l:terminals, '<Cr>') .. '"' : 'echo -e "' .. join(l:terminals, '\n') .. '"'
+        return has('win32') ? 'echo "' .. join(l:terminals, '<Cr>') .. '"' : 'echo -e "' .. join(l:terminals, '\n') .. '"'
     else
-        return has('windows') ? '' : 'true'
+        return has('win32') ? '' : 'true'
     endif
 endfunction
 
@@ -139,7 +139,7 @@ function! s:CmdFeed() abort "{{{2
         endif
     endfor
     " Return as shell command to allow async streaming into fzf.
-    return has('windows') ? l:cmdlist : 'echo -e "' .. join(l:cmdlist, '\n') .. '"'
+    return has('win32') ? l:cmdlist : 'echo -e "' .. join(l:cmdlist, '\n') .. '"'
 endfunction
 
 function! s:TermQuit(job_id, code, event) dict "{{{2
@@ -319,7 +319,7 @@ function! StartTerm(...) abort "{{{2
     let l:has_buf = Floating(l:cmdstr)
     if l:has_buf | return | endif
     call nvim_buf_set_option(0, 'modified', v:false)
-    if has('windows')
+    if has('win32')
         call termopen(l:cmdstr, a:0 ? {} : {"on_exit": function("<SID>TermQuit")})
     else
         call termopen(
@@ -345,7 +345,7 @@ set list
 if has('mouse')
     set mouse=a
 endif
-if has('windows')
+if has('win32')
     " From :h shell-powershell.
     let &shell = executable('pwsh') ? 'pwsh' : 'powershell'
     let &shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;'
@@ -724,7 +724,7 @@ endif
 let g:plug_window = 'SmartSplit'
 call plug#begin(g:PLUGIN_HOME)
     " Ergonomics and general fixes. {{{3
-    if has('windows')
+    if has('win32')
         Plug 'junegunn/fzf'  " Fuzzy search, manual plugin.
     endif
     Plug 'tpope/vim-abolish'  " Word variant manipulation.
@@ -875,13 +875,13 @@ let g:latex_to_unicode_file_types = ["julia", "markdown", "python", "tex", "nim"
 
 let g:mellow_show_bufnr = 0
 
-if $COLORTERM == "truecolor" || has('windows')
+if $COLORTERM == "truecolor" || has('win32')
     set termguicolors
     " Inherit 'background' (dark/light mode) from terminal emulator.
     if executable('theme')
         let &background = get(systemlist('theme -q'), 0)
     else
-        if has('windows') && &shell == "pwsh"
+        if has('win32') && &shell == "pwsh"
             let s:hour24 = system('Get-Date -Format HH')
             if s:hour24 > 21 || s:hour24 < 9
                 set background=dark
