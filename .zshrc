@@ -34,6 +34,8 @@ mkcd() { mkdir -p -- "$1" && cd -P -- "$1" }
 rg,tree() { rg --files $@|tree --fromfile --dirsfirst }
 # Remove white background from PNG image in-place (requires imagemagick).
 rmbg() { convert -transparent white "$1" "$1" }
+# Invert RGB channel of a PNG image in-place (requires imagemagick).
+rgbneg() { convert -channel RGB -negate "$1" "$1" }
 
 #
 # Asynchronous git status indicator.
@@ -163,6 +165,7 @@ fi
 PS2='%F{5}%_>%f '
 
 # Load completions and aliases.
+fpath=(~/.config/zsh/completions $fpath)
 autoload -Uz compinit; compinit
 if [[ -f /usr/share/fzf/completion.zsh ]]; then
     source /usr/share/fzf/completion.zsh
