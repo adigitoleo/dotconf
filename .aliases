@@ -94,7 +94,7 @@ alias e,hist='cut -f2 < ~/.elinks/globhist|fzf'
 alias e,mark='cut -f2 < ~/.elinks/bookmarks|fzf'
 
 # Launch qutebrowser debugging instances (dark or light CSS mode).
-alias q,light='setsid -f qutebrowser -T'
+alias q,light='setsid -f qutebrowser -T -s "colors.webpage.preferred_color_scheme" "light"'
 alias q,dark='setsid -f qutebrowser -T -s "colors.webpage.preferred_color_scheme" "dark"'
 
 # Ouroboros and the Virtual Environment.
