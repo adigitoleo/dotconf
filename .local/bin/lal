@@ -2,14 +2,15 @@
 set -eu
 readonly SCRIPTNAME="${0##*/}"
 helpf() {
-    printf 'Usage: %s alias\n' "$SCRIPTNAME"
+    printf 'Usage: %s [-h|-l]| alias\n' "$SCRIPTNAME"
     echo
     echo 'Use wl-clipboard(1) to copy the login associated with the given alias.'
     echo 'Aliases are defined in ~/.password-store/login_aliases.txt.'
+    echo 'Use -l to print the contenst of that file to stdout.'
 }
 
 [ $# -gt 0 ] || { helpf; exit 1 ;}
-case "$1" in "-h"|"--help") helpf; exit;; esac
+case "$1" in "-h"|"--help") helpf; exit;; "-l"|"--list") cat ~/.password-store/login_aliases.txt; exit;; esac
 if grep -q "$1" ~/.password-store/login_aliases.txt; then
     grep "$1" ~/.password-store/login_aliases.txt|cut -d: -f2-|wl-copy -pn
     grep "$1" ~/.password-store/login_aliases.txt|cut -d: -f2-|xargs \
