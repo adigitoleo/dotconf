@@ -93,6 +93,7 @@ c.tabs.mousewheel_switching = False
 c.tabs.position = "left"
 c.tabs.new_position.related = "next"
 c.tabs.new_position.unrelated = "next"
+c.tabs.select_on_remove = "prev"
 c.tabs.title.format_pinned = "{audio}{index}: {current_title}"
 
 
