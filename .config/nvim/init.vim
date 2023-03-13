@@ -530,25 +530,26 @@ augroup filetype_rules
     autocmd!
     " Consider using ftplugin scripts for complex stuff, `:h ftplugin`.
     " Verify that ':filetype' returns 'plugin:ON'.
-    autocmd FileType sh,zsh setlocal textwidth=79
-    autocmd FileType qf setlocal number norelativenumber cursorline textwidth=0
-    autocmd FileType vim setlocal textwidth=78 foldmethod=marker foldenable
     autocmd FileType bash,sh setlocal foldmethod=marker textwidth=100
-    autocmd FileType make setlocal noexpandtab textwidth=79
-    autocmd FileType markdown setlocal foldlevel=1
-    autocmd FileType python setlocal textwidth=88 foldmethod=syntax
-    autocmd FileType julia setlocal textwidth=92
-    autocmd FileType plaintex setlocal filetype=tex
-    autocmd FileType tex setlocal textwidth=0 wrap
-    autocmd FileType enaml setlocal textwidth=88 filetype=python.enaml
-    autocmd FileType yaml setlocal tabstop=2
-    autocmd FileType css setlocal tabstop=2
-    autocmd FileType xml,html setlocal tabstop=2 foldmethod=indent
-    autocmd FileType desktop set commentstring=#\ %s
-    autocmd FileType fortran setlocal textwidth=92
-    autocmd FileType nim setlocal softtabstop=-1 shiftwidth=0 commentstring=#\ %s textwidth=100
     autocmd FileType cpp setlocal tabstop=2 textwidth=100
-    autocmd Filetype gitconfig setlocal noexpandtab
+    autocmd FileType css setlocal tabstop=2
+    autocmd FileType desktop set commentstring=#\ %s
+    autocmd FileType enaml setlocal textwidth=88 filetype=python.enaml
+    autocmd FileType fortran setlocal textwidth=92
+    autocmd FileType julia setlocal textwidth=92
+    autocmd FileType make setlocal noexpandtab textwidth=79
+    autocmd FileType markdown setlocal foldlevel=1 conceallevel=2 synmaxcol=500
+    autocmd FileType nim setlocal softtabstop=-1 shiftwidth=0 commentstring=#\ %s textwidth=100
+    autocmd FileType plaintex setlocal filetype=tex
+    autocmd FileType python setlocal textwidth=88 foldmethod=syntax
+    autocmd FileType qf setlocal number norelativenumber cursorline textwidth=0
+    autocmd FileType sh,zsh setlocal textwidth=79
+    autocmd FileType tex setlocal textwidth=0 wrap
+    autocmd FileType vim setlocal textwidth=78 foldmethod=marker foldenable
+    autocmd FileType xml,html setlocal tabstop=2 foldmethod=indent
+    autocmd FileType yaml setlocal tabstop=2
+    autocmd FileType gitconfig setlocal noexpandtab
+    autocmd FileType help setlocal signcolumn=no
 augroup END
 
 " Miscellaneous. {{{2
