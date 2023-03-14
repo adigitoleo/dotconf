@@ -884,7 +884,7 @@ if $COLORTERM == "truecolor" || has('win32')
     else
         if has('win32') && &shell == "pwsh"
             let s:hour24 = system('Get-Date -Format HH')
-            if s:hour24 > 21 || s:hour24 < 9
+            if s:hour24 > 20 || s:hour24 < 9
                 set background=dark
             else
                 set background=light
