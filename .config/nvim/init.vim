@@ -538,13 +538,14 @@ augroup filetype_rules
     autocmd FileType fortran setlocal textwidth=92
     autocmd FileType julia setlocal textwidth=92
     autocmd FileType make setlocal noexpandtab textwidth=79
-    autocmd FileType markdown setlocal foldlevel=1 conceallevel=2 synmaxcol=500
+    autocmd FileType markdown setlocal textwidth=79 foldlevel=1 conceallevel=2 synmaxcol=500
     autocmd FileType nim setlocal softtabstop=-1 shiftwidth=0 commentstring=#\ %s textwidth=100
     autocmd FileType plaintex setlocal filetype=tex
     autocmd FileType python setlocal textwidth=88 foldmethod=syntax
     autocmd FileType qf setlocal number norelativenumber cursorline textwidth=0
     autocmd FileType sh,zsh setlocal textwidth=79
     autocmd FileType tex setlocal textwidth=0 wrap
+    autocmd FileType bib setlocal expandtab
     autocmd FileType vim setlocal textwidth=78 foldmethod=marker foldenable
     autocmd FileType xml,html setlocal tabstop=2 foldmethod=indent
     autocmd FileType yaml setlocal tabstop=2
