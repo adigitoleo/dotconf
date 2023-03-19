@@ -8,8 +8,10 @@ Lines beginning with '#' in INPUT_FILE are safe to use for comments.
 
 import argparse
 import os
+import re
 import urllib.error as ue
 import urllib.request as ur
+from xml.etree import ElementTree
 
 
 def _get_args() -> argparse.Namespace:
@@ -28,6 +30,12 @@ def _get_args() -> argparse.Namespace:
         help="request plain text citation instead of BibTeX",
     )
     parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="verbose output (print abstract if available)",
+    )
+    parser.add_argument(
         "doi_or_file",
         metavar="DOI|INPUT_FILE",
         help="single DOI link, or INPUT_FILE if -f was given",
@@ -35,7 +43,7 @@ def _get_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def getbib(doi: str, plain: bool = False) -> str:
+def getbib(doi: str, plain: bool = False, verbose: bool = False) -> str:
     """Get BibTeX metadata or plain text citation from a DOI link."""
     url = doi.rstrip().lstrip()
     if plain:
@@ -49,9 +57,59 @@ def getbib(doi: str, plain: bool = False) -> str:
         response = ur.urlopen(
             ur.Request(url, headers={"Accept": content_negotiation})
         )
+        if verbose:
+            has_abstract = False
+            response_verbose = ur.urlopen(
+                ur.Request(
+                    url, headers={"Accept": "application/vnd.crossref.unixsd+xml"}
+                )
+            )
+            tree = ElementTree.fromstring(response_verbose.read().decode("utf-8"))
+            qrschema_prefix = (
+                '{'
+                + re.findall('{(.+?)}', re.sub(r'\(.+?\)', '', tree[0].tag))[0]
+                + '}'
+            )
+            record = (
+                tree
+                .find(f"{qrschema_prefix}query_result")
+                .find(f"{qrschema_prefix}body")
+                .find(f"{qrschema_prefix}query")
+                .find(f"{qrschema_prefix}doi_record")[0]
+            )
+            xschema_prefix = (
+                '{'
+                + re.findall('{(.+?)}', re.sub(r'\(.+?\)', '', record[0].tag))[0]
+                + '}'
+            )
+            article = (
+                record
+                .find(f"{xschema_prefix}journal")
+                .find(f"{xschema_prefix}journal_article")
+            )
+
+            # FIXME: Abstracts are not well formatted in the XML, there can be all kinds
+            # of sub-elements because of MathML or other nonsense, and for some reason
+            # that causes the abstract <p> element to cut off...
+            abstract_text = ""
+            for child in article:
+                if "abstract" in child.tag:
+                    abstract = article.find(child.tag)
+                    abstract_text += abstract.text.strip()
+                    for c in abstract:
+                        abstract_text += c.text.strip()
+                        for cc in c:
+                            abstract_text += cc.text.strip()
+                    has_abstract = True
+            abstract_text = abstract_text.replace(os.linesep, '')
+            abstract_text += os.linesep
+
     except ue.URLError:
         return "failed to open URL"
-    return response.read().decode("utf-8")
+    output = response.read().decode("utf-8")
+    if verbose and has_abstract:
+        output = output + os.linesep + "Abstract:" + os.linesep + abstract_text
+    return output
 
 
 def _main():
@@ -66,7 +124,7 @@ def _main():
                         print(getbib(line, plain=args.plaintext))
 
     else:
-        print(getbib(args.doi_or_file, plain=args.plaintext))
+        print(getbib(args.doi_or_file, plain=args.plaintext, verbose=args.verbose))
 
 
 if __name__ == "__main__":
