@@ -62,8 +62,8 @@ c.fileselect.multiple_files.command = [
     "down:60%:sharp",
 ]
 c.downloads.remove_finished = 1000
-# TODO: Re-enable after setting up a notifications daemon?
-c.content.notifications.enabled = False
+c.content.notifications.enabled = True
+c.content.notifications.presenter = "libnotify"
 
 if "QB_FORCE_HIDPI" in os.environ and os.environ["QB_FORCE_HIDPI"]:
     c.qt.highdpi = True
@@ -128,10 +128,11 @@ if "dark" in str(THEME):
     # FIXME: Doesn't seem to work?
     if "QB_QT_DARKMODE" in os.environ and os.environ["QB_QT_DARKMODE"]:
         c.colors.webpage.darkmode.enabled = True
-        # Set the default bg to a dark color as well to prevent white flashes.
-        c.colors.webpage.bg = colors[8]
     else:
         c.colors.webpage.preferred_color_scheme = "dark"
+
+    # Set the default bg to a dark color as well to prevent white flashes.
+    c.colors.webpage.bg = colors[8]
 
     c.colors.statusbar.normal.bg = colors[5]
     c.colors.tabs.bar.bg = colors[5]
