@@ -873,6 +873,8 @@ let g:minimap_diffremove_color = "DiffDelete"
 let g:minimap_diff_color = "DiffChange"
 " Use the latex to unicode converter provided by julia.vim for other filetypes.
 let g:latex_to_unicode_file_types = ["julia", "markdown", "python", "tex", "nim"]
+" Fix vim-sneak highlight clearing.
+autocmd User SneakLeave highlight clear Sneak
 " }}}}}}
 
 let g:mellow_show_bufnr = 0
