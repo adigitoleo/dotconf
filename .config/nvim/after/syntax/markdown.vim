@@ -3,7 +3,7 @@ syn region displayMath start=/\$\$/ end=/\$\$/
 " Inline math. Look for '$[not $][anything]$'
 syn match inlineMath '\$[^$].\{-}\$'
 " YAML/TOML frontmatter.
-syn region frontMatter start=/---\+$/ end=/---\+$/ conceal cchar=@
+syn region frontMatter start=/\%^---\+$/ end=/---\+$/ conceal cchar=@
 " Inline URLs look ugly, let's conceal them.
 syn match markdownUrl "\S\+" nextgroup=markdownUrlTitle skipwhite contained conceal cchar=@
 
