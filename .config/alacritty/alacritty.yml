@@ -57,6 +57,6 @@ schemes:
             cyan:       '#D47D49'
             white:      '#ECCD9D'
 
-colors: *dark
+colors: *light
 window:
     opacity: 0.8
