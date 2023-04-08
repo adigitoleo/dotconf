@@ -36,6 +36,7 @@ Any direct messages can be sent either to my email listed on the website,
 or using the `tox` protocol to the following address:
 
 
+```plaintext
     ███████████████████████████████
     █ ▄▄▄▄▄ █  ▀▀ ▀▀██ ▀  █ ▄▄▄▄▄ █
     █ █   █ █  ▄ █▄▄▄▄▄██▀█ █   █ █
@@ -52,3 +53,4 @@ or using the `tox` protocol to the following address:
     █ █   █ █▄▀█▄ ▄ ▀▀▄▀▀ ▄▄▄ ▄▄▄▀█
     █ █▄▄▄█ █▀▄▀▀▄█▄▀▀ █▀█ ▄█ ▄  ▄█
     █▄▄▄▄▄▄▄█▄▄█▄█▄▄██▄▄████▄▄▄████
+```
