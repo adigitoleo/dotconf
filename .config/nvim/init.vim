@@ -745,6 +745,7 @@ call plug#begin(g:PLUGIN_HOME)
     " Dev tooling and filetype plugins. {{{3
     Plug 'nvim-lua/plenary.nvim'  " Lua functions/plugin dev library.
     Plug 'dense-analysis/ale'  " Async code linting.
+    Plug 'lewis6991/gitsigns.nvim'  " Git status in sign column and statusbar.
     Plug 'wfxr/minimap.vim'  " A code minimap, like what cool Atom kids have.
     Plug 'alvan/vim-closetag'  " Auto-close (x)html tags.
     Plug 'cespare/vim-toml'  " Syntax highlighting for TOML configs.
@@ -862,6 +863,8 @@ augroup sneak_colors
 augroup END
 
 " Miscellaneous {{{2
+" Git signs setup.
+lua require('gitsigns').setup()
 " Don't open folds when restoring cursor position.
 let g:lastplace_open_folds = 0
 " Use a wider minimap.
