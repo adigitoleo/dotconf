@@ -31,8 +31,3 @@ For more about me,
 you can check [my website](https://adigitoleo.srht.site/about-me/),
 which lists any more substantial projects and
 might eventually host articles worth reading...
-
-Any direct messages can be sent either to my email listed on the website,
-or using the `tox` protocol to the following address:
-
-![Tox-QRcode](https://git.sr.ht/~adigitoleo/dotconf/blob/master/.config/tox/leon.QRcode.png)
