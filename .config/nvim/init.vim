@@ -284,6 +284,8 @@ function! Floating(buftag, ...) abort "{{{2
                 \   'col': 5,
                 \   'width': &columns - 10,
                 \   'height': &lines - 12,
+                \   'title': ' ' .. a:buftag .. ' ',
+                \   'title_pos': 'center',
                 \}
     if exists("t:floating_window") && win_id2win(t:floating_window) > 0
         call win_gotoid(t:floating_window)
@@ -563,6 +565,7 @@ augroup misc
     autocmd VimResized * wincmd =
     autocmd TabEnter * stopinsert
     autocmd ColorScheme mellow hi link NormalFloat Normal
+    autocmd ColorScheme mellow hi link FloatTitle FloatBorder
 augroup END
 
 " MAPPINGS {{{1
