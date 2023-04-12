@@ -750,6 +750,7 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'dense-analysis/ale'  " Async code linting.
     Plug 'lewis6991/gitsigns.nvim'  " Git status in sign column and statusbar.
     Plug 'wfxr/minimap.vim'  " A code minimap, like what cool Atom kids have.
+    Plug 'SidOfc/carbon.nvim'  " Replacement for nerdtree, directory viewer.
     Plug 'alvan/vim-closetag'  " Auto-close (x)html tags.
     Plug 'cespare/vim-toml'  " Syntax highlighting for TOML configs.
     Plug 'vim-python/python-syntax'  " Python: improved syntax highlighting.
