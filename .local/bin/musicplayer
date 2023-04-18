@@ -5,6 +5,7 @@ usage() {
     printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
     printf '       %s ' "$SCRIPTNAME"
     echo '[-p port][-s][-r] DIRECTORY ...'
+    printf '       %s ' "$SCRIPTNAME"
     echo '[-f file]'
     echo
 }
