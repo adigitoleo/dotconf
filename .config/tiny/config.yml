@@ -10,8 +10,17 @@ servers:
       alias: libera
 
       # Channels to automatically join
-      # join:
-      #     - "#tiny"
+      join:
+          - "#voidlinux"
+          - "#sr.ht"
+          - "#julia"
+          - "#python"
+          - "#nim"
+          - "#latex"
+          - "#openscad"
+          - "##physics"
+          - "##math"
+          - "##statistics"
 
       # Three authentication methods: pass, sasl, and nickserv_ident
       # These are optional and you probably only need one of these, delete
@@ -40,7 +49,7 @@ defaults:
 log_dir: "/tmp/.tiny_logs"
 
 # (Optional) Limits the maximum number of messages stored for each UI tab. Defaults to unlimited.
-# scrollback: 512
+scrollback: 5000
 
 # (Optional) UI layout: 'compact' or 'aligned'. Defaults to 'compact'.
 layout: aligned
