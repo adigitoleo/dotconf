@@ -391,8 +391,8 @@ if executable('wl-copy') && executable('wl-paste')
     let g:clipboard = {
                 \   'name': 'Wayland primary selection',
                 \   'copy': {
-                \      '+': ['wl-copy', '-p'],
-                \      '*': ['wl-copy', '-p'],
+                \      '+': ['wl-copy', '-p', '-n'],
+                \      '*': ['wl-copy', '-p', '-n'],
                 \    },
                 \   'paste': {
                 \      '+': ['wl-paste', '-p'],
