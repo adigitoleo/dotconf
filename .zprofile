@@ -62,3 +62,6 @@ fi
 if [ -r "$HOME/.zprofile.more" ]; then
     . "$HOME/.zprofile.more"
 fi
+
+# A good website to ping for network checks if in AUS.
+export TELSTRA="139.130.4.5"
