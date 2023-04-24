@@ -533,6 +533,7 @@ augroup filetype_rules
     " Consider using ftplugin scripts for complex stuff, `:h ftplugin`.
     " Verify that ':filetype' returns 'plugin:ON'.
     autocmd FileType bash,sh setlocal foldmethod=marker textwidth=100
+    autocmd FileType openscad setlocal commentstring=//\ %s
     autocmd FileType cpp setlocal tabstop=2 textwidth=100
     autocmd FileType css setlocal tabstop=2
     autocmd FileType desktop set commentstring=#\ %s
