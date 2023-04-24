@@ -58,10 +58,10 @@ if [ -d "$HOME/.go" ]; then
     export GOPATH="$HOME/.go"
 fi
 
+# A good website to ping for network checks if in AUS.
+export TELSTRA="139.130.4.5"
+
 # Load hardware-specific or non-universal options from an untracked file.
 if [ -r "$HOME/.zprofile.more" ]; then
     . "$HOME/.zprofile.more"
 fi
-
-# A good website to ping for network checks if in AUS.
-export TELSTRA="139.130.4.5"
