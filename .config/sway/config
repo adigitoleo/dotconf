@@ -55,6 +55,7 @@ for_window [app_id="qt5ct"] floating enable
 for_window [app_id="tikzit"] floating enable
 for_window [app_id="gksqt"] floating enable
 for_window [app_id="gnuplot_qt"] floating enable
+for_window [app_id="fstl"] floating enable
 
 ### Input configuration
 # Read `man 5 sway-input` for a complete reference.
@@ -174,6 +175,10 @@ bar {
         active_workspace #A67458 #A67458 #66292F
         inactive_workspace #66292F #66292F #F3AE72
         urgent_workspace #FF7477 #FF7477 #AF0032
+    }
+
+    tray {
+        padding 3
     }
 }
 
