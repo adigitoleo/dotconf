@@ -12,6 +12,7 @@ servers:
       # Channels to automatically join
       join:
           - "#voidlinux"
+          - "#sway"
           - "#sr.ht"
           - "#julia"
           - "#python"
