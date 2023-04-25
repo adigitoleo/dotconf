@@ -56,6 +56,7 @@ for_window [app_id="tikzit"] floating enable
 for_window [app_id="gksqt"] floating enable
 for_window [app_id="gnuplot_qt"] floating enable
 for_window [app_id="fstl"] floating enable
+for_window [app_id="LithoMaker"] floating enable
 
 ### Input configuration
 # Read `man 5 sway-input` for a complete reference.
