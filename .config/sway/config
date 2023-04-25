@@ -177,9 +177,7 @@ bar {
         urgent_workspace #FF7477 #FF7477 #AF0032
     }
 
-    tray {
-        padding 3
-    }
+    tray_padding 3
 }
 
 exec --no-startup-id wl-init
