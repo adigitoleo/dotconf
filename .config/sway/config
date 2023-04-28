@@ -61,9 +61,11 @@ for_window [app_id="pcmanfm-qt"] floating enable
 
 ### Input configuration
 # Read `man 5 sway-input` for a complete reference.
-input * xkb_layout us
-input * xkb_variant altgr-intl
-input * xkb_options altwin:swap_lalt_lwin,ctrl:swapcaps
+input type:keyboard {
+    xkb_layout us,pl
+    xkb_variant altgr-intl,
+    xkb_options altwin:swap_lalt_lwin,ctrl:swapcaps
+}
 input type:touchpad tap enabled
 input type:touchpad natural_scroll enabled
 
@@ -74,6 +76,7 @@ bindsym $mod+Shift+d exec $menu
 bindsym $mod+Shift+o exec $open
 bindsym $mod+Shift+f exec $floatterm
 bindsym $mod+Shift+e exec $explorer
+bindsym $mod+i input type:keyboard xkb_switch_layout next
 
 floating_modifier $mod normal
 bindsym $mod+Shift+r reload; exec wl-init
