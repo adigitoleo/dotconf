@@ -20,7 +20,7 @@ if [ -d "$BATTERY_INFO_DIR" ]; then
     fi
     if [ -r "$ENERGY_FULL_FILE" ]; then
         IFS= read -r ENERGY_FULL <"$ENERGY_FULL_FILE"
-        ENERGY_PERCENT=$(( 100 * $ENERGY_NOW / ENERGY_FULL ))
+        ENERGY_PERCENT=$(( 100 * ENERGY_NOW / ENERGY_FULL ))
     else
         warn "cannot read from file: '$ENERGY_FULL_FILE'"; exit 1
     fi
@@ -37,7 +37,7 @@ fi
 
 # Show active sshfs mounts, I always forget about them.
 if 1>/dev/null 2>&1 command -v findmnt; then
-    SSHFS_INFO="$(findmnt -n -t fuse.sshfs -o TARGET|tr '\n' ' '|sed 's|'${HOME}'|~|g')"
+    SSHFS_INFO="$(findmnt -n -t fuse.sshfs -o TARGET|tr '\n' ' '|sed 's|'"$HOME"'|~|g')"
     if [ -n "$SSHFS_INFO" ]; then
         STATUS_CMD="${STATUS_CMD} ⇄ $SSHFS_INFO|"
     fi
@@ -46,9 +46,18 @@ else
 fi
 
 # Check for files with '.new' in the name under /etc (Void config updates).
-NEWETC_COUNT="$(2>/dev/null ls /etc/**|grep '\.new'|wc -l)"
+NEWETC_COUNT="$(2>/dev/null ls /etc/**/*.new|wc -l)"
 if [ "$NEWETC_COUNT" -gt 0 ]; then
     STATUS_CMD="${STATUS_CMD} + /etc |"
+fi
+
+# Show active keyboard layout.
+# TODO: Look for xkblayout-state when swaymsg is not available?
+# The binary from the Void repos throws a segfault :(
+# Or better, write my own version of that tool...
+if 1>/dev/null 2>&1 command -v swaymsg; then
+    XKB_LAYOUT="$(swaymsg -t get_inputs|jq '.[0].xkb_active_layout_name'|tr -d '"')"
+    STATUS_CMD="${STATUS_CMD} ${XKB_LAYOUT} |"
 fi
 
 STATUS_CMD="${STATUS_CMD} $(date +'%A %Y-%m-%d %I:%M %p ')"
