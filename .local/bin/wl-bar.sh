@@ -51,14 +51,5 @@ if [ "$NEWETC_COUNT" -gt 0 ]; then
     STATUS_CMD="${STATUS_CMD} + /etc |"
 fi
 
-# Show active keyboard layout.
-# TODO: Look for xkblayout-state when swaymsg is not available?
-# The binary from the Void repos throws a segfault :(
-# Or better, write my own version of that tool...
-if 1>/dev/null 2>&1 command -v swaymsg; then
-    XKB_LAYOUT="$(swaymsg -t get_inputs|jq '.[0].xkb_active_layout_name'|tr -d '"')"
-    STATUS_CMD="${STATUS_CMD} ${XKB_LAYOUT} |"
-fi
-
 STATUS_CMD="${STATUS_CMD} $(date +'%A %Y-%m-%d %I:%M %p ')"
 printf '%s\n' "$STATUS_CMD"|tr -s ' '
