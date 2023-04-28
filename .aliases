@@ -50,6 +50,7 @@ if 1>/dev/null 2>&1 command -v pacman ; then
     alias p,rm='sudo pacman -Rns --color=auto'
     alias p,orphans='pacman -Qtdq --color=auto'
     alias p,info='pacman -Qi --color=auto'
+    alias p,rinfo='pacman -Si --color=auto'
     alias aur='auracle'
     alias pacdiff='sudo SUDO_EDITOR="nvim -d" DIFFPROG="sudoedit" pacdiff'
 elif 1>/dev/null 2>&1 command -v xbps-install ; then
@@ -59,6 +60,7 @@ elif 1>/dev/null 2>&1 command -v xbps-install ; then
     alias p,rm='sudo xbps-remove -R'
     alias p,orphans='xbps-query --list-orphans'
     alias p,info='xbps-query --show'
+    alias p,rinfo='xbps-query -R --show'
 fi
 
 # Use ED25519 ssh keys by default.
