@@ -4,6 +4,8 @@
 # - autotiling plugin, <https://github.com/nwg-piotr/autotiling>
 # - swaylock <https://github.com/swaywm/swaylock>
 # - swayidle <https://github.com/swaywm/swayidle>
+# - pcmanfm-qt <https://lxqt-project.org>
+# - libnotify <https://gitlab.gnome.org/GNOME/libnotify>
 # Read `man 5 sway` for a complete reference.
 
 font monospace bold 11
@@ -31,33 +33,33 @@ set $lock 'swaylock -f -i $HOME/Pictures/wallpapers/chauvet_lions_dark.jpg'
 set $floatterm 'alacritty --class floating-terminal,floating-terminal -o window.opacity=0.8'
 set $menu 'alacritty --class floating-terminal,floating-terminal -o window.opacity=0.8 -e fzfmenu.sh'
 set $open 'alacritty --class floating-terminal,floating-terminal -o window.opacity=0.8 -e fzfopen.sh'
-set $explorer 'alacritty --class floating-terminal,floating-terminal -o window.opacity=0.8 -e "nnn -C -e"'
+set $explorer 'pcmanfm-qt'
 
 ### Window rules
-for_window [title="^.*"] title_format " %title"
+for_window [app_id="LithoMaker"] floating enable
+for_window [app_id="audacity"] floating enable
 for_window [app_id="drracket"] floating enable
 for_window [app_id="floating-terminal"] floating enable
+for_window [app_id="fstl"] floating enable
 for_window [app_id="gimp"] floating enable
+for_window [app_id="gksqt"] floating enable
+for_window [app_id="gnuplot_qt"] floating enable
 for_window [app_id="gov-nasa-giss-panoply-Panoply"] floating enable
 for_window [app_id="imv"] floating enable
-for_window [app_id="swayimg"] floating enable
 for_window [app_id="inkscape"] floating enable
 for_window [app_id="jupyter-qtconsole"] floating enable
 for_window [app_id="libreoffice"] floating enable
 for_window [app_id="matplotlib"] floating enable
 for_window [app_id="mpv"] floating enable
 for_window [app_id="mscore"] floating enable
-for_window [app_id="audacity"] floating enable
-for_window [app_id="vellum"] floating enable
 for_window [app_id="mypaint"] floating enable
+for_window [app_id="pcmanfm-qt"] floating enable
 for_window [app_id="python3"] floating enable
 for_window [app_id="qt5ct"] floating enable
+for_window [app_id="swayimg"] floating enable
 for_window [app_id="tikzit"] floating enable
-for_window [app_id="gksqt"] floating enable
-for_window [app_id="gnuplot_qt"] floating enable
-for_window [app_id="fstl"] floating enable
-for_window [app_id="LithoMaker"] floating enable
-for_window [app_id="pcmanfm-qt"] floating enable
+for_window [app_id="vellum"] floating enable
+for_window [title="^.*"] title_format " %title"
 
 ### Input configuration
 # Read `man 5 sway-input` for a complete reference.
@@ -76,7 +78,9 @@ bindsym $mod+Shift+d exec $menu
 bindsym $mod+Shift+o exec $open
 bindsym $mod+Shift+f exec $floatterm
 bindsym $mod+Shift+e exec $explorer
-bindsym $mod+i input type:keyboard xkb_switch_layout next
+bindsym $mod+i input type:keyboard xkb_switch_layout next;\
+    exec notify-send -t 2500 "Switched keyboard layout to:"\
+    "$(swaymsg -t get_inputs|jq '.[0].xkb_active_layout_name'|tr -d '"')"
 
 floating_modifier $mod normal
 bindsym $mod+Shift+r reload; exec wl-init
