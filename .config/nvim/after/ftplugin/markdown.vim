@@ -26,3 +26,6 @@ if exists('g:loaded_surround')
     map <silent> <localleader>b :call <SID>MarkdownBoldToggle()<Cr>
     map <silent> <localleader>i :call <SID>MarkdownItalicToggle()<Cr>
 endif
+
+iabbrev <buffer> :( \( \)<Left><Left><Left>
+iabbrev <buffer> :[ \[ \]<Left><Left><Left>
