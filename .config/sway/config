@@ -36,6 +36,10 @@ set $open 'alacritty --class floating-terminal,floating-terminal -o window.opaci
 set $explorer 'pcmanfm-qt'
 
 ### Window rules
+for_window [title="^.*"] title_format " %title"
+assign [app_id=".*qutebrowser"] workspace number 2
+assign [app_id="zathura"] workspace number 2
+
 for_window [app_id="LithoMaker"] floating enable
 for_window [app_id="audacity"] floating enable
 for_window [app_id="drracket"] floating enable
@@ -59,7 +63,6 @@ for_window [app_id="qt5ct"] floating enable
 for_window [app_id="swayimg"] floating enable
 for_window [app_id="tikzit"] floating enable
 for_window [app_id="vellum"] floating enable
-for_window [title="^.*"] title_format " %title"
 
 ### Input configuration
 # Read `man 5 sway-input` for a complete reference.
