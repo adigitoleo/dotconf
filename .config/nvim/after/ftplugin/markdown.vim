@@ -28,4 +28,4 @@ if exists('g:loaded_surround')
 endif
 
 iabbrev <buffer> :( \( \)<Left><Left><Left>
-iabbrev <buffer> :[ \[ \]<Left><Left><Left>
+iabbrev <buffer> ;[ \[ \]<Left><Left><Left>
