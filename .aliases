@@ -97,9 +97,8 @@ alias x,op='1>/dev/null 2>/dev/null setsid xdg-open'
 alias e,hist='cut -f2 < ~/.elinks/globhist|fzf'
 alias e,mark='cut -f2 < ~/.elinks/bookmarks|fzf'
 
-# Launch qutebrowser debugging instances (dark or light CSS mode).
-alias q,light='setsid -f qutebrowser -T -s "colors.webpage.preferred_color_scheme" "light"'
-alias q,dark='setsid -f qutebrowser -T -s "colors.webpage.preferred_color_scheme" "dark"'
+# Launch qutebrowser backend-forced dark mode for stuborn sites.
+alias q,dark='QB_QT_DARKMODE=1 setsid -f qutebrowser -T'
 
 # Ouroboros and the Virtual Environment.
 alias py=python
