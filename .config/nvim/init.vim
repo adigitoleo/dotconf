@@ -528,6 +528,7 @@ augroup terminal_buffer_rules
 augroup END
 
 " Special filetype settings and overrides. {{{2
+lua vim.filetype.add({extension = {tikzstyles = 'tex'}})
 augroup filetype_rules
     autocmd!
     " Consider using ftplugin scripts for complex stuff, `:h ftplugin`.
