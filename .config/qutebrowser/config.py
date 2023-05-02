@@ -130,8 +130,8 @@ if "dark" in str(THEME):
     else:
         c.colors.webpage.preferred_color_scheme = "dark"
 
-    # Set the default bg to a dark color as well to prevent white flashes.
-    c.colors.webpage.bg = colors[8]
+    # Set the default bg to a darker color as well to prevent white flashes.
+    c.colors.webpage.bg = colors[5]
 
     c.colors.statusbar.normal.bg = colors[5]
     c.colors.tabs.bar.bg = colors[5]
