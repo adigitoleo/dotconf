@@ -65,7 +65,7 @@ c.downloads.remove_finished = 1000
 c.content.notifications.enabled = True
 c.content.notifications.presenter = "libnotify"
 
-if "QB_FORCE_HIDPI" in os.environ and os.environ["QB_FORCE_HIDPI"]:
+if "QB_FORCE_HIDPI" in os.environ and bool(os.environ["QB_FORCE_HIDPI"]):
     c.qt.highdpi = True
     c.zoom.default = "85%"
 
