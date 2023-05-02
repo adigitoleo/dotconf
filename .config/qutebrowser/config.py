@@ -78,6 +78,10 @@ if "QB_FORCE_HIDPI" in os.environ and bool(os.environ["QB_FORCE_HIDPI"]):
 # Hardening (at least a little bit...)
 ########################################################################################
 
+if "QB_TOR_PORT" in os.environ:
+    c.content.proxy = f"socks://localhost:{os.environ['QB_TOR_PORT']}/"
+    c.url.start_pages = ["https://3g2upl4pq6kufc4m.onion/?q={}"]
+
 c.content.webrtc_ip_handling_policy = "default-public-interface-only"
 c.content.webgl = False
 c.content.cookies.accept = "no-3rdparty"

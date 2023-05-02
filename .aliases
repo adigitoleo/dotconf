@@ -97,8 +97,10 @@ alias x,op='1>/dev/null 2>/dev/null setsid xdg-open'
 alias e,hist='cut -f2 < ~/.elinks/globhist|fzf'
 alias e,mark='cut -f2 < ~/.elinks/bookmarks|fzf'
 
-# Launch qutebrowser backend-forced dark mode for stuborn sites.
-alias q,dark='QB_QT_DARKMODE=1 setsid -f qutebrowser -T'
+# Launch qutebrowser with backend-forced dark mode for stuborn sites.
+alias q,dark='QB_QT_DARKMODE=1 setsid -f qutebrowser -T -C ~/.config/qutebrowser/config.py'
+# Launch qutebrowser with backend-forced dark mode using tor proxy.
+alias q,tor='QB_QT_DARKMODE=1 QB_TOR_PORT=9050 setsid -f qutebrowser -T -C ~/.config/qutebrowser/config.py'
 
 # Ouroboros and the Virtual Environment.
 alias py=python
