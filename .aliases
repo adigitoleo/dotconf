@@ -5,6 +5,7 @@
 # a = alsa (audio)
 # d = disk controls (mount/unmount etc.)
 # e = elinks (text browser utilities), note that bare `e` should run $EDITOR instead
+# i = networking (also ip,<foo>)
 # p = pacman (package manager)
 # q = qutebrowser (web browser)
 # v = virtual console
@@ -92,6 +93,10 @@ alias d,unmount='sync && udisksctl unmount -b'
 # Only for X.
 alias x,clip='xclip -sel clip'
 alias x,op='1>/dev/null 2>/dev/null setsid xdg-open'
+
+# Get host info.
+alias ip,lan='ip route get 1|rg -o "src [^\s]*"|cut -d" " -f2'
+alias ip,pub='curl ipinfo.ip/ip'
 
 # Find and print site urls from elinks history or bookmarks.
 alias e,hist='cut -f2 < ~/.elinks/globhist|fzf'
