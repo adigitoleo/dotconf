@@ -291,10 +291,14 @@ endif
 " <https://github.com/junegunn/fzf/blob/master/README-VIM.md>
 if type(function('fzf#run'))
     " Configure default picker window.
-    let g:fzf_layout = { 'window': {
-                \   'width': 0.9, 'height': 0.6,
-                \   'border': 'sharp', 'highlight': 'StatusLine',
-                \}}
+    if has('nvim') ? has('nvim-0.4') : has('popupwin') && has('patch-8.2.191')
+        let g:fzf_layout = { 'window': {
+                    \   'width': 0.9, 'height': 0.6,
+                    \   'border': 'sharp', 'highlight': 'StatusLine',
+                    \}}
+    else
+        let g:fzf_layout = { 'down': '30%' }
+    endif
 
     function! s:FZFspecgen(source, dir, ...)
         " Generate spec for custom fuzzy finders.
@@ -348,23 +352,40 @@ if type(function('fzf#run'))
         endif
     endfunction
 
-    command! FuzzyCmd
-                \ call fzf#run({
-                \   'source': s:CmdFeed(),
-                \   'sink*': function('s:FuzzyCmd_accept'),
-                \   'window': {
-                \       'width': 1, 'height': 0.4, 'xoffset': 0, 'yoffset': 1,
-                \       'border': 'top', 'highlight': 'StatusLine',
-                \   },
-                \   'options': [
-                \       '--no-multi',
-                \       '--print-query',
-                \       '--prompt', ':',
-                \       '--color', 'prompt:-1',
-                \       '--expect', ';,space,!,|',
-                \       '--layout', 'reverse-list',
-                \   ]
-                \})
+    if has('nvim') ? has('nvim-0.4') : has('popupwin') && has('patch-8.2.191')
+        command! FuzzyCmd
+                    \ call fzf#run({
+                    \   'source': s:CmdFeed(),
+                    \   'sink*': function('s:FuzzyCmd_accept'),
+                    \   'window': {
+                    \       'width': 1, 'height': 0.4, 'xoffset': 0, 'yoffset': 1,
+                    \       'border': 'top', 'highlight': 'StatusLine',
+                    \   },
+                    \   'options': [
+                    \       '--no-multi',
+                    \       '--print-query',
+                    \       '--prompt', ':',
+                    \       '--color', 'prompt:-1',
+                    \       '--expect', ';,space,!,|',
+                    \       '--layout', 'reverse-list',
+                    \   ]
+                    \})
+    else
+        command! FuzzyCmd
+                    \ call fzf#run({
+                    \   'source': s:CmdFeed(),
+                    \   'sink*': function('s:FuzzyCmd_accept'),
+                    \   'down': '30%',
+                    \   'options': [
+                    \       '--no-multi',
+                    \       '--print-query',
+                    \       '--prompt', ':',
+                    \       '--color', 'prompt:-1',
+                    \       '--expect', ';,space,!,|',
+                    \       '--layout', 'reverse-list',
+                    \   ]
+                    \})
+    endif
 endif
 
 " Executable shortcuts. {{{2
@@ -456,7 +477,7 @@ augroup END
 " Ergonomic, smart mode switches.
 inoremap ¶ <Esc>
 inoremap <M-;> <Esc>
-nnoremap ; <Cmd>FuzzyCmd<Cr>
+nnoremap ; :FuzzyCmd<Cr>
 xnoremap ; :
 xnoremap ¶ <Esc>
 xnoremap <M-;> <Esc>
@@ -475,9 +496,9 @@ nnoremap Y y$
 " Search in selection.
 xnoremap / <Esc>/\%V
 " Redo (can't use U, see :h U).
-nnoremap yu <Cmd>redo<Cr>
+nnoremap yu :redo<Cr>
 " CTRL-L also clears search highlighting.
-nnoremap <silent> <C-l> <Cmd>nohlsearch<Cr><C-l>
+nnoremap <silent> <C-l> :nohlsearch<Cr><C-l>
 " Disable middle mouse paste.
 noremap <MiddleMouse> <Nop>
 noremap <2-MiddleMouse> <Nop>
@@ -489,27 +510,27 @@ nnoremap <silent> zl :call <SID>HorizontalScrollMode('l')<Cr>
 nnoremap <silent> zH :call <SID>HorizontalScrollMode('H')<Cr>
 nnoremap <silent> zL :call <SID>HorizontalScrollMode('L')<Cr>
 " Tap space to clear messages.
-nnoremap <silent> <Space> <Cmd>mode<Cr>
+nnoremap <silent> <Space> :mode<Cr>
 
 " Meta mappings: buffer navigation and control. {{{2
 " Window navigation and relocation.
-nnoremap ï <Cmd>wincmd w<Cr>
-nnoremap <M-j> <Cmd>wincmd w<Cr>
-nnoremap œ <Cmd>wincmd W<Cr>
-nnoremap <M-k> <Cmd>wincmd W<Cr>
-nnoremap ñ <Cmd>wincmd n<Cr>
-nnoremap <M-n> <Cmd>wincmd n<Cr>
-nnoremap ö <Cmd>wincmd p<Cr>
-nnoremap <M-p> <Cmd>wincmd p<Cr>
+nnoremap ï :wincmd w<Cr>
+nnoremap <M-j> :wincmd w<Cr>
+nnoremap œ :wincmd W<Cr>
+nnoremap <M-k> :wincmd W<Cr>
+nnoremap ñ :wincmd n<Cr>
+nnoremap <M-n> :wincmd n<Cr>
+nnoremap ö :wincmd p<Cr>
+nnoremap <M-p> :wincmd p<Cr>
 " Tab navigation.
-nnoremap Ï <Cmd>tabnext<Cr>
-tnoremap Ï <Cmd>tabnext<Cr>
-nnoremap <M-J> <Cmd>tabnext<Cr>
-tnoremap <M-J> <Cmd>tabnext<Cr>
-nnoremap Œ <Cmd>tabprev<Cr>
-tnoremap Œ <Cmd>tabprev<Cr>
-nnoremap <M-K> <Cmd>tabprev<Cr>
-tnoremap <M-K> <Cmd>tabprev<Cr>
+nnoremap Ï :tabnext<Cr>
+tnoremap Ï :tabnext<Cr>
+nnoremap <M-J> :tabnext<Cr>
+tnoremap <M-J> :tabnext<Cr>
+nnoremap Œ :tabprev<Cr>
+tnoremap Œ :tabprev<Cr>
+nnoremap <M-K> :tabprev<Cr>
+tnoremap <M-K> :tabprev<Cr>
 
 " Leader mappings: run commands and call functions. {{{2
 let mapleader = "\<Space>"
@@ -518,42 +539,42 @@ let maplocalleader = ','
 " Insert char after cursor [count] times.
 nnoremap <expr>     <Leader>a 'a' . nr2char(getchar()) . '<Esc>'
 " Use FuzzySwitch to switch buffers.
-nnoremap            <Leader>b <Cmd>FuzzySwitch<Cr>
+nnoremap            <Leader>b :FuzzySwitch<Cr>
 " Toggle cursor column indicator.
-nnoremap            <Leader>c <Cmd>set cursorcolumn!<Cr>
+nnoremap            <Leader>c :set cursorcolumn!<Cr>
 " Change working directory of focused window to directory containing focused file/buffer (fall back to HOME).
-nnoremap <expr>     <Leader>d '<Cmd>lcd ' . (empty(&buftype) && !empty(bufname()) ? '%:p:h' : '') . '<Bar>pwd<Cr>'
+nnoremap <expr>     <Leader>d ':lcd ' . (empty(&buftype) && !empty(bufname()) ? '%:p:h' : '') . '<Bar>pwd<Cr>'
 " Open FuzzyFind quickly.
-nnoremap            <Leader>f <Cmd>FuzzyFind<Cr>
+nnoremap            <Leader>f :FuzzyFind<Cr>
 " Toggle folding in focused buffer.
-nnoremap            <Leader>h <Cmd>setlocal foldenable!<Cr>
+nnoremap            <Leader>h :setlocal foldenable!<Cr>
 " Insert char before cursor [count] times.
 nnoremap <expr>     <Leader>i 'i' . nr2char(getchar()) . '<Esc>'
 " Toggle cursor line indicator.
-nnoremap            <Leader>l <Cmd>set cursorline!<Cr>
+nnoremap            <Leader>l :set cursorline!<Cr>
 " Run :make! (the ! disables the stupid errorfile jump btw)
-nnoremap            <Leader>m <Cmd>make!<Cr>
+nnoremap            <Leader>m :make!<Cr>
 " Toggle line numbers for focused buffer.
-nnoremap <silent>   <Leader>n <Cmd>set number! relativenumber!<Cr>
+nnoremap <silent>   <Leader>n :set number! relativenumber!<Cr>
 " Add [count] blank line(s) below.
-nnoremap <expr>     <Leader>o '<Cmd>keepjumps normal! ' . v:count . 'o<Cr>'
+nnoremap <expr>     <Leader>o ':keepjumps normal! ' . v:count . 'o<Cr>'
 " Add [count] blank line(s) above.
-nnoremap <expr>     <Leader>O '<Cmd>keepjumps normal! ' . v:count . 'O<Cr>'
+nnoremap <expr>     <Leader>O ':keepjumps normal! ' . v:count . 'O<Cr>'
 " Paste last yanked text ignoring cut text.
 noremap             <Leader>p "0p
 noremap             <Leader>P "0P
 " Use FuzzyRecent to open recent files.
-nnoremap            <Leader>r <Cmd>FuzzyRecent<Cr>
+nnoremap            <Leader>r :FuzzyRecent<Cr>
 " Toggle spellchecker.
-nnoremap <silent>   <Leader>s <Cmd>setlocal spell!<Cr>
+nnoremap <silent>   <Leader>s :setlocal spell!<Cr>
 " Sync theme to system.
-nnoremap <silent>   <Leader>t <Cmd>SyncTheme<Cr>
+nnoremap <silent>   <Leader>t :SyncTheme<Cr>
 " Write focused buffer if modified.
-nnoremap <silent>   <Leader>w <Cmd>up<Cr>
+nnoremap <silent>   <Leader>w :up<Cr>
 " See :function CopyFile.
-nnoremap <silent>   <Leader>y <Cmd>call CopyFile()<Cr>
+nnoremap <silent>   <Leader>y :call CopyFile()<Cr>
 " Toggle soft-wrapping of long lines to the view width.
-nnoremap <silent>   <Leader>z <Cmd>setlocal wrap!<Cr>
+nnoremap <silent>   <Leader>z :setlocal wrap!<Cr>
 " Attempt to autoformat focused paragraph/selection.
 nnoremap <silent>   <Leader>\ gwip
 xnoremap <silent>   <Leader>\ gw
@@ -578,8 +599,8 @@ nnoremap g] g<C-]>
 noremap ]l g_
 noremap [l ^
 " Navigate to TODO / FIXME comments.
-nnoremap ]t <Cmd>keeppatterns /TODO\\|FIXME<Cr>
-nnoremap [t <Cmd>keeppatterns ?TODO\\|FIXME<Cr>
+nnoremap ]t :keeppatterns /TODO\\|FIXME<Cr>
+nnoremap [t :keeppatterns ?TODO\\|FIXME<Cr>
 
 " PLUGINS {{{1
 
