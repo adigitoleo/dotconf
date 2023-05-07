@@ -30,12 +30,14 @@ bindkey '^E' end-of-line
 
 # Make directory (and parents if necessary) and enter it.
 mkcd() { mkdir -p -- "$1" && cd -P -- "$1" }
-# Ignore whatever ripgrep would in tree output.
+# Ignore whatever ripgrep would in tree output (requires ripgrep, tree).
 rg,tree() { rg --files $@|tree --fromfile --dirsfirst }
 # Remove white background from PNG image in-place (requires imagemagick).
-rmbg() { convert -transparent white "$1" "$1" }
+rmbg() { convert -transparent white "${1:--}" "${1--}" }
 # Invert RGB channel of a PNG image in-place (requires imagemagick).
-rgbneg() { convert -channel RGB -negate "$1" "$1" }
+rgbneg() { convert -channel RGB -negate "${1:--}" "${1:--}" }
+# Share file to https://x0.at/ pastebin (requires curl).
+share() { curl -F "file=@${2:--};filename=.${1:-txt}" https://x0.at/ }
 
 #
 # Asynchronous git status indicator.
