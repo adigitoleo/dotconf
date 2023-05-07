@@ -59,18 +59,18 @@ shift $(( OPTIND - 1 ))
 # to play the selected file.
 if [ "$FILENAME" = "" ]; then
     is_command rg || exit 1
-    FZF_DEFAULT_COMMAND="rg --files -g '*.mp3' -g '*.flac' -g '*.opus' $@"
+    FZF_DEFAULT_COMMAND="rg --sort=path --files -g '*.mp3' -g '*.flac' -g '*.opus' $@"
     if [ $SHUFFLE -eq 0 ]; then
         is_command shuf || exit 1
         FZF_DEFAULT_COMMAND="${FZF_DEFAULT_COMMAND}|shuf"
     fi
     if [ $REPEAT -eq 0 ]; then
-        fzf --listen "$FZF_PORT" --cycle \
+        fzf --listen "$FZF_PORT" --cycle --no-sort \
             --bind "ctrl-r:reload:$FZF_DEFAULT_COMMAND || true" \
             --preview-window up,2 --preview "$SCRIPTNAME -f {}" \
             && kill -a musicplayer && exit 0
     else
-        fzf --listen "$FZF_PORT" \
+        fzf --listen "$FZF_PORT" --no-sort \
             --bind "ctrl-r:reload:$FZF_DEFAULT_COMMAND || true" \
             --preview-window up,2 --preview "$SCRIPTNAME -f {}" \
             && kill -a musicplayer && exit 0
