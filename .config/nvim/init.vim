@@ -551,7 +551,7 @@ augroup filetype_rules
     autocmd FileType qf setlocal number norelativenumber cursorline textwidth=0
     autocmd FileType sh,zsh setlocal textwidth=79
     autocmd FileType tex setlocal textwidth=0 wrap
-    autocmd FileType bib setlocal expandtab
+    autocmd FileType bib setlocal noexpandtab
     autocmd FileType vim setlocal textwidth=78 foldmethod=marker foldenable
     autocmd FileType xml,html setlocal tabstop=2 foldmethod=indent
     autocmd FileType yaml setlocal tabstop=2
