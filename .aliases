@@ -131,6 +131,9 @@ alias mktar='tar --transform=s/$PATTERN/$(date +%Y%m%dT%H%M)/ --exclude={__pycac
 # Create backup according to ./.BACKUP using rsync: backup <destination>
 alias backup='rsync -rszauhP --no-links --delete --info=nonreg0 --files-from=$HOME/.BACKUP $HOME'
 
+# Use readline key bindings in maxima.
+alias maxima='rlwrap maxima'
+
 # Cenetered 80-column display in nvimpager.
 alias s='nvimpager -- -O3 -c "setl bt=nofile|setl bufhidden=hide|setl noswapfile|wincmd x|setl bt=nofile|setl bufhidden=hide|setl noswapfile|wincmd l|vert res 80|setl winfixwidth|wincmd =|hi! link WinSeparator Ignore|hi! link NonText Ignore"'
 
