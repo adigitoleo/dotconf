@@ -38,5 +38,5 @@ sha256sum --check --ignore-missing "julia-${version}.sha256"
 if [ -n "$DIR" ]; then
     tar -xvf "julia-${version}-linux-x86_64.tar.gz" --directory="${DIR}"
     REALPATH="$(realpath "$DIR")"
-    ln -s -i -t "$HOME/.local/bin" "$REALPATH/julia-${version}/bin/julia"
+    ln -s -f -t "$HOME/.local/bin" "$REALPATH/julia-${version}/bin/julia"
 fi
