@@ -39,6 +39,7 @@ set $explorer 'pcmanfm-qt'
 for_window [title="^.*"] title_format " %title"
 assign [app_id=".*qutebrowser"] workspace number 2
 assign [app_id="zathura"] workspace number 2
+assign [app_id="pinentry-qt"] workspace number 2
 
 for_window [app_id="LithoMaker"] floating enable
 for_window [app_id="audacity"] floating enable
