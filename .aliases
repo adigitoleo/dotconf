@@ -76,9 +76,10 @@ alias v=\$VISUAL
 
 # New terminal instance (same directory).
 alias t='1>/dev/null 2>/dev/null setsid $TERM'
-# Tmux, because more terminal sessions are always better.
-alias t,home='tmux new -s $HOST -n aerc "aerc"\; new-window -n notes -c ~/vcs/notebook/notebook.wiki\; new-window -n shapeforge -c ~/vcs/shapeforge\; new-window -n phd -c ~/Documents/PhD\; new-window -n website -c ~/vcs/adigitoleo.srht.site\; new-window -n pydrex -c ~/vcs/PyDRex\; new-window -n sws -c ~/Sync/hazcode/sciware/seis/sws\; select-window -t 1'
-alias t,todo='tmux -L todo new -s todo -n cal "calcurse"\; new-window -n todo -c ~/vcs/todo\; new-window "htop -u $(whoami)"\; new-window -n music -c ~/Music\; new-window "julia"\; select-window -t 1'
+
+# Zellij because tmux is too mainstream.
+alias z,main='zellij -s main --layout=main'
+alias z,scratch='zellij -s scratch --layout=scratch'
 
 # Suspend and lock (run from a vconsole).
 alias v,lock='systemctl suspend && vlock --all'
