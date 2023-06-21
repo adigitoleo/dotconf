@@ -141,7 +141,7 @@ _set_title() {
     # <https://zsh.sourceforge.io/FAQ/zshfaq03.html>
     [[ -t 1 ]] || return
     case $TERM in
-        alacritty|xterm*|rxvt*|(dt|k|a|E)term ) print -Pn "\e]2;${(C)TERM}: %n@%m %~\a" ;;
+        alacritty|xterm*|rxvt*|(dt|k|a|E)term ) print -Pn "\e]2;%n@%m:%~\a" ;;
     esac
 }
 add-zsh-hook precmd _set_title
