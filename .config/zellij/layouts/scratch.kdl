@@ -1,0 +1,24 @@
+layout {
+    tab_template name="tabulous" {
+        pane size=1 borderless=true {
+            plugin location="zellij:compact-bar"
+        }
+        children
+    }
+
+    tabulous name="todo" focus=true {
+        pane cwd="vcs/todo"
+    }
+    tabulous name="calendar" {
+        pane command="calcurse"
+    }
+    tabulous name="music" split_direction="horizontal" {
+        pane cwd="/tmp" command="cava" borderless=true
+        pane cwd="Music" focus=true
+    }
+    tabulous name="calc" {
+        pane command="julia" {
+            args "--banner=no"
+        }
+    }
+}
