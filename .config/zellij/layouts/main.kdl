@@ -1,34 +1,34 @@
 layout {
-    tab_template name="tabulous" {
+    default_tab_template {
         pane size=1 borderless=true {
             plugin location="zellij:compact-bar"
         }
         children
     }
 
-    tabulous name="mail" focus=true {
+    tab name="mail" focus=true {
         pane command="aerc"
     }
-    tabulous name="notes" {
+    tab name="notes" {
         pane cwd="vcs/notebook/notebook.wiki" command="nvim" {
             args "Home.md"
         }
     }
-    tabulous name="work" {
+    tab name="work" {
         pane cwd="vcs/PyDRex"
     }
-    tabulous name="debug" {
+    tab name="debug" {
         pane cwd="vcs/pydrex-notebooks"
     }
-    tabulous name="home" {
+    tab name="home" {
         pane
     }
-    tabulous name="log" {
+    tab name="log" {
         pane command="sudo" start_suspended=true {
             args "axe" "-bf" "errors"
         }
     }
-    tabulous name="monitor" {
+    tab name="monitor" {
         pane command="htop"
     }
 }
