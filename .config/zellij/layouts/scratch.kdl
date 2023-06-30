@@ -12,9 +12,8 @@ layout {
     tab name="calendar" {
         pane command="calcurse"
     }
-    tab name="music" split_direction="horizontal" {
-        pane cwd="/tmp" command="cava" borderless=true
-        pane cwd="Music" focus=true
+    tab name="music" {
+        pane cwd="Music"
     }
     tab name="calc" {
         pane command="julia" {
