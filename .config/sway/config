@@ -130,6 +130,7 @@ bindsym $mod+Shift+s swap container with mark swapmark;\
 bindsym $mod+Shift+J workspace next_on_output
 bindsym $mod+Shift+K workspace prev_on_output
 bindsym $mod+Tab scratchpad show
+bindsym $mod+grave workspace back_and_forth
 bindsym $mod+1 workspace $ws1
 bindsym $mod+2 workspace $ws2
 bindsym $mod+3 workspace $ws3
@@ -143,6 +144,7 @@ bindsym $mod+0 workspace $ws10
 # Move focused container to workspace
 bindsym $mod+Shift+comma move container to output right
 bindsym $mod+Shift+Tab move container to scratchpad
+bindsym $mod+asciitilde move container to workspace back_and_forth
 bindsym $mod+Shift+1 move container to workspace $ws1
 bindsym $mod+Shift+2 move container to workspace $ws2
 bindsym $mod+Shift+3 move container to workspace $ws3
