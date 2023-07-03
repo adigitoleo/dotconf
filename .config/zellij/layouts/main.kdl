@@ -20,7 +20,7 @@ layout {
     tab name="debug" {
         pane cwd="vcs/pydrex-notebooks"
     }
-    tab name="home" {
+    tab name="write" {
         pane
     }
     tab name="log" {
