@@ -342,7 +342,7 @@ if type(function('fzf#run'))
         let l:completion = get(a:fzf_out, 2, '')
 
         if empty(l:key)
-            call feedkeys(':' . l:completion . '<Cr>')
+            call feedkeys(':' . l:completion . '')
         elseif l:key ==# ';'
             call feedkeys(':' . l:query . '')
         elseif l:key ==# 'space'
