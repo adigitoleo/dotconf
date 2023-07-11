@@ -271,6 +271,10 @@ if executable('rg')
     set grepprg=rg\ --vimgrep\ --smart-case\ --follow
 endif
 
+if executable('zsh')
+    set shell=zsh
+endif
+
 if executable('wl-copy') && executable('wl-paste')
     let g:clipboard = {
                 \   'name': 'Wayland primary selection',
