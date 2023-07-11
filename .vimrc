@@ -394,7 +394,6 @@ if executable('theme')  " Toggle global TUI theme using external script.
                 \| let &background = get(systemlist('theme -q'), 0, 'light')
     command! SyncTheme silent! let &background = get(systemlist('theme -q'), 0, 'light')
 endif
-command! -nargs=* -complete=shellcmd Term call StartTerm(<f-args>)
 
 " Misc. {{{2
 " Help, my window is floating!
