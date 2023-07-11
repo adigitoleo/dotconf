@@ -400,8 +400,6 @@ if executable('theme')  " Toggle global TUI theme using external script.
 endif
 
 " Misc. {{{2
-" Help, my window is floating!
-command! -complete=help -nargs=? H call Floating("help", "help") | help <args>
 " Insert current date in ISO (YYYY-MM-DD) format.
 command! InsertDate silent! exec "normal! a" . strftime('%Y-%m-%d') . "<Esc>"
 " See :function FillLine.
