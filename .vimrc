@@ -400,6 +400,8 @@ if executable('theme')  " Toggle global TUI theme using external script.
 endif
 
 " Misc. {{{2
+" Thin vertical terminal.
+command! Vterm silent! exec 'vertical terminal ++cols=56'
 " Insert current date in ISO (YYYY-MM-DD) format.
 command! InsertDate silent! exec "normal! a" . strftime('%Y-%m-%d') . "<Esc>"
 " See :function FillLine.
