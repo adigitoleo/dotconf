@@ -711,7 +711,7 @@ let g:markdown_fenced_languages = [
             \'vim', 'python', 'sh', 'zsh', 'bash=sh', 'julia', 'fortran',
             \'haskell', 'java', 'c', 'css', 'ruby', 'erb=eruby', 'go',
             \'javascript', 'js=javascript', 'json=javascript',
-            \'tex', 'scala', 'sql', 'gnuplot', 'html', 'xml', 'lisp',
+            \'tex', 'scala', 'sql', 'gnuplot', 'html', 'xml', 'lisp', 'nim',
             \]
 let g:markdown_folding = 1
 " reStructuredText {{{3
