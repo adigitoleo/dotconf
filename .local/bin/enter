@@ -100,7 +100,7 @@ trap clean_exit EXIT
 # Listen to $FIFO in background subshell and send contents to local clipboard.
 (
     while true; do
-        ssh -S"$SOCKET" -tt SSHCLIP_HOST "cat $FIFO" 2>/dev/null | wl-copy
+        ssh -S"$SOCKET" -tt SSHCLIP_HOST "cat $FIFO" 2>/dev/null | wl-copy --primary
     done &
 )
 

@@ -205,7 +205,7 @@ bar {
     tray_padding 3
 }
 
-exec --no-startup-id wl-init
+exec wl-init
 exec swayidle -w timeout 600 $lock before-sleep $lock
-exec --no-startup-id autotiling
+exec autotiling
 include /etc/sway/config.d/*
