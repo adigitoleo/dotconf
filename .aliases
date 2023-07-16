@@ -39,6 +39,8 @@ alias rg,absglob='rg $PWD --files -g'
 alias rg,find='rg --files|rg'
 # rg,absfind [opts] 'pattern' : same as rg,find but print absolute paths
 alias rg,absfind='rg --files $PWD|rg'
+# ripgrep but with --color=always for piping to a pager
+alias rg,color='rg --color=always'
 
 
 # VERSION CONTROL AND SYSTEM ADMIN {{{1
