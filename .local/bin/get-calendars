@@ -32,11 +32,16 @@ CFG_DIR="${XDG_CONFIG_HOMEf:-$HOME/.config}/get-calendars"
 CFG="${CFG:-$CFG_DIR/calendars.conf}"
 DIR="${DIR:-$HOME/Downloads}"
 
+# Calcurse --import is too stupid and creates duplicate appointments...
+# Need to nuke the existing appointments file first (make a backup).
+APTS_FILE=${XDG_DATA_HOME:-$HOME/.local/share}/calcurse/apts
+mv -i "$APTS_FILE" "$APTS_FILE".bak
+
 while IFS= read -r line || [ -n "$line" ]; do
     IFS=' ' read -r file url <<EOF
     $line
 <<
 EOF
-    ( cd "$DIR"; curl --output "$file" --fail --location --continue-at - "$url" )
+    ( cd "$DIR"; curl --output "$file" --location --continue-at - "$url" )
     calcurse --import "$DIR"/"$file"
 done < "$CFG"
