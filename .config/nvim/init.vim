@@ -795,10 +795,21 @@ if has('nvim-0.8.0')
                 \       }
                 \   }
                 \}}
+    lua vim.api.nvim_create_autocmd('LspAttach', {
+                \ group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+                \ callback = function(ev)
+                \   vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+                \   local opts = { buffer = ev.buf }
+                \   vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+                \   vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
+                \   vim.keymap.set('n', 'gD', vim.lsp.buf.definition, opts)
+                \   vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+                \ end,
+                \})
 endif
 
 " Mappings for LSP and lspconfig.
-nnoremap <silent> gd <Cmd>lua vim.diagnostic.setloclist()<Cr>
+nnoremap <silent> gl <Cmd>lua vim.diagnostic.setloclist()<Cr>
 nnoremap <silent> ]d <Cmd>lua vim.diagnostic.goto_next()<Cr>
 nnoremap <silent> [d <Cmd>lua vim.diagnostic.goto_prev()<Cr>
 
