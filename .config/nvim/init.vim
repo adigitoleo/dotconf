@@ -514,8 +514,6 @@ command! -nargs=1 -range=% CountWord <line1>,<line2>s/\<<args>\>//gn
 command! -nargs=+ Grep exec 'silent grep! <q-args>' | copen
 " Like the above but search only in open buffers.
 command! -nargs=+ BufGrep exec 'silent grep! <q-args> ' .. join(s:BufList(), ' ') | copen
-" Edit a new buffer in the same directory as the focused buffer.
-command! -nargs=1 -complete=file EditNear exec 'edit %:h/' .. <q-args>
 
 " AUTOCOMMANDS {{{1
 " Special terminal buffer settings and overrides. {{{2
@@ -752,7 +750,6 @@ call plug#begin(g:PLUGIN_HOME)
     " Dev tooling and filetype plugins. {{{3
     Plug 'neovim/nvim-lsp'  " Community configs for :h lsp.
     Plug 'nvim-lua/plenary.nvim'  " Lua functions/plugin dev library.
-    Plug 'dense-analysis/ale'  " Async code linting.
     Plug 'wfxr/minimap.vim'  " A code minimap, like what cool Atom kids have.
     Plug 'alvan/vim-closetag'  " Auto-close (x)html tags.
     Plug 'cespare/vim-toml'  " Syntax highlighting for TOML configs.
@@ -800,38 +797,11 @@ if has('nvim-0.8.0')
                 \}}
 endif
 
-" ALE linter settings. {{{2
-nnoremap ]e <Plug>(ale_next_wrap)
-nnoremap [e <Plug>(ale_previous_wrap)
-augroup ale_highlights
-    autocmd!
-    autocmd ColorScheme mellow hi link ALEError Visual
-    autocmd ColorScheme mellow hi link ALEWarning Visual
-    autocmd ColorScheme mellow hi link ALEErrorSign NonText
-    autocmd ColorScheme mellow hi link ALEWarningSign CursorColumn
-    autocmd VimResume * call map(nvim_list_bufs(), 'ale#Queue(0, "lint_file", v:val)')
-augroup END
-let g:ale_exclude_highlights = [
-            \'TODO',
-            \'line too long',
-            \'missing.*py.typed',
-            \'non-ASCII character',
-            \]
-let g:ale_cursor_detail = 1
-let g:ale_virtualtext_cursor = 0
-let g:ale_echo_cursor = 0
-let g:ale_floating_preview = 1
-let g:ale_close_preview_on_insert = 1
-let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰', '│', '─']
-let g:ale_linters = {'python': ['flake8', 'mypy'], 'cpp': ['cc', 'clang', 'cppcheck']}
-let g:ale_disable_lsp = 1
-let g:ale_fixers = {'cpp': ['clang-format'], 'lua': ['stylua'], 'nim': ['nimpretty']}
-let g:ale_linters_ignore = {'cpp': ['clangcheck', 'clangtidy']}
-let g:ale_python_flake8_options = "--max-line-length 88 --ignore=E203,W503"
-let g:ale_python_mypy_options = "--ignore-missing-imports"
-let g:ale_cpp_cc_options = "-std=c++17 -Wall"
-let g:ale_cpp_clangd_options = "-std=c++17 -Wall"
-let g:ale_nim_nimpretty_options = "--maxLineLen:100"
+" Mappings for LSP and lspconfig.
+nnoremap <silent> gd <Cmd>lua vim.diagnostic.setloclist()<Cr>
+nnoremap <silent> ]d <Cmd>lua vim.diagnostic.goto_next()<Cr>
+nnoremap <silent> [d <Cmd>lua vim.diagnostic.goto_prev()<Cr>
+
 " VimTex LaTeX settings. {{{2
 let g:tex_flavor = 'latex'
 let g:vimtex_fold_enabled = 1
