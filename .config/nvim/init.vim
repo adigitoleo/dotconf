@@ -750,6 +750,7 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'arp242/jumpy.vim'  " Better and extended mappings for ]], g], etc.
     Plug 'dhruvasagar/vim-open-url'  " Open URL's in browser without netrw.
     " Dev tooling and filetype plugins. {{{3
+    Plug 'neovim/nvim-lsp'  " Community configs for :h lsp.
     Plug 'nvim-lua/plenary.nvim'  " Lua functions/plugin dev library.
     Plug 'dense-analysis/ale'  " Async code linting.
     Plug 'wfxr/minimap.vim'  " A code minimap, like what cool Atom kids have.
@@ -783,6 +784,22 @@ if empty(glob(g:PLUGIN_HOME.'/*'))
     finish
 endif
 
+" LSP setup and lua plugin settings (>0.8). {{{2
+if has('nvim-0.8.0')
+    lua require('gitsigns').setup()
+    " For pip install python-lsp-server (NOT python-language-server!).
+    lua require('lspconfig').pylsp.setup{
+                \ settings = {
+                \   pylsp = {
+                \       plugins = {
+                \           pycodestyle = {
+                \               maxLineLength = 88
+                \           }
+                \       }
+                \   }
+                \}}
+endif
+
 " ALE linter settings. {{{2
 nnoremap ]e <Plug>(ale_next_wrap)
 nnoremap [e <Plug>(ale_previous_wrap)
@@ -807,6 +824,7 @@ let g:ale_floating_preview = 1
 let g:ale_close_preview_on_insert = 1
 let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰', '│', '─']
 let g:ale_linters = {'python': ['flake8', 'mypy'], 'cpp': ['cc', 'clang', 'cppcheck']}
+let g:ale_disable_lsp = 1
 let g:ale_fixers = {'cpp': ['clang-format'], 'lua': ['stylua'], 'nim': ['nimpretty']}
 let g:ale_linters_ignore = {'cpp': ['clangcheck', 'clangtidy']}
 let g:ale_python_flake8_options = "--max-line-length 88 --ignore=E203,W503"
@@ -814,7 +832,7 @@ let g:ale_python_mypy_options = "--ignore-missing-imports"
 let g:ale_cpp_cc_options = "-std=c++17 -Wall"
 let g:ale_cpp_clangd_options = "-std=c++17 -Wall"
 let g:ale_nim_nimpretty_options = "--maxLineLen:100"
-" VimTex latex settings. {{{2
+" VimTex LaTeX settings. {{{2
 let g:tex_flavor = 'latex'
 let g:vimtex_fold_enabled = 1
 let g:vimtex_quickfix_mode = 0  " See #1595
@@ -873,10 +891,6 @@ augroup sneak_colors
 augroup END
 
 " Miscellaneous {{{2
-" Git signs setup.
-if has('nvim-0.8.0')
-    lua require('gitsigns').setup()
-endif
 " Don't open folds when restoring cursor position.
 let g:lastplace_open_folds = 0
 " Use a wider minimap.
