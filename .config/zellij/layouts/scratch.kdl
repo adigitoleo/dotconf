@@ -1,6 +1,6 @@
 layout {
-    default_tab_template {
-        pane size=1 borderless=true cwd="~" {
+    default_tab_template cwd="~" {
+        pane size=1 borderless=true {
             plugin location="zellij:compact-bar"
         }
         children
@@ -10,7 +10,7 @@ layout {
         pane cwd="vcs/todo"
     }
     tab name="calendar" {
-        pane command="calcurse"
+        pane cwd="/tmp" command="calcurse"
     }
     tab name="music" {
         pane cwd="Music"

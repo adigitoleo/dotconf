@@ -1,5 +1,5 @@
 layout {
-    default_tab_template {
+    default_tab_template cwd="~" {
         pane size=1 borderless=true {
             plugin location="zellij:compact-bar"
         }
