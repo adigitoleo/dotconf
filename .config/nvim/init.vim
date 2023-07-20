@@ -795,6 +795,8 @@ if has('nvim-0.8.0')
                 \       }
                 \   }
                 \}}
+    " General LSP configuration, keybindings, completion etc.
+    " To focus the hover buffer, press K a second time.
     lua vim.api.nvim_create_autocmd('LspAttach', {
                 \ group = vim.api.nvim_create_augroup('UserLspConfig', {}),
                 \ callback = function(ev)
@@ -802,8 +804,13 @@ if has('nvim-0.8.0')
                 \   local opts = { buffer = ev.buf }
                 \   vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
                 \   vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
-                \   vim.keymap.set('n', 'gD', vim.lsp.buf.definition, opts)
+                \   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+                \   vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
                 \   vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+                \   vim.keymap.set('n', 'gR', vim.lsp.buf.rename, opts)
+                \   vim.keymap.set('n', 'gf', function()
+                \       vim.lsp.buf.format{async = true}
+                \   end, opts)
                 \ end,
                 \})
 endif
