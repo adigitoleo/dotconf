@@ -29,6 +29,8 @@ bindkey '^A' beginning-of-line
 bindkey '^E' end-of-line
 bindkey '^R' history-incremental-pattern-search-backward
 
+# Shush. Go straight to /dev/null.
+silent() { 2>/dev/null 1>&2 $@ }
 # Make directory (and parents if necessary) and enter it.
 mkcd() { mkdir -p -- "$1" && cd -P -- "$1" }
 # Ignore whatever ripgrep would in tree output (requires ripgrep, tree).
