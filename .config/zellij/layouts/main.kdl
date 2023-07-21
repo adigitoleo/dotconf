@@ -6,6 +6,12 @@ layout {
         children
     }
 
+    tab name="system" {
+        pane command="htop"
+        pane command="sudo" start_suspended=true {
+            args "axe" "-bf" "errors"
+        }
+    }
     tab name="mail" focus=true {
         pane command="aerc"
     }
@@ -14,21 +20,10 @@ layout {
             args "Home.md"
         }
     }
-    tab name="work" {
-        pane cwd="vcs/PyDRex"
-    }
-    tab name="debug" {
-        pane cwd="vcs/pydrex-notebooks"
+    tab name="dev" {
+        pane cwd="vcs"
     }
     tab name="write" {
-        pane
-    }
-    tab name="log" {
-        pane command="sudo" start_suspended=true {
-            args "axe" "-bf" "errors"
-        }
-    }
-    tab name="monitor" {
-        pane command="htop"
+        pane cwd="Documents"
     }
 }

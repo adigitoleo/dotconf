@@ -17,6 +17,7 @@ config = config  # pylint: disable=undefined-variable,self-assigning-variable
 c.url.start_pages = ["https://start.duckduckgo.com"]
 c.url.default_page = "qute://history/"
 c.auto_save.session = True
+c.statusbar.position = "top"
 c.completion.shrink = True
 c.session.lazy_restore = True
 c.content.autoplay = False
