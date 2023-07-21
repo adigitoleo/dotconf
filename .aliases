@@ -144,3 +144,6 @@ alias s='nvimpager -- -O3 -c "setl bt=nofile|setl bufhidden=hide|setl noswapfile
 
 # Mpv media player detached instance with larger window, playing in loop, use: m,loop <file>.
 alias m,loop='2>/dev/null 1>&2 setsid -f mpv --geometry=1200x1200 --loop'
+
+# Launch libreoffice and stop complaining on my file descriptors.
+alias office='2>/dev/null 1>&2 setsid -f libreoffice'
