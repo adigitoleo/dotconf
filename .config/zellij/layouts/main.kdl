@@ -20,10 +20,7 @@ layout {
             args "Home.md"
         }
     }
-    tab name="dev" {
-        pane cwd="vcs"
-    }
-    tab name="write" {
-        pane cwd="Documents"
-    }
+    tab name="dev" cwd="vcs"
+    tab name="write" cwd="Documents"
+    tab name="data" cwd="data"
 }

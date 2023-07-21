@@ -7,19 +7,15 @@ layout {
     }
 
     tab name="cmd"
-    tab name="todo" focus=true {
-        pane cwd="vcs/todo"
-    }
-    tab name="calendar" {
-        pane cwd="/tmp" command="calcurse"
-    }
-    tab name="music" {
-        pane cwd="Music"
-    }
+    tab name="todo" focus=true cwd="vcs/todo"
     tab name="calc" {
         pane command="julia" {
             args "--banner=no"
         }
     }
+    tab name="calendar" cwd="/tmp" {
+        pane command="calcurse"
+    }
+    tab name="music" cwd="Music"
     tab name="vpn" cwd="/tmp"
 }
