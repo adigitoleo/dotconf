@@ -8,7 +8,7 @@
 # - libnotify <https://gitlab.gnome.org/GNOME/libnotify>
 # Read `man 5 sway` for a complete reference.
 
-font monospace bold 13
+font monospace bold 12
 focus_follows_mouse no
 focus_wrapping force
 seat * hide_cursor when-typing enable
