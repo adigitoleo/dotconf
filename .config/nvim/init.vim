@@ -784,17 +784,19 @@ endif
 " LSP setup and lua plugin settings (>0.8). {{{2
 if has('nvim-0.8.0')
     lua require('gitsigns').setup()
-    " For pip install python-lsp-server (NOT python-language-server!).
-    lua require('lspconfig').pylsp.setup{
-                \ settings = {
-                \   pylsp = {
-                \       plugins = {
-                \           pycodestyle = {
-                \               maxLineLength = 88
-                \           }
-                \       }
-                \   }
-                \}}
+    " Requires pip install python-lsp-server (NOT python-language-server!).
+    if executable('pylsp')
+        lua require('lspconfig').pylsp.setup{
+                    \ settings = {
+                    \   pylsp = {
+                    \       plugins = {
+                    \           pycodestyle = {
+                    \               maxLineLength = 88
+                    \           }
+                    \       }
+                    \   }
+                    \}}
+    endif
     " General LSP configuration, keybindings, completion etc.
     " To focus the hover buffer, press K a second time.
     lua vim.api.nvim_create_autocmd('LspAttach', {
