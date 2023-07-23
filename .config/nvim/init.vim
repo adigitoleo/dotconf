@@ -732,7 +732,7 @@ let g:plug_window = 'SmartSplit'
 call plug#begin(g:PLUGIN_HOME)
     " Ergonomics and general fixes. {{{3
     if has('win32')
-        Plug 'junegunn/fzf'  " Fuzzy search, manual plugin.
+        Plug 'junegunn/fzf'  " Fuzzy search, not needed on Linux (fzf package).
     endif
     Plug 'tpope/vim-abolish'  " Word variant manipulation.
     Plug 'tpope/vim-commentary'  " Quickly comment/uncomment code.
@@ -750,6 +750,7 @@ call plug#begin(g:PLUGIN_HOME)
     " Dev tooling and filetype plugins. {{{3
     Plug 'neovim/nvim-lsp'  " Community configs for :h lsp.
     Plug 'nvim-lua/plenary.nvim'  " Lua functions/plugin dev library.
+    Plug 'whiteinge/diffconflicts'  " 2-way vimdiff for merge conflicts.
     Plug 'wfxr/minimap.vim'  " A code minimap, like what cool Atom kids have.
     Plug 'alvan/vim-closetag'  " Auto-close (x)html tags.
     Plug 'cespare/vim-toml'  " Syntax highlighting for TOML configs.
