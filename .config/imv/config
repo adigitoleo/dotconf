@@ -5,7 +5,7 @@ suppress_default_binds = true
 [aliases]
 # Aliases support arbitrary arguments.
 # alias = command to run
-copy = exec wl-copy --primary $imv_current_file
+copy = exec realpath --relative-to=$HOME $imv_current_file|wl-copy --primary --trim-newline
 
 [binds]
 # Define some key bindings
