@@ -1,6 +1,7 @@
 -- First steps in migrating to lua config.
 
 local lsp = require('lspconfig')
+
 -- Requires pip install python-lsp-server (NOT python-language-server!).
 if vim.fn.executable('pylsp') > 0 then
     lsp.pylsp.setup{
@@ -41,4 +42,8 @@ local minimap = require('mini.map')
 minimap.setup({
     symbols = { encode = minimap.gen_encode_symbols.dot('3x2') },
     integrations =  { minimap.gen_integration.gitsigns() },
+    width = 16,
 })
+vim.keymap.set('n', 'mf', minimap.toggle_focus)
+vim.keymap.set('n', 'mr', minimap.refresh)
+vim.keymap.set('n', 'gm', minimap.toggle)
