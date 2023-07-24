@@ -751,7 +751,7 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'neovim/nvim-lsp'  " Community configs for :h lsp.
     Plug 'nvim-lua/plenary.nvim'  " Lua functions/plugin dev library.
     Plug 'whiteinge/diffconflicts'  " 2-way vimdiff for merge conflicts.
-    Plug 'wfxr/minimap.vim'  " A code minimap, like what cool Atom kids have.
+    Plug 'echasnovski/mini.map'  " A code minimap, like what cool Atom kids have.
     Plug 'alvan/vim-closetag'  " Auto-close (x)html tags.
     Plug 'cespare/vim-toml'  " Syntax highlighting for TOML configs.
     Plug 'vim-python/python-syntax'  " Python: improved syntax highlighting.
@@ -784,38 +784,7 @@ endif
 
 " LSP setup and lua plugin settings (>0.8). {{{2
 if has('nvim-0.8.0')
-    lua require('gitsigns').setup()
-    " Requires pip install python-lsp-server (NOT python-language-server!).
-    if executable('pylsp')
-        lua require('lspconfig').pylsp.setup{
-                    \ settings = {
-                    \   pylsp = {
-                    \       plugins = {
-                    \           pycodestyle = {
-                    \               maxLineLength = 88
-                    \           }
-                    \       }
-                    \   }
-                    \}}
-    endif
-    " General LSP configuration, keybindings, completion etc.
-    " To focus the hover buffer, press K a second time.
-    lua vim.api.nvim_create_autocmd('LspAttach', {
-                \ group = vim.api.nvim_create_augroup('UserLspConfig', {}),
-                \ callback = function(ev)
-                \   vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
-                \   local opts = { buffer = ev.buf }
-                \   vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-                \   vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
-                \   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-                \   vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-                \   vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-                \   vim.keymap.set('n', 'gR', vim.lsp.buf.rename, opts)
-                \   vim.keymap.set('n', 'gf', function()
-                \       vim.lsp.buf.format{async = true}
-                \   end, opts)
-                \ end,
-                \})
+    luafile $HOME/.config/nvim/conf.lua
 endif
 
 " Mappings for LSP and lspconfig.
@@ -884,13 +853,6 @@ augroup END
 " Miscellaneous {{{2
 " Don't open folds when restoring cursor position.
 let g:lastplace_open_folds = 0
-" Use a wider minimap.
-let g:minimap_width = 14
-" Show more stuff in the minimap.
-let g:minimap_git_colors = 1  " https://github.com/wfxr/minimap.vim/issues/168
-let g:minimap_diffadd_color = "DiffAdd"
-let g:minimap_diffremove_color = "DiffDelete"
-let g:minimap_diff_color = "DiffChange"
 " Use the latex to unicode converter provided by julia.vim for other filetypes.
 let g:latex_to_unicode_file_types = ["julia", "markdown", "python", "tex", "nim", "openscad"]
 " Fix vim-sneak highlight clearing.
