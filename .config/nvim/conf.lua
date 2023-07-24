@@ -42,7 +42,7 @@ local minimap = require('mini.map')
 minimap.setup({
     symbols = { encode = minimap.gen_encode_symbols.dot('3x2') },
     integrations =  { minimap.gen_integration.gitsigns() },
-    width = 16,
+    window = { width = 15, show_integration_count = false },
 })
 vim.keymap.set('n', 'mf', minimap.toggle_focus)
 vim.keymap.set('n', 'mr', minimap.refresh)
