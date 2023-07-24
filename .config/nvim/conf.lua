@@ -1,4 +1,5 @@
 -- First steps in migrating to lua config.
+vim.filetype.add({extension = {tikzstyles = 'tex'}})
 
 local lsp = require('lspconfig')
 
