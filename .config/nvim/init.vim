@@ -749,6 +749,7 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'nvim-lua/plenary.nvim'  " Lua functions/plugin dev library.
     Plug 'whiteinge/diffconflicts'  " 2-way vimdiff for merge conflicts.
     Plug 'echasnovski/mini.map'  " A code minimap, like what cool Atom kids have.
+    Plug 'lukas-reineke/indent-blankline.nvim'  " Visual indentation guides.
     Plug 'alvan/vim-closetag'  " Auto-close (x)html tags.
     Plug 'cespare/vim-toml'  " Syntax highlighting for TOML configs.
     Plug 'vim-python/python-syntax'  " Python: improved syntax highlighting.
