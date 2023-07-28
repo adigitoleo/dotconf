@@ -693,9 +693,6 @@ nnoremap g] g<C-]>
 " Jump to first/last character of current line.
 noremap ]l g_
 noremap [l ^
-" Navigate to TODO / FIXME comments.
-nnoremap ]t <Cmd>keeppatterns /TODO\\|FIXME<Cr>
-nnoremap [t <Cmd>keeppatterns ?TODO\\|FIXME<Cr>
 
 " PLUGINS {{{1
 " Set builtin plugin options. {{{2
@@ -750,6 +747,7 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'whiteinge/diffconflicts'  " 2-way vimdiff for merge conflicts.
     Plug 'echasnovski/mini.map'  " A code minimap, like what cool Atom kids have.
     Plug 'lukas-reineke/indent-blankline.nvim'  " Visual indentation guides.
+    Plug 'folke/todo-comments.nvim'  " Track TODO/FIXME comments.
     Plug 'alvan/vim-closetag'  " Auto-close (x)html tags.
     Plug 'cespare/vim-toml'  " Syntax highlighting for TOML configs.
     Plug 'vim-python/python-syntax'  " Python: improved syntax highlighting.
