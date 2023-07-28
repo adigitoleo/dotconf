@@ -7,7 +7,7 @@ layout {
     }
 
     tab name="system" {
-        pane command="htop"
+        pane command="top"
         pane command="sudo" start_suspended=true {
             args "axe" "-bf" "errors"
         }
