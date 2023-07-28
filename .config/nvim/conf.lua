@@ -50,7 +50,7 @@ vim.keymap.set('n', 'mr', minimap.refresh)
 vim.keymap.set('n', 'gm', minimap.toggle)
 
 -- TODO/FIXME comment tracker setup.
-todo_comments = require('todo-comments').setup({signs = false})
+todo_comments = require('todo-comments').setup({signs = false, colors = {error = {"DiagnosticWarn"}}})
 vim.keymap.set("n", "]t", function()
     todo_comments.jump_next()
 end, { desc = "Next todo comment" })
