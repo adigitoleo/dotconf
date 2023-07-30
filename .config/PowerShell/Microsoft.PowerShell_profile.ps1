@@ -36,3 +36,6 @@ function prompt {
       else { '' }) + 'PS ' + $(Get-Location) +
         $(if ($NestedPromptLevel -ge 1) { '>>' }) + '>' + "$color[0m "
 }
+
+# Install neovim with winget.
+Set-Alias -Name v -Value nvim 
