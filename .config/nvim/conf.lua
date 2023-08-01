@@ -83,7 +83,7 @@ end
 -- TODO/FIXME comment tracker setup.
 local has_todo_comments, todo_comments = pcall(require, 'todo-comments')
 if has_todo_comments then
-    todo_comments.setup({signs = false, colors = {error = {"DiagnosticWarn"}}})
+    todo_comments.setup({signs = false, colors = {error = {"DiagnosticWarn"}}, highlight = {before = "bg", after = ""}})
     vim.keymap.set("n", "]t", function()
         todo_comments.jump_next()
     end, { desc = "Next todo comment" })
