@@ -63,24 +63,24 @@ clean_exit() {
 trap clean_exit EXIT
 
 # Open ssh master connection through $SOCKET and stream from /dev/null to keep it open.
-ssh -f -oControlMaster=yes -oControlPath="$SOCKET" "$@" 'tail -f /dev/null' \
+ssh -f -oControlMaster=yes -oControlPath="$SOCKET" -oRemoteCommand=none "$@" 'tail -f /dev/null' \
     || { warn "unable to open ssh master connection" && exit 1; }
 
 while true; do
     # Check for existing $FIFO.
     EXISTS_FIFO="n"
-    ssh -S"$SOCKET" SSHCLIP_HOST "sh -c 'test -p $FIFO'" && EXISTS_FIFO="y"
+    ssh -S"$SOCKET" -oRemoteCommand=none SSHCLIP_HOST "sh -c 'test -p $FIFO'" && EXISTS_FIFO="y"
     if [ "$EXISTS_FIFO" = "n" ]; then
         # Check if the $FIFO path is in use.
         EXISTS_FILE="n"
-        ssh -S"$SOCKET" SSHCLIP_HOST "sh -c 'test -e $FIFO'" && EXISTS_FILE="y"
+        ssh -S"$SOCKET" -oRemoteCommand=none SSHCLIP_HOST "sh -c 'test -e $FIFO'" && EXISTS_FILE="y"
         # Create $FIFO or prompt for new path.
         if [ "$EXISTS_FILE" = "y" ]; then
             MSG="$SCRIPTNAME: file $FIFO already exists on remote, enter a different path: "
             read -r -p "$MSG" FIFO
             continue
         else
-            ssh -S"$SOCKET" SSHCLIP_HOST "sh -c 'mkfifo $FIFO'" && break
+            ssh -S"$SOCKET" -oRemoteCommand=none SSHCLIP_HOST "sh -c 'mkfifo $FIFO'" && break
         fi
     else
         # Use $FIFO or prompt for new path.
@@ -100,16 +100,19 @@ trap clean_exit EXIT
 # Listen to $FIFO in background subshell and send contents to local clipboard.
 (
     while true; do
-        ssh -S"$SOCKET" -tt SSHCLIP_HOST "cat $FIFO" 2>/dev/null | wl-copy --primary --trim-newline
+        ssh -S"$SOCKET" -oRemoteCommand=none -tt SSHCLIP_HOST "cat $FIFO" 2>/dev/null \
+            | wl-copy --primary --trim-newline
     done &
 )
 
 # Start the ssh login session.
 if [ "$WAYLAND_DISPLAY" ] \
     && is_command waypipe \
-    && ssh -S"$SOCKET" SSHCLIP_HOST '>/dev/null command -v waypipe' ; then
+    && ssh -S"$SOCKET" -oRemoteCommand=none SSHCLIP_HOST '>/dev/null command -v waypipe' ; then
     # If both local and remote have a waypipe binary, use waypipe for graphics forwarding.
     # See more at <https://gitlab.freedesktop.org/mstoeckl/waypipe>.
+    # TODO: Should we set RemoteCommand=none here as well?
+    # If yes, how to force z login shell for musl libc, add '$SHELL -l'?
     waypipe -s "$WAYPIPE_CLIENT_SOCKET" client &
     ssh -t -R "$WAYPIPE_SERVER_SOCKET":"$WAYPIPE_CLIENT_SOCKET" -S"$SOCKET" SSHCLIP_HOST \
         waypipe --login-shell --unlink-socket -s "$WAYPIPE_SERVER_SOCKET" \

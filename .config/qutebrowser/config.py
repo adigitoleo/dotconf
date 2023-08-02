@@ -136,7 +136,9 @@ if "dark" in str(THEME):
         c.colors.webpage.preferred_color_scheme = "dark"
 
     # Set the default bg to a darker color as well to prevent white flashes.
-    c.colors.webpage.bg = colors[5]
+    # But not too dark so that crappy sites that don't set a background/font color
+    # aren't unreadable without forced Qt dark mode.
+    c.colors.webpage.bg = colors[13]
 
     c.colors.statusbar.normal.bg = colors[5]
     c.colors.tabs.bar.bg = colors[5]
