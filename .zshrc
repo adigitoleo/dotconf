@@ -134,7 +134,7 @@ _run_async() {
         || { psvar[1]='bg' && psvar[2]='4' }
     # Distinct color for non-login user (e.g. after su - <user>).
     # Triggers the color when more than one user share the same pseudoterminal.
-    [[ $(ps -A -ouser,tty|sort -u|grep $(tty|cut -d/ -f3-)|wc -l) -eq 1 ]] || psvar[2]='9'
+    [[ $(ps -A -ouser,tty|sort -u|grep $(tty|cut -d/ -f3-)$|wc -l) -eq 1 ]] || psvar[2]='9'
     # Start async runners.
     _subst_async
 }
