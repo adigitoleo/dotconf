@@ -133,7 +133,8 @@ _run_async() {
     [[ -n "${SSH_TTY+_}" ]] && { psvar[1]='4' && psvar[2]='15' } \
         || { psvar[1]='bg' && psvar[2]='4' }
     # Distinct color for non-login user (e.g. after su - <user>).
-    who|2>/dev/null 1>&2 grep $(whoami) || psvar[2]='9'
+    # Triggers the color when more than one user share the same pseudoterminal.
+    [[ $(ps -A -ouser,tty|sort -u|grep $(tty|cut -d/ -f3-)|wc -l) -eq 1 ]] || psvar[2]='9'
     # Start async runners.
     _subst_async
 }
