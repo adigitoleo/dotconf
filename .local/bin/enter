@@ -6,6 +6,9 @@ usage() {
     printf '       %s [ssh_options...] destination\n' "$SCRIPTNAME"
 }
 helpf() {
+    echo 'Options:'
+    echo '  -b          do not set up waypipe connection, which is incompatible'
+    echo '              with sending an SSH RemoteCommand'
     echo
     echo 'Wrapper for ssh that sets up a FIFO clipboard to the remote,'
     echo 'using ssh ControlMaster. This allows for convenient one-way copying'
@@ -23,6 +26,10 @@ helpf() {
 
 [ $# -eq 0 ] && usage && exit 1
 [ "$1" = "-h" ] && usage && helpf && exit 0
+SSH_REMOTE="$1"
+DISABLE_WAYPIPE=1
+[ "$1" = "-b" ] && DISABLE_WAYPIPE=0 && SSH_REMOTE="$2"
+[ "$SSH_REMOTE" = "" ] && usage && exit 1
 
 warn() { >&2 printf '%s\n' "$SCRIPTNAME: $1"; }
 is_command() { # Check if command exists, for flow control (no stdout messages)
@@ -40,9 +47,11 @@ is_command wl-copy || exit 1
 # Avoid spaces or other silly characters in any of these!
 SOCKET="$(mktemp -u --tmpdir sshclip.sock.XXXXXXXXXX)"
 FIFO="~/.sshclip"
-WAYPIPE_SERVER_SOCKET="$(mktemp -u --tmpdir waypipe-server.sock.XXXXXXXXXX)"
-WAYPIPE_CLIENT_SOCKET="$(mktemp -u --tmpdir waypipe-client.sock.XXXXXXXXXX)"
-WAYPIPE_DISPLAY_NAME="wayland-${WAYPIPE_SERVER_SOCKET##*.}"
+if [ "$DISABLE_WAYPIPE" -gt 0 ]; then
+    WAYPIPE_SERVER_SOCKET="$(mktemp -u --tmpdir waypipe-server.sock.XXXXXXXXXX)"
+    WAYPIPE_CLIENT_SOCKET="$(mktemp -u --tmpdir waypipe-client.sock.XXXXXXXXXX)"
+    WAYPIPE_DISPLAY_NAME="wayland-${WAYPIPE_SERVER_SOCKET##*.}"
+fi
 
 clean_exit() {
     # Clean up side effects.
@@ -54,16 +63,20 @@ clean_exit() {
             ssh -S"$SOCKET" SSHCLIP_HOST "rm $FIFO" ;;
         esac
     fi
-    [ -S "$WAYPIPE_CLIENT_SOCKET" ] && rm "$WAYPIPE_CLIENT_SOCKET"
+    if [ "$DISABLE_WAYPIPE" -gt 0 ]; then
+        [ -S "$WAYPIPE_CLIENT_SOCKET" ] && rm "$WAYPIPE_CLIENT_SOCKET"
+    fi
     # Terminate all ssh connections.
     ssh -oControlPath="$SOCKET" -O exit SSHCLIP_HOST
     # Terminate waypipe client, if still running.
-    kill 0
+    if [ "$DISABLE_WAYPIPE" -gt 0 ]; then
+        kill 0
+    fi
 }
 trap clean_exit EXIT
 
 # Open ssh master connection through $SOCKET and stream from /dev/null to keep it open.
-ssh -f -oControlMaster=yes -oControlPath="$SOCKET" -oRemoteCommand=none "$@" 'tail -f /dev/null' \
+ssh -f -oControlMaster=yes -oControlPath="$SOCKET" -oRemoteCommand=none "$SSH_REMOTE" 'tail -f /dev/null' \
     || { warn "unable to open ssh master connection" && exit 1; }
 
 while true; do
@@ -106,13 +119,12 @@ trap clean_exit EXIT
 )
 
 # Start the ssh login session.
-if [ "$WAYLAND_DISPLAY" ] \
+if [ "$WAYLAND_DISPLAY" ] && [ "$DISABLE_WAYPIPE" -gt 0 ] \
     && is_command waypipe \
-    && ssh -S"$SOCKET" -oRemoteCommand=none SSHCLIP_HOST '>/dev/null command -v waypipe' ; then
+    && ssh -S"$SOCKET" SSHCLIP_HOST '>/dev/null command -v waypipe' ; then
     # If both local and remote have a waypipe binary, use waypipe for graphics forwarding.
     # See more at <https://gitlab.freedesktop.org/mstoeckl/waypipe>.
-    # TODO: Should we set RemoteCommand=none here as well?
-    # If yes, how to force z login shell for musl libc, add '$SHELL -l'?
+    warn "setting up waypipe connection..."
     waypipe -s "$WAYPIPE_CLIENT_SOCKET" client &
     ssh -t -R "$WAYPIPE_SERVER_SOCKET":"$WAYPIPE_CLIENT_SOCKET" -S"$SOCKET" SSHCLIP_HOST \
         waypipe --login-shell --unlink-socket -s "$WAYPIPE_SERVER_SOCKET" \
