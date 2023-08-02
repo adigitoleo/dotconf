@@ -85,8 +85,12 @@ alias t='1>/dev/null 2>/dev/null setsid $TERM'
 alias z,main='zellij -s main --layout=main'
 alias z,scratch='zellij -s scratch --layout=scratch'
 
-# Suspend and lock (run from a vconsole).
-alias v,lock='systemctl suspend && vlock --all'
+# Open files but don't make a fuss on stdout.
+alias open='1>/dev/null 2>/dev/null setsid xdg-open'
+
+# The utmp stuff is horrible, let's avoid it. Musl libc doesn't provide it.
+alias who='ps -A -ouser|sort -u|tail -n+2'  # All users that are doing stuff.
+alias users='cat /etc/passwd|cut -d: -f1'  # All users that have a password.
 
 # MISC. ABBREVIATIONS {{{1
 
@@ -94,10 +98,6 @@ alias v,lock='systemctl suspend && vlock --all'
 # Because automounting is not smart enough and always breaks somehow.
 alias d,mount='udisksctl mount --options fmask=0133 dmask=0022 noexec -b'
 alias d,unmount='sync && udisksctl unmount -b'
-
-# Only for X.
-alias x,clip='xclip -sel clip'
-alias x,op='1>/dev/null 2>/dev/null setsid xdg-open'
 
 # Get host info.
 alias ip,lan='ip route get 1|rg -o "src [^\s]*"|cut -d" " -f2'
@@ -120,7 +120,7 @@ alias py,lint='pylint -E --output-format=colorized'
 alias by='bpython'
 alias py,update='mv -i requirements.txt requirements.bak && pip install --upgrade pip && pip-compile --resolver=backtracking && pip-sync'
 
-# Die Julia
+# Die Julia.
 alias jl='julia --banner=no'
 alias jl,env='julia --banner=no --startup-file=no --project=$PWD'
 alias jl,bw='julia --banner=no --color=no'
