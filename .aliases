@@ -89,7 +89,7 @@ alias z,scratch='zellij -s scratch --layout=scratch'
 alias open='1>/dev/null 2>/dev/null setsid xdg-open'
 
 # The utmp stuff is horrible, let's avoid it. Musl libc doesn't provide it.
-alias who='ps -A -ouser|sort -u|tail -n+2'  # All users that are doing stuff.
+alias who='ps -A -ouser,uid|sort -u|tail -n+2'  # All users that are doing stuff.
 alias users='cat /etc/passwd|cut -d: -f1'  # All users that have a password.
 
 # MISC. ABBREVIATIONS {{{1
