@@ -742,7 +742,6 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'arp242/jumpy.vim'  " Better and extended mappings for ]], g], etc.
     Plug 'dhruvasagar/vim-open-url'  " Open URL's in browser without netrw.
     " Dev tooling and filetype plugins. {{{3
-    Plug 'neovim/nvim-lsp'  " Community configs for :h lsp.
     Plug 'nvim-lua/plenary.nvim'  " Lua functions/plugin dev library.
     Plug 'whiteinge/diffconflicts'  " 2-way vimdiff for merge conflicts.
     Plug 'echasnovski/mini.map'  " A code minimap, like what cool Atom kids have.
@@ -755,6 +754,7 @@ call plug#begin(g:PLUGIN_HOME)
     Plug 'euclidianAce/BetterLua.vim'  " Lua: improved syntax highlighting.
     Plug 'jakemason/ouroboros'  " Switch between .c/.cpp and header files.
     if has('nvim-0.8.0')
+        Plug 'neovim/nvim-lsp'  " Community configs for :h lsp.
         Plug 'lewis6991/gitsigns.nvim'  " Git status in sign column and statusbar.
         Plug 'SidOfc/carbon.nvim'  " Replacement for nerdtree, directory viewer.
     endif
