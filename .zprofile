@@ -38,6 +38,11 @@ if [ "$COLORTERM" != "truecolor" ]; then
     export COLORTERM=truecolor
 fi
 
+# Set LS_COLORS if not set already.
+if [ -z "$LS_COLORS" ] && is_command dircolors; then
+    eval $(dircolors $HOME/.dir_colors)
+fi
+
 # Prepend ~/.local/bin to PATH if it exists.
 if [ -d "$HOME/.local/bin" ]; then
     export PATH="$HOME/.local/bin:$PATH"
