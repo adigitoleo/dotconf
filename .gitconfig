@@ -1,0 +1,53 @@
+; send-email requires perl-authen-sasl, perl-net-smtp-ssl, perl-mime-tools
+; push via ssh requires openssh
+; github credential helper requires gh cli command
+; also check that the .git-commit-template.txt is in $HOME
+
+[user]
+	name = adigitoleo
+	email = adigitoleo@posteo.net
+[sendemail]
+	smtpUser = adigitoleo@posteo.net
+	smtpServer = posteo.de
+	smtpServerPort = 465
+	smtpEncryption = ssl
+[url "git@github.com:"]
+	pushInsteadOf = "https://github.com/"
+[url "git@git.sr.ht:"]
+	pushInsteadOf = "https://git.sr.ht/"
+[url "git@codeberg.org:"]
+	pushInsteadOf = "https://codeberg.org/"
+[credential "https://github.com"]
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://git.overleaf.com"]
+	helper = cache
+[pull]
+	ff = only
+[init]
+	defaultBranch = main
+[alias]
+	f = fetch --auto-gc
+	s = status -uno --short
+	st = status --short --branch
+	l = log --decorate --oneline --graph
+	c = commit
+	d = diff
+	b = branch -lvv
+	last = log -1 HEAD
+	unstage = reset HEAD --
+	url = config --get remote.origin.url
+	nuke = !sh -c 'git branch -d $1 && git push origin :$1' -
+	inspect = show --format=full
+	develop = !sh -c 'mkdir _dev_$1 && git branch $1 && git worktree add _dev_$1 $1' -
+[remote]
+	pushDefault = origin
+[push]
+	followTags = true
+[checkout]
+	defaultRemote = origin
+[fetch]
+	prune = true
+[commit]
+	template = ~/.git-commit-template.txt
