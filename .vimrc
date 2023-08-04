@@ -548,7 +548,7 @@ nnoremap            <Leader>c :set cursorcolumn!<Cr>
 " Change working directory of focused window to directory containing focused file/buffer (fall back to HOME).
 nnoremap <expr>     <Leader>d ':lcd ' . (empty(&buftype) && !empty(bufname()) ? '%:p:h' : '') . '<Bar>pwd<Cr>'
 " Open FuzzyFind quickly.
-nnoremap            <Leader>f :FuzzyFind<Cr>
+nnoremap            <Leader>f :FuzzyFind $PWD<Cr>
 " Toggle folding in focused buffer.
 nnoremap            <Leader>h :setlocal foldenable!<Cr>
 " Insert char before cursor [count] times.
