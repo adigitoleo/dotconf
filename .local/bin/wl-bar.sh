@@ -46,9 +46,10 @@ else
 fi
 
 # Check for files with '.new' in the name under /etc (Void config updates).
-NEWETC_COUNT="$(2>/dev/null ls /etc/**/*.new|wc -l)"
+# Requires xdiff from the `xtools` package in Void.
+NEWETC_COUNT="$(2>/dev/null xdiff -l|wc -l)"
 if [ "$NEWETC_COUNT" -gt 0 ]; then
-    STATUS_CMD="${STATUS_CMD} + /etc |"
+    STATUS_CMD="${STATUS_CMD} /etc/*.new-.* |"
 fi
 
 STATUS_CMD="${STATUS_CMD} $(date +'%A %Y-%m-%d %I:%M %p ')"
