@@ -865,19 +865,18 @@ if $COLORTERM == "truecolor" || has('win32')
     else
         if has('win32') && &shell == "pwsh"
             let s:hour24 = system('Get-Date -Format HH')
-            if s:hour24 > 20 || s:hour24 < 9
-                set background=dark
-            else
-                set background=light
-            endif
+        else
+            let s:hour24 = system('date +%H')
+        endif
+        if s:hour24 > 20 || s:hour24 < 9
+            set background=dark
         else
             set background=light
         endif
     endif
     let g:mellow_user_colors = 1
     colorscheme mellow
-    " let g:lightline = {'colorscheme': 'mellow'}
-else
+else  " Minimal color settings for vconsole.
     colorscheme pablo
     set background=dark
     hi! link ColorColumn Normal
