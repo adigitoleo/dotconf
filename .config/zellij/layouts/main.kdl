@@ -6,14 +6,11 @@ layout {
         children
     }
 
-    tab name="system" {
+    tab name="system" focus=true {
         pane command="top"
         pane command="sudo" start_suspended=true {
             args "axe" "-bf" "errors"
         }
-    }
-    tab name="mail" focus=true {
-        pane command="aerc"
     }
     tab name="notes" {
         pane cwd="vcs/notebook/notebook.wiki" command="nvim" {
