@@ -93,3 +93,7 @@ if has_todo_comments then
         todo_comments.jump_prev()
     end, { desc = "Previous todo comment" })
 end
+
+-- Replacement for buggy vim8 directory viewer.
+local has_carbon, carbon = pcall(require, 'carbon')
+if has_carbon then carbon.setup() end

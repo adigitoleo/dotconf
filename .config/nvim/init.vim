@@ -726,7 +726,7 @@ let g:plug_window = 'SmartSplit'
 call plug#begin(g:PLUGIN_HOME)
     " Ergonomics and general fixes. {{{3
     if has('win32')
-        Plug 'junegunn/fzf'  " Fuzzy search, not needed on Linux (fzf package).
+        Plug 'junegunn/fzf'  " Fuzzy search, included in `fzf` package on Linux.
     endif
     Plug 'tpope/vim-abolish'  " Word variant manipulation.
     Plug 'tpope/vim-commentary'  " Quickly comment/uncomment code.
