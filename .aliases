@@ -101,7 +101,6 @@ alias d,unmount='sync && udisksctl unmount -b'
 
 # Get host info.
 alias ip,lan='ip route get 1|rg -o "src [^\s]*"|cut -d" " -f2'
-alias ip,pub='curl ipinfo.ip/ip'
 
 # Find and print site urls from elinks history or bookmarks.
 alias e,hist='cut -f2 < ~/.elinks/globhist|fzf'
