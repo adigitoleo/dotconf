@@ -850,7 +850,7 @@ augroup END
 " Don't open folds when restoring cursor position.
 let g:lastplace_open_folds = 0
 " Use the latex to unicode converter provided by julia.vim for other filetypes.
-let g:latex_to_unicode_file_types = ["julia", "markdown", "python", "tex", "nim", "openscad"]
+let g:latex_to_unicode_file_types = ["julia", "markdown", "python", "tex", "nim", "openscad", "hare"]
 " Fix vim-sneak highlight clearing.
 autocmd User SneakLeave highlight clear Sneak
 " }}}}}}
