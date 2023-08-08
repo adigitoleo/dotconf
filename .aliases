@@ -129,9 +129,6 @@ alias jl,tmp='julia --banner=no --startup-file=no --history-file=no'
 alias a,mute='amixer set Master toggle'
 alias a,mixer=alsamixer
 
-# Create an archive of <folder>: PATTERN=<folder> && mktar <archive>.tar.gz <folder>
-alias mktar='tar --transform=s/$PATTERN/$(date +%Y%m%dT%H%M)/ --exclude={__pycache,.mypy_cache} -vcaf'
-
 # Create backup according to ./.BACKUP using rsync: backup <destination>
 alias backup='rsync -rszauhP --no-links --delete --info=nonreg0 --files-from=$HOME/.BACKUP $HOME'
 
