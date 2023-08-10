@@ -28,10 +28,16 @@ fi
 
 
 # Set preferred editors.
+EDITOR="vim"
+VISUAL="vim"
 if [ -x "/usr/bin/vis" ]; then
-    export EDITOR="/usr/bin/vis"
-    export VISUAL="/usr/bin/nvim"
+    EDITOR="/usr/bin/vis"
 fi
+if [ -x "/usr/bin/nvim" ]; then
+    VISUAL="/usr/bin/nvim"
+fi
+export EDITOR
+export VISUAL
 
 # Set colorterm to use truecolors if not already.
 if [ "$COLORTERM" != "truecolor" ]; then
