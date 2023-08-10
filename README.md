@@ -16,8 +16,6 @@ They can be found in the `.local/bin/` folder, e.g.
 
 - [doi2bib](https://git.sr.ht/~adigitoleo/dotconf/tree/master/item/.local/bin/doi2bib),
   a bibliographic metadata querying tool using the CrossRef API,
-- [enter](https://git.sr.ht/~adigitoleo/dotconf/tree/master/item/.local/bin/enter),
-  a SSH wrapper that sets up Wayland network transparency (video forwarding),
 - [musicplayer](https://git.sr.ht/~adigitoleo/dotconf/tree/master/item/.local/bin/musicplayer),
   an extremely simple music player TUI using [fzf](https://github.com/junegunn/fzf), among others...
 
