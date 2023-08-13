@@ -42,6 +42,7 @@ export VISUAL
 # Set colorterm to use truecolors if not already.
 if [ "$COLORTERM" != "truecolor" ]; then
     export COLORTERM=truecolor
+    export MANPAGER="less -R --use-color -Dd+c -Du+y"
 fi
 
 # Set LS_COLORS if not set already.
