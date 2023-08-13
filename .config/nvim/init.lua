@@ -742,8 +742,9 @@ end, { nargs = "?" })
 command("H", function(opts) -- https://github.com/numToStr/FTerm.nvim/issues/92
     local arg = fn.expand("<cword>")
     if opts.args ~= "" then arg = opts.args end
-    require("FTerm").scratch({ cmd = { "nvim", "-c", "help", arg, "-c", "only" } })
-end, { nargs = "?" })
+    vim.print(arg)
+    require("FTerm").scratch({ cmd = { "nvim", "-c", "help " .. arg, "-c", "only" } })
+end, { nargs = "?", complete = "help" })
 
 -- Better jumping and motions.
 -- TODO: Add repeat.vim optional dependency for leap.nvim?
