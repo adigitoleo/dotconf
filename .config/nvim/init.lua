@@ -733,18 +733,21 @@ if carbon then
 end
 
 -- Floating windows/terminals.
-command("Term", require("FTerm").toggle, { desc = "Toggle floating terminal" })
-command("M", function(opts) -- https://github.com/numToStr/FTerm.nvim/issues/91
-    local arg = fn.expand("<cword>")
-    if opts.args ~= "" then arg = opts.args end
-    require("FTerm").scratch({ cmd = { "man", arg } })
-end, { nargs = "?" })
-command("H", function(opts) -- https://github.com/numToStr/FTerm.nvim/issues/92
-    local arg = fn.expand("<cword>")
-    if opts.args ~= "" then arg = opts.args end
-    vim.print(arg)
-    require("FTerm").scratch({ cmd = { "nvim", "-c", "help " .. arg, "-c", "only" } })
-end, { nargs = "?", complete = "help" })
+local fterm = load("FTerm")
+if fterm then
+    command("Term", require("FTerm").toggle, { desc = "Toggle floating terminal" })
+    command("M", function(opts) -- https://github.com/numToStr/FTerm.nvim/issues/91
+        local arg = fn.expand("<cword>")
+        if opts.args ~= "" then arg = opts.args end
+        require("FTerm").scratch({ cmd = { "man", arg } })
+    end, { nargs = "?" })
+    command("H", function(opts) -- https://github.com/numToStr/FTerm.nvim/issues/92
+        local arg = fn.expand("<cword>")
+        if opts.args ~= "" then arg = opts.args end
+        vim.print(arg)
+        require("FTerm").scratch({ cmd = { "nvim", "-c", "help " .. arg, "-c", "only" } })
+    end, { nargs = "?", complete = "help" })
+end
 
 -- Better jumping and motions.
 -- TODO: Add repeat.vim optional dependency for leap.nvim?
