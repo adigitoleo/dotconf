@@ -4,6 +4,9 @@ local opt = vim.opt
 local fn = vim.fn
 local command = api.nvim_create_user_command
 local bindkey = vim.keymap.set
+local system = vim.loop.os_uname().sysname
+if system == "Windows_NT" then vim.o.shell = "pwsh" end
+-- FIXME: FZF stuff doesn't work on Win11 because of printf and \n.
 local function warn(msg) api.nvim_err_writeln("init.lua: " .. msg) end
 
 -- Enable unicode input and markdown fenced block highlighting for:
@@ -266,8 +269,8 @@ opt.scrolloff = 3
 opt.showbreak = "> "
 
 -- Direct integration with external executables.
-if fn.executable("rg") then opt.grepprg = "rg --vimgrep --smart-case --follow" end
-if fn.executable("wl-copy") and fn.executable("wl-paste") then
+if fn.executable("rg") > 0 then opt.grepprg = "rg --vimgrep --smart-case --follow" end
+if fn.executable("wl-copy") > 0 and fn.executable("wl-paste") > 0 then
     vim.g.clipboard = {
         name = "Wayland primary selection",
         copy = { ["+"] = "wl-copy --type text/plain", ["*"] = "wl-copy --primary --type text/plain" },
@@ -279,7 +282,7 @@ else
 end
 
 -- Integration with fzf, <https://github.com/junegunn/fzf/blob/master/README-VIM.md>.
-if fn.executable("fzf") then -- Doesn't guarantee that fzf.vim file is available...
+if fn.executable("fzf") > 0 then -- Doesn't guarantee that fzf.vim file is available...
     vim.g.fzf_layout = {
         window =
         { width = 0.9, height = 0.6, border = "sharp", highlight = "StatusLine" }
@@ -310,7 +313,7 @@ if fn.executable("fzf") then -- Doesn't guarantee that fzf.vim file is available
     end
     command("FuzzyRecent", _fuzzy_recent, { desc = "Open recent files (v:oldfiles) or listed buffers" })
 
-    if fn.executable("rg") then
+    if fn.executable("rg") > 0 then
         local function _fuzzy_find(opts)
             vim.cmd("call fzf#run(fzf#wrap(FZFspecgen('rg --files --hidden --no-messages', '"
                 .. opts.args .. "')))"
@@ -374,7 +377,7 @@ else
     warn("fuzzy finder ('fzf') not found, disabling fzf features")
 end
 
-if fn.executable("theme") then
+if fn.executable("theme") > 0 then
     command("ToggleTheme",
         [[silent! exec '!theme -t'|let &background = get(systemlist('theme -q'), 0, 'light')]],
         { desc = "Toggle global TUI theme using `!theme`" })
@@ -630,6 +633,9 @@ require("packer").startup(function(use)
     if fn.executable("julia") > 0 then
         use "JuliaEditorSupport/julia-vim" -- Improved Julia syntax highlighting, unicode input.
     end
+    if system == "Windows_NT" then
+        use "junegunn/fzf" -- Provides the basic fzf.vim file.
+    end
     if packer_bootstrap then
         require("packer").sync()
     end
@@ -806,6 +812,7 @@ if vim.env.COLORTERM == "truecolor" or system ~= "Linux" then
     else
         local hour24 = 0
         if system ~= "Linux" and vim.o.shell == "pwsh" then
+            -- FIXME: Seems to be broken on Win11 now...
             hour24 = tonumber(fn.system('Get-Date -Format HH'))
         else
             hour24 = tonumber(fn.system('date +%H'))
