@@ -31,7 +31,7 @@
 	f = fetch --auto-gc
 	s = status -uno --short
 	st = status --short --branch
-	l = log --decorate --oneline --graph
+	l = log --pretty='%C(yellow)%h %C(cyan)%cd %C(blue)%aN%C(auto)%d %Creset%s' --graph --date=relative --date-order
 	c = commit
 	d = diff
 	b = branch -lvv
