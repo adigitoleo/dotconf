@@ -146,9 +146,6 @@ syn keyword nimKeyword interface lambda let mixin mod
 syn keyword nimKeyword object out ptr ref return shared
 syn keyword nimKeyword shl shr static type using var with without yield
 
-" Pragmas (sort of like preprocessor statements), FIXME: not working?
-syn region nimPragma start=+{\.+ end=+\.}+
-
 " Types start with uppercase (mostly)
 syn match nimType "\<\u\%(\h\w\|\w\|\d\)*\*\?\>"
 
