@@ -15,7 +15,7 @@ function main()
     ylims = (parse(Float64, ARGS[3]), parse(Float64, ARGS[4]))
     plt = lineplot(
         parse.(Float64, split(readline(stdin))),
-        width=:auto, height=:auto, xlim=xlims, ylim=ylims
+        width=:auto, height=:auto, xlim=xlims, ylim=ylims, blend=false,
     )
     for line in readlines(stdin)
         lineplot!(plt, parse.(Float64, split(line)))
