@@ -1,0 +1,16 @@
+#!/usr/bin/env julia
+# Command line plotting (data from stdin), e.g:
+#   seq -s' ' 1 100|jl,plot
+using UnicodePlots
+
+function main()
+    plt =  lineplot(parse.(Float64, split(readline(stdin))))
+    for line in readlines(stdin)
+        lineplot!(plt, parse.(Float64, split(line)))
+    end
+    println(plt)
+end
+
+main()
+
+# vim:ft=julia
