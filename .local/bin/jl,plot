@@ -1,10 +1,22 @@
 #!/usr/bin/env julia
 # Command line plotting (data from stdin), e.g:
-#   seq -s' ' 1 100|jl,plot
+#   seq -s' ' 1 100|jl,plot 0 100 0 100
+#                           ^  ^  ^  ^
+#                           |  |  |  y_max
+#                           |  |  y_min
+#                           | x_max
+#                          x_min
+# Each line of input is plotted as one series one the plot.
+# The x-axis just shows the index of the element in the series.
 using UnicodePlots
 
 function main()
-    plt =  lineplot(parse.(Float64, split(readline(stdin))))
+    xlims = (parse(Float64, ARGS[1]), parse(Float64, ARGS[2]))
+    ylims = (parse(Float64, ARGS[3]), parse(Float64, ARGS[4]))
+    plt = lineplot(
+        parse.(Float64, split(readline(stdin))),
+        width=:auto, height=:auto, xlim=xlims, ylim=ylims
+    )
     for line in readlines(stdin)
         lineplot!(plt, parse.(Float64, split(line)))
     end
