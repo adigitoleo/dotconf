@@ -741,6 +741,7 @@ end
 -- Floating windows/terminals.
 local fterm = load("FTerm")
 if fterm then
+    fterm.setup({ blend = 30 })
     command("Term", require("FTerm").toggle, { desc = "Toggle floating terminal" })
     command("M", function(opts) -- https://github.com/numToStr/FTerm.nvim/issues/91
         local arg = fn.expand("<cword>")
