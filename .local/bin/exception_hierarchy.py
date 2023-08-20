@@ -1,9 +1,10 @@
 #!/usr/bin/env python
-"""Print Python builtin exception hierarchy.
+import sys
 
-Adapted from https://stackoverflow.com/a/18296681
-
-"""
+if sys.argv[1] == "-h" or sys.argv[1] == "--help":
+    print("Print Python builtin exception hierarchy.")
+    print("Adapted from <https://stackoverflow.com/a/18296681>.")
+    raise SystemExit(0)
 
 
 def classtree(cls, indent=0):

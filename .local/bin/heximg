@@ -1,10 +1,36 @@
 #!/bin/sh
 set -eu
+readonly SCRIPTNAME="${0##*/}"
+helpf() {
+    echo 'Generate and display a PNG image of the given color.'
+    echo 'Colors should be given in the HEX code format as supported by'
+    echo "imagemagick's 'convert' command."
+}
+warn() { >&2 printf '%s\n' "$SCRIPTNAME: $1"; }
+is_command() {
+    if 1>/dev/null 2>&1 command -v "$1"; then
+        return 0
+    else
+        warn "command '$1' not found"; return 1
+    fi
+}
+
+is_command convert || exit 1
+is_command xdg-open || exit 1
+
+HAS_DISPLAY=
+[ -n "$DISPLAY" ] && HAS_DISPLAY="$DISPLAY"
+[ -n "$WAYLAND_DISPLAY" ] && HAS_DISPLAY="$WAYLAND_DISPLAY"
+[ -n "$HAS_DISPLAY" ] || { warn "neither DISPLAY nor WAYLAND_DISPLAY set"; exit 1; }
+
 if [ $# -eq 0 ]; then
     IFS= read -r val && set -- "$val"
 elif [ "$1" = "-" ]; then
     IFS= read -r val && set -- "$val"
 fi
+
+[ "$1" = "-h" ] && { helpf; exit 0; }
+
 convert -size 20x20 xc:"$1" /tmp/c.png || exit 1
 xdg-open /tmp/c.png
 rm /tmp/c.png

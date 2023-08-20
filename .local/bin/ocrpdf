@@ -1,14 +1,12 @@
 #!/bin/sh
-#set -euo pipefail
 set -eu
-# ----------- MESSAGING FUNCTIONS ---------------------------------------------
 readonly SCRIPTNAME="${0##*/}"
-usage() { # Print a short synopsis <https://pubs.opengroup.org/onlinepubs/9699919799/>
+usage() {
     printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
     printf '       %s ' "$SCRIPTNAME"
     echo '[-l lang][-o filename][-p password][document]'
 }
-helpf() { # Print a longer help string
+helpf() {
     echo 'Options:'
     echo '-l <language>     override default language(s) for tesseract OCR'
     echo '-o <filename>     filename to use for the output PDF (without `.pdf`)'
@@ -24,14 +22,9 @@ helpf() { # Print a longer help string
     echo 'Multiple languages may be given, separated by plus signs (+).'
     echo 'See also <https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF>.'
 }
-warn() { # warn [message]... Print message to stderr <https://stackoverflow.com/a/23550347>
-    >&2 printf '%s\n' "${SCRIPTNAME}: $1"
-}
-tell() { # tell [message]... Print message to stdout
-    printf '%s\n' "${SCRIPTNAME}: $1"
-}
+warn() { >&2 printf '%s\n' "${SCRIPTNAME}: $1"; }
+tell() { printf '%s\n' "${SCRIPTNAME}: $1"; }
 
-# ----------- MAIN ROUTINES ---------------------------------------------------
 FUNCRETURN=  # Store non-integer return values, see also <https://stackoverflow.com/a/18198358>
 ARGSTR=  # Store argument string during processing
 PDF_OUT=  # Store filename for output PDF
@@ -94,7 +87,6 @@ ocr() { # ocr [input] [output] Run OCR on input PDF and write to output PDF
 }
 
 [ $# -eq 0 ] && usage && exit 1
-# NOTE: Long form options like `--help` are not POSIX compliant.
 while getopts "o:p:l:h" OPT ; do
     case "$OPT" in
         o ) PDF_OUT="$OPTARG" ;;
