@@ -748,7 +748,7 @@ if fterm then
         else
             require("FTerm").toggle()
         end
-    end, { nargs = "?", desc = "Toggle floating terminal or open scratch term and run command" })
+    end, { nargs = "?", complete="file", desc = "Toggle floating terminal or open scratch term and run command" })
     command("M", function(opts) -- https://github.com/numToStr/FTerm.nvim/issues/91
         local arg = fn.expand("<cword>")
         if opts.args ~= "" then arg = opts.args end
