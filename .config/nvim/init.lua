@@ -663,6 +663,10 @@ if lsp then
             end, { buffer = ev.buf, desc = "Run LSP formatter" })
         end,
     })
+    -- Borders for LSP popup windows.
+    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" })
+    vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" })
+    vim.diagnostic.config { float = { border = "single" } }
     -- Requires pip install python-lsp-server (NOT python-language-server!).
     if fn.executable('pylsp') > 0 then
         lsp.pylsp.setup {
@@ -748,17 +752,17 @@ if fterm then
         else
             require("FTerm").toggle()
         end
-    end, { nargs = "?", complete="file", desc = "Toggle floating terminal or open scratch term and run command" })
+    end, { nargs = "?", complete = "file", desc = "Toggle floating terminal or open scratch term and run command" })
     command("M", function(opts) -- https://github.com/numToStr/FTerm.nvim/issues/91
         local arg = fn.expand("<cword>")
         if opts.args ~= "" then arg = opts.args end
         require("FTerm").scratch({ cmd = { "man", arg } })
     end, { nargs = "?", desc = "Show man page of argument or word under cursor in floating window" })
     command("H", function(opts) -- https://github.com/numToStr/FTerm.nvim/issues/92
-        local arg = fn.expand("<cword>")
-        if opts.args ~= "" then arg = opts.args end
-        require("FTerm").scratch({ cmd = { "nvim", "-c", "help " .. arg, "-c", "only" } })
-    end,
+            local arg = fn.expand("<cword>")
+            if opts.args ~= "" then arg = opts.args end
+            require("FTerm").scratch({ cmd = { "nvim", "-c", "help " .. arg, "-c", "only" } })
+        end,
         { nargs = "?", complete = "help", desc = "Open neovim help of argument or word under cursor in floating window" })
 end
 
