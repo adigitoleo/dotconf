@@ -742,18 +742,24 @@ end
 local fterm = load("FTerm")
 if fterm then
     fterm.setup({ blend = 30 })
-    command("Term", require("FTerm").toggle, { desc = "Toggle floating terminal" })
+    command("Term", function(opts)
+        if opts.args ~= "" then
+            require("FTerm").scratch({ cmd = { opts.args } })
+        else
+            require("FTerm").toggle()
+        end
+    end, { nargs = "?", desc = "Toggle floating terminal or open scratch term and run command" })
     command("M", function(opts) -- https://github.com/numToStr/FTerm.nvim/issues/91
         local arg = fn.expand("<cword>")
         if opts.args ~= "" then arg = opts.args end
         require("FTerm").scratch({ cmd = { "man", arg } })
-    end, { nargs = "?" })
+    end, { nargs = "?", desc = "Show man page of argument or word under cursor in floating window" })
     command("H", function(opts) -- https://github.com/numToStr/FTerm.nvim/issues/92
         local arg = fn.expand("<cword>")
         if opts.args ~= "" then arg = opts.args end
-        vim.print(arg)
         require("FTerm").scratch({ cmd = { "nvim", "-c", "help " .. arg, "-c", "only" } })
-    end, { nargs = "?", complete = "help" })
+    end,
+        { nargs = "?", complete = "help", desc = "Open neovim help of argument or word under cursor in floating window" })
 end
 
 -- Better jumping and motions.
