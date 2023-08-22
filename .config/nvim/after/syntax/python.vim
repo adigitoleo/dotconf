@@ -19,8 +19,7 @@ hi! link Constant Identifier
 setlocal indentkeys-=: indentkeys-=<:>
 
 " Highlight string prefix modifiers in stronger color.
-" FIXME: Don't catch things like pdf" in here...
-syn match pythonStringModifier '[brf]"'me=e-1 contained
+syn match pythonStringModifier '\<[brf]"'me=e-1 contained
 syn region pythonFString   start=+[fF]'+ skip=+\\\\\|\\'\|\\$+ excludenl end=+'+ end=+$+ keepend contains=pythonBytesEscape,pythonBytesEscapeError,pythonUniEscape,pythonUniEscapeError,@Spell,pythonStringModifier
 syn region pythonFString   start=+[fF]"+ skip=+\\\\\|\\"\|\\$+ excludenl end=+"+ end=+$+ keepend contains=pythonBytesEscape,pythonBytesEscapeError,pythonUniEscape,pythonUniEscapeError,@Spell,pythonStringModifier
 syn region pythonFString   start=+[fF]'''+ skip=+\\'+ end=+'''+ keepend contains=pythonBytesEscape,pythonBytesEscapeError,pythonUniEscape,pythonUniEscapeError,pythonDocTest,pythonSpaceError,@Spell,pythonStringModifier
