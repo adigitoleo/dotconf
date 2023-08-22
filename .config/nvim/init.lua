@@ -807,7 +807,8 @@ vim.g.python_highlight_indent_errors = 0
 -- Julia settings.
 vim.g.julia_indent_align_brackets = 0
 -- Use the latex to unicode converter provided by julia.vim for other filetypes.
-vim.g.latex_to_unicode_file_types = table.concat(freqlangs, "markdown")
+table.insert(freqlangs, "markdown")
+vim.g.latex_to_unicode_file_types = freqlangs
 
 -- Don't open folds when restoring cursor position.
 vim.g.lastplace_open_folds = 0
