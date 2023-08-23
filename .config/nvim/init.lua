@@ -13,6 +13,7 @@ local function warn(msg) api.nvim_err_writeln("init.lua: " .. msg) end
 local freqlangs = {
     "c", "cpp", "python", "julia", "nim", "sh", "conf", "css", "go", "json",
     "lua", "rust", "strace", "toml", "yaml", "openscad", "tex", "hare",
+    "racket", "pollen"
 } -- Unicode input will additionally be enabled in the "markdown" filetype.
 
 -- Turn off optional Python, Ruby, Perl and NodeJS support.
@@ -451,6 +452,7 @@ setl_ft_autocmd({ "xml", "html" }, { tabstop = 2, foldmethod = "indent" })
 setl_ft_autocmd({ "yaml" }, { tabstop = 2 })
 setl_ft_autocmd({ "gitconfig" }, { expandtab = false })
 setl_ft_autocmd({ "help" }, { signcolumn = "no" })
+setl_ft_autocmd({ "pollen" }, { commentstring = "◊;\\ %s" })
 
 -- Miscellaneous autocommands.
 vim.cmd [[augroup misc
@@ -617,7 +619,6 @@ require("packer").startup(function(use)
     -- Follow symlinks when opening files (Linux, VimL).
     use { "aymericbeaumet/vim-symlink", requires = { "moll/vim-bbye" } }
 
-    use "jghauser/follow-md-links.nvim" -- Follow links in markdown files.
     use "dhruvasagar/vim-open-url"      -- Open URL's in browser without :h netrw (VimL).
     use "alvan/vim-closetag"            -- Auto-close (x|ht)ml tags (VimL).
     use "vim-python/python-syntax"      -- Improved Python syntax highlighting (VimL).
@@ -632,6 +633,9 @@ require("packer").startup(function(use)
     end
     if fn.executable("julia") > 0 then
         use "JuliaEditorSupport/julia-vim" -- Improved Julia syntax highlighting, unicode input.
+    end
+    if fn.executable("racket") > 0 then
+        use "otherjoel/vim-pollen" -- Syntax highlighting for #lang pollen
     end
     if system == "Windows_NT" then
         use "junegunn/fzf" -- Provides the basic fzf.vim file.
