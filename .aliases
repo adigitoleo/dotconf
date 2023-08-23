@@ -6,7 +6,7 @@
 # d = disk controls (mount/unmount etc.)
 # e = elinks (text browser utilities), note that bare `e` should run $EDITOR instead
 # i = networking (also ip,<foo>)
-# p = pacman (package manager)
+# p = package manager
 # q = qutebrowser (web browser)
 # v = virtual console
 # w = wayland specific
