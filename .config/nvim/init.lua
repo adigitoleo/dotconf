@@ -232,15 +232,16 @@ end
 -- Global booleans.
 opt.confirm = true
 opt.ignorecase = true
-opt.smartcase = true
+opt.incsearch = false
 opt.infercase = true
-opt.signcolumn = "yes"
-opt.splitbelow = true
-opt.splitright = true
 opt.linebreak = true
 opt.list = true
 opt.showmode = false
-opt.incsearch = false
+opt.signcolumn = "yes"
+opt.smartcase = true
+opt.splitbelow = true
+opt.splitright = true
+opt.wrap = false
 
 -- Global configs.
 opt.tabstop = 4                -- Set indent size.
