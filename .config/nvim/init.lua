@@ -638,7 +638,7 @@ require("packer").startup(function(use)
     if fn.executable("racket") > 0 then
         use "otherjoel/vim-pollen" -- Syntax highlighting for #lang pollen
     end
-    if system == "Windows_NT" then
+    if system == "Windows_NT" or fn.executable("apt") then
         use "junegunn/fzf" -- Provides the basic fzf.vim file.
     end
     if packer_bootstrap then
