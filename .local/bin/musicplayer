@@ -108,4 +108,4 @@ if [ -n "$FZF_PORT" ]; then
     [ -n "$JOB" ] || { sleep 5 && curl -XPOST localhost:"$FZF_PORT" -d 'down'; }
 fi
 
-trap "test \"$JOB\" = \"\" || kill $JOB" EXIT HUP TERM INT
+trap "[ -n \"$JOB\" ] || kill $JOB" EXIT HUP TERM INT
