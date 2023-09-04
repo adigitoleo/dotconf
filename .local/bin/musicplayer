@@ -104,6 +104,8 @@ fi
 
 # Move to next file automatically,
 # requires fzf to be started with --listen <FZF_PORT>
-test "$JOB" = "" || { sleep 5 && curl -XPOST localhost:"$FZF_PORT" -d 'down'; }
+if [ -n "$FZF_PORT" ]; then
+    [ -n "$JOB" ] || { sleep 5 && curl -XPOST localhost:"$FZF_PORT" -d 'down'; }
+fi
 
 trap "test \"$JOB\" = \"\" || kill $JOB" EXIT HUP TERM INT
