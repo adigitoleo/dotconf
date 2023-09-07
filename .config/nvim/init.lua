@@ -13,7 +13,7 @@ local function warn(msg) api.nvim_err_writeln("init.lua: " .. msg) end
 local freqlangs = {
     "c", "cpp", "python", "julia", "nim", "sh", "conf", "css", "go", "json",
     "lua", "rust", "strace", "toml", "yaml", "openscad", "tex", "hare",
-    "racket", "pollen", "html", "latex"
+    "racket", "pollen", "html"
 } -- Unicode input will additionally be enabled in the "markdown" filetype.
 
 -- Turn off optional Python, Ruby, Perl and NodeJS support.
