@@ -8,6 +8,9 @@ layout {
 
     tab name="system" focus=true {
         pane command="top"
+        pane command="axe" {
+            args "-wf"
+        }
         pane command="sudo" start_suspended=true {
             args "axe" "-bf" "errors"
         }
