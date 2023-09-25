@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 
-if sys.argv[1] == "-h" or sys.argv[1] == "--help":
+if len(sys.argv) > 1 and (sys.argv[1] == "-h" or sys.argv[1] == "--help"):
     print("Print Python builtin exception hierarchy.")
     print("Adapted from <https://stackoverflow.com/a/18296681>.")
     raise SystemExit(0)
