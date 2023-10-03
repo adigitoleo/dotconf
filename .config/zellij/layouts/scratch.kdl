@@ -13,9 +13,6 @@ layout {
             args "--banner=no"
         }
     }
-    tab name="calendar" cwd="/tmp" {
-        pane command="calcurse"
-    }
     tab name="music" cwd="Music"
     tab name="vpn" cwd="/tmp"
 }
