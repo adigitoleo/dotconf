@@ -99,7 +99,7 @@ elif [ "${FILENAME%%:*}" = "https" ]; then
     2>/dev/null ffplay -vn -sn -nodisp -autoexit -hide_banner "$FILENAME"
     JOB=$!
 else
-    warn "audio file format unrecognised or not supported"
+    warn "audio file format for $FILENAME unrecognised or not supported"
 fi
 
 # Move to next file automatically,
