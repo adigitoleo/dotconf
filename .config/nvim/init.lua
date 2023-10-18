@@ -753,6 +753,7 @@ if fterm then
     fterm.setup({ blend = 30 })
     command("Term", function(opts)
         if opts.args ~= "" then
+            ---@diagnostic disable-next-line missing-fields
             require("FTerm").scratch({ cmd = { opts.args } })
         else
             require("FTerm").toggle()
@@ -761,11 +762,13 @@ if fterm then
     command("M", function(opts) -- https://github.com/numToStr/FTerm.nvim/issues/91
         local arg = fn.expand("<cword>")
         if opts.args ~= "" then arg = opts.args end
+        ---@diagnostic disable-next-line missing-fields
         require("FTerm").scratch({ cmd = { "man", arg } })
     end, { nargs = "?", desc = "Show man page of argument or word under cursor in floating window" })
     command("H", function(opts) -- https://github.com/numToStr/FTerm.nvim/issues/92
             local arg = fn.expand("<cword>")
             if opts.args ~= "" then arg = opts.args end
+            ---@diagnostic disable-next-line missing-fields
             require("FTerm").scratch({ cmd = { "nvim", "-c", "help " .. arg, "-c", "only" } })
         end,
         { nargs = "?", complete = "help", desc = "Open neovim help of argument or word under cursor in floating window" })
