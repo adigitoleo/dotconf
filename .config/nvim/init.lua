@@ -155,7 +155,7 @@ end
 
 -- Allow continuous horizontal scrolling with 'z' + {'h', 'l', 'H' or 'L'}.
 local function horizontal_scroll_mode(scrolltype)
-    -- a:scrolltype -- string, a letter (as above), see `:h scroll-horizontal`.
+    -- scrolltype: string, a letter (as above), see `:h scroll-horizontal`.
     -- <https://stackoverflow.com/a/59950870/12519962>
     if vim.wo.wrap then
         return
@@ -227,6 +227,35 @@ local function rename_file() -- Rename current buffer and associated file.
         vim.cmd("silent bdelete " .. old_name)
         vim.cmd [[redraw!]]
     end
+end
+
+-- Open or focus floating window and set {buf|file}type.
+local function floating(buf, win, bt, ft)
+    -- buf: possibly existing buffer
+    -- win: possibly existing window
+    -- bt: desired buftype
+    -- ft: desired filetype
+    local wc = vim.o.columns
+    local wl = vim.o.lines
+    local width = math.ceil(wc * 0.8)
+    local height = math.ceil(wl * 0.8 - 4)
+    if not api.nvim_buf_is_valid(buf) then
+        buf = api.nvim_create_buf(true, false)
+    end
+    api.nvim_buf_set_option(buf, "buftype", bt)
+    api.nvim_buf_set_option(buf, "filetype", ft)
+    if not api.nvim_win_is_valid(win) then
+        win = api.nvim_open_win(buf, true, {
+            border = "single",
+            relative = "editor",
+            style = "minimal",
+            width = width,
+            height = height,
+            col = math.ceil((wc - width) * 0.5),
+            row = math.ceil((wl - height) * 0.5 - 1)
+        })
+    end
+    return buf, win
 end
 
 -- Global booleans.
@@ -459,7 +488,7 @@ setl_ft_autocmd({ "pollen" }, { commentstring = "◊;\\ %s" })
 vim.cmd [[augroup misc
     autocmd!
     autocmd BufWritePost * exec "normal! " .. &foldenable ? "zx" : ""
-    autocmd VimEnter,BufWinEnter * let &colorcolumn = "+" .. join(range(&columns)[1:], ",+")
+    autocmd VimEnter,BufWinEnter,FileType * let &colorcolumn = "+" .. join(range(&columns)[1:], ",+")
     autocmd InsertLeave,CompleteDone * silent! pclose
     autocmd VimResized * wincmd =
     autocmd TabEnter * stopinsert
@@ -759,20 +788,41 @@ if fterm then
             require("FTerm").toggle()
         end
     end, { nargs = "?", complete = "file", desc = "Toggle floating terminal or open scratch term and run command" })
-    command("M", function(opts) -- https://github.com/numToStr/FTerm.nvim/issues/91
+end
+local helpbuf = -1
+local helpwin = -1
+command("H", function(opts)
         local arg = fn.expand("<cword>")
         if opts.args ~= "" then arg = opts.args end
-        ---@diagnostic disable-next-line missing-fields
-        require("FTerm").scratch({ cmd = { "man", arg } })
-    end, { nargs = "?", desc = "Show man page of argument or word under cursor in floating window" })
-    command("H", function(opts) -- https://github.com/numToStr/FTerm.nvim/issues/92
-            local arg = fn.expand("<cword>")
-            if opts.args ~= "" then arg = opts.args end
-            ---@diagnostic disable-next-line missing-fields
-            require("FTerm").scratch({ cmd = { "nvim", "-c", "help " .. arg, "-c", "only" } })
-        end,
-        { nargs = "?", complete = "help", desc = "Open neovim help of argument or word under cursor in floating window" })
-end
+        helpbuf, helpwin = floating(helpbuf, helpwin, "help", "help")
+        local cmdparts = {
+            "try|help ",
+            arg,
+            "|catch /^Vim(help):E149/|call nvim_win_close(",
+            helpwin,
+            ", v:false)|echoerr v:exception|endtry",
+        }
+        vim.cmd(table.concat(cmdparts))
+        api.nvim_buf_set_option(helpbuf, "filetype", "help")  -- Set ft again to redraw conceal formatting.
+    end,
+    { nargs = "?", complete = "help", desc = "Open neovim help of argument or word under cursor in floating window" }
+)
+local manbuf = -1
+local manwin = -1
+command("M", function(opts)
+        local arg = fn.expand("<cword>")
+        if opts.args ~= "" then arg = opts.args end
+        manbuf, manwin = floating(manbuf, manwin, "nofile", "man")
+        local cmdparts = {
+            "try|Man ",
+            arg,
+            '|catch /^Vim:man.lua: "no manual entry for/|call nvim_win_close(',
+            manwin,
+            ", v:false)|echoerr v:exception|endtry",
+        }
+        vim.cmd(table.concat(cmdparts))
+    end, { nargs = "?", desc = "Show man page of argument or word under cursor in floating window" }
+)
 
 -- Better jumping and motions.
 -- TODO: Add repeat.vim optional dependency for leap.nvim?
