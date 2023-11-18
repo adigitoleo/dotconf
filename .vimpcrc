@@ -1,0 +1,6 @@
+set ignorecase
+set smartcase
+set windownumbers
+set singlequit
+set sortignorethe
+set windows help,browse,playlist
