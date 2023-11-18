@@ -6,12 +6,12 @@ I manage these files with the Git-based [yadm](https://yadm.io/) tool.
 I use both Void and Arch Linux as daily drivers on different machines.
 My preferred window manager is Sway (`x86_64` Wayland) and I don't own NVIDIA
 GPUs so don't expect any proprietary driver configurations or obsessive
-performance optimisations. My tenure in the terminal (`alacritty` with `tmux`)
+performance optimisations. My tenure in the terminal (`alacritty` with ~~`tmux`~~ `zellij`)
 outweighs any focus on graphical interfaces, which are not well suited to the
 spartan development conditions of Open Source.
 
 Most or all of my shell scripts should be self sufficient, written in either
-Python, Nim, or POSIX shell, and are likely the most portable components.
+Python, Nim, POSIX or zsh shell, and are likely the most portable components.
 They can be found in the `.local/bin/` folder, e.g.
 
 - [doi2bib](https://git.sr.ht/~adigitoleo/dotconf/tree/master/item/.local/bin/doi2bib),
@@ -21,7 +21,7 @@ They can be found in the `.local/bin/` folder, e.g.
 
 My <200 line .zshrc sets up asynchronous Git status indicators and is aware of
 remote login sessions, and my rather more unwieldy NeoVim configuration (900+
-lines of `.config/nvim/init.vim` not counting filetype specific features in
+lines of `.config/nvim/init.lua` not counting filetype specific features in
 `.config/nvim/after/`) provides comprehensive code linting, Git integration,
 and general IDE features (including floating terminals, without any plugin).
 
