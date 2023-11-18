@@ -39,6 +39,35 @@ is_command() { # Check if command exists, for flow control (no stdout messages)
     fi
 }
 
+play() {
+    FILENAME="$1"
+    JOB=
+    echo "$SCRIPTNAME: playing ${FILENAME/$HOME/\~}"
+    if [ "${FILENAME##*.}" = "mp3" ]; then
+        is_command ffplay || exit 1
+        sleep 5 && 2>/dev/null ffplay -vn -sn -nodisp -autoexit -hide_banner "$FILENAME"
+        JOB=$!
+    elif [ "${FILENAME##*.}" = "opus" ]; then
+        is_command opusdec || exit 1
+        is_command aplay || exit 1
+        opusdec --quiet --force-wav "$FILENAME" -|aplay --quiet
+        JOB=$!
+    elif [ "${FILENAME##*.}" = "flac" ]; then
+        is_command flac || exit 1
+        is_command aplay || exit 1
+        flac -dcs "$FILENAME"|aplay --quiet
+        JOB=$!
+    elif [ "${FILENAME%%:*}" = "https" ]; then
+        is_command ffplay || exit 1
+        2>/dev/null ffplay -vn -sn -nodisp -autoexit -hide_banner "$FILENAME"
+        JOB=$!
+    else
+        warn "audio file format for $FILENAME unrecognised or not supported"
+    fi
+
+    trap "[ -n \"$JOB\" ] || kill $JOB" EXIT HUP TERM INT
+}
+
 FILENAME=
 FZF_PORT=6266
 SHUFFLE=1
@@ -55,6 +84,7 @@ while getopts "hsrp:f:" OPT; do
     esac
 done
 shift $(( OPTIND - 1 ))
+
 # Playlist mode, sets up a listing using fzf and uses a recursive call with -f
 # to play the selected file.
 if [ "$FILENAME" = "" ]; then
@@ -78,34 +108,15 @@ if [ "$FILENAME" = "" ]; then
     exit 0
 fi
 
-JOB=
-echo "$SCRIPTNAME: playing ${FILENAME/$HOME/\~}"
-if [ "${FILENAME##*.}" = "mp3" ]; then
-    is_command ffplay || exit 1
-    sleep 5 && 2>/dev/null ffplay -vn -sn -nodisp -autoexit -hide_banner "$FILENAME"
-    JOB=$!
-elif [ "${FILENAME##*.}" = "opus" ]; then
-    is_command opusdec || exit 1
-    is_command aplay || exit 1
-    opusdec --quiet --force-wav "$FILENAME" -|aplay --quiet -
-    JOB=$!
-elif [ "${FILENAME##*.}" = "flac" ]; then
-    is_command flac || exit 1
-    is_command aplay || exit 1
-    flac -dcs "$FILENAME"|aplay --quiet -
-    JOB=$!
-elif [ "${FILENAME%%:*}" = "https" ]; then
-    is_command ffplay || exit 1
-    2>/dev/null ffplay -vn -sn -nodisp -autoexit -hide_banner "$FILENAME"
-    JOB=$!
-else
-    warn "audio file format for $FILENAME unrecognised or not supported"
-fi
+play "$FILENAME"
 
-# Move to next file automatically,
-# requires fzf to be started with --listen <FZF_PORT>
 if [ -n "$FZF_PORT" ]; then
+    # Move to next file automatically,
+    # requires fzf to be started with --listen <FZF_PORT>
     [ -n "$JOB" ] || { sleep 5 && curl -XPOST localhost:"$FZF_PORT" -d 'down'; }
 fi
 
-trap "[ -n \"$JOB\" ] || kill $JOB" EXIT HUP TERM INT
+if [ $REPEAT -eq 0 ]; then
+    # Loop single file.
+    play "$FILENAME"
+fi
