@@ -118,5 +118,6 @@ fi
 
 if [ $REPEAT -eq 0 ]; then
     # Loop single file.
+    # FIXME: Doesn't work, aplay crashes when it gets to the end of the wav.
     play "$FILENAME"
 fi
