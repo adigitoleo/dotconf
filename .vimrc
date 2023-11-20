@@ -673,6 +673,12 @@ let g:ale_nim_nimpretty_options = '--maxLineLen:100'
 
 " Mellow colorscheme settings {{{2
 set termguicolors
+let g:hour24 = system('date +%H')
+if g:hour24 > 20 || g:hour24 < 9
+    set bg=dark
+else
+    set bg=light
+endif
 let g:mellow_show_bufnr = 0
 let g:mellow_user_colors = 1
 colorscheme mellow
