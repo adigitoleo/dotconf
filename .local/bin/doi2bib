@@ -108,7 +108,7 @@ def getbib(doi: str, plain: bool = False, verbose: bool = False) -> str:
         return "failed to open URL"
     output = re.sub(
         r" }", r"\n}", re.sub(
-            r"([a-zA-Z_]+)=", r"\n\t\1 = ", response.read().decode("utf-8").strip()
+            r"( [a-zA-Z_]+)=", r"\n\t\1 = ", response.read().decode("utf-8").strip()
         )
     )
     if verbose and has_abstract:
