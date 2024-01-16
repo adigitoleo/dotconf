@@ -4,8 +4,7 @@
 import os
 import subprocess
 from pathlib import Path
-
-import yaml
+import tomllib
 
 c = c  # pylint: disable=undefined-variable,self-assigning-variable
 config = config  # pylint: disable=undefined-variable,self-assigning-variable
@@ -105,18 +104,20 @@ c.tabs.title.format_pinned = "{audio}{index}: {current_title}"
 # Appearance settings.
 ########################################################################################
 
-with (Path.home() / ".config/alacritty/alacritty.yml").open() as file:
-    term_config = yaml.safe_load(file)
+def get_colors(theme):
+    if theme.lower() == "dark":
+        with (Path.home() / ".config/alacritty/mellow-dark.toml").open('rb') as file:
+            d = tomllib.load(file)
+    else:
+        with (Path.home() / ".config/alacritty/mellow-light.toml").open('rb') as file:
+            d = tomllib.load(file)
+    return d["colors"]
 
 
-def get_colors(name):
-    return (
-        list(term_config["schemes"][name]["normal"].values())
-        + list(term_config["schemes"][name]["bright"].values())
-    )
+with (Path.home() / ".config/alacritty/alacritty.toml").open('rb') as file:
+    term_config = tomllib.load(file)
+    c.fonts.default_size = str(term_config["font"]["size"]) + "pt"
 
-
-c.fonts.default_size = str(term_config["font"]["size"]) + "pt"
 c.fonts.default_family = "monospace"
 c.fonts.web.size.default_fixed = 14
 c.fonts.web.size.minimum = 14
@@ -127,7 +128,7 @@ c.colors.hints.match.fg = "darkRed"
 
 THEME = subprocess.run(["theme", "-q"], capture_output=True, check=True).stdout
 if "dark" in str(THEME):
-    colors = get_colors("mellow_dark")
+    colors = get_colors("dark")
     # Optional Qt dark mode, works for all sites not just those with dark CSS option,
     # however overwrites dark CSS, looks more ugly and requires a restart to turn off.
     if "QB_QT_DARKMODE" in os.environ and bool(os.environ["QB_QT_DARKMODE"]):
@@ -138,24 +139,24 @@ if "dark" in str(THEME):
     # Set the default bg to a darker color as well to prevent white flashes.
     # But not too dark so that crappy sites that don't set a background/font color
     # aren't unreadable without forced Qt dark mode.
-    c.colors.webpage.bg = colors[13]
+    c.colors.webpage.bg = colors["bright"]["magenta"]
 
-    c.colors.statusbar.normal.bg = colors[5]
-    c.colors.tabs.bar.bg = colors[5]
-    c.colors.tabs.odd.bg = colors[5]
-    c.colors.tabs.even.bg = colors[13]
-    c.colors.tabs.pinned.odd.bg = colors[6]
-    c.colors.tabs.pinned.even.bg = colors[14]
-    c.colors.tabs.odd.fg = colors[11]
-    c.colors.tabs.even.fg = colors[11]
-    c.colors.tabs.pinned.odd.fg = colors[0]
-    c.colors.tabs.pinned.even.fg = colors[0]
-    c.colors.tabs.selected.even.fg = colors[7]
-    c.colors.tabs.selected.odd.fg = colors[7]
+    c.colors.statusbar.normal.bg = colors["normal"]["magenta"]
+    c.colors.tabs.bar.bg = colors["normal"]["magenta"]
+    c.colors.tabs.odd.bg = colors["normal"]["magenta"]
+    c.colors.tabs.even.bg = colors["bright"]["magenta"]
+    c.colors.tabs.pinned.odd.bg = colors["normal"]["cyan"]
+    c.colors.tabs.pinned.even.bg = colors["bright"]["cyan"]
+    c.colors.tabs.odd.fg = colors["bright"]["yellow"]
+    c.colors.tabs.even.fg = colors["bright"]["yellow"]
+    c.colors.tabs.pinned.odd.fg = colors["normal"]["black"]
+    c.colors.tabs.pinned.even.fg = colors["normal"]["black"]
+    c.colors.tabs.selected.even.fg = colors["normal"]["white"]
+    c.colors.tabs.selected.odd.fg = colors["normal"]["white"]
 else:
-    colors = get_colors("mellow_light")
-    c.colors.webpage.bg = colors[15]
-    c.colors.statusbar.normal.bg = colors[5]
+    colors = get_colors("light")
+    c.colors.webpage.bg = colors["bright"]["white"]
+    c.colors.statusbar.normal.bg = colors["normal"]["magenta"]
 
 
 # Custom key bindings.
