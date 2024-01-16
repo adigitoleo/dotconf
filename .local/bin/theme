@@ -19,22 +19,27 @@ helpf() {
     echo 'and therefore does not need to know about any other APIs.'
     echo 'This utility could be used to set the theme at startup,'
     echo "and compatible programs can be set up to read '$SCRIPTNAME -q'."
+    echo "THEME_SOURCE should be an alacritty config file in TOML format."
 }
 warn() { >&2 printf '%s\n' "$SCRIPTNAME: $1"; }
 
 if [ -z "${THEME_SOURCE+_}" ] ; then
-    DEFAULT_THEME_SOURCE="$HOME/.config/alacritty/alacritty.yml"
+    DEFAULT_THEME_SOURCE="$HOME/.config/alacritty/alacritty.toml"
     if [ -f "$DEFAULT_THEME_SOURCE" ] ; then
         THEME_SOURCE="$DEFAULT_THEME_SOURCE"
     else
         warn "can't load default theme source: $DEFAULT_THEME_SOURCE" ; exit 1
     fi
 fi
-theme_query() { awk '/colors:/,/\w/ {print substr($2,2)}' "$THEME_SOURCE" ;}
+theme_query() { # Query current theme from $THEME_SOURCE
+    awk 'BEGIN {FS = "="} /^import/ && $2 ~ /mellow/ \
+        {match($2, /\w+.toml/); print(substr($2, RSTART, RLENGTH-5))}' \
+            "$THEME_SOURCE"
+}
 theme_set() { # theme_set [theme] Set the theme in $THEME_SOURCE using sed
     case "$1" in
-        'light' ) sed -i "s/*dark/*light/" "$THEME_SOURCE" ;;
-        'dark' ) sed -i "s/*light/*dark/" "$THEME_SOURCE" ;;
+        'light' ) sed -i "s/mellow-dark/mellow-light/" "$THEME_SOURCE" ;;
+        'dark' ) sed -i "s/mellow-light/mellow-dark/" "$THEME_SOURCE" ;;
         * ) warn "theme '$1' is not supported"
     esac
 }

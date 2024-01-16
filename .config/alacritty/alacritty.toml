@@ -1,0 +1,10 @@
+import = ["~/.config/alacritty/mellow-dark.toml"]
+
+[cursor]
+vi_mode_style = "Underline"
+
+[font]
+size = 12
+
+[window]
+opacity = 0.8
