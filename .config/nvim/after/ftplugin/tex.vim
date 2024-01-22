@@ -3,6 +3,10 @@ if exists(":VimtexCountWords")
     xmap <silent> <buffer> <LocalLeader>c :VimtexCountWords<Cr>
 endif
 
+if exists(":VimtexTocToggle")
+    nmap <silent> <buffer> gO <plug>(vimtex-toc-toggle)
+endif
+
 func Eatchar(pat)
     let c = nr2char(getchar(0))
     return (c =~ a:pat) ? '' : c

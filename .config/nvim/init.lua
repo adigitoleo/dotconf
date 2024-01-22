@@ -649,14 +649,15 @@ require("packer").startup(function(use)
     -- Follow symlinks when opening files (Linux, VimL).
     use { "aymericbeaumet/vim-symlink", requires = { "moll/vim-bbye" } }
 
-    use "dhruvasagar/vim-open-url"      -- Open URL's in browser without :h netrw (VimL).
-    use "alvan/vim-closetag"            -- Auto-close (x|ht)ml tags (VimL).
-    use "vim-python/python-syntax"      -- Improved Python syntax highlighting (VimL).
-    use "hattya/python-indent.vim"      -- PEP8 auto-indenting for Python (VimL).
-    use "euclidianAce/BetterLua.vim"    -- Improved Lua syntax highlighting (VimL).
-    use "jakemason/ouroboros"           -- Switch between .c/.cpp and header files.
+    use "dhruvasagar/vim-open-url"   -- Open URL's in browser without :h netrw (VimL).
+    use "alvan/vim-closetag"         -- Auto-close (x|ht)ml tags (VimL).
+    use "vim-python/python-syntax"   -- Improved Python syntax highlighting (VimL).
+    use "hattya/python-indent.vim"   -- PEP8 auto-indenting for Python (VimL).
+    use "euclidianAce/BetterLua.vim" -- Improved Lua syntax highlighting (VimL).
+    use "jakemason/ouroboros"        -- Switch between .c/.cpp and header files.
     use "adigitoleo/vim-mellow"
     use "adigitoleo/vim-mellow-statusline"
+    use "https://git.sr.ht/~adigitoleo/overview.nvim"
 
     if fn.executable("latex") > 0 then
         use "lervag/vimtex" -- Comprehensive LaTeX integration.
@@ -803,25 +804,25 @@ command("H", function(opts)
             ", v:false)|echoerr v:exception|endtry",
         }
         vim.cmd(table.concat(cmdparts))
-        api.nvim_buf_set_option(helpbuf, "filetype", "help")  -- Set ft again to redraw conceal formatting.
+        api.nvim_buf_set_option(helpbuf, "filetype", "help") -- Set ft again to redraw conceal formatting.
     end,
     { nargs = "?", complete = "help", desc = "Open neovim help of argument or word under cursor in floating window" }
 )
 local manbuf = -1
 local manwin = -1
 command("M", function(opts)
-        local arg = fn.expand("<cword>")
-        if opts.args ~= "" then arg = opts.args end
-        manbuf, manwin = floating(manbuf, manwin, "nofile", "man")
-        local cmdparts = {
-            "try|Man ",
-            arg,
-            '|catch /^Vim:man.lua: "no manual entry for/|call nvim_win_close(',
-            manwin,
-            ", v:false)|echoerr v:exception|endtry",
-        }
-        vim.cmd(table.concat(cmdparts))
-    end, { nargs = "?", desc = "Show man page of argument or word under cursor in floating window" }
+    local arg = fn.expand("<cword>")
+    if opts.args ~= "" then arg = opts.args end
+    manbuf, manwin = floating(manbuf, manwin, "nofile", "man")
+    local cmdparts = {
+        "try|Man ",
+        arg,
+        '|catch /^Vim:man.lua: "no manual entry for/|call nvim_win_close(',
+        manwin,
+        ", v:false)|echoerr v:exception|endtry",
+    }
+    vim.cmd(table.concat(cmdparts))
+end, { nargs = "?", desc = "Show man page of argument or word under cursor in floating window" }
 )
 
 -- Better jumping and motions.
@@ -870,6 +871,13 @@ vim.g.latex_to_unicode_file_types = freqlangs
 
 -- Don't open folds when restoring cursor position.
 vim.g.lastplace_open_folds = 0
+
+-- Overview.nvim bindings.
+overview = load("overview")
+if overview then
+    bindkey("n", "gO", overview.toggle, { desc = "Toggle Overview sidebar for current buffer" })
+    bindkey("n", "go", overview.focus, { desc = "Toggle focus between Overview sidebar and source buffer" })
+end
 
 -- Mellow theme setup.
 system = vim.loop.os_uname().sysname
