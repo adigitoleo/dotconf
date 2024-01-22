@@ -1,0 +1,2 @@
+#!/bin/sh
+wl-copy --primary "$1" || notify-send -t 2500 "[sioyek]: command failed: wl-copy --primary $1"
