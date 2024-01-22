@@ -50,7 +50,9 @@ set $ws10 "10:#"
 for_window [title="^.*"] title_format " %title"
 assign [app_id=".*qutebrowser"] workspace $ws2
 assign [app_id="zathura"] workspace $ws3
+assign [app_id="sioyek"] workspace $ws3
 
+for_window [app_id="sioyek" title="Select Document"] floating enable
 for_window [app_id="LithoMaker"] floating enable
 for_window [app_id="audacity"] floating enable
 for_window [app_id="drracket"] floating enable
