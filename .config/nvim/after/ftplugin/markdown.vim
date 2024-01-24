@@ -44,7 +44,7 @@ function! s:MarkdownItalicToggle(visual) range
     endif
 endfunction
 
-if exists('g:loaded_surround')
+if luaeval('require("nvim-surround") ~= nil')
     nnoremap <silent> <localleader>b :call <SID>MarkdownBoldToggle(v:false)<Cr>
     nnoremap <silent> <localleader>i :call <SID>MarkdownItalicToggle(v:false)<Cr>
     vnoremap <silent> <localleader>b :call <SID>MarkdownBoldToggle(v:true)<Cr>
