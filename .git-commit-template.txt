@@ -5,10 +5,10 @@
 # (can use '-' for bullet points, and '[#N]' to reference issue number N)
 
 # Types of commits:
-#   fix         (bug fix)
+#   fix         (bug fix, append ! if potentially a breaking change)
 #   feat        (new feature)
-#   remove      (feature removal)
-#   refactor    (internal abstraction change, no intended API change)
+#   remove!     (feature removal)
+#   refactor    (internal abstraction change, append ! if potentially a breaking change)
 #   style       (formatting/cosmetic change)
 #   docs        (documentation change)
 #   build       (build system change, dependency change)
