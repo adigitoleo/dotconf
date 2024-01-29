@@ -443,6 +443,8 @@ vim.cmd [[augroup terminal_buffer_rules
 augroup END]]
 
 vim.filetype.add({ extension = { tikzstyles = "tex" } })
+vim.filetype.add({ extension = { txr = "txr" } })
+vim.filetype.add({ extension = { tl = "tl" } })
 
 local filetype_rules = api.nvim_create_augroup("filetype_rules", { clear = true })
 local function setl_ft_autocmd(filetypes, options)
