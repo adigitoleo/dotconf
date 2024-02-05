@@ -172,7 +172,7 @@ config.unbind("<Ctrl-Q>")
 config.bind("<Ctrl-N>", "tab-next")
 config.bind("<Ctrl-P>", "tab-prev")
 
-config.bind("gr", "restart")
+config.bind("gR", "restart")
 config.bind("tt", "config-cycle tabs.show always switching")
 
 config.bind("<Ctrl-l>", "search")  # Clears search highlighting.
