@@ -28,6 +28,7 @@ bindkey -M vicmd 'j' down-line-or-beginning-search
 bindkey '^A' beginning-of-line
 bindkey '^E' end-of-line
 bindkey '^R' history-incremental-pattern-search-backward
+bindkey '^?' backward-delete-char
 
 # Shush. Go straight to /dev/null.
 silent() { 2>/dev/null 1>&2 $@ }
