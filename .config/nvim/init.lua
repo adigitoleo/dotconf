@@ -301,15 +301,17 @@ opt.showbreak = "> "
 
 -- Direct integration with external executables.
 if fn.executable("rg") > 0 then opt.grepprg = "rg --vimgrep --smart-case --follow" end
-if fn.executable("wl-copy") > 0 and fn.executable("wl-paste") > 0 then
-    vim.g.clipboard = {
-        name = "Wayland primary selection",
-        copy = { ["+"] = "wl-copy --type text/plain", ["*"] = "wl-copy --primary --type text/plain" },
-        paste = { ["+"] = "wl-paste --no-newline", ["*"] = "wl-copy --primary --no-newline" },
-        cache_enabled = true,
-    }
-else
-    warn("could not set up system clipboard integration with wl-clipboard")
+if system == "Linux" then
+    if fn.executable("wl-copy") > 0 and fn.executable("wl-paste") > 0 then
+        vim.g.clipboard = {
+            name = "Wayland primary selection",
+            copy = { ["+"] = "wl-copy --type text/plain", ["*"] = "wl-copy --primary --type text/plain" },
+            paste = { ["+"] = "wl-paste --no-newline", ["*"] = "wl-copy --primary --no-newline" },
+            cache_enabled = true,
+        }
+    else
+        warn("could not set up system clipboard integration with wl-clipboard")
+    end
 end
 
 -- Integration with fzf, <https://github.com/junegunn/fzf/blob/master/README-VIM.md>.
