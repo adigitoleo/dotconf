@@ -66,6 +66,8 @@ elif 1>/dev/null 2>&1 command -v xbps-install ; then
     alias p,orphans='xbps-query --list-orphans'
     alias p,info='xbps-query --show'
     alias p,rinfo='xbps-query -R --show'
+    alias p,manual='xbps-query -m|rev|cut -d- -f2-|rev|while IFS= read -r pkg; do xbps-query $pkg -p install-date|tr "\n" "\t"; echo $pkg; done|sort -n'
+    alias p,unmaint='xbps-query -p maintainer -s Orphaned|rev|cut -d- -f2-|rev|while IFS= read -r pkg; do xbps-query $pkg -p install-date|tr "\n" "\t"; echo $pkg; done|sort -n'
 fi
 
 # Use ED25519 ssh keys by default.
