@@ -1,3 +1,4 @@
+# vim:ff=dos
 # To visually check color mappings:
 # $> [enum]::GetValues([System.ConsoleColor]) | ForEach-Object {Write-Host $_ -ForegroundColor $_}
 # Color mapping for Mellow Dark scheme.
