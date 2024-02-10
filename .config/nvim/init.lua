@@ -376,9 +376,6 @@ if fn.executable("fzf") > 0 and fn.exists(":FZF") then
         warn("ripgrep executable ('rg') not found, ripgrep features disabled")
     end
 
-    -- FIXME: First item in fzf list is empty when there is a single terminal buffer
-    -- and a single non-terminal buffer that is focused. Tried to fix by not sending
-    -- file_feed to FZFspecgen if list_buf_names is empty, but this didn't seem to work.
     local function _fuzzy_switch()
         local files = list_files({ list_buf_names(false) }, ":~:.", _lsep)
         local terms = list_terminals(_lsep)
@@ -417,8 +414,9 @@ if fn.executable("fzf") > 0 and fn.exists(":FZF") then
             local key = fzf_out[2]
             local completion = fzf_out[3] ~= nil and fzf_out[3] or ''
 
-            if #key == 0 then          -- <Cr> pressed => insert completion
-                api.nvim_input(':' .. completion)
+            if #key == 0 then -- <Cr> pressed => execute completion
+                -- NOTE: vim.cmd(completion) doesn't trigger TermOpen and swallows paged output from e.g. ':ls'.
+                api.nvim_input(':' .. completion .. '<Cr>')
             elseif key == ';' then     -- ';' pressed => cancel completion
                 api.nvim_input(':' .. query)
             elseif key == 'space' then -- '<space>' pressed => append space to completion
