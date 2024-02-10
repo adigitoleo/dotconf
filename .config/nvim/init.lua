@@ -8,7 +8,7 @@ local system = vim.loop.os_uname().sysname
 if system == "Windows_NT" then
     vim.o.shell = "pwsh"
     _lsep = [[`n]]
-    _printf = "pwsh.exe -c echo"  -- Extra pwsh.exe nesting ensures laziness?
+    _printf = "pwsh.exe -c echo" -- Extra pwsh.exe nesting ensures laziness?
     _preview = false
 else
     _lsep = [[\n]]
@@ -96,7 +96,7 @@ end
 -- Generate list of open terminals, omitting focused terminal.
 function list_terminals(sep)
     -- sep: string, separator to insert between file names.
-    if system == "Windows_NT" then return "" end  -- FIXME: Broken on Win11, needs more work.
+    if system == "Windows_NT" then return "" end -- FIXME: Broken on Win11, needs more work.
     local terminals = {}
     -- Ignore current (focused) terminal buffer if any.
     local thisfilename = fn.expand("%")
@@ -339,7 +339,7 @@ if fn.executable("fzf") > 0 and fn.exists(":FZF") then
         -- dir: string, if #dir > 0 this sets the directory in which to start FZF
         -- preview: bool, toggle file preview window (currently only works on Linux)
         -- prompt: FZF prompt message
-        local options = {'--multi'}
+        local options = { '--multi' }
         if preview then
             options = vim.list_extend(options, {
                 '--preview',
@@ -401,13 +401,13 @@ if fn.executable("fzf") > 0 and fn.exists(":FZF") then
     local function _fuzzy_cmd()
         local spec = {
             source = _printf .. ' "' .. list_commands(_lsep) .. '"',
-            window = {width = 1, height = 0.4, xoffset = 0, yoffset = 1, border = 'top', highlight = 'StatusLine'},
+            window = { width = 1, height = 0.4, xoffset = 0, yoffset = 1, border = 'top', highlight = 'StatusLine' },
             options = {
                 '--no-multi',
                 '--print-query',
                 '--prompt', ':',
                 '--color', 'prompt:-1',
-                '--expect', ';,space,|,!',  -- NOTE: --expect='!' broken on Win11, fzf 0.46.1
+                '--expect', ';,space,|,!', -- NOTE: --expect='!' broken on Win11, fzf 0.46.1
                 '--layout', 'reverse-list'
             }
         }
@@ -417,13 +417,13 @@ if fn.executable("fzf") > 0 and fn.exists(":FZF") then
             local key = fzf_out[2]
             local completion = fzf_out[3] ~= nil and fzf_out[3] or ''
 
-            if #key == 0 then  -- <Cr> pressed => insert completion
+            if #key == 0 then          -- <Cr> pressed => insert completion
                 api.nvim_input(':' .. completion)
-            elseif key == ';' then  -- ';' pressed => cancel completion
+            elseif key == ';' then     -- ';' pressed => cancel completion
                 api.nvim_input(':' .. query)
-            elseif key == 'space' then  -- '<space>' pressed => append space to completion
+            elseif key == 'space' then -- '<space>' pressed => append space to completion
                 api.nvim_input(':' .. completion .. ' ')
-            else  -- '!' or '|' pressed => append to completion, append trailing space
+            else                       -- '!' or '|' pressed => append to completion, append trailing space
                 api.nvim_input(':' .. completion .. key .. ' ')
             end
         end
@@ -917,7 +917,7 @@ if vim.env.COLORTERM == "truecolor" or system ~= "Linux" then
     if fn.executable('theme') > 0 then
         vim.o.background = fn.get(fn.systemlist('theme -q'), 0)
     else
-        local hour24 = 0
+        local hour24 = nil
         if system ~= "Linux" and vim.o.shell == "pwsh" then
             hour24 = tonumber(fn.system('Get-Date -Format HH'))
             if hour24 == nil then
