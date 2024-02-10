@@ -628,7 +628,7 @@ bindkey("x", [[<Leader>/]], [[:s/]])
 bindkey("n", [[<Leader>;]], [[:!]])
 
 -- Plugin setup and configuration.
-vim.g.markdown_fenced_languages = freqlangs
+if system ~= "Windows_NT" then vim.g.markdown_fenced_languages = freqlangs end
 vim.g.markdown_folding = 1
 vim.g.rst_use_emphasis_colors = 1
 vim.g.rst_fold_enabled = 1
