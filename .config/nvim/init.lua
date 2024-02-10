@@ -5,8 +5,17 @@ local fn = vim.fn
 local command = api.nvim_create_user_command
 local bindkey = vim.keymap.set
 local system = vim.loop.os_uname().sysname
-if system == "Windows_NT" then vim.o.shell = "pwsh" end
--- FIXME: FZF stuff doesn't work on Win11 because of printf and \n.
+if system == "Windows_NT" then
+    vim.o.shell = "pwsh"
+    _lsep = [[`n]]
+    _printf = "pwsh.exe -c echo"  -- Extra pwsh.exe nesting ensures laziness?
+    _preview = false
+else
+    _lsep = [[\n]]
+    _printf = "printf"
+    _preview = true
+end
+
 local function warn(msg) api.nvim_err_writeln("init.lua: " .. msg) end
 
 -- Enable unicode input and markdown fenced block highlighting for:
@@ -16,7 +25,7 @@ local freqlangs = {
     "racket", "pollen", "html", "txr", "tl"
 } -- Unicode input will additionally be enabled in the "markdown" filetype.
 
--- Turn off optional Python, Ruby, Perl and NodeJS support.
+-- Turn off optional Python, Ruby, Perl and NodeJS support for faster startup.
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
@@ -49,9 +58,10 @@ function list_buf_names(all)
 end
 
 -- Generate filtered list of file names from given sources, omitting current file name.
-function list_files(sources, mods)
+function list_files(sources, mods, sep)
     -- source: table of sources, each field is a sub-table of file names.
     -- mods: string of filters to use, see :h filename-modifiers and :h fnamemodify().
+    -- sep: string, separator to insert between file names.
 
     local ignore = { vim.env.VIMRUNTIME }            -- Ignore internal (neo)vim files.
     table.insert(ignore, "/nvim/runtime/doc/")       -- Ignore neovim helpfiles.
@@ -80,11 +90,13 @@ function list_files(sources, mods)
             end
         end
     end
-    return table.concat(files, [[\n]])
+    return table.concat(files, sep)
 end
 
 -- Generate list of open terminals, omitting focused terminal.
-function list_terminals()
+function list_terminals(sep)
+    -- sep: string, separator to insert between file names.
+    if system == "Windows_NT" then return "" end  -- FIXME: Broken on Win11, needs more work.
     local terminals = {}
     -- Ignore current (focused) terminal buffer if any.
     local thisfilename = fn.expand("%")
@@ -94,11 +106,12 @@ function list_terminals()
             table.insert(terminals, name)
         end
     end
-    return table.concat(terminals, [[\n]])
+    return table.concat(terminals, sep)
 end
 
 -- Generate list of (most?) builtin and user/plugin-defined commands.
-function list_commands()
+function list_commands(sep)
+    -- sep: string, separator to insert between file names.
     local cmdlist = {}
     for _, line in pairs(fn.readfile(fn.expand("$VIMRUNTIME/doc/index.txt", 1))) do
         local match = line:match("^|:(%w+)|")
@@ -115,10 +128,10 @@ function list_commands()
             break
         until true
     end
-    return table.concat(cmdlist, [[\n]])
+    return table.concat(cmdlist, sep)
 end
 
-function list_filetypes() -- List all default filetypes.
+function list_filetypes() -- List all known filetypes.
     filetypes = {}
     for _, ft in pairs(fn.split(fn.expand("$VIMRUNTIME/ftplugin/*.vim"))) do
         table.insert(filetypes, fn.fnamemodify(ft, ":t:r"))
@@ -126,7 +139,7 @@ function list_filetypes() -- List all default filetypes.
     return filetypes
 end
 
-function list_syntax() -- List all default syntax files.
+function list_syntax() -- List all known syntax files.
     syntax = {}
     for _, sx in pairs(fn.split(fn.expand("$VIMRUNTIME/syntax/*.vim"))) do
         table.insert(syntax, fn.fnamemodify(sx, ":t:r"))
@@ -315,42 +328,47 @@ if system == "Linux" then
 end
 
 -- Integration with fzf, <https://github.com/junegunn/fzf/blob/master/README-VIM.md>.
-if fn.executable("fzf") > 0 then -- Doesn't guarantee that fzf.vim file is available...
+if fn.executable("fzf") > 0 and fn.exists(":FZF") then
     vim.g.fzf_layout = {
         window =
         { width = 0.9, height = 0.6, border = "sharp", highlight = "StatusLine" }
     }
     -- Generate spec for custom fuzzy finders.
-    vim.cmd [[function! FZFspecgen(source, dir, ...)
-        " Generate spec for custom fuzzy finders.
-        let l:dir = substitute(fnamemodify(a:dir, ':~'), '/*$', '/', '')
+    local function FZFspecgen(source, dir, preview, prompt)
+        -- source: string, command to be executed as a source to FZF
+        -- dir: string, if #dir > 0 this sets the directory in which to start FZF
+        -- preview: bool, toggle file preview window (currently only works on Linux)
+        -- prompt: FZF prompt message
+        local options = {'--multi'}
+        if preview then
+            options = vim.list_extend(options, {
+                '--preview',
+                'case $(file {}) in *"text"*) head -200 {} ;; *) echo "Preview unavailable" ;; esac',
+                '--preview-window',
+                vim.o.columns > 120 and 'right:60%:sharp' or 'down:60%:sharp'
+            })
+        end
+        table.insert(options, '--prompt')
+        if prompt ~= nil then table.insert(options, prompt) else table.insert(options, dir .. ' ') end
         return {
-        \ 'source': a:source,
-        \ 'sink': 'e',
-        \ 'dir': l:dir,
-        \ 'options': [
-        \   '--multi',
-        \   '--preview', 'case $(file {}) in *"text"*) head -200 {} ;;'
-        \       .. '*) echo "Preview unavailable" ;; esac',
-        \   '--preview-window', &columns > 120 ? 'right:60%:sharp' : 'down:60%:sharp',
-        \   '--prompt', get(a:, 1, l:dir .. ' '),
-        \ ]
-        \}
-    endfunction]]
+            source = source,
+            sink = 'e',
+            dir = fn.substitute(fn.fnamemodify(dir, ':~'), '/*$', '/', ''),
+            options = options
+        }
+    end
 
     local function _fuzzy_recent()
-        vim.cmd("call fzf#run(fzf#wrap(FZFspecgen('printf \""
-            .. list_files({ vim.v.oldfiles, list_buf_names(false) }, ":~:.")
-            .. "\"', '', 'Recent files: ')))"
-        )
+        local source = table.concat({
+            _printf, ' "', list_files({ vim.v.oldfiles, list_buf_names(false) }, ":~:.", _lsep), '"'
+        })
+        fn["fzf#run"](fn["fzf#wrap"](FZFspecgen(source, "", _preview, "Recent files: ")))
     end
     command("FuzzyRecent", _fuzzy_recent, { desc = "Open recent files (v:oldfiles) or listed buffers" })
 
     if fn.executable("rg") > 0 then
         local function _fuzzy_find(opts)
-            vim.cmd("call fzf#run(fzf#wrap(FZFspecgen('rg --files --hidden --no-messages', '"
-                .. opts.args .. "')))"
-            )
+            fn["fzf#run"](fn["fzf#wrap"](FZFspecgen('rg --files --hidden --no-messages', opts.args, _preview)))
         end
         command("FuzzyFind", _fuzzy_find,
             { nargs = "?", complete = "file", desc = "Open files from <dir> (or :pwd by default)" })
@@ -362,48 +380,54 @@ if fn.executable("fzf") > 0 then -- Doesn't guarantee that fzf.vim file is avail
     -- and a single non-terminal buffer that is focused. Tried to fix by not sending
     -- file_feed to FZFspecgen if list_buf_names is empty, but this didn't seem to work.
     local function _fuzzy_switch()
-        cmdparts = {
-            "call fzf#run(fzf#wrap(FZFspecgen('printf \"",
-            list_files({ list_buf_names(false) }, ":~:."),
-            [[\n]],
-            list_terminals(),
-            "\"', '', 'Open buffers: ')))"
-        }
-        vim.cmd(table.concat(cmdparts))
+        local files = list_files({ list_buf_names(false) }, ":~:.", _lsep)
+        local terms = list_terminals(_lsep)
+        local source = nil
+        if #files > 0 and #terms > 0 then
+            source = table.concat({ _printf, ' "', files .. _lsep .. terms, '"' })
+        elseif #files > 0 then
+            source = table.concat({ _printf, ' "', files, '"' })
+        elseif #terms > 0 then
+            source = table.concat({ _printf, ' "', terms, '"' })
+        end
+        if source ~= nil then
+            fn["fzf#run"](fn["fzf#wrap"](FZFspecgen(source, "", _preview, "Open buffers: ")))
+        else
+            warn("no buffers available")
+        end
     end
     command("FuzzySwitch", _fuzzy_switch, { desc = "Switch between listed buffers or loaded `:terminal`s" })
 
-    -- Semicolon <;> drops back to normal command line,
-    -- <space>, ! or | are appended to the match.
-    vim.cmd [[function! FuzzyCmd_accept(fzf_out)
-        if len(a:fzf_out) < 2 | return | endif
-        let l:query = a:fzf_out[0]
-        let l:key = a:fzf_out[1]
-        let l:completion = get(a:fzf_out, 2, '')
-
-        if empty(l:key)
-            call nvim_input(':' .. l:completion .. '<Cr>')
-        elseif l:key ==# ';'
-            call nvim_input(':' .. l:query .. '')
-        elseif l:key ==# 'space'
-            call nvim_input(':' .. l:completion .. ' ')
-        else
-            call nvim_input(':' .. l:completion .. l:key .. ' ')
-        endif
-    endfunction]]
     local function _fuzzy_cmd()
-        vim.cmd("call fzf#run({'source': 'printf \"" .. list_commands()
-            .. [["', 'sink*': function('FuzzyCmd_accept'),
-            \'window': {'width': 1, 'height': 0.4, 'xoffset': 0, 'yoffset': 1,
-            \'border': 'top', 'highlight': 'StatusLine'},
-            \'options': [
-            \   '--no-multi',
-            \   '--print-query',
-            \   '--prompt', ':',
-            \   '--color', 'prompt:-1',
-            \   '--expect', ';,space,!,|',
-            \   '--layout', 'reverse-list',
-            \]})]])
+        local spec = {
+            source = _printf .. ' "' .. list_commands(_lsep) .. '"',
+            window = {width = 1, height = 0.4, xoffset = 0, yoffset = 1, border = 'top', highlight = 'StatusLine'},
+            options = {
+                '--no-multi',
+                '--print-query',
+                '--prompt', ':',
+                '--color', 'prompt:-1',
+                '--expect', ';,space,|,!',  -- NOTE: --expect='!' broken on Win11, fzf 0.46.1
+                '--layout', 'reverse-list'
+            }
+        }
+        spec["sink*"] = function(fzf_out)
+            if #fzf_out < 2 then return end
+            local query = fzf_out[1]
+            local key = fzf_out[2]
+            local completion = fzf_out[3] ~= nil and fzf_out[3] or ''
+
+            if #key == 0 then  -- <Cr> pressed => insert completion
+                api.nvim_input(':' .. completion)
+            elseif key == ';' then  -- ';' pressed => cancel completion
+                api.nvim_input(':' .. query)
+            elseif key == 'space' then  -- '<space>' pressed => append space to completion
+                api.nvim_input(':' .. completion .. ' ')
+            else  -- '!' or '|' pressed => append to completion, append trailing space
+                api.nvim_input(':' .. completion .. key .. ' ')
+            end
+        end
+        fn["fzf#run"](spec)
     end
     command("FuzzyCmd", _fuzzy_cmd, { desc = "Search for cmdline mode commands" })
 else
@@ -895,8 +919,10 @@ if vim.env.COLORTERM == "truecolor" or system ~= "Linux" then
     else
         local hour24 = 0
         if system ~= "Linux" and vim.o.shell == "pwsh" then
-            -- FIXME: Seems to be broken on Win11 now...
             hour24 = tonumber(fn.system('Get-Date -Format HH'))
+            if hour24 == nil then
+                hour24 = 0
+            end
         else
             hour24 = tonumber(fn.system('date +%H'))
         end
