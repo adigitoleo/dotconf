@@ -7,7 +7,6 @@ layout {
     }
 
     tab name="cmd"
-    tab name="todo" focus=true cwd="vcs/todo"
     tab name="calc" {
         pane command="julia" {
             args "--banner=no"
