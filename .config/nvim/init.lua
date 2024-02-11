@@ -269,6 +269,7 @@ local function floating(buf, win, bt, ft)
             col = math.ceil((wc - width) * 0.5),
             row = math.ceil((wl - height) * 0.5 - 1)
         })
+        api.nvim_win_set_option(win, "winblend", 30)
     end
     return buf, win
 end
