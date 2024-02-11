@@ -255,8 +255,10 @@ local function floating(buf, win, bt, ft)
     if not api.nvim_buf_is_valid(buf) then
         buf = api.nvim_create_buf(true, false)
     end
-    api.nvim_buf_set_option(buf, "buftype", bt)
-    api.nvim_buf_set_option(buf, "filetype", ft)
+    if bt ~= "terminal" then -- Ignore bt = "terminal" which is not allowed.
+        api.nvim_buf_set_option(buf, "buftype", bt)
+        api.nvim_buf_set_option(buf, "filetype", ft)
+    end
     if not api.nvim_win_is_valid(win) then
         win = api.nvim_open_win(buf, true, {
             border = "single",
@@ -670,7 +672,6 @@ require("packer").startup(function(use)
     use "lewis6991/gitsigns.nvim"             -- Git status in sign column and statusbar.
     use "SidOfc/carbon.nvim"                  -- Replacement for :h netrw, directory viewer.
     use "ggandor/leap.nvim"                   -- Alternative to '/' for quick search/motions.
-    use "numToStr/FTerm.nvim"                 -- Floating terminal using :h job-control.
     use "farmergreg/vim-lastplace"            -- Open files at the last viewed location (VimL).
     use "AndrewRadev/inline_edit.vim"         -- Edit embedded code in a temporary buffer with a different filetype
     -- Follow symlinks when opening files (Linux, VimL).
@@ -804,19 +805,26 @@ if carbon then
     vim.g.loaded_netrwPlugin = 1
 end
 
--- Floating windows/terminals.
-local fterm = load("FTerm")
-if fterm then
-    fterm.setup({ blend = 30 })
-    command("Term", function(opts)
-        if opts.args ~= "" then
-            ---@diagnostic disable-next-line missing-fields
-            require("FTerm").scratch({ cmd = { opts.args } })
-        else
-            require("FTerm").toggle()
-        end
-    end, { nargs = "?", complete = "file", desc = "Toggle floating terminal or open scratch term and run command" })
-end
+-- TODO: Support more than one terminal buffer.
+local termbuf = -1
+local termwin = -1
+command("Term", function(opts)
+    local create_new = false
+    if termbuf == -1 then create_new = true end
+    termbuf, termwin = floating(termbuf, termwin, "terminal", "")
+    local cmd = { vim.o.shell }
+    if opts.args ~= "" then cmd = opts.fargs end
+    if create_new then
+        fn.termopen(cmd, {
+            on_exit = function()
+                termbuf = -1
+                termwin = -1
+                api.nvim_input("<Cr>")
+            end
+        })
+    end
+end, { nargs = "?", complete = "shellcmd", desc = "Toggle floating terminal or open scratch term and run command" })
+
 local helpbuf = -1
 local helpwin = -1
 command("H", function(opts)
@@ -849,7 +857,16 @@ command("M", function(opts)
         ", v:false)|echoerr v:exception|endtry",
     }
     vim.cmd(table.concat(cmdparts))
-end, { nargs = "?", desc = "Show man page of argument or word under cursor in floating window" }
+end, {
+    nargs = "?",
+    complete = function(arg_lead, cmdline, cursor_pos)
+        local man = load("man")
+        if man then
+            return man.man_complete(arg_lead, cmdline, cursor_pos)
+        end
+    end,
+    desc = "Show man page of argument or word under cursor in floating window"
+}
 )
 
 -- Better jumping and motions.
