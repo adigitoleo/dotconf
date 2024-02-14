@@ -786,6 +786,10 @@ if minimap then
     bindkey("n", "gm", minimap.toggle, { desc = "Toggle minimap" })
 end
 
+-- Indent guides.
+local indent_blankline = load("ibl")
+if indent_blankline then indent_blankline.setup() end
+
 -- TODO/FIXME comment tracker setup.
 local todo_comments = load('todo-comments')
 if todo_comments then
