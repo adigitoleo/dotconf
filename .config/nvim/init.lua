@@ -929,7 +929,6 @@ if overview then
 end
 
 -- Mellow theme setup.
-system = vim.loop.os_uname().sysname
 vim.g.mellow_show_bufnr = 0
 if vim.env.COLORTERM == "truecolor" or system ~= "Linux" then
     opt.termguicolors = true
