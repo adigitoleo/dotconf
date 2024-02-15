@@ -20,9 +20,8 @@ local function warn(msg) api.nvim_err_writeln("init.lua: " .. msg) end
 
 -- Enable unicode input and markdown fenced block highlighting for:
 local freqlangs = {
-    "c", "cpp", "python", "nim", "sh", "conf", "css", "go", "json",
-    "lua", "rust", "strace", "toml", "yaml", "openscad", "tex", "hare",
-    "html", "txr", "tl"
+    "c", "cpp", "python", "nim", "sh", "conf", "css", "go", "json", "lua",
+    "rust", "strace", "toml", "yaml", "openscad", "tex", "hare", "html",
 } -- Unicode input will additionally be enabled in the "markdown" filetype.
 
 -- Turn off optional Python, Ruby, Perl and NodeJS support for faster startup.
@@ -470,8 +469,11 @@ vim.cmd [[augroup terminal_buffer_rules
 augroup END]]
 
 vim.filetype.add({ extension = { tikzstyles = "tex" } })
-vim.filetype.add({ extension = { txr = "txr" } })
-vim.filetype.add({ extension = { tl = "tl" } })
+if fn.executable("txr") > 0 then
+    vim.list_extend(freqlangs, {"txr", "tl"})
+    vim.filetype.add({ extension = { txr = "txr" } })
+    vim.filetype.add({ extension = { tl = "tl" } })
+end
 
 local filetype_rules = api.nvim_create_augroup("filetype_rules", { clear = true })
 local function setl_ft_autocmd(filetypes, options)
