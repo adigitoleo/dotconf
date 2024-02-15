@@ -20,9 +20,9 @@ local function warn(msg) api.nvim_err_writeln("init.lua: " .. msg) end
 
 -- Enable unicode input and markdown fenced block highlighting for:
 local freqlangs = {
-    "c", "cpp", "python", "julia", "nim", "sh", "conf", "css", "go", "json",
+    "c", "cpp", "python", "nim", "sh", "conf", "css", "go", "json",
     "lua", "rust", "strace", "toml", "yaml", "openscad", "tex", "hare",
-    "racket", "pollen", "html", "txr", "tl"
+    "html", "txr", "tl"
 } -- Unicode input will additionally be enabled in the "markdown" filetype.
 
 -- Turn off optional Python, Ruby, Perl and NodeJS support for faster startup.
@@ -693,9 +693,11 @@ require("packer").startup(function(use)
     end
     if fn.executable("julia") > 0 then
         use "JuliaEditorSupport/julia-vim" -- Improved Julia syntax highlighting, unicode input.
+        table.insert(freqlangs, "julia")
     end
     if fn.executable("racket") > 0 then
         use "otherjoel/vim-pollen" -- Syntax highlighting for #lang pollen
+        vim.list_extend(freqlangs, {"racket", "pollen"})
     end
     if system == "Windows_NT" or fn.executable("apt") then
         use "junegunn/fzf" -- Provides the basic fzf.vim file.
