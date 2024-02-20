@@ -1,6 +1,3 @@
-using Pkg
-Pkg.add(["Revise", "TerminalPager", "UnicodePlots"])
-using Revise
 using TerminalPager
 using UnicodePlots
 

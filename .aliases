@@ -123,6 +123,7 @@ alias py,update='mv -i requirements.txt requirements.bak && pip install --upgrad
 
 # Die Julia.
 alias jl='julia --banner=no'
+alias jl,rev='julia --banner=no -e "using Revise" -i'
 alias jl,env='julia --banner=no --startup-file=no --project=$PWD'
 alias jl,bw='julia --banner=no --color=no'
 alias jl,tmp='julia --banner=no --startup-file=no --history-file=no'
