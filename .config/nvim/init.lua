@@ -9,7 +9,7 @@ if system == "Windows_NT" then
     vim.o.shell = "pwsh"
     _lsep = [[`n]]
     _printf = "pwsh.exe -c echo" -- Extra pwsh.exe nesting ensures laziness?
-    _preview = false
+    _preview = false             -- Preview files in fuzzyfinders, unix only.
 else
     _lsep = [[\n]]
     _printf = "printf"
@@ -230,7 +230,8 @@ local function copy_file()
     vim.print(fn.getreg())
 end
 
-local function rename_file() -- Rename current buffer and associated file.
+-- Rename current buffer and associated file.
+local function rename_file()
     local old_name = fn.expand("%")
     local new_name = fn.input("New file name: ", old_name)
     if new_name ~= "" and new_name ~= old_name then
@@ -434,7 +435,7 @@ else
     warn("fuzzy finder ('fzf') not found, disabling fzf features")
 end
 
-if fn.executable("theme") > 0 then
+if fn.executable("theme") > 0 then -- Use `theme` executable to manage global dark/light TUI theme.
     command("ToggleTheme",
         [[silent! exec '!theme -t'|let &background = get(systemlist('theme -q'), 0, 'light')]],
         { desc = "Toggle global TUI theme using `!theme`" })
@@ -470,7 +471,7 @@ augroup END]]
 
 vim.filetype.add({ extension = { tikzstyles = "tex" } })
 if fn.executable("txr") > 0 then
-    vim.list_extend(freqlangs, {"txr", "tl"})
+    vim.list_extend(freqlangs, { "txr", "tl" })
     vim.filetype.add({ extension = { txr = "txr" } })
     vim.filetype.add({ extension = { tl = "tl" } })
 end
@@ -515,6 +516,7 @@ setl_ft_autocmd({ "txr" }, { commentstring = "@;\\ %s" })
 setl_ft_autocmd({ "vim" }, { textwidth = 78, foldmethod = "marker", foldenable = true })
 setl_ft_autocmd({ "xml", "html" }, { tabstop = 2, foldmethod = "indent" })
 setl_ft_autocmd({ "yaml" }, { tabstop = 2 })
+setl_ft_autocmd({ "mail" }, { columns = 80 })
 
 -- Miscellaneous autocommands.
 vim.cmd [[augroup misc
@@ -621,9 +623,14 @@ bindkey("n", [[<Leader>t]], [[<Cmd>SyncTheme<Cr>]], { silent = true })
 -- Write focused buffer if modified.
 bindkey("n", [[<Leader>w]], [[<Cmd>up<Cr>]], { silent = true })
 -- Copy file contents, name or path to clipboard.
-bindkey("n", [[<Leader>y]], function() copy_file() end, { silent = true })
+bindkey("n", [[<Leader>y]], function() copy_file() end, { silent = true , desc = "Copy file contents, name, path or directory to clipboard" })
 -- Toggle soft-wrapping of long lines to the view width.
-bindkey("n", [[<Leader>z]], [[<Cmd>setlocal wrap!<Cr>]], { silent = true })
+bindkey("n", [[<Leader>z]], function()
+    if vim.o.textwidth > 0 and vim.o.wrap == false then
+        vim.o.textwidth = 0
+        vim.o.wrap = true
+    end
+end, { silent = true, desc = "Toggle use of 'textwidth' for hard-wrapping versus soft-wrapping with 'wrap'" })
 -- Attempt to autoformat focused paragraph/selection.
 bindkey("n", [[<Leader>\]], [[gwip]], { silent = true })
 bindkey("x", [[<Leader>\]], [[gw]], { silent = true })
@@ -640,7 +647,7 @@ vim.g.rst_fold_enabled = 1
 vim.g.fortran_more_precise = 1
 vim.g.fortran_free_source = 1
 
-local function load(plugin)
+local function load(plugin) -- Load either local or third-party plugin.
     local has_plugin, out = pcall(require, plugin)
     if has_plugin then
         return out
@@ -649,6 +656,69 @@ local function load(plugin)
         return nil
     end
 end
+
+local termbuf = -1
+local termwin = -1
+command("Term", function(opts) -- TODO: Support more than one terminal buffer.
+    local create_new = false
+    if termbuf == -1 then create_new = true end
+    termbuf, termwin = floating(termbuf, termwin, "terminal", "")
+    local cmd = { vim.o.shell }
+    if opts.args ~= "" then cmd = opts.fargs end
+    if create_new then
+        fn.termopen(cmd, {
+            on_exit = function()
+                termbuf = -1
+                termwin = -1
+                api.nvim_input("<Cr>")
+            end
+        })
+    end
+end, { nargs = "?", complete = "shellcmd", desc = "Toggle floating terminal or open scratch term and run command" })
+
+local helpbuf = -1
+local helpwin = -1
+command("H", function(opts)
+        local arg = fn.expand("<cword>")
+        if opts.args ~= "" then arg = opts.args end
+        helpbuf, helpwin = floating(helpbuf, helpwin, "help", "help")
+        local cmdparts = {
+            "try|help ",
+            arg,
+            "|catch /^Vim(help):E149/|call nvim_win_close(",
+            helpwin,
+            ", v:false)|echoerr v:exception|endtry",
+        }
+        vim.cmd(table.concat(cmdparts))
+        api.nvim_buf_set_option(helpbuf, "filetype", "help") -- Set ft again to redraw conceal formatting.
+    end,
+    { nargs = "?", complete = "help", desc = "Open neovim help of argument or word under cursor in floating window" }
+)
+local manbuf = -1
+local manwin = -1
+command("M", function(opts)
+    local arg = fn.expand("<cword>")
+    if opts.args ~= "" then arg = opts.args end
+    manbuf, manwin = floating(manbuf, manwin, "nofile", "man")
+    local cmdparts = {
+        "try|Man ",
+        arg,
+        '|catch /^Vim:man.lua: "no manual entry for/|call nvim_win_close(',
+        manwin,
+        ", v:false)|echoerr v:exception|endtry",
+    }
+    vim.cmd(table.concat(cmdparts))
+end, {
+    nargs = "?",
+    complete = function(arg_lead, cmdline, cursor_pos)
+        local man = load("man")
+        if man then
+            return man.man_complete(arg_lead, cmdline, cursor_pos)
+        end
+    end,
+    desc = "Show man page of argument or word under cursor in floating window"
+}
+)
 
 local function bootstrap()
     local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
@@ -699,7 +769,7 @@ require("packer").startup(function(use)
     end
     if fn.executable("racket") > 0 then
         use "otherjoel/vim-pollen" -- Syntax highlighting for #lang pollen
-        vim.list_extend(freqlangs, {"racket", "pollen"})
+        vim.list_extend(freqlangs, { "racket", "pollen" })
     end
     if system == "Windows_NT" or fn.executable("apt") then
         use "junegunn/fzf" -- Provides the basic fzf.vim file.
@@ -813,70 +883,6 @@ if carbon then
     vim.g.loaded_netrw = 1
     vim.g.loaded_netrwPlugin = 1
 end
-
--- TODO: Support more than one terminal buffer.
-local termbuf = -1
-local termwin = -1
-command("Term", function(opts)
-    local create_new = false
-    if termbuf == -1 then create_new = true end
-    termbuf, termwin = floating(termbuf, termwin, "terminal", "")
-    local cmd = { vim.o.shell }
-    if opts.args ~= "" then cmd = opts.fargs end
-    if create_new then
-        fn.termopen(cmd, {
-            on_exit = function()
-                termbuf = -1
-                termwin = -1
-                api.nvim_input("<Cr>")
-            end
-        })
-    end
-end, { nargs = "?", complete = "shellcmd", desc = "Toggle floating terminal or open scratch term and run command" })
-
-local helpbuf = -1
-local helpwin = -1
-command("H", function(opts)
-        local arg = fn.expand("<cword>")
-        if opts.args ~= "" then arg = opts.args end
-        helpbuf, helpwin = floating(helpbuf, helpwin, "help", "help")
-        local cmdparts = {
-            "try|help ",
-            arg,
-            "|catch /^Vim(help):E149/|call nvim_win_close(",
-            helpwin,
-            ", v:false)|echoerr v:exception|endtry",
-        }
-        vim.cmd(table.concat(cmdparts))
-        api.nvim_buf_set_option(helpbuf, "filetype", "help") -- Set ft again to redraw conceal formatting.
-    end,
-    { nargs = "?", complete = "help", desc = "Open neovim help of argument or word under cursor in floating window" }
-)
-local manbuf = -1
-local manwin = -1
-command("M", function(opts)
-    local arg = fn.expand("<cword>")
-    if opts.args ~= "" then arg = opts.args end
-    manbuf, manwin = floating(manbuf, manwin, "nofile", "man")
-    local cmdparts = {
-        "try|Man ",
-        arg,
-        '|catch /^Vim:man.lua: "no manual entry for/|call nvim_win_close(',
-        manwin,
-        ", v:false)|echoerr v:exception|endtry",
-    }
-    vim.cmd(table.concat(cmdparts))
-end, {
-    nargs = "?",
-    complete = function(arg_lead, cmdline, cursor_pos)
-        local man = load("man")
-        if man then
-            return man.man_complete(arg_lead, cmdline, cursor_pos)
-        end
-    end,
-    desc = "Show man page of argument or word under cursor in floating window"
-}
-)
 
 -- Better jumping and motions.
 -- TODO: Add repeat.vim optional dependency for leap.nvim?
