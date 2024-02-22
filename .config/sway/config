@@ -53,6 +53,7 @@ assign [app_id="zathura"] workspace $ws3
 assign [app_id="sioyek"] workspace $ws3
 
 for_window [app_id="sioyek" title="Select Document"] floating enable
+for_window [app_id="QXmlEdit.qxmledit" title="Keyboard Shortcuts List"] float enable
 for_window [app_id="LithoMaker"] floating enable
 for_window [app_id="audacity"] floating enable
 for_window [app_id="drracket"] floating enable
