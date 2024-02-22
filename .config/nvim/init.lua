@@ -623,12 +623,16 @@ bindkey("n", [[<Leader>t]], [[<Cmd>SyncTheme<Cr>]], { silent = true })
 -- Write focused buffer if modified.
 bindkey("n", [[<Leader>w]], [[<Cmd>up<Cr>]], { silent = true })
 -- Copy file contents, name or path to clipboard.
-bindkey("n", [[<Leader>y]], function() copy_file() end, { silent = true , desc = "Copy file contents, name, path or directory to clipboard" })
+bindkey("n", [[<Leader>y]], function() copy_file() end,
+    { silent = true, desc = "Copy file contents, name, path or directory to clipboard" })
 -- Toggle soft-wrapping of long lines to the view width.
 bindkey("n", [[<Leader>z]], function()
     if vim.o.textwidth > 0 and vim.o.wrap == false then
         vim.o.textwidth = 0
         vim.o.wrap = true
+    elseif vim.o.textwidth == 0 and vim.o.wrap == true then
+        vim.o.wrap = false
+        vim.o.filetype = vim.o.filetype -- This should reset &textwidth.
     end
 end, { silent = true, desc = "Toggle use of 'textwidth' for hard-wrapping versus soft-wrapping with 'wrap'" })
 -- Attempt to autoformat focused paragraph/selection.
