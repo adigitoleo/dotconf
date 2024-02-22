@@ -800,6 +800,7 @@ if lsp then
             bindkey("n", "gD", vim.lsp.buf.declaration, { buffer = ev.buf, desc = "Go to declaration" })
             bindkey("n", "gr", vim.lsp.buf.references, { buffer = ev.buf, desc = "Find references to symbol" })
             bindkey("n", "gR", vim.lsp.buf.rename, { buffer = ev.buf, desc = "Rename symbol" })
+            bindkey("n", "gL", vim.lsp.buf.document_symbol, { buffer = ev.buf, desc = "List symbols (current document)" })
             bindkey("n", "gf", function()
                 vim.lsp.buf.format { async = true }
             end, { buffer = ev.buf, desc = "Run LSP formatter" })
