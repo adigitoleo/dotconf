@@ -804,6 +804,9 @@ if lsp then
             bindkey("n", "gf", function()
                 vim.lsp.buf.format { async = true }
             end, { buffer = ev.buf, desc = "Run LSP formatter" })
+            bindkey("v", "gf", function()
+                vim.lsp.buf.format { async = true }
+            end, { buffer = ev.buf, desc = "Run LSP formatter" })
         end,
     })
     -- Borders for LSP popup windows.
