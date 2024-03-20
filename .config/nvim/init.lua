@@ -679,6 +679,8 @@ command("Term", function(opts) -- TODO: Support more than one terminal buffer.
         })
     end
 end, { nargs = "?", complete = "shellcmd", desc = "Toggle floating terminal or open scratch term and run command" })
+command("TabTerminal", function(opts) vim.cmd("tabnew|terminal " .. opts.args) end,
+    { nargs = "?", complete = "shellcmd", desc = "Open new tab with a terminal (optionally running the given command)" })
 
 local helpbuf = -1
 local helpwin = -1
