@@ -309,7 +309,7 @@ opt.shortmess:remove("F")
 opt.formatoptions:remove("t")
 opt.listchars:append({ trail = " ", precedes = "<", extends = ">" })
 opt.pumheight = 15
-opt.completeopt = { "menu", "noselect", "preview" }
+opt.completeopt = { "menu", "noselect" }
 opt.helpheight = 0
 opt.synmaxcol = 200
 opt.scrolloff = 3
