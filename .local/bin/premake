@@ -1,0 +1,59 @@
+#!/bin/sh
+set -eu
+readonly SCRIPTNAME="${0##*/}"
+usage() {
+    printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
+    printf '       %s ' "$SCRIPTNAME"
+    echo '[-s shell][-f shellflags]'
+    echo
+}
+helpf() {
+    echo 'Options:'
+    echo '-s <shell>        set specific shell target (path or alias),'
+    echo '                  not set by default, i.e. make uses /bin/sh'
+    echo '-f <shellflags>   flags to append to the shell invocation,'
+    echo '                  default: -eu'
+    echo
+    echo 'Generate Makefile template with opinionated sane defaults.'
+    echo 'Output is written to stdout.'
+}
+
+SHELL=
+SHELLFLAGS="-eu"
+while getopts "hs:f:" OPT; do
+    case $OPT in
+        h ) usage && helpf; exit 0;;
+        s ) SHELL="$OPTARG";;
+        f ) SHELLFLAGS="$OPTARG";;
+        * ) usage; exit 1;;
+    esac
+done
+
+echo '# ===== Makefile template. Edit as required. ====='
+[ -n "$SHELL" ] && echo ".SHELL := $SHELL"
+echo ".SHELLFLAGS := $SHELLFLAGS"
+cat<<'EOF'
+.ONESHELL:
+.DELETE_ON_ERROR:
+MAKEFLAGS += --warn-undefined-variables
+MAKEFLAGS += --no-builtin-rules
+# Define variables with either = (recursive, confusing, try to avoid)...
+#   RECURSIVE_ASSIGNMENT = foo ${LATER_VARIABLE}
+# ...or wih := (only previously defined variables are substituted, intuitive).
+# This will only be assigned the value 'bar':
+#   IMPERATIVE_ASSIGNMENT := bar ${LATER_VARIABLE}
+#   LATER_VARIABLE := value of later variable
+# Other things to be aware of:
+# - Basic format for rule headers is <outfile>: <input_file1> <input_file2> ...
+# - Use $$ instead of $ to prefix environment variables
+# - Use $VARIABLE to refer to make variables (defined as above, or builtins)
+# - Avoid arcane "output templates" for generating multiple output files,
+#   instead use an output "sentinel" file to trigger rebuilding
+# - The only template rules that don't cause migraines look like this:
+#   out/%.o: out/%.c
+# - These are the only magic variables you should care about: $@ is the target,
+#   i.e. output file; $(@D) is its parent directory; $< is the first input file
+#   and $+ is all the input files separated by spaces
+# - If you must write rules which don't generate files, you should add this on
+#   top: .PHONY <target> (don't abuse this; use it for e.g. `make clean`)
+EOF
