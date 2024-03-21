@@ -1,6 +1,6 @@
 #!/bin/sh
 # Generate output for wayland status bars. See swaybar-protocol(7).
-set -eu
+set -u
 readonly SCRIPTNAME="${0##*/}"
 
 warn() { >&2 printf '%s\n' "$SCRIPTNAME: $1"; }

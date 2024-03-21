@@ -1,5 +1,5 @@
 #!/bin/sh
-set -eu
+set -u
 helpf() {
     echo 'Select and open a binary file using xdg-open(1).'
     echo 'The list of files is built using rg(1), and excludes all text file'

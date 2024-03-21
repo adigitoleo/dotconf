@@ -1,5 +1,5 @@
 #!/bin/sh
-set -eu
+set -u
 readonly SCRIPTNAME="${0##*/}"
 helpf() {
     echo 'Generate and display a PNG image of the given color.'

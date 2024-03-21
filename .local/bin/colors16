@@ -1,5 +1,5 @@
 #!/bin/sh
-set -eu
+set -u
 helpf() {
     echo 'Print color swatches showing foreground/background combinations'
     echo 'of the first 16 (i.e. ANSI) colors configured for your terminal'

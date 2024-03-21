@@ -1,5 +1,5 @@
 #!/bin/sh
-set -eu
+set -u
 readonly SCRIPTNAME="${0##*/}"
 usage() {
     printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
@@ -19,7 +19,7 @@ helpf() {
 }
 
 SHELL=
-SHELLFLAGS="-eu"
+SHELLFLAGS="-u"
 while getopts "hs:f:" OPT; do
     case $OPT in
         h ) usage && helpf; exit 0;;
@@ -31,7 +31,7 @@ done
 
 echo '# ===== Makefile template. Edit as required. ====='
 [ -n "$SHELL" ] && echo ".SHELL := $SHELL"
-echo ".SHELLFLAGS := $SHELLFLAGS"
+echo ".SHELLFLAGS += $SHELLFLAGS"
 cat<<'EOF'
 .ONESHELL:
 .DELETE_ON_ERROR:

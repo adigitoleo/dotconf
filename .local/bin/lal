@@ -1,5 +1,5 @@
 #!/bin/sh
-set -eu
+set -u
 readonly SCRIPTNAME="${0##*/}"
 helpf() {
     printf 'Usage: %s [-h|-l]| alias\n' "$SCRIPTNAME"

@@ -1,5 +1,5 @@
 #!/bin/zsh
-set -eu
+set -u
 readonly SCRIPTNAME="${0##*/}"
 usage() {
     printf 'Usage: %s [-h]\n' "$SCRIPTNAME"

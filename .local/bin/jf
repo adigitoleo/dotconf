@@ -1,5 +1,5 @@
 #!/bin/sh
-set -eu
+set -u
 readonly SCRIPTNAME="${0##*/}"
 usage() { printf 'Usage: %s [-h|-q|file.jl]\n' "$SCRIPTNAME"; }
 helpf() {

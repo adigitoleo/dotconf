@@ -1,5 +1,5 @@
 #!/bin/sh
-set -eu
+set -u
 helpf() {
     echo 'Select and run a desktop application using gio(1).'
     echo 'The application list is built using `.desktop` files from'
