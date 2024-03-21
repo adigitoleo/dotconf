@@ -57,5 +57,5 @@ MAKEFLAGS += --no-builtin-rules
 # - To suppress a line of the recipe from printing itself to stdout, prefix it
 #   with @ (can be used as `@echo "message about what target we are building"`)
 # - If you must write rules which don't generate files, you should add this on
-#   top: .PHONY <target> (don't abuse this; use it for e.g. `make clean`)
+#   top: `.PHONY: <target>` (don't abuse this; use it for e.g. `make clean`)
 EOF
