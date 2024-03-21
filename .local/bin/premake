@@ -46,7 +46,7 @@ MAKEFLAGS += --no-builtin-rules
 # Other things to be aware of:
 # - Basic format for rule headers is <outfile>: <input_file1> <input_file2> ...
 # - Use $$ instead of $ to prefix environment variables
-# - Use $VARIABLE to refer to make variables (defined as above, or builtins)
+# - Use $(VARIABLE) to refer to make variables (defined as above, or builtins)
 # - Avoid arcane "output templates" for generating multiple output files,
 #   instead use an output "sentinel" file to trigger rebuilding
 # - The only template rules that don't cause migraines look like this:
