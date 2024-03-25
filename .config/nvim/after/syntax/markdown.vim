@@ -1,7 +1,11 @@
 " Block math. Look for '$$[anything]$$'
-syn region displayMath start=/\$\$/ end=/\$\$/
+syn region displayMath matchgroup=MathDelimiter start=/\$\$/ end=/\$\$/ concealends
+" Block math. Look for '\[[anything]\]'
+syn region displayMath matchgroup=MathDelimiter start=/\\\[/ end=/\\\]/ concealends
 " Inline math. Look for '$[not $][anything]$'
-syn match inlineMath '\$[^$].\{-}\$'
+syn region inlineMath matchgroup=MathDelimiter start=/\$/ end=/\$/ concealends
+" Inline math. Look for '\([anything]\)'
+syn region inlineMath matchGroup=MathDelimiter start=/\\(/ end=/\\)/ concealends
 " YAML/TOML frontmatter.
 syn region frontMatter start=/\%^---\+$/ end=/---\+$/ conceal cchar=@
 " Inline URLs look ugly, let's conceal them.
