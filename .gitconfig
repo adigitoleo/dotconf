@@ -38,9 +38,9 @@
 	last = log -1 HEAD
 	unstage = reset HEAD --
 	url = config --get remote.origin.url
-	nuke = !sh -c 'git branch -d $1 && git push origin :$1' -
+	nuke = !git-nuke
 	inspect = show --format=full
-	develop = !sh -c 'mkdir _dev_$1 && git branch $1 && git worktree add _dev_$1 $1' -
+	develop = !git-develop
 	tags = for-each-ref --sort=-creatordate --format '%(color:cyan)%(creatordate:short) %(color:reset)%(refname:short) %(color:magenta)%(subject)' refs/tags
 [remote]
 	pushDefault = origin

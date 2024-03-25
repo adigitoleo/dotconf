@@ -1,0 +1,11 @@
+#!/bin/sh
+set -u
+readonly SCRIPTNAME="${0##*/}"
+usage() {
+    printf 'Usage: %s BRANCH\n' "$SCRIPTNAME"
+    echo "Create new git branch and associated worktree."
+}
+[ $# -ne 1 ] && { usage ; exit 1 ; }
+mkdir _dev_$1 || exit 1
+git branch $1 || exit 1
+git worktree add _dev_$1 $1
