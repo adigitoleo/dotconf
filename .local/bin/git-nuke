@@ -5,9 +5,11 @@ usage() {
     printf 'Usage: %s BRANCH\n' "$SCRIPTNAME"
     echo "Delete git branch and remove associated worktree and remote branch(es)."
 }
+FORCE=
+[ "$1" = "-f" ] && { FORCE="-f" ; shift ; }
 [ $# -ne 1 ] && { usage ; exit 1 ; }
-git worktree remove $PWD/_dev_$1 || exit 1
-git branch -d $1 || exit 1
+git worktree remove $PWD/_dev_$1 "$FORCE" || exit 1
+git branch -d $1 "$FORCE" || exit 1
 for remote in $(git remote); do
     git push $remote --delete $1
 done
