@@ -726,64 +726,66 @@ end, {
 }
 )
 
-local function bootstrap()
-    local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-    if fn.empty(fn.glob(install_path)) > 0 then
-        fn.system({ "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path })
-        vim.o.runtimepath = vim.fn.stdpath('data') .. '/site/pack/*/start/*,' .. vim.o.runtimepath
-        vim.cmd [[packadd packer.nvim]]
-        return true
+local function pkgbootstrap()
+    local pckr_path = fn.stdpath("data") .. "/site/pack/pckr/start/pckr.nvim"
+    if not vim.loop.fs_stat(pckr_path) then
+        fn.system({ "git", "clone", "--depth", "1", "https://github.com/lewis6991/pckr.nvim", pckr_path })
     end
-    return false
+    vim.opt.rtp:prepend(pckr_path)
 end
-local packer_bootstrap = bootstrap()
 
-require("packer").startup(function(use)
-    use "wbthomason/packer.nvim"              -- Neovim plugin manager, uses :h packages.
-    use "neovim/nvim-lsp"                     -- Community configs for :h lsp.
-    use "numToStr/Comment.nvim"               -- Quickly comment/uncomment code.
-    use "kylechui/nvim-surround"              -- Quoting/parenthesizing made simple.
-    use "nvim-lua/plenary.nvim"               -- Lua functions/plugin dev library.
-    use "whiteinge/diffconflicts"             -- 2-way vimdiff for merge conflicts (VimL).
-    use "echasnovski/mini.map"                -- A code minimap, like what cool Atom kids have.
-    use "lukas-reineke/indent-blankline.nvim" -- Visual indentation guides.
-    use "folke/todo-comments.nvim"            -- Track TODO/FIXME comments.
-    use "lewis6991/gitsigns.nvim"             -- Git status in sign column and statusbar.
-    use "SidOfc/carbon.nvim"                  -- Replacement for :h netrw, directory viewer.
-    use "ggandor/leap.nvim"                   -- Alternative to '/' for quick search/motions.
-    use "farmergreg/vim-lastplace"            -- Open files at the last viewed location (VimL).
-    use "AndrewRadev/inline_edit.vim"         -- Edit embedded code in a temporary buffer with a different filetype
+pkgbootstrap()
+require("pckr").add {
+    "neovim/nvim-lsp",                     -- Community configs for :h lsp.
+    "numToStr/Comment.nvim",               -- Quickly comment/uncomment code.
+    "kylechui/nvim-surround",              -- Quoting/parenthesizing made simple.
+    "nvim-lua/plenary.nvim",               -- Lua functions/plugin dev library.
+    "whiteinge/diffconflicts",             -- 2-way vimdiff for merge conflicts (VimL).
+    "echasnovski/mini.map",                -- A code minimap, like what cool Atom kids have.
+    "lukas-reineke/indent-blankline.nvim", -- Visual indentation guides.
+    "folke/todo-comments.nvim",            -- Track TODO/FIXME comments.
+    "lewis6991/gitsigns.nvim",             -- Git status in sign column and statusbar.
+    "SidOfc/carbon.nvim",                  -- Replacement for :h netrw, directory viewer.
+    "ggandor/leap.nvim",                   -- Alternative to '/' for quick search/motions.
+    "farmergreg/vim-lastplace",            -- Open files at the last viewed location (VimL).
+    "AndrewRadev/inline_edit.vim",         -- Edit embedded code in a temporary buffer with a different filetype
+
     -- Follow symlinks when opening files (Linux, VimL).
-    use { "aymericbeaumet/vim-symlink", requires = { "moll/vim-bbye" } }
+    { "aymericbeaumet/vim-symlink", requires = { "moll/vim-bbye" }, },
+    "dhruvasagar/vim-open-url",   -- Open URL's in browser without :h netrw (VimL).
+    "alvan/vim-closetag",         -- Auto-close (x|ht)ml tags (VimL).
+    "vim-python/python-syntax",   -- Improved Python syntax highlighting (VimL).
+    "hattya/python-indent.vim",   -- PEP8 auto-indenting for Python (VimL).
+    "euclidianAce/BetterLua.vim", -- Improved Lua syntax highlighting (VimL).
+    "jakemason/ouroboros",        -- Switch between .c/.cpp and header files.
 
-    use "dhruvasagar/vim-open-url"   -- Open URL's in browser without :h netrw (VimL).
-    use "alvan/vim-closetag"         -- Auto-close (x|ht)ml tags (VimL).
-    use "vim-python/python-syntax"   -- Improved Python syntax highlighting (VimL).
-    use "hattya/python-indent.vim"   -- PEP8 auto-indenting for Python (VimL).
-    use "euclidianAce/BetterLua.vim" -- Improved Lua syntax highlighting (VimL).
-    use "jakemason/ouroboros"        -- Switch between .c/.cpp and header files.
-    use "adigitoleo/vim-mellow"
-    use "adigitoleo/vim-mellow-statusline"
-    use "https://git.sr.ht/~adigitoleo/overview.nvim"
+    "adigitoleo/vim-mellow",
+    "adigitoleo/vim-mellow-statusline",
+    "https://git.sr.ht/~adigitoleo/overview.nvim",
 
-    if fn.executable("latex") > 0 then
-        use "lervag/vimtex" -- Comprehensive LaTeX integration.
-    end
-    if fn.executable("julia") > 0 then
-        use "JuliaEditorSupport/julia-vim" -- Improved Julia syntax highlighting, unicode input.
-        table.insert(freqlangs, "julia")
-    end
-    if fn.executable("racket") > 0 then
-        use "otherjoel/vim-pollen" -- Syntax highlighting for #lang pollen
-        vim.list_extend(freqlangs, { "racket", "pollen" })
-    end
-    if system == "Windows_NT" or fn.executable("apt") then
-        use "junegunn/fzf" -- Provides the basic fzf.vim file.
-    end
-    if packer_bootstrap then
-        require("packer").sync()
-    end
-end)
+    -- Comprehensive LaTeX integration.
+    { "lervag/vimtex", cond = function(load_plugin)
+        if fn.executable("latex") > 0 then load_plugin() end
+    end },
+    -- Improved Julia syntax highlighting, unicode input.
+    { "JuliaEditorSupport/julia-vim", cond = function(load_plugin)
+        if fn.executable("julia") > 0 then
+            load_plugin()
+            table.insert(freqlangs, "julia")
+        end
+    end },
+    -- Syntax highlighting for #lang pollen
+    { "otherjoel/vim-pollen", cond = function(load_plugin)
+        if fn.executable("racket") > 0 then
+            load_plugin()
+            vim.list_extend(freqlangs, { "racket", "pollen" })
+        end
+    end },
+    -- Provides the basic fzf.vim file.
+    { "junegunn/fzf", cond = function(load_plugin)
+        if system == "Windows_NT" or fn.executable("apt") then load_plugin() end
+    end },
+}
 
 local lsp = load("lspconfig")
 if lsp then
