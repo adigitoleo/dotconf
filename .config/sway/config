@@ -29,7 +29,7 @@ set $down j
 set $up k
 set $right l
 set $term alacritty
-set $lock 'swaylock -f -i $HOME/Pictures/wallpapers/chauvet_lions_dark.jpg'
+set $lock 'pgrep swaylock||swaylock -f -i $HOME/Pictures/wallpapers/chauvet_lions_dark.jpg'
 set $floatterm 'alacritty --class floating-terminal,floating-terminal -o window.opacity=0.8'
 set $menu 'alacritty --class floating-terminal,floating-terminal -o window.opacity=0.8 -e fzfmenu.sh'
 set $open 'alacritty --class floating-terminal,floating-terminal -o window.opacity=0.8 -e fzfopen.sh'
