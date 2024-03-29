@@ -104,10 +104,6 @@ alias d,unmount='sync && udisksctl unmount -b'
 # Get host info.
 alias ip,lan='ip route get 1|rg -o "src [^\s]*"|cut -d" " -f2'
 
-# Find and print site urls from elinks history or bookmarks.
-alias e,hist='cut -f2 < ~/.elinks/globhist|fzf'
-alias e,mark='cut -f2 < ~/.elinks/bookmarks|fzf'
-
 # Launch qutebrowser with backend-forced dark mode for stuborn sites.
 alias q,dark='QB_QT_DARKMODE=1 setsid -f qutebrowser -T -C ~/.config/qutebrowser/config.py'
 # Launch qutebrowser with backend-forced dark mode using tor proxy.
@@ -137,9 +133,6 @@ alias backup='rsync -rszauhP --no-links --delete --info=nonreg0 --files-from=$HO
 
 # Use readline key bindings in maxima.
 alias maxima='rlwrap maxima'
-
-# Cenetered 80-column display in nvimpager.
-alias s='nvimpager -- -O3 -c "setl bt=nofile|setl bufhidden=hide|setl noswapfile|wincmd x|setl bt=nofile|setl bufhidden=hide|setl noswapfile|wincmd l|vert res 80|setl winfixwidth|wincmd =|hi! link WinSeparator Ignore|hi! link NonText Ignore"'
 
 # Mpv media player detached instance with larger window, playing in loop, use: m,loop <file>.
 alias m,loop='2>/dev/null 1>&2 setsid -f mpv --geometry=1200x1200 --loop'
