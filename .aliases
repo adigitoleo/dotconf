@@ -114,7 +114,7 @@ alias py=python
 alias py,venv='$(2>/dev/null pyenv prefix||printf "/usr")/bin/python -m venv .venv-${PWD##*/} && source .venv-${PWD##*/}/bin/activate && pip install --upgrade pip flake8 mypy black pipdeptree pip-tools'
 alias py,activate='test -f .venv-${PWD##*/}/bin/activate && source .venv-${PWD##*/}/bin/activate'
 alias py,lint='pylint -E --output-format=colorized'
-alias by='bpython'
+alias py,repl='ptpython --$(theme -q)-bg'
 alias py,update='mv -i requirements.txt requirements.bak && pip install --upgrade pip && pip-compile --resolver=backtracking && pip-sync'
 
 # Die Julia.
