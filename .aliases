@@ -1,23 +1,6 @@
 # vim:ft=sh
-# Shell aliases for bash/zsh.
 
-# --- Prefix rules ---
-# a = alsa (audio)
-# d = disk controls (mount/unmount etc.)
-# e = elinks (text browser utilities), note that bare `e` should run $EDITOR instead
-# i = networking (also ip,<foo>)
-# p = package manager
-# q = qutebrowser (web browser)
-# v = virtual console
-# w = wayland specific
-# x = xorg-specific (X11 server)
-# py = python (+ venv, pyenv, ...)
-# jl = julia
-# rg = ripgrep shortcuts (search)
-
-
-# COLORS AND OUTPUT FORMATTING {{{1
-# https://wiki.archlinux.org/index.php/Color_output_in_console
+# COLORS AND OUTPUT FORMATTING
 
 alias ls='ls --color=auto --group-directories-first'
 alias d='diff --color=always -u'
@@ -43,10 +26,9 @@ alias rg,absfind='rg --files $PWD|rg'
 alias rg,color='rg --color=always'
 
 
-# VERSION CONTROL AND SYSTEM ADMIN {{{1
+# VERSION CONTROL AND SYSTEM ADMIN
 
 alias y=yadm
-
 if 1>/dev/null 2>&1 command -v pacman ; then
     alias pacman='pacman --color=auto'
     alias p='pacman --color=auto'
@@ -68,6 +50,7 @@ elif 1>/dev/null 2>&1 command -v xbps-install ; then
     alias p,rinfo='xbps-query -R --show'
     alias p,manual='xbps-query -m|rev|cut -d- -f2-|rev|while IFS= read -r pkg; do xbps-query $pkg -p install-date|tr "\n" "\t"; echo $pkg; done|sort -n'
     alias p,unmaint='xbps-query -p maintainer -s Orphaned|rev|cut -d- -f2-|rev|while IFS= read -r pkg; do xbps-query $pkg -p install-date|tr "\n" "\t"; echo $pkg; done|sort -n'
+    alias p,ownedby='xbps-query --ownedby'
 fi
 
 # Use ED25519 ssh keys by default.
@@ -94,7 +77,7 @@ alias open='1>/dev/null 2>/dev/null setsid xdg-open'
 alias who='ps -A -ouser,uid|sort -u|tail -n+2'  # All users that are doing stuff.
 alias users='cat /etc/passwd|cut -d: -f1'  # All users that have a password.
 
-# MISC. ABBREVIATIONS {{{1
+# MISC. ABBREVIATIONS
 
 # (Un)mount drives, e.g. external usb devices (udisks2).
 # Because automounting is not smart enough and always breaks somehow.
