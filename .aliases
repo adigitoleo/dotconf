@@ -122,3 +122,6 @@ alias m,loop='2>/dev/null 1>&2 setsid -f mpv --geometry=1200x1200 --loop'
 
 # Launch libreoffice and stop complaining on my file descriptors.
 alias office='2>/dev/null 1>&2 setsid -f libreoffice'
+
+# Flatten input (file) by joining all lines into one.
+alias flatten='paste -d" " -s'
