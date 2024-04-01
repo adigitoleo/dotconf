@@ -13,5 +13,5 @@ layout {
         }
     }
     tab name="music" cwd="Music"
-    tab name="vpn" cwd="/tmp"
+    tab name="tmp" cwd="/tmp"
 }
