@@ -1,0 +1,42 @@
+#!/bin/sh
+set -u
+readonly SCRIPTNAME="${0##*/}"
+usage() {
+    printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
+    printf '       %s ' "$SCRIPTNAME"
+    echo '[-d DIR] VERSION'
+}
+helpf() {
+    echo 'Options:'
+    echo '  -d <dir>        Specify destination directory for unpacked archive'
+    echo 'Operands:'
+    echo '  VERSION         Version number in SemVer format e.g. "1.9.0"'
+    echo
+    echo 'Download Linux x86 glibc neovim binary for the specified version,'
+    echo 'and the corresponding sha256sum file, and perform the hash check.'
+    echo 'Optionally unpack the archive to the specified directory DIR.'
+}
+
+DIR=
+while getopts "hd:" OPT; do
+    case "$OPT" in
+        h ) usage && helpf ; exit 0 ;;
+        d ) DIR="$OPTARG" ;;
+        * ) usage ; exit 1 ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+test $# -eq 1 || { usage ; exit 1 ; }
+version="$1"
+[ -f "nvim-linux64.tar.gz.sha256sum" ] || \
+    curl --fail --remote-name --location --continue-at - "https://github.com/neovim/neovim/releases/download/v${version}/nvim-linux64.tar.gz.sha256sum"
+[ -f "nvim-linux64.tar.gz" ] || \
+    curl --fail --remote-name --location --continue-at - "https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz"
+sha256sum --check --ignore-missing "nvim-linux64.tar.gz.sha256sum"
+
+if [ -n "$DIR" ]; then
+    tar -xvf "nvim-linux64.tar.gz" --directory="${DIR}"
+    REALPATH="$(realpath "$DIR")"
+    ln -s -f -t "$HOME/.local/bin" "$REALPATH/nvim-linux64/bin/nvim"
+fi
