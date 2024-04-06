@@ -51,5 +51,26 @@ if luaeval('require("nvim-surround") ~= nil')
     vnoremap <silent> <localleader>i :call <SID>MarkdownItalicToggle(v:true)<Cr>
 endif
 
+func Eatchar(pat)
+    let c = nr2char(getchar(0))
+    return (c =~ a:pat) ? '' : c
+endfunc
+
 iabbrev <buffer> :( \( \)<Left><Left><Left>
 iabbrev <buffer> ;[ \[ \]<Left><Left><Left>
+" Can only use alphanum. or _ in abbreviation lhs, see
+" https://github.com/neovim/neovim/issues/28150
+iabbrev <buffer> _mat \begin{matrix}\end{matrix}<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><C-r>=Eatchar('\s')<Cr>
+iabbrev <buffer> _pmat \begin{pmatrix}\end{pmatrix}<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><C-r>=Eatchar('\s')<Cr>
+iabbrev <buffer> _bmat \begin{bmatrix}\end{bmatrix}<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><C-r>=Eatchar('\s')<Cr>
+iabbrev <buffer> _vmat \begin{vmatrix}\end{vmatrix}<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><C-r>=Eatchar('\s')<Cr>
+iabbrev <buffer> _Vmat \begin{Vmatrix}\end{Vmatrix}<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><C-r>=Eatchar('\s')<Cr>
+iabbrev <buffer> _Bmat \begin{Bmatrix}\end{Bmatrix}<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><C-r>=Eatchar('\s')<Cr>
+iabbrev <buffer> _cases \begin{cases}\end{cases}<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><C-r>=Eatchar('\s')<Cr>
+iabbrev <buffer> _rcases \begin{rcases}\end{rcases}<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><C-r>=Eatchar('\s')<Cr>
+iabbrev <buffer> _smat \begin{smallmatrix}\end{smallmatrix}<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><C-r>=Eatchar('\s')<Cr>
+iabbrev <buffer> _abs \left\vert  \right\vert<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><C-r>=Eatchar('\s')<Cr>
+iabbrev <buffer> _arr \begin{array}{}\end{array}<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><C-r>=Eatchar('\s')<Cr>
+iabbrev <buffer> _subarr \begin{subarray}{}\end{subarray}<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><C-r>=Eatchar('\s')<Cr>
+iabbrev <buffer> _pd \frac{\partial }{\partial }<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><C-r>=Eatchar('\s')<Cr>
+iabbrev <buffer> _spd \begin{pmatrix}\partial  / \partial \end{pmatrix<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><C-r>=Eatchar('\s')<Cr>}
