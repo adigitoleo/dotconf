@@ -317,7 +317,7 @@ opt.showbreak = "> "
 
 -- Direct integration with external executables.
 if fn.executable("rg") > 0 then opt.grepprg = "rg --vimgrep --smart-case --follow" end
-if system == "Linux" then
+if system == "Linux" and vim.env.WAYLAND_DISPLAY ~= nil then
     if fn.executable("wl-copy") > 0 and fn.executable("wl-paste") > 0 then
         vim.g.clipboard = {
             name = "Wayland primary selection",
