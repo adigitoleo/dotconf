@@ -440,11 +440,11 @@ if fn.executable("theme") > 0 then -- Use `theme` executable to manage global da
         { desc = "Sync to global TUI theme using `!theme`" })
 end
 command("ToggleTheme", function()
-    if fn.executable("theme") > 0 then
-        vim.cmd [[silent! exec '!theme -t'|let &background = get(systemlist('theme -q'), 0, 'light')]]
-    else
-        if vim.o.background == "light" then opt.background = "dark" else opt.background = "light" end
-    end
+        if fn.executable("theme") > 0 then
+            vim.cmd [[silent! exec '!theme -t'|let &background = get(systemlist('theme -q'), 0, 'light')]]
+        else
+            if vim.o.background == "light" then opt.background = "dark" else opt.background = "light" end
+        end
     end,
     { desc = "Toggle global TUI theme using `!theme`, if available; also toggle neovim &background setting" })
 
