@@ -464,6 +464,8 @@ command("Grep", [[exec 'silent grep! <q-args>' | copen]],
 command("BufGrep", [[exec 'silent grep! <q-args> ' .. join(v:lua.list_buf_names(v:false), ' ') | copen]],
     { nargs = "+", desc = "Like grep but search only in open buffers" })
 command("Rename", rename_file, { desc = "Rename current buffer and associated file" })
+command("CDHere", function() vim.cmd("tcd " .. fn.expand("%:p:h")) end,
+    { desc = "Change directory to the parent directory of the current buffer" })
 
 -- Autocommands for terminal buffers and basic filetype settings.
 vim.cmd [[augroup terminal_buffer_rules
