@@ -436,12 +436,17 @@ else
 end
 
 if fn.executable("theme") > 0 then -- Use `theme` executable to manage global dark/light TUI theme.
-    command("ToggleTheme",
-        [[silent! exec '!theme -t'|let &background = get(systemlist('theme -q'), 0, 'light')]],
-        { desc = "Toggle global TUI theme using `!theme`" })
     command("SyncTheme", [[silent! let &background = get(systemlist('theme -q'), 0, 'light')]],
         { desc = "Sync to global TUI theme using `!theme`" })
 end
+command("ToggleTheme", function()
+    if fn.executable("theme") > 0 then
+        vim.cmd [[silent! exec '!theme -t'|let &background = get(systemlist('theme -q'), 0, 'light')]]
+    else
+        if vim.o.background == "light" then opt.background = "dark" else opt.background = "light" end
+    end
+    end,
+    { desc = "Toggle global TUI theme using `!theme`, if available; also toggle neovim &background setting" })
 
 -- User commands.
 command("TitleCase", convert_case, { range = true, desc = "Change line/range to title case" })
