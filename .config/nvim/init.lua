@@ -757,6 +757,8 @@ require("pckr").add {
     "farmergreg/vim-lastplace",            -- Open files at the last viewed location (VimL).
     "AndrewRadev/inline_edit.vim",         -- Edit embedded code in a temporary buffer with a different filetype
 
+    -- Downloader and shims for tree-sitter grammars; see :h :TSInstall and :h :TSEnable.
+    { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" },
     -- Follow symlinks when opening files (Linux, VimL).
     { "aymericbeaumet/vim-symlink", requires = { "moll/vim-bbye" }, },
     "dhruvasagar/vim-open-url",   -- Open URL's in browser without :h netrw (VimL).
