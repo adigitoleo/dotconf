@@ -42,6 +42,8 @@ rmbg() { convert -transparent white "${1:--}" "${1--}" }
 rgbneg() { convert -channel RGB -negate "${1:--}" "${1:--}" }
 # Share text file to https://x0.at/ pastebin (requires curl).
 share() { curl -F "file=@$1;filename=.txt" https://x0.at/ }
+# Share raw file (don't assume it is text) to https://x0.at/ pastebin (requires curl).
+share,raw() { curl -F "file=@$1" https://x0.at/ }
 
 #
 # Asynchronous git status indicator.
