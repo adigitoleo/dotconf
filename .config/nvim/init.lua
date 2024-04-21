@@ -16,6 +16,7 @@ else
     _preview = true
 end
 
+local function is_executable(cmd) if fn.executable(cmd) > 0 then return true else return false end end
 local function warn(msg) api.nvim_err_writeln("init.lua: " .. msg) end
 
 -- Enable unicode input and markdown fenced block highlighting for:
@@ -169,10 +170,7 @@ end
 local function horizontal_scroll_mode(scrolltype)
     -- scrolltype: string, a letter (as above), see `:h scroll-horizontal`.
     -- <https://stackoverflow.com/a/59950870/12519962>
-    if vim.wo.wrap then
-        return
-    end
-
+    if vim.wo.wrap then return end
     vim.cmd("echohl Title")
     local key = scrolltype
     while fn.index({ "h", "l", "H", "L" }, key) >= 0 do
@@ -316,9 +314,9 @@ opt.scrolloff = 3
 opt.showbreak = "> "
 
 -- Direct integration with external executables.
-if fn.executable("rg") > 0 then opt.grepprg = "rg --vimgrep --smart-case --follow" end
+if is_executable("rg") then opt.grepprg = "rg --vimgrep --smart-case --follow" end
 if system == "Linux" and vim.env.WAYLAND_DISPLAY ~= nil then
-    if fn.executable("wl-copy") > 0 and fn.executable("wl-paste") > 0 then
+    if is_executable("wl-copy") and is_executable("wl-paste") then
         vim.g.clipboard = {
             name = "Wayland primary selection",
             copy = { ["+"] = "wl-copy --type text/plain", ["*"] = "wl-copy --primary --type text/plain" },
@@ -331,7 +329,7 @@ if system == "Linux" and vim.env.WAYLAND_DISPLAY ~= nil then
 end
 
 -- Integration with fzf, <https://github.com/junegunn/fzf/blob/master/README-VIM.md>.
-if fn.executable("fzf") > 0 and fn.exists(":FZF") then
+if is_executable("fzf") and fn.exists(":FZF") then
     vim.g.fzf_layout = {
         window =
         { width = 0.9, height = 0.6, border = "sharp", highlight = "StatusLine" }
@@ -369,7 +367,7 @@ if fn.executable("fzf") > 0 and fn.exists(":FZF") then
     end
     command("FuzzyRecent", _fuzzy_recent, { desc = "Open recent files (v:oldfiles) or listed buffers" })
 
-    if fn.executable("rg") > 0 then
+    if is_executable("rg") then
         local function _fuzzy_find(opts)
             fn["fzf#run"](fn["fzf#wrap"](FZFspecgen('rg --files --hidden --no-messages', opts.args, _preview)))
         end
@@ -435,12 +433,12 @@ else
     warn("fuzzy finder ('fzf') not found, disabling fzf features")
 end
 
-if fn.executable("theme") > 0 then -- Use `theme` executable to manage global dark/light TUI theme.
+if is_executable("theme") then -- Use `theme` executable to manage global dark/light TUI theme.
     command("SyncTheme", [[silent! let &background = get(systemlist('theme -q'), 0, 'light')]],
         { desc = "Sync to global TUI theme using `!theme`" })
 end
 command("ToggleTheme", function()
-        if fn.executable("theme") > 0 then
+        if is_executable("theme") then
             vim.cmd [[silent! exec '!theme -t'|let &background = get(systemlist('theme -q'), 0, 'light')]]
         else
             if vim.o.background == "light" then opt.background = "dark" else opt.background = "light" end
@@ -477,7 +475,7 @@ vim.cmd [[augroup terminal_buffer_rules
 augroup END]]
 
 vim.filetype.add({ extension = { tikzstyles = "tex" } })
-if fn.executable("txr") > 0 then
+if is_executable("txr") then
     vim.list_extend(freqlangs, { "txr", "tl" })
     vim.filetype.add({ extension = { txr = "txr" } })
     vim.filetype.add({ extension = { tl = "tl" } })
@@ -671,11 +669,15 @@ end
 local termbuf = -1
 local termwin = -1
 command("Term", function(opts) -- TODO: Support more than one terminal buffer.
+    local cmd = { vim.o.shell }
+    if opts.args ~= "" then cmd = opts.fargs end
+    if not is_executable(cmd[1]) then
+        warn(cmd[1] .. " is not executable")
+        return
+    end
     local create_new = false
     if termbuf == -1 then create_new = true end
     termbuf, termwin = floating(termbuf, termwin, "terminal", "")
-    local cmd = { vim.o.shell }
-    if opts.args ~= "" then cmd = opts.fargs end
     if create_new then
         fn.termopen(cmd, {
             on_exit = function()
@@ -685,7 +687,7 @@ command("Term", function(opts) -- TODO: Support more than one terminal buffer.
             end
         })
     end
-end, { nargs = "?", complete = "shellcmd", desc = "Toggle floating terminal or open scratch term and run command" })
+end, { nargs = "*", complete = "shellcmd", desc = "Toggle floating terminal or open scratch term and run command" })
 command("TabTerminal", function(opts) vim.cmd("tabnew|terminal " .. opts.args) end,
     { nargs = "?", complete = "shellcmd", desc = "Open new tab with a terminal (optionally running the given command)" })
 
@@ -760,7 +762,7 @@ require("pckr").add {
     -- Downloader and shims for tree-sitter grammars; see :h :TSInstall and :h :TSEnable.
     { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" },
     -- Follow symlinks when opening files (Linux, VimL).
-    { "aymericbeaumet/vim-symlink", requires = { "moll/vim-bbye" }, },
+    { "aymericbeaumet/vim-symlink",      requires = { "moll/vim-bbye" }, },
     "dhruvasagar/vim-open-url",   -- Open URL's in browser without :h netrw (VimL).
     "alvan/vim-closetag",         -- Auto-close (x|ht)ml tags (VimL).
     "vim-python/python-syntax",   -- Improved Python syntax highlighting (VimL).
@@ -774,25 +776,25 @@ require("pckr").add {
 
     -- Comprehensive LaTeX integration.
     { "lervag/vimtex", cond = function(load_plugin)
-        if fn.executable("latex") > 0 then load_plugin() end
+        if is_executable("latex") then load_plugin() end
     end },
     -- Improved Julia syntax highlighting, unicode input.
     { "JuliaEditorSupport/julia-vim", cond = function(load_plugin)
-        if fn.executable("julia") > 0 then
+        if is_executable("julia") then
             load_plugin()
             table.insert(freqlangs, "julia")
         end
     end },
     -- Syntax highlighting for #lang pollen
     { "otherjoel/vim-pollen", cond = function(load_plugin)
-        if fn.executable("racket") > 0 then
+        if is_executable("racket") then
             load_plugin()
             vim.list_extend(freqlangs, { "racket", "pollen" })
         end
     end },
     -- Provides the basic fzf.vim file.
     { "junegunn/fzf", cond = function(load_plugin)
-        if system == "Windows_NT" or fn.executable("apt") then load_plugin() end
+        if system == "Windows_NT" or is_executable("apt") then load_plugin() end
     end },
 }
 
@@ -827,7 +829,7 @@ if lsp then
     vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" })
     vim.diagnostic.config { float = { border = "single" } }
     -- Requires pip install python-lsp-server (NOT python-language-server!).
-    if fn.executable('pylsp') > 0 then
+    if is_executable('pylsp') then
         lsp.pylsp.setup {
             settings = {
                 pylsp = { plugins = { pycodestyle = { maxLineLength = 88 } } }
@@ -836,7 +838,7 @@ if lsp then
     end
 
     -- https://github.com/LuaLS/lua-language-server
-    if fn.executable('lua-language-server') > 0 then
+    if is_executable('lua-language-server') then
         lsp.lua_ls.setup {
             settings = {
                 Lua = {
@@ -964,7 +966,7 @@ vim.g.mellow_show_bufnr = 0
 if vim.env.COLORTERM == "truecolor" or system ~= "Linux" then
     opt.termguicolors = true
     -- Inherit 'background' (dark/light mode) from terminal emulator.
-    if fn.executable('theme') > 0 then
+    if is_executable('theme') then
         vim.o.background = fn.get(fn.systemlist('theme -q'), 0)
     else
         local hour24 = nil
