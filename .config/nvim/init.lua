@@ -987,7 +987,7 @@ if vim.env.COLORTERM == "truecolor" or system ~= "Linux" then
     vim.g.mellow_user_colors = 1
     vim.cmd [[colorscheme mellow]]
 else -- Minimal fallback color settings for vconsole.
-    vim.cmd [[colorscheme pablo]]
+    vim.cmd [[colorscheme lunaperche]]
     opt.background = "dark"
     vim.cmd [[
     hi! link ColorColumn Normal
