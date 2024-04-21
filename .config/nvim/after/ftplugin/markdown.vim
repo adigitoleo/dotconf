@@ -4,7 +4,7 @@ function! s:MarkdownBoldToggle(visual) range
             if match(getline(l:line), '^\*\{2,3}[^\*]\+\*\{2,3}') >= 0
                 exec 'keeppatterns' .. l:line .. 's/\%V\*\{2}\(.\+\)\*\{2}/\1/e'
             else
-                exec 'keeppatterns' .. l:line .. 's/\%V.\+/**&**/e'
+                exec 'keeppatterns' .. l:line .. 's/\%V.*\%V./**&**/e'
             endif
         endfor
     else  " Single-word variant requires vim-surround plugin.
@@ -27,7 +27,7 @@ function! s:MarkdownItalicToggle(visual) range
             elseif match(getline(l:line), '^\*[^\*]\+\*') >= 0
                 exec 'keeppatterns' .. l:line .. 's/\%V\*\(.\+\)\*/\1/e'
             else
-                exec 'keeppatterns' .. l:line .. 's/\%V*.*/*&*/e'
+                exec 'keeppatterns' .. l:line .. 's/\%V.*\%V./*&*/e'
             endif
         endfor
     else  " Single-word variant requires vim-surround plugin.
