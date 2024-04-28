@@ -132,7 +132,7 @@ function list_commands(sep)
 end
 
 function list_filetypes() -- List all known filetypes.
-    filetypes = {}
+    local filetypes = {}
     for _, ft in pairs(fn.split(fn.expand("$VIMRUNTIME/ftplugin/*.vim"))) do
         table.insert(filetypes, fn.fnamemodify(ft, ":t:r"))
     end
@@ -140,7 +140,7 @@ function list_filetypes() -- List all known filetypes.
 end
 
 function list_syntax() -- List all known syntax files.
-    syntax = {}
+    local syntax = {}
     for _, sx in pairs(fn.split(fn.expand("$VIMRUNTIME/syntax/*.vim"))) do
         table.insert(syntax, fn.fnamemodify(sx, ":t:r"))
     end
@@ -483,7 +483,7 @@ end
 
 local filetype_rules = api.nvim_create_augroup("filetype_rules", { clear = true })
 local function setl_ft_autocmd(filetypes, options)
-    cmdparts = {}
+    local cmdparts = {}
     for k, v in pairs(options) do
         if type(v) == "boolean" then
             if v then table.insert(cmdparts, k) else table.insert(cmdparts, "no" .. k) end
@@ -854,12 +854,14 @@ if lsp then
                         -- https://github.com/LuaLS/lua-language-server/discussions/1688
                         checkThirdParty = false,
                     },
-                    -- Do not send telemetry data!
-                    telemetry = { enable = false },
+                    telemetry = { enable = false }, -- Do not send telemetry data!
                 },
             },
         }
     end
+
+    -- https://github.com/latex-lsp/texlab
+    if is_executable('texlab') then lsp.texlab.setup {} end
 end
 
 -- Toggle comments and add/change/delete surrouning delimiters.
@@ -954,9 +956,8 @@ vim.g.latex_to_unicode_file_types = freqlangs
 -- Don't open folds when restoring cursor position.
 vim.g.lastplace_open_folds = 0
 
--- Overview.nvim bindings.
 overview = load("overview")
-if overview then
+if overview then -- Overview.nvim bindings.
     bindkey("n", "gO", overview.toggle, { desc = "Toggle Overview sidebar for current buffer" })
     bindkey("n", "go", overview.focus, { desc = "Toggle focus between Overview sidebar and source buffer" })
 end
@@ -965,8 +966,7 @@ end
 vim.g.mellow_show_bufnr = 0
 if vim.env.COLORTERM == "truecolor" or system ~= "Linux" then
     opt.termguicolors = true
-    -- Inherit 'background' (dark/light mode) from terminal emulator.
-    if is_executable('theme') then
+    if is_executable('theme') then -- Inherit 'background' (dark/light mode) from terminal emulator.
         vim.o.background = fn.get(fn.systemlist('theme -q'), 0)
     else
         local hour24 = nil
