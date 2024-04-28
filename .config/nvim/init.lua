@@ -240,38 +240,6 @@ local function rename_file()
     end
 end
 
--- Open or focus floating window and set {buf|file}type.
-local function floating(buf, win, bt, ft)
-    -- buf: possibly existing buffer
-    -- win: possibly existing window
-    -- bt: desired buftype
-    -- ft: desired filetype
-    local wc = vim.o.columns
-    local wl = vim.o.lines
-    local width = math.ceil(wc * 0.8)
-    local height = math.ceil(wl * 0.8 - 4)
-    if not api.nvim_buf_is_valid(buf) then
-        buf = api.nvim_create_buf(true, false)
-    end
-    if bt ~= "terminal" then -- Ignore bt = "terminal" which is not allowed.
-        api.nvim_buf_set_option(buf, "buftype", bt)
-        api.nvim_buf_set_option(buf, "filetype", ft)
-    end
-    if not api.nvim_win_is_valid(win) then
-        win = api.nvim_open_win(buf, true, {
-            border = "single",
-            relative = "editor",
-            style = "minimal",
-            width = width,
-            height = height,
-            col = math.ceil((wc - width) * 0.5),
-            row = math.ceil((wl - height) * 0.5 - 1)
-        })
-        api.nvim_win_set_option(win, "winblend", 30)
-    end
-    return buf, win
-end
-
 -- Global booleans.
 opt.confirm = true
 opt.ignorecase = true
@@ -666,74 +634,8 @@ local function load(plugin) -- Load either local or third-party plugin.
     end
 end
 
-local termbuf = -1
-local termwin = -1
-command("Term", function(opts) -- TODO: Support more than one terminal buffer.
-    local cmd = { vim.o.shell }
-    if opts.args ~= "" then cmd = opts.fargs end
-    if not is_executable(cmd[1]) then
-        warn(cmd[1] .. " is not executable")
-        return
-    end
-    local create_new = false
-    if termbuf == -1 then create_new = true end
-    termbuf, termwin = floating(termbuf, termwin, "terminal", "")
-    if create_new then
-        fn.termopen(cmd, {
-            on_exit = function()
-                termbuf = -1
-                termwin = -1
-                api.nvim_input("<Cr>")
-            end
-        })
-    end
-end, { nargs = "*", complete = "shellcmd", desc = "Toggle floating terminal or open scratch term and run command" })
 command("TabTerminal", function(opts) vim.cmd("tabnew|terminal " .. opts.args) end,
     { nargs = "?", complete = "shellcmd", desc = "Open new tab with a terminal (optionally running the given command)" })
-
-local helpbuf = -1
-local helpwin = -1
-command("H", function(opts)
-        local arg = fn.expand("<cword>")
-        if opts.args ~= "" then arg = opts.args end
-        helpbuf, helpwin = floating(helpbuf, helpwin, "help", "help")
-        local cmdparts = {
-            "try|help ",
-            arg,
-            "|catch /^Vim(help):E149/|call nvim_win_close(",
-            helpwin,
-            ", v:false)|echoerr v:exception|endtry",
-        }
-        vim.cmd(table.concat(cmdparts))
-        api.nvim_buf_set_option(helpbuf, "filetype", "help") -- Set ft again to redraw conceal formatting.
-    end,
-    { nargs = "?", complete = "help", desc = "Open neovim help of argument or word under cursor in floating window" }
-)
-local manbuf = -1
-local manwin = -1
-command("M", function(opts)
-    local arg = fn.expand("<cword>")
-    if opts.args ~= "" then arg = opts.args end
-    manbuf, manwin = floating(manbuf, manwin, "nofile", "man")
-    local cmdparts = {
-        "try|Man ",
-        arg,
-        '|catch /^Vim:man.lua: "no manual entry for/|call nvim_win_close(',
-        manwin,
-        ", v:false)|echoerr v:exception|endtry",
-    }
-    vim.cmd(table.concat(cmdparts))
-end, {
-    nargs = "?",
-    complete = function(arg_lead, cmdline, cursor_pos)
-        local man = load("man")
-        if man then
-            return man.man_complete(arg_lead, cmdline, cursor_pos)
-        end
-    end,
-    desc = "Show man page of argument or word under cursor in floating window"
-}
-)
 
 local function pkgbootstrap()
     local pckr_path = fn.stdpath("data") .. "/site/pack/pckr/start/pckr.nvim"
@@ -773,6 +675,7 @@ require("pckr").add {
     "adigitoleo/vim-mellow",
     "adigitoleo/vim-mellow-statusline",
     "https://git.sr.ht/~adigitoleo/overview.nvim",
+    "https://git.sr.ht/~adigitoleo/haunt.nvim",
 
     -- Comprehensive LaTeX integration.
     { "lervag/vimtex", cond = function(load_plugin)
@@ -961,6 +864,7 @@ if overview then -- Overview.nvim bindings.
     bindkey("n", "gO", overview.toggle, { desc = "Toggle Overview sidebar for current buffer" })
     bindkey("n", "go", overview.focus, { desc = "Toggle focus between Overview sidebar and source buffer" })
 end
+haunt = load("haunt")
 
 -- Mellow theme setup.
 vim.g.mellow_show_bufnr = 0
