@@ -68,7 +68,7 @@ fi
 # Use ~/.go instead of ~/go for GOPATH if it exists.
 if [ -d "$HOME/.go" ]; then
     export GOPATH="$HOME/.go"
-    export PATH="$GOPATH:$PATH"
+    export PATH="$GOPATH/bin:$PATH"
 fi
 
 # A good website to ping for network checks if in AUS.
