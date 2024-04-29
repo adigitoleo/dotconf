@@ -739,7 +739,6 @@ if lsp then
             }
         }
     end
-
     -- https://github.com/LuaLS/lua-language-server
     if is_executable('lua-language-server') then
         lsp.lua_ls.setup {
@@ -762,7 +761,6 @@ if lsp then
             },
         }
     end
-
     -- https://github.com/latex-lsp/texlab
     if is_executable('texlab') then lsp.texlab.setup {} end
 end
