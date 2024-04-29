@@ -647,7 +647,7 @@ end
 
 pkgbootstrap()
 require("pckr").add {
-    "neovim/nvim-lsp",                     -- Community configs for :h lsp.
+    "neovim/nvim-lspconfig",               -- Community configs for :h lsp.
     "numToStr/Comment.nvim",               -- Quickly comment/uncomment code.
     "kylechui/nvim-surround",              -- Quoting/parenthesizing made simple.
     "nvim-lua/plenary.nvim",               -- Lua functions/plugin dev library.
@@ -660,11 +660,18 @@ require("pckr").add {
     "ggandor/leap.nvim",                   -- Alternative to '/' for quick search/motions.
     "farmergreg/vim-lastplace",            -- Open files at the last viewed location (VimL).
     "AndrewRadev/inline_edit.vim",         -- Edit embedded code in a temporary buffer with a different filetype
-
     -- Downloader and shims for tree-sitter grammars; see :h :TSInstall and :h :TSEnable.
     { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" },
+    -- Community configs for efm-langserver.
+    { "creativenull/efmls-configs-nvim", cond = function(load_plugin)
+        if is_executable('efm-langserver') then load_plugin() end
+    end,
+        requires = { "neovim/nvim-lspconfig" },
+    },
     -- Follow symlinks when opening files (Linux, VimL).
-    { "aymericbeaumet/vim-symlink",      requires = { "moll/vim-bbye" }, },
+    { "aymericbeaumet/vim-symlink",
+        requires = { "moll/vim-bbye" },
+    },
     "dhruvasagar/vim-open-url",   -- Open URL's in browser without :h netrw (VimL).
     "alvan/vim-closetag",         -- Auto-close (x|ht)ml tags (VimL).
     "vim-python/python-syntax",   -- Improved Python syntax highlighting (VimL).
@@ -731,14 +738,6 @@ if lsp then
     vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" })
     vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" })
     vim.diagnostic.config { float = { border = "single" } }
-    -- Requires pip install python-lsp-server (NOT python-language-server!).
-    if is_executable('pylsp') then
-        lsp.pylsp.setup {
-            settings = {
-                pylsp = { plugins = { pycodestyle = { maxLineLength = 88 } } }
-            }
-        }
-    end
     -- https://github.com/LuaLS/lua-language-server
     if is_executable('lua-language-server') then
         lsp.lua_ls.setup {
@@ -759,6 +758,33 @@ if lsp then
                     telemetry = { enable = false }, -- Do not send telemetry data!
                 },
             },
+        }
+    end
+    -- https://github.com/mattn/efm-langserver
+    if is_executable('efm-langserver') then
+        local efm_languages = {}
+        if is_executable('shellcheck') then
+            local shellcheck = load('efmls-configs.linters.shellcheck')
+            if shellcheck then efm_languages.sh = { shellcheck } end
+        end
+        lsp.efm.setup {
+            filetypes = vim.tbl_keys(efm_languages),
+            settings = {
+                rootMarkers = { '.git/' },
+                languages = efm_languages,
+            },
+            init_options = {
+                documentFormatting = true,
+                documentRangeFormatting = true,
+            }
+        }
+    end
+    -- Requires pip install python-lsp-server (NOT python-language-server!).
+    if is_executable('pylsp') then
+        lsp.pylsp.setup {
+            settings = {
+                pylsp = { plugins = { pycodestyle = { maxLineLength = 88 } } }
+            }
         }
     end
     -- https://github.com/latex-lsp/texlab
