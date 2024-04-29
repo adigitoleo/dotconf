@@ -109,7 +109,7 @@ alias jl,bw='julia --banner=no --color=no'
 alias jl,tmp='julia --banner=no --startup-file=no --history-file=no'
 
 # Carcinisation and the Skill Issue.
-alias r,update="cargo install $(cargo install --list | egrep '^[a-z0-9_-]+ v[0-9.]+:$' | cut -f1 -d' ')"
+alias r,update="cargo install \$(cargo install --list | egrep '^[a-z0-9_-]+ v[0-9.]+:$' | cut -f1 -d' ')"
 
 # Without music, life would be a mistake.
 alias a,mute='amixer set Master toggle'
