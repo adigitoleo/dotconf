@@ -500,7 +500,7 @@ vim.cmd [[augroup misc
     autocmd VimResized * wincmd =
     autocmd TabEnter * stopinsert
     autocmd ColorScheme mellow hi link NormalFloat Normal
-    autocmd ColorScheme mellow hi link FloatTitle FloatBorder
+    autocmd ColorScheme mellow hi link FloatTitle CursorLineNr
 augroup END]]
 
 -- Mappings. De gustibus: general fixes and tweaks.
