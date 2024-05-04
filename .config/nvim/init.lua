@@ -260,7 +260,7 @@ local function setl_ft_autocmd(filetypes, options)
         command = "setlocal " .. table.concat(cmdparts, " "),
     })
 end
-setl_ft_autocmd({ "bash", "sh" }, { foldmethod = "marker", textwidth = 100 })
+setl_ft_autocmd({ "bash", "sh", "zsh" }, { foldmethod = "marker", textwidth = 100 })
 setl_ft_autocmd({ "bib" }, { expandtab = false })
 setl_ft_autocmd({ "cpp" }, { tabstop = 2, textwidth = 100 })
 setl_ft_autocmd({ "css" }, { tabstop = 2 })
@@ -278,13 +278,11 @@ setl_ft_autocmd({ "plaintex" }, { filetype = "tex" })
 setl_ft_autocmd({ "pollen" }, { commentstring = "◊;\\ %s" })
 setl_ft_autocmd({ "python" }, { textwidth = 88, foldmethod = "syntax" })
 setl_ft_autocmd({ "qf" }, { number = true, relativenumber = false, cursorline = true, textwidth = 0 })
-setl_ft_autocmd({ "sh", "zsh" }, { textwidth = 79 })
 setl_ft_autocmd({ "tex" }, { textwidth = 0, wrap = true })
 setl_ft_autocmd({ "txr" }, { commentstring = "@;\\ %s" })
 setl_ft_autocmd({ "vim" }, { textwidth = 78, foldmethod = "marker", foldenable = true })
 setl_ft_autocmd({ "xml", "html" }, { tabstop = 2, foldmethod = "indent" })
 setl_ft_autocmd({ "yaml" }, { tabstop = 2 })
-setl_ft_autocmd({ "mail" }, { columns = 80 })
 
 -- Miscellaneous autocommands.
 vim.cmd [[augroup misc
