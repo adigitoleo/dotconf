@@ -92,6 +92,8 @@ alias ip,lan='ip route get 1|rg -o "src [^\s]*"|cut -d" " -f2'
 alias q,dark='QB_QT_DARKMODE=1 setsid -f qutebrowser -T -C ~/.config/qutebrowser/config.py'
 # Launch qutebrowser with backend-forced dark mode using tor proxy.
 alias q,tor='QB_QT_DARKMODE=1 QB_TOR_PORT=9050 setsid -f qutebrowser -T -C ~/.config/qutebrowser/config.py'
+# Launch qutebrowser with backend-forced dark mode and go to semanticscholar.
+alias q,scholar='QB_QT_DARKMODE=1 setsid -f qutebrowser -T -C ~/.config/qutebrowser/config.py semanticscholar.org/sign-in'
 
 # Ouroboros and the Virtual Environment.
 alias py=python
