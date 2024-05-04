@@ -5,16 +5,6 @@ local fn = vim.fn
 local command = api.nvim_create_user_command
 local bindkey = vim.keymap.set
 local system = vim.loop.os_uname().sysname
-if system == "Windows_NT" then
-    vim.o.shell = "pwsh"
-    _lsep = [[`n]]
-    _printf = "pwsh.exe -c echo" -- Extra pwsh.exe nesting ensures laziness?
-    _preview = false             -- Preview files in fuzzyfinders, unix only.
-else
-    _lsep = [[\n]]
-    _printf = "printf"
-    _preview = true
-end
 
 local function is_executable(cmd) if fn.executable(cmd) > 0 then return true else return false end end
 local function warn(msg) api.nvim_err_writeln("init.lua: " .. msg) end
@@ -55,96 +45,6 @@ function list_buf_names(all)
         table.insert(buffer_names, api.nvim_buf_get_name(buf))
     end
     return buffer_names
-end
-
--- Generate filtered list of file names from given sources, omitting current file name.
-function list_files(sources, mods, sep)
-    -- source: table of sources, each field is a sub-table of file names.
-    -- mods: string of filters to use, see :h filename-modifiers and :h fnamemodify().
-    -- sep: string, separator to insert between file names.
-
-    local ignore = { vim.env.VIMRUNTIME }            -- Ignore internal (neo)vim files.
-    table.insert(ignore, "/nvim/runtime/doc/")       -- Ignore neovim helpfiles.
-    for _, pattern in pairs(opt.wildignore:get()) do -- Respect 'wildignore'.
-        pattern, _ = string.gsub(pattern, "*", "")   -- Remove glob signs, not used here.
-        table.insert(ignore, pattern)
-    end
-    local thisfilename = fn.expand("%" .. mods) -- Ignore current file name if any.
-    if fn.strchars(thisfilename) > 0 then table.insert(ignore, thisfilename) end
-
-    local files = {} -- Deduplicated list of files from given sources.
-    for _, source in pairs(sources) do
-        for _, file in pairs(source) do
-            file = fn.fnamemodify(file, mods)
-            if fn.strchars(file) > 0 and fn.filereadable(file) > 0 then
-                local match = false
-                for _, pattern in pairs(ignore) do
-                    if file:match(pattern) then
-                        match = true
-                        break
-                    end
-                end
-                if not match and fn.count(files, file) == 0 then
-                    table.insert(files, file)
-                end
-            end
-        end
-    end
-    return table.concat(files, sep)
-end
-
--- Generate list of open terminals, omitting focused terminal.
-function list_terminals(sep)
-    -- sep: string, separator to insert between file names.
-    if system == "Windows_NT" then return "" end -- FIXME: Broken on Win11, needs more work.
-    local terminals = {}
-    -- Ignore current (focused) terminal buffer if any.
-    local thisfilename = fn.expand("%")
-    for _, name in pairs(list_buf_names(true)) do
-        if name:match("term://", 1, true) then
-            if name:match(thisfilename) then break end
-            table.insert(terminals, name)
-        end
-    end
-    return table.concat(terminals, sep)
-end
-
--- Generate list of (most?) builtin and user/plugin-defined commands.
-function list_commands(sep)
-    -- sep: string, separator to insert between file names.
-    local cmdlist = {}
-    for _, line in pairs(fn.readfile(fn.expand("$VIMRUNTIME/doc/index.txt", 1))) do
-        local match = line:match("^|:(%w+)|")
-        if match then table.insert(cmdlist, match) end
-    end
-
-    -- Get user/plugin defined commands from `:command`.
-    local com = fn.split(fn.execute("command"), [[\n]])
-    for i, line in pairs(com) do
-        repeat
-            if i == 1 then break end -- First element is 'Name' from :command header.
-            local match = line:match("^%W%W%W%W(%w+)%s")
-            if match then table.insert(cmdlist, match) end
-            break
-        until true
-    end
-    return table.concat(cmdlist, sep)
-end
-
-function list_filetypes() -- List all known filetypes.
-    local filetypes = {}
-    for _, ft in pairs(fn.split(fn.expand("$VIMRUNTIME/ftplugin/*.vim"))) do
-        table.insert(filetypes, fn.fnamemodify(ft, ":t:r"))
-    end
-    return filetypes
-end
-
-function list_syntax() -- List all known syntax files.
-    local syntax = {}
-    for _, sx in pairs(fn.split(fn.expand("$VIMRUNTIME/syntax/*.vim"))) do
-        table.insert(syntax, fn.fnamemodify(sx, ":t:r"))
-    end
-    return syntax
 end
 
 function neat_foldtext() -- Simplified, cleaner foldtext.
@@ -296,111 +196,6 @@ if system == "Linux" and vim.env.WAYLAND_DISPLAY ~= nil then
     end
 end
 
--- Integration with fzf, <https://github.com/junegunn/fzf/blob/master/README-VIM.md>.
-if is_executable("fzf") and fn.exists(":FZF") then
-    vim.g.fzf_layout = {
-        window =
-        { width = 0.9, height = 0.6, border = "sharp", highlight = "StatusLine" }
-    }
-    -- Generate spec for custom fuzzy finders.
-    local function FZFspecgen(source, dir, preview, prompt)
-        -- source: string, command to be executed as a source to FZF
-        -- dir: string, if #dir > 0 this sets the directory in which to start FZF
-        -- preview: bool, toggle file preview window (currently only works on Linux)
-        -- prompt: FZF prompt message
-        local options = { '--multi' }
-        if preview then
-            options = vim.list_extend(options, {
-                '--preview',
-                'case $(file {}) in *"text"*) head -200 {} ;; *) echo "Preview unavailable" ;; esac',
-                '--preview-window',
-                vim.o.columns > 120 and 'right:60%:sharp' or 'down:60%:sharp'
-            })
-        end
-        table.insert(options, '--prompt')
-        if prompt ~= nil then table.insert(options, prompt) else table.insert(options, dir .. ' ') end
-        return {
-            source = source,
-            sink = 'e',
-            dir = fn.substitute(fn.fnamemodify(dir, ':~'), '/*$', '/', ''),
-            options = options
-        }
-    end
-
-    local function _fuzzy_recent()
-        local source = table.concat({
-            _printf, ' "', list_files({ vim.v.oldfiles, list_buf_names(false) }, ":~:.", _lsep), '"'
-        })
-        fn["fzf#run"](fn["fzf#wrap"](FZFspecgen(source, "", _preview, "Recent files: ")))
-    end
-    command("FuzzyRecent", _fuzzy_recent, { desc = "Open recent files (v:oldfiles) or listed buffers" })
-
-    if is_executable("rg") then
-        local function _fuzzy_find(opts)
-            fn["fzf#run"](fn["fzf#wrap"](FZFspecgen('rg --files --hidden --no-messages', opts.args, _preview)))
-        end
-        command("FuzzyFind", _fuzzy_find,
-            { nargs = "?", complete = "file", desc = "Open files from <dir> (or :pwd by default)" })
-    else
-        warn("ripgrep executable ('rg') not found, ripgrep features disabled")
-    end
-
-    local function _fuzzy_switch()
-        local files = list_files({ list_buf_names(false) }, ":~:.", _lsep)
-        local terms = list_terminals(_lsep)
-        local source = nil
-        if #files > 0 and #terms > 0 then
-            source = table.concat({ _printf, ' "', files .. _lsep .. terms, '"' })
-        elseif #files > 0 then
-            source = table.concat({ _printf, ' "', files, '"' })
-        elseif #terms > 0 then
-            source = table.concat({ _printf, ' "', terms, '"' })
-        end
-        if source ~= nil then
-            fn["fzf#run"](fn["fzf#wrap"](FZFspecgen(source, "", _preview, "Open buffers: ")))
-        else
-            warn("no buffers available")
-        end
-    end
-    command("FuzzySwitch", _fuzzy_switch, { desc = "Switch between listed buffers or loaded `:terminal`s" })
-
-    local function _fuzzy_cmd()
-        local spec = {
-            source = _printf .. ' "' .. list_commands(_lsep) .. '"',
-            window = { width = 1, height = 0.4, xoffset = 0, yoffset = 1, border = 'top', highlight = 'StatusLine' },
-            options = {
-                '--no-multi',
-                '--print-query',
-                '--prompt', ':',
-                '--color', 'prompt:-1',
-                '--expect', ';,space,|,!', -- NOTE: --expect='!' broken on Win11, fzf 0.46.1
-                '--layout', 'reverse-list'
-            }
-        }
-        spec["sink*"] = function(fzf_out)
-            if #fzf_out < 2 then return end
-            local query = fzf_out[1]
-            local key = fzf_out[2]
-            local completion = fzf_out[3] ~= nil and fzf_out[3] or ''
-
-            if #key == 0 then -- <Cr> pressed => execute completion
-                -- NOTE: vim.cmd(completion) doesn't trigger TermOpen and swallows paged output from e.g. ':ls'.
-                api.nvim_input(':' .. completion .. '<Cr>')
-            elseif key == ';' then     -- ';' pressed => cancel completion
-                api.nvim_input(':' .. query)
-            elseif key == 'space' then -- '<space>' pressed => append space to completion
-                api.nvim_input(':' .. completion .. ' ')
-            else                       -- '!' or '|' pressed => append to completion, append trailing space
-                api.nvim_input(':' .. completion .. key .. ' ')
-            end
-        end
-        fn["fzf#run"](spec)
-    end
-    command("FuzzyCmd", _fuzzy_cmd, { desc = "Search for cmdline mode commands" })
-else
-    warn("fuzzy finder ('fzf') not found, disabling fzf features")
-end
-
 if is_executable("theme") then -- Use `theme` executable to manage global dark/light TUI theme.
     command("SyncTheme", [[silent! let &background = get(systemlist('theme -q'), 0, 'light')]],
         { desc = "Sync to global TUI theme using `!theme`" })
@@ -507,7 +302,6 @@ augroup END]]
 -- Ergonomic, smart mode switches, with variants for us/intl-altgr keyboard.
 bindkey("i", [[¶]], [[<Esc>]])
 bindkey("i", [[<M-;>]], [[<Esc>]])
-bindkey("n", [[;]], [[<Cmd>FuzzyCmd<Cr>]])
 bindkey("x", [[;]], [[:]])
 bindkey("x", [[¶]], [[<Esc>]])
 bindkey("x", [[<M-;>]], [[<Esc>]])
@@ -577,9 +371,7 @@ bindkey("", "[l", [[^]])
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
-bindkey("n", [[<Leader>b]], [[<Cmd>FuzzySwitch<Cr>]], { desc = "Launch buffer switcher" })
 bindkey("n", [[<Leader>c]], [[<Cmd>set cursorcolumn!<Cr>]], { desc = "Toggle cursorcolumn" })
-bindkey("n", [[<Leader>f]], [[<Cmd>FuzzyFind<Cr>]], { desc = "Launch file browser" })
 bindkey("n", [[<Leader>h]], [[<Cmd>setlocal foldenable!<Cr>]], { desc = "Toggle folding (buffer-local)" })
 bindkey("n", [[<Leader>l]], [[<Cmd>set cursorline!<Cr>]], { desc = "Toggle cursorline" })
 bindkey("n", [[<Leader>m]], [[<Cmd>make!<Cr>]], { desc = "Run make! (doesn't jump to errorfile)" })
@@ -588,7 +380,6 @@ bindkey("n", [[<Leader>n]], [[<Cmd>set number! relativenumber!<Cr>]], { silent =
 -- Paste last yanked text ignoring cut text.
 bindkey("", [[<Leader>p]], [["0p]])
 bindkey("", [[<Leader>P]], [["0P]])
-bindkey("n", [[<Leader>r]], [[<Cmd>FuzzyRecent<Cr>]], { desc = "Launch recent file browser" })
 -- Toggle spell checking in current buffer.
 bindkey("n", [[<Leader>s]], [[<Cmd>setlocal spell!<Cr>]], { silent = true })
 -- Sync theme to system, using `theme -q` (Linux only).
@@ -683,6 +474,7 @@ require("pckr").add {
     "adigitoleo/vim-mellow-statusline",
     "https://git.sr.ht/~adigitoleo/overview.nvim",
     "https://git.sr.ht/~adigitoleo/haunt.nvim",
+    "https://git.sr.ht/~adigitoleo/quark.nvim",
 
     -- Comprehensive LaTeX integration.
     { "lervag/vimtex", cond = function(load_plugin)
@@ -889,6 +681,17 @@ if overview then -- Overview.nvim bindings.
     bindkey("n", "go", overview.focus, { desc = "Toggle focus between Overview sidebar and source buffer" })
 end
 haunt = load("haunt")
+quark = load("quark")
+if quark then
+    quark.setup {
+        -- Requires ripgrep: <https://github.com/BurntSushi/ripgrep>
+        fzf = { default_command = "rg --files --hidden --no-messages" }
+    }
+    bindkey("n", ";", quark.fuzzy_cmd, { desc = "Search for (and execute) ex-commands" })
+    bindkey("n", [[<Leader>b]], [[<Cmd>QuarkSwitch<Cr>]], { desc = "Launch buffer switcher" })
+    bindkey("n", [[<Leader>f]], [[<Cmd>QuarkFind<Cr>]], { desc = "Launch file browser" })
+    bindkey("n", [[<Leader>r]], [[<Cmd>QuarkRecent<Cr>]], { desc = "Launch recent file browser" })
+end
 
 -- Mellow theme setup.
 vim.g.mellow_show_bufnr = 0
