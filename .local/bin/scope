@@ -1,5 +1,4 @@
 #!/bin/sh
-#set -euo pipefail
 set -u
 readonly SCRIPTNAME="${0##*/}"
 usage() {
@@ -26,7 +25,10 @@ is_command() { # Check if command exists, for flow control (no stdout messages)
 }
 
 while getopts "h" OPT ; do
-    usage && helpf && exit 0
+    case "$OPT" in
+        h ) usage && helpf && exit 0 ;;
+        * ) usage ;;
+    esac
 done
 
 is_command git || exit 1
@@ -34,7 +36,7 @@ is_command diff || exit 1
 is_command cscope || exit 1
 
 # Make sure we are in a git repo.
-git -C $PWD rev-parse
+git -C "$PWD" rev-parse
 
 # Make sure there is a cscope listing.
 [ -r "cscope.files" ] || { warn "unable to read cscope.files listing" && exit 1; }
