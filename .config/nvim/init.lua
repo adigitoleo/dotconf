@@ -699,7 +699,7 @@ if vim.env.COLORTERM == "truecolor" or system ~= "Linux" then
         vim.o.background = fn.get(fn.systemlist('theme -q'), 0)
     else
         local hour24 = nil
-        if system ~= "Linux" and vim.o.shell == "pwsh" then
+        if system ~= "Linux" and string.match(vim.o.shell, "pwsh") ~= nil then
             hour24 = tonumber(fn.system('Get-Date -Format HH'))
             if hour24 == nil then
                 hour24 = 0
