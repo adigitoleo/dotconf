@@ -37,7 +37,7 @@
 	b = branch -lvv
 	last = log -1 HEAD
 	unstage = reset HEAD --
-	url = config --get remote.origin.url
+	url = remote get-url origin
 	add-mirror = "!f(){ git remote set-url --add --push origin $(git remote get-url --push origin) && git remote set-url --add --push origin \"$1\"; };f"
 	delete-mirror = remote set-url --delete --push origin
 	nuke = !git-nuke
