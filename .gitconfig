@@ -38,7 +38,8 @@
 	last = log -1 HEAD
 	unstage = reset HEAD --
 	url = config --get remote.origin.url
-	add-mirror = remote set-url --add --push origin
+	add-mirror = "!f(){ git remote set-url --add --push origin $(git remote get-url --push origin) && git remote set-url --add --push origin \"$1\"; };f"
+	delete-mirror = remote set-url --delete --push origin
 	nuke = !git-nuke
 	inspect = show --format=full
 	develop = !git-develop
