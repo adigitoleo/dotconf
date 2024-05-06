@@ -373,6 +373,7 @@ bindkey("n", [[<Leader>c]], [[<Cmd>set cursorcolumn!<Cr>]], { desc = "Toggle cur
 bindkey("n", [[<Leader>h]], [[<Cmd>setlocal foldenable!<Cr>]], { desc = "Toggle folding (buffer-local)" })
 bindkey("n", [[<Leader>l]], [[<Cmd>set cursorline!<Cr>]], { desc = "Toggle cursorline" })
 bindkey("n", [[<Leader>m]], [[<Cmd>make!<Cr>]], { desc = "Run make! (doesn't jump to errorfile)" })
+bindkey("n", [[<Leader>i]], [[<Cmd>TSToggle highlight<Cr>]], { desc = "Toggle tree-sitter syntax highlighting" })
 -- Toggle line numbers for focused buffer.
 bindkey("n", [[<Leader>n]], [[<Cmd>set number! relativenumber!<Cr>]], { silent = true })
 -- Paste last yanked text ignoring cut text.
@@ -450,7 +451,9 @@ require("pckr").add {
     "farmergreg/vim-lastplace",            -- Open files at the last viewed location (VimL).
     "AndrewRadev/inline_edit.vim",         -- Edit embedded code in a temporary buffer with a different filetype
     -- Downloader and shims for tree-sitter grammars; see :h :TSInstall and :h :TSEnable.
-    { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" },
+    { "nvim-treesitter/nvim-treesitter", cond = function(load_plugin)
+        if is_executable('tree-sitter') then load_plugin() end
+    end, run = ":TSUpdate" },
     -- Community configs for efm-langserver.
     { "creativenull/efmls-configs-nvim", cond = function(load_plugin)
         if is_executable('efm-langserver') then load_plugin() end
