@@ -4,18 +4,18 @@ readonly SCRIPTNAME="${0##*/}"
 helpf() {
     printf 'Usage: %s [-h|-l]| alias\n' "$SCRIPTNAME"
     echo
-    echo 'Use wl-clipboard(1) to copy the login associated with the given alias.'
-    echo 'Aliases are defined in ~/.password-store/login_aliases.txt.'
+    echo 'Use wl-clipboard(1) to copy the value associated with the given alias.'
+    echo 'Aliases are defined in ~/.password-store/lists_and_aliases.txt.'
     echo 'Use -l to print the contenst of that file to stdout.'
 }
 
 [ $# -gt 0 ] || { helpf; exit 1 ;}
-case "$1" in "-h"|"--help") helpf; exit;; "-l"|"--list") cat ~/.password-store/login_aliases.txt; exit;; esac
-if grep -q "^$1:" ~/.password-store/login_aliases.txt; then
-    grep "^$1:" ~/.password-store/login_aliases.txt|cut -d: -f2-|wl-copy -pn
-    grep "^$1:" ~/.password-store/login_aliases.txt|cut -d: -f2-|xargs \
+case "$1" in "-h"|"--help") helpf; exit;; "-l"|"--list") cat ~/.password-store/lists_and_aliases.txt; exit;; esac
+if grep -q "^$1:" ~/.password-store/lists_and_aliases.txt; then
+    grep "^$1:" ~/.password-store/lists_and_aliases.txt|cut -d: -f2-|wl-copy -pn
+    grep "^$1:" ~/.password-store/lists_and_aliases.txt|cut -d: -f2-|xargs \
         printf "%s: copied '%s' to clipboard\n" "$SCRIPTNAME"
 else
-    >&2 printf "%s: no login alias for '%s' in ~/.password-store/login_aliases.txt\n" "$SCRIPTNAME" "$1"
+    >&2 printf "%s: no login alias for '%s' in ~/.password-store/lists_and_aliases.txt\n" "$SCRIPTNAME" "$1"
     exit 1
 fi
