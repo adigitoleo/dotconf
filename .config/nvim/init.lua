@@ -294,6 +294,7 @@ vim.cmd [[augroup misc
     autocmd TabEnter * stopinsert
     autocmd ColorScheme mellow hi link NormalFloat Normal
     autocmd ColorScheme mellow hi link FloatTitle CursorLineNr
+    autocmd ColorScheme mellow hi link @string.documentation.python Comment
 augroup END]]
 
 -- Mappings. De gustibus: general fixes and tweaks.
@@ -373,7 +374,8 @@ bindkey("n", [[<Leader>c]], [[<Cmd>set cursorcolumn!<Cr>]], { desc = "Toggle cur
 bindkey("n", [[<Leader>h]], [[<Cmd>setlocal foldenable!<Cr>]], { desc = "Toggle folding (buffer-local)" })
 bindkey("n", [[<Leader>l]], [[<Cmd>set cursorline!<Cr>]], { desc = "Toggle cursorline" })
 bindkey("n", [[<Leader>m]], [[<Cmd>make!<Cr>]], { desc = "Run make! (doesn't jump to errorfile)" })
-bindkey("n", [[<Leader>i]], [[<Cmd>TSToggle highlight<Cr>]], { desc = "Toggle tree-sitter syntax highlighting" })
+bindkey("n", [[<Leader>i]], [[<Cmd>TSToggle highlight|doautocmd ColorScheme<Cr>]],
+    { desc = "Toggle tree-sitter syntax highlighting" })
 -- Toggle line numbers for focused buffer.
 bindkey("n", [[<Leader>n]], [[<Cmd>set number! relativenumber!<Cr>]], { silent = true })
 -- Paste last yanked text ignoring cut text.
