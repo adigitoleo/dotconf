@@ -11,6 +11,7 @@
 	smtpServer = posteo.de
 	smtpServerPort = 465
 	smtpEncryption = ssl
+	annotate = yes
 [url "git@github.com:"]
 	pushInsteadOf = "https://github.com/"
 [url "git@git.sr.ht:"]
