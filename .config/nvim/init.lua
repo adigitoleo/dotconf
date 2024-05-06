@@ -704,12 +704,10 @@ if vim.env.COLORTERM == "truecolor" or system ~= "Linux" then
         local hour24 = nil
         if system ~= "Linux" and string.match(vim.o.shell, "pwsh") ~= nil then
             hour24 = tonumber(fn.system('Get-Date -Format HH'))
-            if hour24 == nil then
-                hour24 = 0
-            end
         else
             hour24 = tonumber(fn.system('date +%H'))
         end
+        if hour24 == nil then hour24 = 0 end
         if hour24 > 20 or hour24 < 9 then
             opt.background = "dark"
         else
