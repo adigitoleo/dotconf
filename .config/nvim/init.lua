@@ -14,6 +14,7 @@ local freqlangs = {
     "c", "cpp", "python", "nim", "sh", "conf", "css", "go", "json", "lua",
     "rust", "strace", "toml", "yaml", "openscad", "tex", "hare", "html",
 } -- Unicode input will additionally be enabled in the "markdown" filetype.
+if system == "Windows_NT" and is_executable("pwsh.exe") then opt.shell = "pwsh.exe" end
 
 -- Turn off optional Python, Ruby, Perl and NodeJS support for faster startup.
 vim.g.loaded_python3_provider = 0
@@ -393,11 +394,11 @@ bindkey("n", [[<Leader>y]], function() copy_file() end,
 -- Toggle soft-wrapping of long lines to the view width.
 bindkey("n", [[<Leader>z]], function()
     if vim.o.textwidth > 0 and vim.o.wrap == false then
-        vim.o.textwidth = 0
-        vim.o.wrap = true
+        opt.textwidth = 0
+        opt.wrap = true
     elseif vim.o.textwidth == 0 and vim.o.wrap == true then
-        vim.o.wrap = false
-        vim.o.filetype = vim.o.filetype -- This should reset &textwidth.
+        opt.wrap = false
+        opt.filetype = vim.o.filetype -- This should reset &textwidth.
     end
 end, { silent = true, desc = "Toggle use of 'textwidth' for hard-wrapping versus soft-wrapping with 'wrap'" })
 -- Attempt to autoformat focused paragraph/selection.
@@ -434,7 +435,7 @@ local function pkgbootstrap()
     if not vim.loop.fs_stat(pckr_path) then
         fn.system({ "git", "clone", "--depth", "1", "https://github.com/lewis6991/pckr.nvim", pckr_path })
     end
-    vim.opt.rtp:prepend(pckr_path)
+    opt.rtp:prepend(pckr_path)
 end
 
 pkgbootstrap()
@@ -701,7 +702,7 @@ vim.g.mellow_show_bufnr = 0
 if vim.env.COLORTERM == "truecolor" or system ~= "Linux" then
     opt.termguicolors = true
     if is_executable('theme') then -- Inherit 'background' (dark/light mode) from terminal emulator.
-        vim.o.background = fn.get(fn.systemlist('theme -q'), 0)
+        opt.background = fn.get(fn.systemlist('theme -q'), 0)
     else
         local hour24 = nil
         if system ~= "Linux" and string.match(vim.o.shell, "pwsh") ~= nil then
