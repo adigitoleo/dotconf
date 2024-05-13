@@ -40,8 +40,8 @@ function prompt {
 
 # Create symbolic link, requires sudo e.g. gsudo from winget.
 function symlink ($target, $link) {
-    New-Item -Path $link -ItemType SymbolicLink -Value $target
+    sudo New-Item -Path $link -ItemType SymbolicLink -Value $target
 }
 
 # Install neovim with winget.
-Set-Alias -Name v -Value nvim 
+Set-Alias -Name v -Value nvim
