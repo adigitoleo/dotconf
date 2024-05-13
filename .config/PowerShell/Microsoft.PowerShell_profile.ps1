@@ -38,5 +38,10 @@ function prompt {
         $(if ($NestedPromptLevel -ge 1) { '>>' }) + '>' + "$color[0m "
 }
 
+# Create symbolic link, requires sudo e.g. gsudo from winget.
+function symlink ($target, $link) {
+    New-Item -Path $link -ItemType SymbolicLink -Value $target
+}
+
 # Install neovim with winget.
 Set-Alias -Name v -Value nvim 
