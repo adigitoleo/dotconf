@@ -1,4 +1,4 @@
 #compdef lal
 typeset -a aliases
-cut -d: -f1 ~/.password-store/login_aliases.txt|IFS=$'\n' read -r -d '' aliases
+cut -d: -f1 ~/.password-store/lists_and_aliases.txt|IFS=$'\n' read -r -d '' aliases
 _arguments + '(single)' {-l,--list}'[list aliases]' {-h,--help}'[help]' '*:aliases:(${(f)aliases})'
