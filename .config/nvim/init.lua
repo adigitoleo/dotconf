@@ -499,7 +499,7 @@ require("pckr").add {
         end
     end },
     -- Provides the basic fzf.vim file.
-    { "junegunn/fzf", cond = function(load_plugin)
+    { "junegunn/fzf", run = ":call fzf#install()", cond = function(load_plugin)
         if system == "Windows_NT" or is_executable("apt") then load_plugin() end
     end },
 }
