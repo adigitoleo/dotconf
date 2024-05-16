@@ -44,6 +44,17 @@ rgbneg() { convert -channel RGB -negate "${1:--}" "${1:--}" }
 share() { curl -F "file=@$1;filename=.txt" https://x0.at/ }
 # Share raw file (don't assume it is text) to https://x0.at/ pastebin (requires curl).
 share,raw() { curl -F "file=@$1" https://x0.at/ }
+# Python REPL with appropriate settings.
+pyi() {
+    theme=$(theme -q)
+    if 2>/dev/null 1>&2 command -v ptpython; then
+        ptpython --"${theme}"-bg
+    elif [[ "$theme" == "light" ]]; then
+        ipython --colors=lightbg
+    else
+        ipython
+    fi
+}
 
 #
 # Asynchronous git status indicator.
