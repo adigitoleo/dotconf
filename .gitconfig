@@ -6,6 +6,7 @@
 [user]
 	name = adigitoleo
 	email = adigitoleo@posteo.net
+	signingkey = CEFC9DF9B532AD5E
 [sendemail]
 	smtpUser = adigitoleo@posteo.net
 	smtpServer = posteo.de
@@ -55,3 +56,6 @@
 	prune = true
 [commit]
 	template = ~/.git-commit-template.txt
+	gpgsign = true
+[tag]
+	gpgSign = true
