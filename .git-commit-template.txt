@@ -1,4 +1,5 @@
 
+# Message format:
 # <type>: <single line subject> (use imperative verbs, start with capital letter,
 #                                omit trailing period)
 # <multiline body>
@@ -17,5 +18,7 @@
 #   dev         (CI configuration or devtool script change)
 #   release     (release commit, should always be tagged)
 
-# Enable this template using:
-#   git config --global commit.template <path to template file>
+# Enable this template:
+#   git config commit.template <path to template file>
+
+# vim:ft=gitcommit
