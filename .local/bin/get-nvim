@@ -32,7 +32,7 @@ version="$1"
 [ -f "nvim-linux64.tar.gz.sha256sum" ] || \
     curl --fail --remote-name --location --continue-at - "https://github.com/neovim/neovim/releases/download/v${version}/nvim-linux64.tar.gz.sha256sum"
 [ -f "nvim-linux64.tar.gz" ] || \
-    curl --fail --remote-name --location --continue-at - "https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz"
+    curl --fail --remote-name --location --continue-at - "https://github.com/neovim/neovim/releases/download/v${version}/nvim-linux64.tar.gz"
 sha256sum --check --ignore-missing "nvim-linux64.tar.gz.sha256sum"
 
 if [ -n "$DIR" ]; then
