@@ -267,8 +267,7 @@ vim.cmd [[augroup misc
     autocmd InsertLeave,CompleteDone * silent! pclose
     autocmd VimResized * wincmd =
     autocmd TabEnter * stopinsert
-    autocmd ColorScheme mellow hi link NormalFloat Normal
-    autocmd ColorScheme mellow hi link FloatTitle CursorLineNr
+    autocmd ColorScheme mellow hi! link NormalFloat Normal
     autocmd ColorScheme mellow hi link @string.documentation.python Comment
 augroup END]]
 
