@@ -22,32 +22,6 @@ vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_node_provider = 0
 
--- Get list of open ("listed", or "loaded" if all is true) buffer IDs.
-function list_bufs(all)
-    local bufs = {}
-    for i, buf in ipairs(api.nvim_list_bufs()) do
-        if api.nvim_buf_is_loaded(buf) then
-            if all then
-                bufs[i] = buf
-            else
-                if vim.bo[buf].buflisted then
-                    table.insert(bufs, buf)
-                end
-            end
-        end
-    end
-    return bufs
-end
-
--- Get list of open ("listed", or "loaded" if all is true) buffer names.
-function list_buf_names(all)
-    local buffer_names = {}
-    for _, buf in pairs(list_bufs(all)) do
-        table.insert(buffer_names, api.nvim_buf_get_name(buf))
-    end
-    return buffer_names
-end
-
 function neat_foldtext() -- Simplified, cleaner foldtext.
     local patterns = {
         "%s?{{{%d?",     -- Remove default fold markers, see :h foldmarker.
@@ -223,7 +197,7 @@ command("CountWord", [[<line1>,<line2>s/\<<args>\>//gn]],
     { nargs = 1, range = "%", desc = "Count occurances of a word without moving cursor (supports `n`/`N`)" })
 command("Grep", [[exec 'silent grep! <q-args>' | copen]],
     { nargs = "+", desc = "Like :grep but open quickfix list for match selection" })
-command("BufGrep", [[exec 'silent grep! <q-args> ' .. join(v:lua.list_buf_names(v:false), ' ') | copen]],
+command("BufGrep", [[exec 'silent grep! <q-args> ' .. join(v:lua.require("quark").list_buf_names(v:false), ' ') | copen]],
     { nargs = "+", desc = "Like grep but search only in open buffers" })
 command("Rename", rename_file, { desc = "Rename current buffer and associated file" })
 command("CDHere", function() vim.cmd("tcd " .. fn.expand("%:p:h")) end,
