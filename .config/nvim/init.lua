@@ -4,7 +4,7 @@ local opt = vim.opt
 local fn = vim.fn
 local command = api.nvim_create_user_command
 local bindkey = vim.keymap.set
-local system = vim.uv.os_uname().sysname
+local system = (vim.uv or vim.loop).os_uname().sysname
 
 local function is_executable(cmd) if fn.executable(cmd) > 0 then return true else return false end end
 local function warn(msg) api.nvim_err_writeln("init.lua: " .. msg) end
@@ -405,7 +405,7 @@ command("TabTerminal", function(opts) vim.cmd("tabnew|terminal " .. opts.args) e
 
 local function pkgbootstrap()
     local pckr_path = fn.stdpath("data") .. "/site/pack/pckr/start/pckr.nvim"
-    if not vim.uv.fs_stat(pckr_path) then
+    if not (vim.uv or vim.loop).fs_stat(pckr_path) then
         fn.system({ "git", "clone", "--depth", "1", "https://github.com/lewis6991/pckr.nvim", pckr_path })
     end
     opt.rtp:prepend(pckr_path)
