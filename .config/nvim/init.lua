@@ -1,4 +1,4 @@
--- *** NeoVim 0.8+ configuration file ***
+-- *** NeoVim 0.9+ configuration file ***
 local api = vim.api
 local opt = vim.opt
 local fn = vim.fn
@@ -185,23 +185,25 @@ command("ToggleTheme", function()
     { desc = "Toggle global TUI theme using `!theme`, if available; also toggle neovim &background setting" })
 
 -- User commands.
-command("TitleCase", convert_case, { range = true, desc = "Change line/range to title case" })
-command("SentenceCase", convert_case, { range = true, desc = "Change line/range to sentence case" })
-command("StripTrails", [[silent! keeppatterns %s/\s\+$//e]], { desc = "Strip trailing whitespace" })
-command("InsertDate", [[silent! exec 'normal! a' .. strftime('%Y-%m-%d') .. '<Esc>']],
-    { desc = "Insert current date (ISO YYYY-MM-DD format)" })
-command("SmartSplit", smart_split,
-    { nargs = "?", bar = true, complete = "buffer", desc = "Smart buffer split based on terminal width" })
-command("Vresize", [[exec 'vert resize' .. <q-args>]], { nargs = 1, desc = "Resize window vertically" })
+command("BufGrep", [[exec 'silent grep! <q-args> ' .. join(v:lua.require("quark").list_buf_names(v:false), ' ') | copen]],
+    { nargs = "+", desc = "Like grep but search only in open buffers" })
+command("CDHere", function() vim.cmd("tcd " .. fn.expand("%:p:h")) end,
+    { desc = "Change directory to the parent directory of the current buffer" })
 command("CountWord", [[<line1>,<line2>s/\<<args>\>//gn]],
     { nargs = 1, range = "%", desc = "Count occurances of a word without moving cursor (supports `n`/`N`)" })
 command("Grep", [[exec 'silent grep! <q-args>' | copen]],
     { nargs = "+", desc = "Like :grep but open quickfix list for match selection" })
-command("BufGrep", [[exec 'silent grep! <q-args> ' .. join(v:lua.require("quark").list_buf_names(v:false), ' ') | copen]],
-    { nargs = "+", desc = "Like grep but search only in open buffers" })
+command("InsertDate", [[silent! exec 'normal! a' .. strftime('%Y-%m-%d') .. '<Esc>']],
+    { desc = "Insert current date (ISO YYYY-MM-DD format)" })
 command("Rename", rename_file, { desc = "Rename current buffer and associated file" })
-command("CDHere", function() vim.cmd("tcd " .. fn.expand("%:p:h")) end,
-    { desc = "Change directory to the parent directory of the current buffer" })
+command("SentenceCase", convert_case, { range = true, desc = "Change line/range to sentence case" })
+command("SmartSplit", smart_split,
+    { nargs = "?", bar = true, complete = "buffer", desc = "Smart buffer split based on terminal width" })
+command("StripTrails", [[silent! keeppatterns %s/\s\+$//e]], { desc = "Strip trailing whitespace" })
+command("TabTerminal", function(opts) vim.cmd("tabnew|terminal " .. opts.args) end,
+    { nargs = "?", complete = "shellcmd", desc = "Open new tab with a terminal (optionally running the given command)" })
+command("TitleCase", convert_case, { range = true, desc = "Change line/range to title case" })
+command("Vresize", [[exec 'vert resize' .. <q-args>]], { nargs = 1, desc = "Resize window vertically" })
 
 -- Autocommands for terminal buffers and basic filetype settings.
 vim.cmd [[augroup terminal_buffer_rules
@@ -284,7 +286,7 @@ bindkey("t", [[°]], [[<C-\><C-n>]])
 bindkey("t", [[<M-S-;>]], [[<C-\><C-n>]])
 bindkey("n", [[q;]], [[q:]])
 bindkey("n", [[Q]], [[<Nop>]])
--- Some shell-style improvements to command mode mappings.
+-- Some shell-like improvements to command mode mappings.
 bindkey("c", [[<C-p>]], [[<Up>]])
 bindkey("c", [[<C-n>]], [[<Up>]])
 bindkey("c", [[<C-a>]], [[<C-b>]])      -- Shadow default c_CTRL-A.
@@ -300,7 +302,7 @@ bindkey("n", [[<MiddleMouse>]], [[<Nop>]])
 bindkey("n", [[<2-MiddleMouse>]], [[<Nop>]])
 bindkey("n", [[<3-MiddleMouse>]], [[<Nop>]])
 bindkey("n", [[<4-MiddleMouse>]], [[<Nop>]])
--- HorizontalScrollMode allows continuous scrolling with the indicated char.
+-- HorizontalScrollMode allows continuous scrolling with the h|H/l|L keys.
 bindkey("n", [[zh]], function() horizontal_scroll_mode('h') end, { silent = true })
 bindkey("n", [[zl]], function() horizontal_scroll_mode('l') end, { silent = true })
 bindkey("n", [[zH]], function() horizontal_scroll_mode('H') end, { silent = true })
@@ -332,6 +334,7 @@ bindkey("n", [[zk]], [[zkzb]])
 bindkey("n", [[H]], [[<C-o>]])
 bindkey("n", [[L]], [[<C-i>]])
 -- Coarse scrolling, also inspired by web browsers.
+-- Because Shift-Space isn't available we use ] and [ prefices to indicate direction.
 bindkey("n", [[[<Space>]], [[<C-u>]])
 bindkey("n", [[]<Space>]], [[<C-d>]])
 -- Better mapping for :tjump, clobbers :tselect.
@@ -348,7 +351,7 @@ bindkey("n", [[<Leader>c]], [[<Cmd>set cursorcolumn!<Cr>]], { desc = "Toggle cur
 bindkey("n", [[<Leader>h]], [[<Cmd>setlocal foldenable!<Cr>]], { desc = "Toggle folding (buffer-local)" })
 bindkey("n", [[<Leader>l]], [[<Cmd>set cursorline!<Cr>]], { desc = "Toggle cursorline" })
 bindkey("n", [[<Leader>m]], [[<Cmd>make!<Cr>]], { desc = "Run make! (doesn't jump to errorfile)" })
-bindkey("n", [[<Leader>i]], [[<Cmd>TSToggle highlight|doautocmd ColorScheme<Cr>]],
+bindkey("n", [[<Leader>i]], [[<Cmd>TSToggle highlight|colorscheme mellow<Cr>]],
     { desc = "Toggle tree-sitter syntax highlighting" })
 -- Toggle line numbers for focused buffer.
 bindkey("n", [[<Leader>n]], [[<Cmd>set number! relativenumber!<Cr>]], { silent = true })
@@ -378,7 +381,7 @@ end, { silent = true, desc = "Toggle use of 'textwidth' for hard-wrapping versus
 bindkey("n", [[<Leader>\]], [[gwip]], { silent = true })
 bindkey("x", [[<Leader>\]], [[gw]], { silent = true })
 -- Convenient cmdline mode prefixes.
-bindkey("n", [[<Leader>/]], [[:%s/<C-r><C-w>/]])
+bindkey("n", [[<Leader>/]], [[:%s/<C-r><C-w>/]]) -- Replace all occurances of <cword>.
 bindkey("x", [[<Leader>/]], [[:s/]])
 bindkey("n", [[<Leader>;]], [[:!]])
 
@@ -400,8 +403,9 @@ local function load(plugin) -- Load either local or third-party plugin.
     end
 end
 
-command("TabTerminal", function(opts) vim.cmd("tabnew|terminal " .. opts.args) end,
-    { nargs = "?", complete = "shellcmd", desc = "Open new tab with a terminal (optionally running the given command)" })
+local function gen_cond(bin) -- Callback to load plugin if binary is present.
+    local cond = function(load_plugin) if is_executable(bin) then load_plugin() end end
+end
 
 local function pkgbootstrap()
     local pckr_path = fn.stdpath("data") .. "/site/pack/pckr/start/pckr.nvim"
@@ -411,79 +415,14 @@ local function pkgbootstrap()
     opt.rtp:prepend(pckr_path)
 end
 
-pkgbootstrap()
-require("pckr").add {
-    "neovim/nvim-lspconfig",               -- Community configs for :h lsp.
-    "numToStr/Comment.nvim",               -- Quickly comment/uncomment code.
-    "kylechui/nvim-surround",              -- Quoting/parenthesizing made simple.
-    "nvim-lua/plenary.nvim",               -- Lua functions/plugin dev library.
-    "whiteinge/diffconflicts",             -- 2-way vimdiff for merge conflicts (VimL).
-    "echasnovski/mini.map",                -- A code minimap, like what cool Atom kids have.
-    "lukas-reineke/indent-blankline.nvim", -- Visual indentation guides.
-    "folke/todo-comments.nvim",            -- Track TODO/FIXME comments.
-    "lewis6991/gitsigns.nvim",             -- Git status in sign column and statusbar.
-    "SidOfc/carbon.nvim",                  -- Replacement for :h netrw, directory viewer.
-    "ggandor/leap.nvim",                   -- Alternative to '/' for quick search/motions.
-    "farmergreg/vim-lastplace",            -- Open files at the last viewed location (VimL).
-    "AndrewRadev/inline_edit.vim",         -- Edit embedded code in a temporary buffer with a different filetype
-    -- Downloader and shims for tree-sitter grammars; see :h :TSInstall and :h :TSEnable.
-    { "nvim-treesitter/nvim-treesitter", cond = function(load_plugin)
-        if is_executable('tree-sitter') then load_plugin() end
-    end, run = ":TSUpdate" },
-    -- Community configs for efm-langserver.
-    { "creativenull/efmls-configs-nvim", cond = function(load_plugin)
-        if is_executable('efm-langserver') then load_plugin() end
-    end,
-        requires = { "neovim/nvim-lspconfig" },
-    },
-    -- Follow symlinks when opening files (Linux, VimL).
-    { "aymericbeaumet/vim-symlink",
-        requires = { "moll/vim-bbye" },
-    },
-    "dhruvasagar/vim-open-url",   -- Open URL's in browser without :h netrw (VimL).
-    "alvan/vim-closetag",         -- Auto-close (x|ht)ml tags (VimL).
-    "vim-python/python-syntax",   -- Improved Python syntax highlighting (VimL).
-    "hattya/python-indent.vim",   -- PEP8 auto-indenting for Python (VimL).
-    "euclidianAce/BetterLua.vim", -- Improved Lua syntax highlighting (VimL).
-    "jakemason/ouroboros",        -- Switch between .c/.cpp and header files.
-
-    "adigitoleo/vim-mellow",
-    "adigitoleo/vim-mellow-statusline",
-    "https://git.sr.ht/~adigitoleo/overview.nvim",
-    "https://git.sr.ht/~adigitoleo/haunt.nvim",
-    "https://git.sr.ht/~adigitoleo/quark.nvim",
-
-    -- Comprehensive LaTeX integration.
-    { "lervag/vimtex", cond = function(load_plugin)
-        if is_executable("latex") then load_plugin() end
-    end },
-    -- Improved Julia syntax highlighting, unicode input.
-    { "JuliaEditorSupport/julia-vim", cond = function(load_plugin)
-        if is_executable("julia") then
-            load_plugin()
-            table.insert(freqlangs, "julia")
-        end
-    end },
-    -- Syntax highlighting for #lang pollen
-    { "otherjoel/vim-pollen", cond = function(load_plugin)
-        if is_executable("racket") then
-            load_plugin()
-            vim.list_extend(freqlangs, { "racket", "pollen" })
-        end
-    end },
-    -- Provides the basic fzf.vim file.
-    { "junegunn/fzf", run = ":call fzf#install()", cond = function(load_plugin)
-        if system == "Windows_NT" or is_executable("apt") then load_plugin() end
-    end },
-}
-
-local lsp = load("lspconfig")
-if lsp then
+local function pkconf_lsp()
+    local lsp = load('lspconfig')
+    if lsp == nil then return end
     -- LSP mappings and autocommands.
     bindkey("n", "gl", vim.diagnostic.setloclist, { silent = true, desc = "Open LSP loclist" })
     bindkey("n", "]d", vim.diagnostic.goto_next, { silent = true, desc = "Go to next LSP hint" })
     bindkey("n", "[d", vim.diagnostic.goto_prev, { silent = true, desc = "Go to previous LSP hint" })
-    -- To focus the hover buffer, press K a second time.
+    -- NOTE: To focus the hover buffer, press K a second time.
     api.nvim_create_autocmd("LspAttach", {
         group = api.nvim_create_augroup("UserLspConfig", {}),
         callback = function(ev)
@@ -529,8 +468,21 @@ if lsp then
             },
         }
     end
-    -- https://github.com/mattn/efm-langserver
-    if is_executable('efm-langserver') then
+    -- Requires pip install python-lsp-server (NOT python-language-server!).
+    if is_executable('pylsp') then
+        lsp.pylsp.setup {
+            settings = {
+                pylsp = { plugins = { pycodestyle = { maxLineLength = 88 } } }
+            }
+        }
+    end
+    -- https://github.com/latex-lsp/texlab
+    if is_executable('texlab') then lsp.texlab.setup {} end
+end
+
+local function pkconf_efmls() -- https://github.com/mattn/efm-langserver
+    local lsp = load('lspconfig')
+    if is_executable('efm-langserver') and lsp ~= nil then
         local efm_languages = {}
         if is_executable('shellcheck') then
             local shellcheck = load('efmls-configs.linters.shellcheck')
@@ -548,29 +500,25 @@ if lsp then
             }
         }
     end
-    -- Requires pip install python-lsp-server (NOT python-language-server!).
-    if is_executable('pylsp') then
-        lsp.pylsp.setup {
-            settings = {
-                pylsp = { plugins = { pycodestyle = { maxLineLength = 88 } } }
-            }
-        }
-    end
-    -- https://github.com/latex-lsp/texlab
-    if is_executable('texlab') then lsp.texlab.setup {} end
 end
 
 -- Toggle comments and add/change/delete surrouning delimiters.
-local comment = load("Comment")
-if comment then comment.setup() end
-local surround = load("nvim-surround")
-if surround then surround.setup() end
+local function pkconf_comment()
+    local comment = load("Comment")
+    if comment ~= nil then comment.setup() end
+end
+local function pkconf_surround()
+    local surround = load("nvim-surround")
+    if surround ~= nil then surround.setup() end
+end
 
--- Git signs and minimap.
-local gitsigns = load("gitsigns")
-if gitsigns then gitsigns.setup() end
-local minimap = load("mini.map")
-if minimap then
+local function pkconf_signs() -- Git status signs.
+    local gitsigns = load("gitsigns")
+    if gitsigns ~= nil then gitsigns.setup() end
+end
+local function pkconf_map() -- Code minimap with git diff status.
+    local minimap = load("mini.map")
+    if minimap == nil then return end
     minimap.setup({
         symbols = { encode = minimap.gen_encode_symbols.dot("3x2") },
         integrations = { minimap.gen_integration.gitsigns() },
@@ -581,13 +529,14 @@ if minimap then
     bindkey("n", "gm", minimap.toggle, { desc = "Toggle minimap" })
 end
 
--- Indent guides.
-local indent_blankline = load("ibl")
-if indent_blankline then indent_blankline.setup() end
+local function pkconf_ibl() -- Indent guides.
+    local indent_blankline = load("ibl")
+    if indent_blankline ~= nil then indent_blankline.setup() end
+end
 
--- TODO/FIXME comment tracker setup.
-local todo_comments = load('todo-comments')
-if todo_comments then
+local function pkconf_todo() -- TODO/FIXME comment tracker setup.
+    local todo_comments = load('todo-comments')
+    if todo_comments == nil then return end
     todo_comments.setup({
         signs = false,
         colors = { error = { "DiagnosticWarn" } },
@@ -597,69 +546,84 @@ if todo_comments then
     bindkey("n", "[t", function() todo_comments.jump_prev() end, { desc = "Previous todo comment" })
 end
 
--- Replacement for buggy netrw (vim8 directory viewer).
-local carbon = load("carbon")
-if carbon then
+local function pkconf_carbon() -- Replacement for buggy netrw (vim8 directory viewer).
+    local carbon = load("carbon")
+    if carbon == nil then return end
     carbon.setup()
     vim.g.loaded_netrw = 1
     vim.g.loaded_netrwPlugin = 1
 end
 
--- Better jumping and motions.
--- TODO: Add repeat.vim optional dependency for leap.nvim?
-local leap = load("leap")
-if leap then leap.add_default_mappings() end
-
--- LaTeX/VimTeX setup.
-vim.g.tex_flavor = "latex"
-vim.g.vimtex_fold_enabled = 1
-vim.g.vimtex_quickfix_mode = 0 -- See #1595
-vim.g.vimtex_matchparen_enabled = 1
--- vim.gvimtex_view_method = "zathura"
-vim.g.vimtex_fold_types = {
-    cmd_single = { enabled = 0 },
-    cmd_multi = { enabled = 0 },
-    items = { enabled = 0 },
-    envs = {
-        blacklist = { 'equation', 'align', 'figure', 'enumerate', 'split',
-            'equation*', 'align*', 'figure*', 'itemize',
-            'pmatrix', 'bmatrix', 'vmatrix', 'Bmatrix', 'Vmatrix',
-            'scope', 'displayquote', 'verbatim',
-        },
-    },
-}
-vim.g.vimtex_indent_lists = {
-    'itemize',
-    'description',
-    'enumerate',
-    'thebibliography',
-    'compactitem',
-}
-vim.g.vimtex_quickfix_ignore_filters = { 'underfull', 'moderncv' }
-
--- Python syntax/filetype settings.
-vim.g.python_highlight_all = 1
-vim.g.python_highlight_builtin_types = 0
-vim.g.python_highlight_space_errors = 0
-vim.g.python_highlight_indent_errors = 0
-
--- Julia settings.
-vim.g.julia_indent_align_brackets = 0
--- Use the latex to unicode converter provided by julia.vim for other filetypes.
-table.insert(freqlangs, "markdown")
-vim.g.latex_to_unicode_file_types = freqlangs
-
--- Don't open folds when restoring cursor position.
-vim.g.lastplace_open_folds = 0
-
-overview = load("overview")
-if overview then -- Overview.nvim bindings.
-    bindkey("n", "gO", overview.toggle, { desc = "Toggle Overview sidebar for current buffer" })
-    bindkey("n", "go", overview.focus, { desc = "Toggle focus between Overview sidebar and source buffer" })
+local function pkconf_leap() -- Better jumping and motions.
+    -- TODO: Add repeat.vim optional dependency for leap.nvim?
+    local leap = load("leap")
+    if leap ~= nil then leap.add_default_mappings() end
 end
-haunt = load("haunt")
-quark = load("quark")
-if quark then
+
+local function pkconf_vimtex() -- LaTeX/VimTeX setup.
+    vim.g.tex_flavor = "latex"
+    vim.g.vimtex_fold_enabled = 1
+    vim.g.vimtex_quickfix_mode = 0 -- See #1595
+    vim.g.vimtex_matchparen_enabled = 1
+    vim.g.vimtex_fold_types = {
+        cmd_single = { enabled = 0 },
+        cmd_multi = { enabled = 0 },
+        items = { enabled = 0 },
+        envs = {
+            blacklist = { 'equation', 'align', 'figure', 'enumerate', 'split',
+                'equation*', 'align*', 'figure*', 'itemize',
+                'pmatrix', 'bmatrix', 'vmatrix', 'Bmatrix', 'Vmatrix',
+                'scope', 'displayquote', 'verbatim',
+            },
+        },
+    }
+    vim.g.vimtex_indent_lists = {
+        'itemize',
+        'description',
+        'enumerate',
+        'thebibliography',
+        'compactitem',
+    }
+    vim.g.vimtex_quickfix_ignore_filters = { 'underfull', 'moderncv' }
+end
+
+local function pkconf_lastplace()
+    -- Don't open folds when restoring cursor position.
+    vim.g.lastplace_open_folds = 0
+end
+
+local function pkconf_julia() -- Julia lang.
+    vim.list_extend(freqlangs, { "julia", "markdown" })
+    vim.g.julia_indent_align_brackets = 0
+    -- Use the latex to unicode converter provided by julia.vim for other filetypes.
+    vim.g.latex_to_unicode_file_types = freqlangs
+end
+
+local function pkconf_pollen() -- Pollen lang.
+    vim.list_extend(freqlangs, { "racket", "pollen" })
+end
+
+local function pkconf_python() -- Python lang.
+    -- Non-treesitter Python syntax/filetype settings.
+    vim.g.python_highlight_all = 1
+    vim.g.python_highlight_builtin_types = 0
+    vim.g.python_highlight_space_errors = 0
+    vim.g.python_highlight_indent_errors = 0
+end
+
+local function pkconf_overview()
+    overview = load("overview")
+    if overview ~= nil then -- Overview.nvim bindings.
+        bindkey("n", "gO", overview.toggle, { desc = "Toggle Overview sidebar for current buffer" })
+        bindkey("n", "go", overview.focus, { desc = "Toggle focus between Overview sidebar and source buffer" })
+    end
+end
+
+local function pkconf_haunt() require('haunt') end
+
+local function pkconf_quark()
+    quark = load("quark")
+    if quark == nil then return end
     quark.setup {
         -- Requires ripgrep: <https://github.com/BurntSushi/ripgrep>
         fzf = { default_command = "rg --files --hidden --no-messages" }
@@ -670,37 +634,91 @@ if quark then
     bindkey("n", [[<Leader>r]], [[<Cmd>QuarkRecent<Cr>]], { desc = "Launch recent file browser" })
 end
 
--- Mellow theme setup.
-vim.g.mellow_show_bufnr = 0
-if vim.env.COLORTERM == "truecolor" or system ~= "Linux" then
-    opt.termguicolors = true
-    if is_executable('theme') then -- Inherit 'background' (dark/light mode) from terminal emulator.
-        opt.background = fn.get(fn.systemlist('theme -q'), 0)
-    else
-        local hour24 = nil
-        if system ~= "Linux" and string.match(vim.o.shell, "pwsh") ~= nil then
-            hour24 = tonumber(fn.system('Get-Date -Format HH'))
+local function pkconf_mellow() -- Mellow theme setup.
+    vim.g.mellow_show_bufnr = 0
+    if vim.env.COLORTERM == "truecolor" or system ~= "Linux" then
+        opt.termguicolors = true
+        if is_executable('theme') then -- Inherit 'background' (dark/light mode) from terminal emulator.
+            opt.background = fn.get(fn.systemlist('theme -q'), 0)
         else
-            hour24 = tonumber(fn.system('date +%H'))
+            local hour24 = nil
+            if system ~= "Linux" and string.match(vim.o.shell, "pwsh") ~= nil then
+                hour24 = tonumber(fn.system('Get-Date -Format HH'))
+            else
+                hour24 = tonumber(fn.system('date +%H'))
+            end
+            if hour24 == nil then hour24 = 0 end
+            if hour24 > 20 or hour24 < 9 then
+                opt.background = "dark"
+            else
+                opt.background = "light"
+            end
         end
-        if hour24 == nil then hour24 = 0 end
-        if hour24 > 20 or hour24 < 9 then
-            opt.background = "dark"
-        else
-            opt.background = "light"
-        end
+        vim.g.mellow_user_colors = 1
+        vim.cmd [[colorscheme mellow]]
+    else -- Minimal fallback color settings for vconsole.
+        vim.cmd [[colorscheme lunaperche]]
+        opt.background = "dark"
+        vim.cmd [[
+        hi! link ColorColumn Normal
+        hi! link Statusline NonText
+        hi! link TabLineFill NonText
+        hi! link TabLineSel NonText
+        hi! link VertSplit NonText
+        hi! link StatusLineNC NonText
+        ]]
     end
-    vim.g.mellow_user_colors = 1
-    vim.cmd [[colorscheme mellow]]
-else -- Minimal fallback color settings for vconsole.
-    vim.cmd [[colorscheme lunaperche]]
-    opt.background = "dark"
-    vim.cmd [[
-    hi! link ColorColumn Normal
-    hi! link Statusline NonText
-    hi! link TabLineFill NonText
-    hi! link TabLineSel NonText
-    hi! link VertSplit NonText
-    hi! link StatusLineNC NonText
-    ]]
 end
+
+pkgbootstrap()
+require("pckr").add {
+    -- Lua functions/plugin dev library.
+    "nvim-lua/plenary.nvim",
+
+    { "SidOfc/carbon.nvim",                  config = pkconf_carbon },    -- Replacement for :h netrw, directory viewer.
+    { "echasnovski/mini.map",                config = pkconf_map },       -- A code minimap, like what cool Atom kids have.
+    { "farmergreg/vim-lastplace",            config = pkconf_lastplace }, -- Open files at the last viewed location (VimL).
+    { "folke/todo-comments.nvim",            config = pkconf_todo },      -- Track TODO/FIXME comments.
+    { "ggandor/leap.nvim",                   config = pkconf_leap },      -- Alternative to '/' for quick search/motions.
+    { "kylechui/nvim-surround",              config = pkconf_surround },  -- Quoting/parenthesizing made simple.
+    { "lewis6991/gitsigns.nvim",             config = pkconf_signs },     -- Git status in sign column and statusbar.
+    { "lukas-reineke/indent-blankline.nvim", config = pkconf_ibl },       -- Visual indentation guides.
+    { "neovim/nvim-lspconfig",               config = pkconf_lsp },       -- Community configs for :h lsp.
+    { "numToStr/Comment.nvim",               config = pkconf_comment },   -- Quickly comment/uncomment code.
+    { "vim-python/python-syntax",            config = pkconf_python },    -- Improved Python syntax highlighting (VimL).
+
+    -- Downloader and shims for tree-sitter grammars; see :h :TSInstall and :h :TSEnable.
+    { "nvim-treesitter/nvim-treesitter",
+        cond = gen_cond('tree-sitter'), run = ":TSUpdate" },
+    -- Community configs for efm-langserver.
+    { "creativenull/efmls-configs-nvim",
+        cond = gen_cond('efm-langserver'), requires = { "neovim/nvim-lspconfig" }, config = pkconf_efmls },
+    -- Follow symlinks when opening files (Linux, VimL).
+    { "aymericbeaumet/vim-symlink",
+        requires = { "moll/vim-bbye" } },
+
+    "AndrewRadev/inline_edit.vim", -- Edit embedded code in a temporary buffer with a different filetype
+    "alvan/vim-closetag",          -- Auto-close (x|ht)ml tags (VimL).
+    "dhruvasagar/vim-open-url",    -- Open URL's in browser without :h netrw (VimL).
+    "euclidianAce/BetterLua.vim",  -- Improved Lua syntax highlighting (VimL).
+    "hattya/python-indent.vim",    -- PEP8 auto-indenting for Python (VimL).
+    "jakemason/ouroboros",         -- Switch between .c/.cpp and header files.
+    "whiteinge/diffconflicts",     -- 2-way vimdiff for merge conflicts (VimL).
+
+    -- Comprehensive LaTeX integration.
+    { "lervag/vimtex",                cond = gen_cond('latex'),  config = pkconf_vimtex },
+    -- Improved Julia syntax highlighting, unicode input.
+    { "JuliaEditorSupport/julia-vim", cond = gen_cond('julia'),  config = pkconf_julia },
+    -- Syntax highlighting for #lang pollen
+    { "otherjoel/vim-pollen",         cond = gen_cond('racket'), config = pkconf_pollen },
+    -- Provides the basic fzf.vim file.
+    { "junegunn/fzf", run = ":call fzf#install()", cond = function(load_plugin)
+        if system == "Windows_NT" or is_executable("apt") then load_plugin() end
+    end },
+
+    { "https://git.sr.ht/~adigitoleo/haunt.nvim",    branch = "dev",        config = pkconf_haunt },
+    { "https://git.sr.ht/~adigitoleo/overview.nvim", branch = "dev",        config = pkconf_overview },
+    { "https://git.sr.ht/~adigitoleo/quark.nvim",    branch = "dev",        config = pkconf_quark },
+    { "adigitoleo/vim-mellow",                       config = pkconf_mellow },
+    "adigitoleo/vim-mellow-statusline",
+}
