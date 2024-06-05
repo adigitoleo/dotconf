@@ -45,3 +45,6 @@ function symlink ($target, $link) {
 
 # Install neovim with winget.
 Set-Alias -Name v -Value nvim
+
+# Install-Module pwsh-git-completion
+Register-GitCompletion
