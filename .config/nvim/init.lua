@@ -509,7 +509,11 @@ local function pkconf_comment()
 end
 local function pkconf_surround()
     local surround = load("nvim-surround")
-    if surround ~= nil then surround.setup() end
+    if surround ~= nil then
+        surround.setup()
+        bindkey("x", [[<Leader>s]], [[<C-v>e<Plug>(nvim-surround-visual)]],
+            { desc = "Repeat surround motion for the first word of each line in the selection" })
+    end
 end
 
 local function pkconf_signs() -- Git status signs.
