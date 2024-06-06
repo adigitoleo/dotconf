@@ -404,7 +404,7 @@ local function load(plugin) -- Load either local or third-party plugin.
 end
 
 local function gen_cond(bin) -- Callback to load plugin if binary is present.
-    local cond = function(load_plugin) if is_executable(bin) then load_plugin() end end
+    return function(load_plugin) if is_executable(bin) then load_plugin() end end
 end
 
 local function pkgbootstrap()
