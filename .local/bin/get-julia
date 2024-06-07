@@ -30,13 +30,13 @@ shift $(( OPTIND - 1 ))
 test $# -eq 1 || { usage ; exit 1 ; }
 version="$1"
 [ -f "julia-${version}.sha256" ] || \
-    curl --fail --remote-name --location --continue-at - "https://julialang-s3.julialang.org/bin/checksums/julia-${version}.sha256"
+    { curl --fail --remote-name --location --continue-at - "https://julialang-s3.julialang.org/bin/checksums/julia-${version}.sha256" || exit 1; }
 [ -f "julia-${version}-linux-x86_64.tar.gz" ] || \
-    curl --fail --remote-name --location --continue-at - "https://julialang-s3.julialang.org/bin/linux/x64/${version%.*}/julia-${version}-linux-x86_64.tar.gz"
-sha256sum --check --ignore-missing "julia-${version}.sha256"
+    { curl --fail --remote-name --location --continue-at - "https://julialang-s3.julialang.org/bin/linux/x64/${version%.*}/julia-${version}-linux-x86_64.tar.gz" || exit 1; }
+sha256sum --check --ignore-missing "julia-${version}.sha256" || exit 1
 
 if [ -n "$DIR" ]; then
-    tar -xvf "julia-${version}-linux-x86_64.tar.gz" --directory="${DIR}"
+    tar -xvf "julia-${version}-linux-x86_64.tar.gz" --directory="${DIR}" || exit 1
     REALPATH="$(realpath "$DIR")"
     ln -s -f -t "$HOME/.local/bin" "$REALPATH/julia-${version}/bin/julia"
 fi

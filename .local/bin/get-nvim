@@ -30,13 +30,13 @@ shift $(( OPTIND - 1 ))
 test $# -eq 1 || { usage ; exit 1 ; }
 version="$1"
 [ -f "nvim-linux64.tar.gz.sha256sum" ] || \
-    curl --fail --remote-name --location --continue-at - "https://github.com/neovim/neovim/releases/download/v${version}/nvim-linux64.tar.gz.sha256sum"
+    { curl --fail --remote-name --location --continue-at - "https://github.com/neovim/neovim/releases/download/v${version}/nvim-linux64.tar.gz.sha256sum" || exit 1; }
 [ -f "nvim-linux64.tar.gz" ] || \
-    curl --fail --remote-name --location --continue-at - "https://github.com/neovim/neovim/releases/download/v${version}/nvim-linux64.tar.gz"
-sha256sum --check --ignore-missing "nvim-linux64.tar.gz.sha256sum"
+    { curl --fail --remote-name --location --continue-at - "https://github.com/neovim/neovim/releases/download/v${version}/nvim-linux64.tar.gz" || exit 1; }
+sha256sum --check --ignore-missing "nvim-linux64.tar.gz.sha256sum" || exit 1
 
 if [ -n "$DIR" ]; then
-    tar -xvf "nvim-linux64.tar.gz" --directory="${DIR}"
+    tar -xvf "nvim-linux64.tar.gz" --directory="${DIR}" || exit 1
     REALPATH="$(realpath "$DIR")"
     ln -s -f -t "$HOME/.local/bin" "$REALPATH/nvim-linux64/bin/nvim"
 fi
