@@ -472,7 +472,8 @@ local function pkconf_lsp()
     if is_executable('pylsp') then
         lsp.pylsp.setup {
             settings = {
-                pylsp = { plugins = { pycodestyle = { maxLineLength = 88 } } }
+                -- Requires pip install ruff and pip install python-lsp-ruff.
+                pylsp = { plugins = { ruff = { format = { "I" } } } }
             }
         }
     end
