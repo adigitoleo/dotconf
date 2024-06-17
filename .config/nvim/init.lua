@@ -717,7 +717,7 @@ require("pckr").add {
     -- Syntax highlighting for #lang pollen
     { "otherjoel/vim-pollen",         cond = gen_cond('racket'), config = pkconf_pollen },
     -- Provides the basic fzf.vim file.
-    { "junegunn/fzf", run = ":call fzf#install()", cond = function(load_plugin)
+    { "junegunn/fzf", config = function() vim.cmd("call fzf#install()") end, cond = function(load_plugin)
         if system == "Windows_NT" or is_executable("apt") then load_plugin() end
     end },
 
