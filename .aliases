@@ -13,6 +13,7 @@ alias tmux='TERM=xterm-256color tmux'
 alias l='tree -L 2|less'
 alias df='df --si'
 alias du='du --si'
+alias tl,dr='tldr --color=always|less'
 
 # rg,glob 'pattern' : find filenames in current directory that match glob
 alias rg,glob='rg --files -g'
