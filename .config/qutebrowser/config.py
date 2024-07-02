@@ -154,6 +154,13 @@ if "dark" in str(THEME):
     c.colors.tabs.pinned.even.fg = colors["normal"]["black"]
     c.colors.tabs.selected.even.fg = colors["normal"]["white"]
     c.colors.tabs.selected.odd.fg = colors["normal"]["white"]
+
+    # Forced dark mode for some URL patterns.
+    config.set("colors.webpage.darkmode.enabled", True, "https://*.zulipchat.com/login/*")
+    config.set("colors.webpage.darkmode.enabled", True, "https://auth.openai.com/*")
+    config.set("colors.webpage.darkmode.enabled", True, "https://auth0.openai.com/*")
+    config.set("colors.webpage.darkmode.enabled", True, "https://www.semanticscholar.org/*")
+    config.set("colors.webpage.darkmode.enabled", True, "qute://*")
 else:
     colors = get_colors("light")
     c.colors.webpage.bg = colors["bright"]["white"]
