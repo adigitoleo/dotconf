@@ -156,10 +156,13 @@ if "dark" in str(THEME):
     c.colors.tabs.selected.odd.fg = colors["normal"]["white"]
 
     # Forced dark mode for some URL patterns.
+    config.set("colors.webpage.darkmode.enabled", True, "https://*.anu.edu.au/*")
+    config.set("colors.webpage.darkmode.enabled", True, "https://*.microsoftonline.com/*")
+    config.set("colors.webpage.darkmode.enabled", True, "https://*.openai.com/*")
+    config.set("colors.webpage.darkmode.enabled", True, "https://*.sciencedirect.com/*")
+    config.set("colors.webpage.darkmode.enabled", True, "https://*.semanticscholar.org/*")
+    config.set("colors.webpage.darkmode.enabled", True, "https://*.wiley.com/*")
     config.set("colors.webpage.darkmode.enabled", True, "https://*.zulipchat.com/login/*")
-    config.set("colors.webpage.darkmode.enabled", True, "https://auth.openai.com/*")
-    config.set("colors.webpage.darkmode.enabled", True, "https://auth0.openai.com/*")
-    config.set("colors.webpage.darkmode.enabled", True, "https://www.semanticscholar.org/*")
     config.set("colors.webpage.darkmode.enabled", True, "qute://*")
 else:
     colors = get_colors("light")
