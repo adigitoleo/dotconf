@@ -1,2 +1,11 @@
 #!/bin/sh
+set -u
+readonly SCRIPTNAME="${0##*/}"
+helpf() {
+    printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
+    echo
+    echo 'Use grim(1), slurp(1), cut(1), tail(1) and convert(1) (from ImageMagick) to get the hex'
+    echo 'value of the color of a pixel on the screen (select the pixel with the mouse pointer).'
+}
+[ $# -gt 0 ] && { helpf; STAT=1; [ "$1" = "-h" ] && STAT=0; exit $STAT ;}
 echo "$(grim -g "$(slurp -p)" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | tail -n 1 | cut -d ' ' -f 4)"
