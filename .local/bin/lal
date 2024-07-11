@@ -6,7 +6,7 @@ helpf() {
     echo
     echo 'Use wl-clipboard(1) to copy the value associated with the given alias.'
     echo 'Aliases are defined in ~/.password-store/lists_and_aliases.txt.'
-    echo 'Use -l to print the contenst of that file to stdout.'
+    echo 'Use -l to print the contents of that file to stdout.'
 }
 
 [ $# -gt 0 ] || { helpf; exit 1 ;}
