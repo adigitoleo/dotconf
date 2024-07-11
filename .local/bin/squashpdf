@@ -1,0 +1,54 @@
+#!/bin/sh
+set -u
+readonly SCRIPTNAME="${0##*/}"
+usage() {
+    printf 'Usage: %s [-h]\n' "$SCRIPTNAME"
+    printf '       %s ' "$SCRIPTNAME"
+    echo '[-o OUTFILE] [-m MODE] VERSION'
+}
+helpf() {
+    echo 'Options:'
+    echo '  -o <outfile>    The name for the output file (with the .pdf extension)'
+    echo '  -m <mode>       The ghostscript output PDF mode, one of "ebook", "screen" or "prepress"'
+    echo '                  (uses "ebook" by default)'
+    echo 'Operands:'
+    echo '  PDF             The original PDF file'
+    echo
+    echo 'Attempt to reduce PDF file size using a sequence of ghostscript commands.'
+    echo 'Requires the pdf2ps, ps2pdf and gs executables.'
+    echo 'Optionally specify a name for the output file,'
+    echo 'which whill otherwise use the input file name with the suffix "-squashed.pdf".'
+}
+is_command() {
+    if 1>/dev/null 2>&1 command -v "$1"; then
+        return 0
+    else
+        >&2 printf '%s\n' "$SCRIPTNAME: command '$1' not found"; return 1
+    fi
+}
+
+OUTFILE=
+MODE="ebook"
+while getopts "hom:" OPT; do
+    case "$OPT" in
+        h ) usage && helpf ; exit 0 ;;
+        o ) OUTFILE="$OPTARG" ;;
+        m ) MODE="$OPTARG" ;;
+        * ) usage ; exit 1 ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+test $# -eq 1 || { usage ; exit 1 ; }
+PDF="$1"
+test -n "$OUTFILE" || OUTFILE="${PDF%%.pdf}-squashed.pdf"
+is_command pdf2ps || exit 1
+is_command ps2pdf || exit 1
+is_command gs || exit 1
+
+PSFILE="$(mktemp)"
+pdf2ps "$PDF" "$PSFILE"
+ps2pdf "$PSFILE" "$PDF"
+gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/"$MODE" \
+    -dNOPAUSE -dQUIET -dBATCH -dDetectDuplicateImages -dDownsampleColorImages=true \
+    -sOutputFile=small.pdf large.pdf
