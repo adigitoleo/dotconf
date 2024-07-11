@@ -3,6 +3,7 @@
 
 INPUT_FILE must contain at most one DOI link per line.
 Lines beginning with '#' in INPUT_FILE are safe to use for comments.
+The 'https://doi.org/' prefix may be omitted from DOI links.
 
 """
 
@@ -12,6 +13,27 @@ import re
 import urllib.error as ue
 import urllib.request as ur
 from xml.etree import ElementTree
+
+# See:
+# <https://www.doi.org/the-identifier/resources/factsheets/doi-resolution-documentation>
+URI_REPLACEMENTS = {
+    r"%": "%25",
+    r'"': "%22",
+    r"#": "%23",
+    r"\s": "%20",
+    r"\?": "%3F",
+    r"<": "%3C",
+    r">": "%3E",
+    r"\{": "%7B",
+    r"\}": "%7D",
+    r"\^": "%5E",
+    r"\[": "%5B",
+    r"\]": "%5D",
+    r"`": "%60",
+    r"\|": "%7C",
+    r"\\": "%5C",
+    r"\+": "%2B",
+}
 
 
 def _get_args() -> argparse.Namespace:
@@ -44,19 +66,23 @@ def _get_args() -> argparse.Namespace:
 
 
 def getbib(doi: str, plain: bool = False, verbose: bool = False) -> str:
-    """Get BibTeX metadata or plain text citation from a DOI link."""
-    url = doi.rstrip().lstrip()
+    """Get BibTeX metadata or plain text citation from a DOI link.
+
+    The protocol:domain prefix may be omitted from the DOI link.
+    Some tests:
+    - https://doi.org/10.1000/demo_DOI
+
+    """
     if plain:
         content_negotiation = "text/x-bibliography"
     else:
         content_negotiation = "application/x-bibtex"
 
-    if not url.startswith("https://doi.org/"):
-        url = "https://doi.org/" + url
+    url = encode(doi)
+    print(url)
+
     try:
-        response = ur.urlopen(
-            ur.Request(url, headers={"Accept": content_negotiation})
-        )
+        response = ur.urlopen(ur.Request(url, headers={"Accept": content_negotiation}))
         if verbose:
             has_abstract = False
             response_verbose = ur.urlopen(
@@ -66,26 +92,23 @@ def getbib(doi: str, plain: bool = False, verbose: bool = False) -> str:
             )
             tree = ElementTree.fromstring(response_verbose.read().decode("utf-8"))
             qrschema_prefix = (
-                '{'
-                + re.findall('{(.+?)}', re.sub(r'\(.+?\)', '', tree[0].tag))[0]
-                + '}'
+                "{"
+                + re.findall("{(.+?)}", re.sub(r"\(.+?\)", "", tree[0].tag))[0]
+                + "}"
             )
             record = (
-                tree
-                .find(f"{qrschema_prefix}query_result")
+                tree.find(f"{qrschema_prefix}query_result")
                 .find(f"{qrschema_prefix}body")
                 .find(f"{qrschema_prefix}query")
                 .find(f"{qrschema_prefix}doi_record")[0]
             )
             xschema_prefix = (
-                '{'
-                + re.findall('{(.+?)}', re.sub(r'\(.+?\)', '', record[0].tag))[0]
-                + '}'
+                "{"
+                + re.findall("{(.+?)}", re.sub(r"\(.+?\)", "", record[0].tag))[0]
+                + "}"
             )
-            article = (
-                record
-                .find(f"{xschema_prefix}journal")
-                .find(f"{xschema_prefix}journal_article")
+            article = record.find(f"{xschema_prefix}journal").find(
+                f"{xschema_prefix}journal_article"
             )
 
             # FIXME: Abstracts are not well formatted in the XML, there can be all kinds
@@ -101,19 +124,33 @@ def getbib(doi: str, plain: bool = False, verbose: bool = False) -> str:
                         for cc in c:
                             abstract_text += cc.text.strip()
                     has_abstract = True
-            abstract_text = abstract_text.replace(os.linesep, '')
+            abstract_text = abstract_text.replace(os.linesep, "")
             abstract_text += os.linesep
 
     except ue.URLError:
         return "failed to open URL"
     output = re.sub(
-        r" }", r"\n}", re.sub(
+        r" }",
+        r"\n}",
+        re.sub(
             r"( [a-zA-Z_]+)=", r"\n\t\1 = ", response.read().decode("utf-8").strip()
-        )
+        ),
     )
     if verbose and has_abstract:
         output = output + os.linesep + "Abstract:" + os.linesep + abstract_text
     return output
+
+
+def encode(doi: str) -> str:
+    """Encode DOI name for safe use in URLs."""
+    url = doi.rstrip().lstrip()
+    if not (
+        url.startswith("https://doi.org/") or url.startswith("https://dx.doi.org/")
+    ):
+        url = "https://doi.org/" + url
+    for key in URI_REPLACEMENTS.keys():
+        url = re.sub(key, lambda match: URI_REPLACEMENTS[key], url)
+    return url
 
 
 def _main():
