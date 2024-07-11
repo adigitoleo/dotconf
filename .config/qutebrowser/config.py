@@ -157,11 +157,18 @@ if "dark" in str(THEME):
 
     # Forced dark mode for some URL patterns.
     config.set("colors.webpage.darkmode.enabled", True, "https://*.anu.edu.au/*")
+    config.set("colors.webpage.darkmode.enabled", True, "https://*.apsjobs.gov.au/*")
+    config.set("colors.webpage.darkmode.enabled", True, "https://*.doi.org/*")
+    config.set("colors.webpage.darkmode.enabled", True, "https://*.distrowatch.com/*")
+    config.set("colors.webpage.darkmode.enabled", True, "https://*.freedesktop.org/*")
     config.set("colors.webpage.darkmode.enabled", True, "https://*.microsoftonline.com/*")
     config.set("colors.webpage.darkmode.enabled", True, "https://*.openai.com/*")
+    config.set("colors.webpage.darkmode.enabled", True, "https://*.repology.org/*")
+    config.set("colors.webpage.darkmode.enabled", True, "https://*.rosettacode.org/*")
     config.set("colors.webpage.darkmode.enabled", True, "https://*.sciencedirect.com/*")
     config.set("colors.webpage.darkmode.enabled", True, "https://*.semanticscholar.org/*")
     config.set("colors.webpage.darkmode.enabled", True, "https://*.wiley.com/*")
+    config.set("colors.webpage.darkmode.enabled", True, "https://*.ycombinator.com/*")
     config.set("colors.webpage.darkmode.enabled", True, "https://*.zulipchat.com/login/*")
     config.set("colors.webpage.darkmode.enabled", True, "qute://*")
 else:
