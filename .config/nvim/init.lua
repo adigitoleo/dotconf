@@ -608,14 +608,6 @@ local function pkconf_pollen() -- Pollen lang.
     vim.list_extend(freqlangs, { "racket", "pollen" })
 end
 
-local function pkconf_python() -- Python lang.
-    -- Non-treesitter Python syntax/filetype settings.
-    vim.g.python_highlight_all = 1
-    vim.g.python_highlight_builtin_types = 0
-    vim.g.python_highlight_space_errors = 0
-    vim.g.python_highlight_indent_errors = 0
-end
-
 local function pkconf_overview()
     overview = load("overview")
     if overview ~= nil then -- Overview.nvim bindings.
@@ -690,7 +682,6 @@ require("pckr").add {
     { "lukas-reineke/indent-blankline.nvim", config = pkconf_ibl },       -- Visual indentation guides.
     { "neovim/nvim-lspconfig",               config = pkconf_lsp },       -- Community configs for :h lsp.
     { "numToStr/Comment.nvim",               config = pkconf_comment },   -- Quickly comment/uncomment code.
-    { "vim-python/python-syntax",            config = pkconf_python },    -- Improved Python syntax highlighting (VimL).
 
     -- Downloader and shims for tree-sitter grammars; see :h :TSInstall and :h :TSEnable.
     { "nvim-treesitter/nvim-treesitter",
@@ -699,24 +690,21 @@ require("pckr").add {
     { "creativenull/efmls-configs-nvim",
         cond = gen_cond('efm-langserver'), requires = { "neovim/nvim-lspconfig" }, config = pkconf_efmls },
     -- Follow symlinks when opening files (Linux, VimL).
-    { "aymericbeaumet/vim-symlink",
-        requires = { "moll/vim-bbye" } },
+    { "aymericbeaumet/vim-symlink",   requires = { "moll/vim-bbye" } },
 
     "AndrewRadev/inline_edit.vim", -- Edit embedded code in a temporary buffer with a different filetype
     "alvan/vim-closetag",          -- Auto-close (x|ht)ml tags (VimL).
     "dhruvasagar/vim-open-url",    -- Open URL's in browser without :h netrw (VimL).
-    "euclidianAce/BetterLua.vim",  -- Improved Lua syntax highlighting (VimL).
-    "hattya/python-indent.vim",    -- PEP8 auto-indenting for Python (VimL).
     "jakemason/ouroboros",         -- Switch between .c/.cpp and header files.
     "whiteinge/diffconflicts",     -- 2-way vimdiff for merge conflicts (VimL).
 
     -- Comprehensive LaTeX integration.
-    { "lervag/vimtex",                cond = gen_cond('latex'),  config = pkconf_vimtex },
+    { "lervag/vimtex",                cond = gen_cond('latex'),      config = pkconf_vimtex },
     -- Improved Julia syntax highlighting, unicode input.
-    { "JuliaEditorSupport/julia-vim", cond = gen_cond('julia'),  config = pkconf_julia },
+    { "JuliaEditorSupport/julia-vim", cond = gen_cond('julia'),      config = pkconf_julia },
     -- Syntax highlighting for #lang pollen
-    { "otherjoel/vim-pollen",         cond = gen_cond('racket'), config = pkconf_pollen },
-    -- Provides the basic fzf.vim file.
+    { "otherjoel/vim-pollen",         cond = gen_cond('racket'),     config = pkconf_pollen },
+    -- Provides the basic fzf.vim file, not needed on Void Linux.
     { "junegunn/fzf", config = function() vim.cmd("call fzf#install()") end, cond = function(load_plugin)
         if system == "Windows_NT" or is_executable("apt") then load_plugin() end
     end },
