@@ -665,40 +665,51 @@ pkgbootstrap()
 require("pckr").add {
     -- Lua functions/plugin dev library.
     "nvim-lua/plenary.nvim",
-
-    { "SidOfc/carbon.nvim",                  config = pkconf_carbon },                     -- Replacement for :h netrw, directory viewer.
-    { "echasnovski/mini.map",                config = pkconf_map },                        -- A code minimap, like what cool Atom kids have.
-    { "echasnovski/mini.pairs",              config = pkconf_use_defaults("mini.pairs") }, -- Automatic delimiter pair insertion/deletion.
-    { "farmergreg/vim-lastplace",            config = pkconf_lastplace },                  -- Open files at the last viewed location (VimL).
-    { "folke/todo-comments.nvim",            config = pkconf_todo },                       -- Track TODO/FIXME comments.
-    { "ggandor/leap.nvim",                   config = pkconf_leap },                       -- Alternative to '/' for quick search/motions.
-    { "kylechui/nvim-surround",              config = pkconf_surround },                   -- Quoting/parenthesizing made simple.
-    { "lewis6991/gitsigns.nvim",             config = pkconf_use_defaults("gitsigns") },   -- Git status in sign column and statusbar.
-    { "lukas-reineke/indent-blankline.nvim", config = pkconf_use_defaults("ibl") },        -- Visual indentation guides.
-    { "neovim/nvim-lspconfig",               config = pkconf_lsp },                        -- Community configs for :h lsp.
-    { "numToStr/Comment.nvim",               config = pkconf_use_defaults("Comment") },    -- Quickly comment/uncomment code.
+    -- Replacement for :h netrw, directory viewer.
+    { "SidOfc/carbon.nvim",                  config = pkconf_carbon },
+    -- A code minimap, like what cool Atom kids have.
+    { "echasnovski/mini.map",                config = pkconf_map },
+    -- Automatic delimiter pair insertion/deletion.
+    { "echasnovski/mini.pairs",              config = pkconf_use_defaults("mini.pairs") },
+    -- Open files at the last viewed location (VimL).
+    { "farmergreg/vim-lastplace",            config = pkconf_lastplace },
+    -- Track TODO/FIXME comments.
+    { "folke/todo-comments.nvim",            config = pkconf_todo },
+    -- Alternative to '/' for quick search/motions.
+    { "ggandor/leap.nvim",                   config = pkconf_leap },
+    -- Quoting/parenthesizing made simple.
+    { "kylechui/nvim-surround",              config = pkconf_surround },
+    -- Git status in sign column and statusbar.
+    { "lewis6991/gitsigns.nvim",             config = pkconf_use_defaults("gitsigns") },
+    -- Visual indentation guides.
+    { "lukas-reineke/indent-blankline.nvim", config = pkconf_use_defaults("ibl") },
+    -- Community configs for :h lsp.
+    { "neovim/nvim-lspconfig",               config = pkconf_lsp },
+    -- Quickly comment/uncomment code.
+    { "numToStr/Comment.nvim",               config = pkconf_use_defaults("Comment") },
 
     -- Downloader and shims for tree-sitter grammars; see :h :TSInstall and :h :TSEnable.
     { "nvim-treesitter/nvim-treesitter",
         cond = gen_cond('tree-sitter'), run = ":TSUpdate" },
-    -- Community configs for efm-langserver.
+    -- Community configs for efm-langserver (emulate LSP servers for languages that don't have one).
     { "creativenull/efmls-configs-nvim",
         cond = gen_cond('efm-langserver'), requires = { "neovim/nvim-lspconfig" }, config = pkconf_efmls },
     -- Follow symlinks when opening files (Linux, VimL).
-    { "aymericbeaumet/vim-symlink",   requires = { "moll/vim-bbye" } },
+    { "aymericbeaumet/vim-symlink", requires = { "moll/vim-bbye" } },
+    -- Switch between .c/.cpp and header files.
+    { "jakemason/ouroboros",        requires = { "nvim-lua/plenary.nvim" } },
 
     "AndrewRadev/inline_edit.vim", -- Edit embedded code in a temporary buffer with a different filetype
     "alvan/vim-closetag",          -- Auto-close (x|ht)ml tags (VimL).
     "dhruvasagar/vim-open-url",    -- Open URL's in browser without :h netrw (VimL).
-    "jakemason/ouroboros",         -- Switch between .c/.cpp and header files.
     "whiteinge/diffconflicts",     -- 2-way vimdiff for merge conflicts (VimL).
 
     -- Comprehensive LaTeX integration.
-    { "lervag/vimtex",                cond = gen_cond('latex'),      config = pkconf_vimtex },
+    { "lervag/vimtex",                cond = gen_cond('latex'),  config = pkconf_vimtex },
     -- Improved Julia syntax highlighting, unicode input.
-    { "JuliaEditorSupport/julia-vim", cond = gen_cond('julia'),      config = pkconf_julia },
+    { "JuliaEditorSupport/julia-vim", cond = gen_cond('julia'),  config = pkconf_julia },
     -- Syntax highlighting for #lang pollen
-    { "otherjoel/vim-pollen",         cond = gen_cond('racket'),     config = pkconf_pollen },
+    { "otherjoel/vim-pollen",         cond = gen_cond('racket'), config = pkconf_pollen },
     -- Provides the basic fzf.vim file, not needed on Void Linux.
     { "junegunn/fzf", config = function() vim.cmd("call fzf#install()") end, cond = function(load_plugin)
         if system == "Windows_NT" or is_executable("apt") then load_plugin() end
