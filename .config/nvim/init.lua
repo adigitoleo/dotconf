@@ -503,11 +503,14 @@ local function pkconf_efmls() -- https://github.com/mattn/efm-langserver
     end
 end
 
--- Toggle comments and add/change/delete surrouning delimiters.
-local function pkconf_comment()
-    local comment = load("Comment")
-    if comment ~= nil then comment.setup() end
+local function pkconf_use_defaults(plugin)
+    return function()
+        local _plugin = load(plugin)
+        if _plugin ~= nil then _plugin.setup() end
+    end
 end
+
+-- Add/change/delete surrouning delimiters.
 local function pkconf_surround()
     local surround = load("nvim-surround")
     if surround ~= nil then
@@ -517,10 +520,6 @@ local function pkconf_surround()
     end
 end
 
-local function pkconf_signs() -- Git status signs.
-    local gitsigns = load("gitsigns")
-    if gitsigns ~= nil then gitsigns.setup() end
-end
 local function pkconf_map() -- Code minimap with git diff status.
     local minimap = load("mini.map")
     if minimap == nil then return end
@@ -532,11 +531,6 @@ local function pkconf_map() -- Code minimap with git diff status.
     bindkey("n", "mf", minimap.toggle_focus, { desc = "Toggle minimap focus" })
     bindkey("n", "mr", minimap.refresh, { desc = "Refresh minimap" })
     bindkey("n", "gm", minimap.toggle, { desc = "Toggle minimap" })
-end
-
-local function pkconf_ibl() -- Indent guides.
-    local indent_blankline = load("ibl")
-    if indent_blankline ~= nil then indent_blankline.setup() end
 end
 
 local function pkconf_todo() -- TODO/FIXME comment tracker setup.
@@ -672,16 +666,17 @@ require("pckr").add {
     -- Lua functions/plugin dev library.
     "nvim-lua/plenary.nvim",
 
-    { "SidOfc/carbon.nvim",                  config = pkconf_carbon },    -- Replacement for :h netrw, directory viewer.
-    { "echasnovski/mini.map",                config = pkconf_map },       -- A code minimap, like what cool Atom kids have.
-    { "farmergreg/vim-lastplace",            config = pkconf_lastplace }, -- Open files at the last viewed location (VimL).
-    { "folke/todo-comments.nvim",            config = pkconf_todo },      -- Track TODO/FIXME comments.
-    { "ggandor/leap.nvim",                   config = pkconf_leap },      -- Alternative to '/' for quick search/motions.
-    { "kylechui/nvim-surround",              config = pkconf_surround },  -- Quoting/parenthesizing made simple.
-    { "lewis6991/gitsigns.nvim",             config = pkconf_signs },     -- Git status in sign column and statusbar.
-    { "lukas-reineke/indent-blankline.nvim", config = pkconf_ibl },       -- Visual indentation guides.
-    { "neovim/nvim-lspconfig",               config = pkconf_lsp },       -- Community configs for :h lsp.
-    { "numToStr/Comment.nvim",               config = pkconf_comment },   -- Quickly comment/uncomment code.
+    { "SidOfc/carbon.nvim",                  config = pkconf_carbon },                     -- Replacement for :h netrw, directory viewer.
+    { "echasnovski/mini.map",                config = pkconf_map },                        -- A code minimap, like what cool Atom kids have.
+    { "echasnovski/mini.pairs",              config = pkconf_use_defaults("mini.pairs") }, -- Automatic delimiter pair insertion/deletion.
+    { "farmergreg/vim-lastplace",            config = pkconf_lastplace },                  -- Open files at the last viewed location (VimL).
+    { "folke/todo-comments.nvim",            config = pkconf_todo },                       -- Track TODO/FIXME comments.
+    { "ggandor/leap.nvim",                   config = pkconf_leap },                       -- Alternative to '/' for quick search/motions.
+    { "kylechui/nvim-surround",              config = pkconf_surround },                   -- Quoting/parenthesizing made simple.
+    { "lewis6991/gitsigns.nvim",             config = pkconf_use_defaults("gitsigns") },   -- Git status in sign column and statusbar.
+    { "lukas-reineke/indent-blankline.nvim", config = pkconf_use_defaults("ibl") },        -- Visual indentation guides.
+    { "neovim/nvim-lspconfig",               config = pkconf_lsp },                        -- Community configs for :h lsp.
+    { "numToStr/Comment.nvim",               config = pkconf_use_defaults("Comment") },    -- Quickly comment/uncomment code.
 
     -- Downloader and shims for tree-sitter grammars; see :h :TSInstall and :h :TSEnable.
     { "nvim-treesitter/nvim-treesitter",
