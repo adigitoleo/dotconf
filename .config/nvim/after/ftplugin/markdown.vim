@@ -44,6 +44,13 @@ function! s:MarkdownItalicToggle(visual) range
     endif
 endfunction
 
+function! s:InsertTag()
+    let l:name = input('tag name: ')
+    return '[#' . l:name . '](#' . l:name . ')'
+endfunction
+
+cnoremap <silent> <localleader>t <SID>InsertTag()<Cr>
+
 if luaeval('require("nvim-surround") ~= nil')
     nnoremap <silent> <localleader>b :call <SID>MarkdownBoldToggle(v:false)<Cr>
     nnoremap <silent> <localleader>i :call <SID>MarkdownItalicToggle(v:false)<Cr>
