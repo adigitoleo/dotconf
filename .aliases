@@ -5,6 +5,8 @@
 alias ls='ls --color=auto --group-directories-first'
 alias d='diff --color=always -u'
 alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
 alias ip='ip --color=auto'
 alias lsblk='lsblk -o NAME,MAJ:MIN,RM,SIZE,RO,TYPE,MOUNTPOINT,FSTYPE,FSVER'
 alias tree='tree --dirsfirst'
