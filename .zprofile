@@ -60,6 +60,11 @@ if [ -d "$HOME/.local/share/man" ]; then
     export MANPATH="$HOME/.local/share/man:$MANPATH"
 fi
 
+# Prepend ~/.cargo/bin to PATH if it exists.
+if [ -d "$HOME/.cargo/bin" ]; then
+    export PATH="$HOME/.cargo/bin:$PATH"
+fi
+
 # Prepend ~/.nimble/bin to PATH if it exists.
 if [ -d "$HOME/.nimble/bin" ]; then
     export PATH="$HOME/.nimble/bin:$PATH"
