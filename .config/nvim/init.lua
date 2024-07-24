@@ -155,6 +155,7 @@ opt.helpheight = 0
 opt.synmaxcol = 200
 opt.scrolloff = 3
 opt.showbreak = "> "
+opt.cmdheight = 0
 
 -- Direct integration with external executables.
 if is_executable("rg") then opt.grepprg = "rg --vimgrep --smart-case --follow" end
