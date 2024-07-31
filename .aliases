@@ -14,18 +14,7 @@ alias tmux='TERM=xterm-256color tmux'
 alias l='tree -L 2|less'
 alias df='df --si'
 alias du='du --si'
-alias tl,dr='tldr --color=always|less'
-
-# rg,glob 'pattern' : find filenames in current directory that match glob
-alias rg,glob='rg --files -g'
-# rg,absglob 'pattern' : same as rg,glob but print absolute paths
-alias rg,absglob='rg $PWD --files -g'
-# rg,find [opts] 'pattern' : find filenames recursively
-alias rg,find='rg --files|rg'
-# rg,absfind [opts] 'pattern' : same as rg,find but print absolute paths
-alias rg,absfind='rg --files $PWD|rg'
-# ripgrep but with --color=always for piping to a pager
-alias rg,color='rg --color=always'
+alias tl,dr='tldr --color=always'
 
 
 # VERSION CONTROL AND SYSTEM ADMIN
@@ -53,6 +42,10 @@ elif 1>/dev/null 2>&1 command -v xbps-install ; then
     alias p,unmaint='xbps-query -p maintainer -s Orphaned|rev|cut -d- -f2-|rev|while IFS= read -r pkg; do xbps-query $pkg -p install-date|tr "\n" "\t"; echo $pkg; done|sort -n'
     alias p,ownedby='xbps-query --ownedby'
     alias p,revdeps='xbps-query -RX'
+elif 1>/dev/null 2>&1 command -v apt ; then
+    alias p,get='sudo apt update && sudo apt upgrade && sudo apt install'
+    alias p,search='apt search'
+    alias p,rinfo='apt show'
 fi
 
 # Use ED25519 ssh keys by default.
@@ -64,6 +57,20 @@ alias is_text_file='grep -qIF ""'
 # Terminal editor.
 alias e=\$EDITOR
 alias v=\$VISUAL
+
+# rg,glob 'pattern' : find filenames in current directory that match glob
+alias rg,glob='rg --files -g'
+# rg,absglob 'pattern' : same as rg,glob but print absolute paths
+alias rg,absglob='rg $PWD --files -g'
+# rg,find [opts] 'pattern' : find filenames recursively
+alias rg,find='rg --files|rg'
+# rg,absfind [opts] 'pattern' : same as rg,find but print absolute paths
+alias rg,absfind='rg --files $PWD|rg'
+# ripgrep but with --color=always for piping to a pager
+alias rg,color='rg --color=always'
+
+# Cycle through $(dirs); the pushd/popd equivalent to cd -
+alias c,='dirs +1'
 
 # New terminal instance (same directory).
 alias t='1>/dev/null 2>/dev/null setsid $TERM'
