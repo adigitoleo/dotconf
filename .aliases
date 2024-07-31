@@ -1,7 +1,6 @@
 # vim:ft=sh
 
 # COLORS AND OUTPUT FORMATTING
-
 alias ls='ls --color=auto --group-directories-first'
 alias d='diff --color=always -u'
 alias grep='grep --color=auto'
@@ -30,7 +29,6 @@ alias rg,color='rg --color=always'
 
 
 # VERSION CONTROL AND SYSTEM ADMIN
-
 alias y=yadm
 if 1>/dev/null 2>&1 command -v pacman ; then
     alias pacman='pacman --color=auto'
@@ -80,8 +78,6 @@ alias open='1>/dev/null 2>/dev/null setsid xdg-open'
 # The utmp stuff is horrible, let's avoid it. Musl libc doesn't provide it.
 alias who='ps -A -ouser,uid|sort -u|tail -n+2'  # All users that are doing stuff.
 alias users='cat /etc/passwd|cut -d: -f1'  # All users that have a password.
-
-# MISC. ABBREVIATIONS
 
 # (Un)mount drives, e.g. external usb devices (udisks2).
 # Because automounting is not smart enough and always breaks somehow.
