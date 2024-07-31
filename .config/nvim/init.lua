@@ -480,6 +480,8 @@ local function pkconf_lsp()
     end
     -- https://github.com/latex-lsp/texlab
     if is_executable('texlab') then lsp.texlab.setup {} end
+    -- https://github.com/gnikit/fortls
+    if is_executable('fortls') then lsp.fortls.setup {} end
 end
 
 local function pkconf_efmls() -- https://github.com/mattn/efm-langserver
