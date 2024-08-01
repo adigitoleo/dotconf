@@ -1,3 +1,2 @@
-window = #000000
-font-size = 12
-info = yes
+[font]
+size = 12
