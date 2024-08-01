@@ -542,7 +542,7 @@ local function pkconf_todo() -- TODO/FIXME comment tracker setup.
     todo_comments.setup({
         signs = false,
         colors = { error = { "DiagnosticWarn" } },
-        highlight = { before = "bg", after = "" }
+        highlight = { before = "", keyword = "wide", after = "" },
     })
     bindkey("n", "]t", function() todo_comments.jump_next() end, { desc = "Next todo comment" })
     bindkey("n", "[t", function() todo_comments.jump_prev() end, { desc = "Previous todo comment" })
