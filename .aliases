@@ -70,7 +70,7 @@ alias rg,absfind='rg --files $PWD|rg'
 alias rg,color='rg --color=always'
 
 # Cycle through $(dirs); the pushd/popd equivalent to cd -
-alias c,='dirs +1'
+alias c,='pushd +1'
 
 # New terminal instance (same directory).
 alias t='1>/dev/null 2>/dev/null setsid $TERM'
