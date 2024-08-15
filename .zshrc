@@ -164,7 +164,20 @@ _set_title() {
 }
 add-zsh-hook precmd _set_title
 
-TRAPWINCH() {  # See <https://github.com/ohmyzsh/ohmyzsh/issues/3605#issuecomment-75271013>
+_tcsh_autolist() {
+    # List dir with TAB, when there are only spaces/no text before cursor,
+    # or complete words, that are before cursor only (like in tcsh).
+    # From <https://unix.stackexchange.com/a/373351>.
+    if [[ -z ${LBUFFER// } ]]; then
+        BUFFER="ls " CURSOR=3 zle list-choices
+    else
+        zle expand-or-complete-prefix;
+    fi
+}
+zle -N _tcsh_autolist
+bindkey '^I' _tcsh_autolist
+
+TRAPWINCH() {  # See <https://github.com/ohmyzsh/ohmyzsh/issues/3605#issuecomment-75271013>.
     zle && { zle .reset-prompt; zle -R }
 }
 
@@ -181,7 +194,7 @@ else
     RPROMPT='%F{3}%(1j.[bg:%j] .)'
 fi
 
-# Set PS2 (continuation prompt)
+# Set PS2 (continuation prompt).
 PS2='%F{5}%_>%f '
 
 # Load completions and aliases.
