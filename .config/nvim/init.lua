@@ -454,15 +454,13 @@ local function pkconf_lsp()
                 Lua = {
                     runtime = { version = 'LuaJIT' },
                     diagnostics = {
-                        globals = { 'vim' }, -- Recognize 'vim' global.
+                        globals = { 'vim', 'MiniTest' },
                         disable = { "lowercase-global" },
                     },
                     workspace = {
                         -- Make the server aware of Neovim runtime files
-                        library = vim.api.nvim_get_runtime_file("", true),
-                        -- Silence weird luassert message,
-                        -- https://github.com/LuaLS/lua-language-server/discussions/1688
-                        checkThirdParty = false,
+                        library = vim.env.VIMRUNTIME,
+                        checkThirdParty = true,
                     },
                     telemetry = { enable = false }, -- Do not send telemetry data!
                 },
@@ -702,6 +700,7 @@ require("pckr").add {
     -- Switch between .c/.cpp and header files.
     { "jakemason/ouroboros",        requires = { "nvim-lua/plenary.nvim" } },
 
+    "jubnzv/mdeval.nvim",          -- Evaluate fenced code blocks in markdown and insert results.
     "AndrewRadev/inline_edit.vim", -- Edit embedded code in a temporary buffer with a different filetype
     "alvan/vim-closetag",          -- Auto-close (x|ht)ml tags (VimL).
     "dhruvasagar/vim-open-url",    -- Open URL's in browser without :h netrw (VimL).
