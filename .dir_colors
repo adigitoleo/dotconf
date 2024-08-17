@@ -1,15 +1,10 @@
-# Configuration file for the color ls utility
-# This file goes in the /etc directory, and must be world readable.
-# You can copy this file to .dir_colors in your $HOME directory to override
-# the system defaults.
-
-# COLOR needs one of these arguments: 'tty' colorizes output to ttys, but not
-# pipes. 'all' adds color characters to all output. 'none' shuts colorization
-# off.
+# COLOR needs one of these arguments:
+# - 'tty' colorizes output to ttys, but not pipes, or
+# - 'all' adds color characters to all output, or
+# - 'none' shuts colorization off.
 COLOR tty
 
 # Extra command line options for ls go here.
-# Basically these ones are:
 #  -F = show '/' for dirs, '*' for executables, etc.
 #  -T 0 = don't trust tab spacing when formatting ls output.
 OPTIONS -F -T 0
@@ -62,50 +57,41 @@ TERM xterm-debian
 # EIGHTBIT, followed by '1' for on, '0' for off. (8-bit output)
 EIGHTBIT 1
 
-# Below are the color init strings for the basic file types. A color init
-# string consists of one or more of the following numeric codes:
-# Attribute codes: 
+# Below are the color init strings for the basic file types.
+# A color init string consists of one or more of the following numeric codes:
+# Attribute codes:
 # 00=none 01=bold 04=underscore 05=blink 07=reverse 08=concealed
 # Text color codes:
 # 30=black 31=red 32=green 33=yellow 34=blue 35=magenta 36=cyan 37=white
 # Background color codes:
 # 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
-NORMAL 00	# global default, although everything should be something.
-FILE 00 	# normal file
-DIR 01;34 	# directory
-LINK 01;36 	# symbolic link (If you set this to 'target' instead of a
-		# numerical value, the color is as for the file pointed to.)
-FIFO 40;33	# pipe
-SOCK 01;35	# socket
-DOOR 01;35	# door
-BLK 40;33;01	# block device driver
-CHR 40;33;01 	# character device driver
-ORPHAN 40;31;01  # symlink to nonexistent file, or non-stat'able file
+NORMAL 00   # global default, although everything should be something.
+FILE 00     # normal file
+DIR 01;34   # directory
+LINK 01;36  # symbolic link (If you set this to 'target' instead of a
+            # numerical value, the color is as for the file pointed to.)
+FIFO 40;33  # pipe
+SOCK 01;35  # socket
+DOOR 01;35  # door
+BLK 40;33;01    # block device driver
+CHR 40;33;01    # character device driver
+ORPHAN 40;31;01     # symlink to nonexistent file, or non-stat'able file
 MISSING 01;05;37;41 # ... and the files they point to
-SETUID 37;41	# file that is setuid (u+s)
-SETGID 30;43	# file that is setgid (g+s)
-CAPABILITY 30;41	# file with capability
-STICKY_OTHER_WRITABLE 30;42 # dir that is sticky and other-writable (+t,o+w)
-OTHER_WRITABLE 34;42 # dir that is other-writable (o+w) and not sticky
-STICKY 37;44	# dir with the sticky bit set (+t) and not other-writable
-
+SETUID 37;41    # file that is setuid (u+s)
+SETGID 30;43    # file that is setgid (g+s)
+CAPABILITY 30;41    # file with capability
+STICKY_OTHER_WRITABLE 30;44;01  # dir that is sticky and other-writable (+t,o+w)
+OTHER_WRITABLE 30;44  # dir that is other-writable (o+w) and not sticky
+STICKY 37;44;01  # dir with the sticky bit set (+t) and not other-writable
 
 # This is for files with execute permission:
-EXEC 01;32 
+EXEC 01;32
 
 # List any file extensions like '.gz' or '.tar' that you would like ls
 # to colorize below. Put the extension, a space, and the color init string.
-# (and any comments you want to add after a '#')
-# executables (bright green)
-#.cmd 01;32 
-#.exe 01;32
-#.com 01;32
-#.btm 01;32
-#.bat 01;32
-#.sh  01;32
-#.csh 01;32
- # archives or compressed (bright red)
-.tar 01;31 
+
+# archives or compressed (bright red)
+.tar 01;31
 .tgz 01;31
 .svgz 01;31
 .arj 01;31
@@ -131,7 +117,7 @@ EXEC 01;32
 .7z  01;31
 .rz  01;31
 # image formats (magenta)
-.jpg 01;35 
+.jpg 01;35
 .jpeg 01;35
 .gif 01;35
 .bmp 01;35
