@@ -206,15 +206,6 @@ command("TabTerminal", function(opts) vim.cmd("tabnew|terminal " .. opts.args) e
 command("TitleCase", convert_case, { range = true, desc = "Change line/range to title case" })
 command("Vresize", [[exec 'vert resize' .. <q-args>]], { nargs = 1, desc = "Resize window vertically" })
 
--- Autocommands for terminal buffers and basic filetype settings.
-vim.cmd [[augroup terminal_buffer_rules
-    autocmd!
-    autocmd TermOpen * setlocal nonumber norelativenumber signcolumn=no
-    autocmd TermOpen * startinsert
-    autocmd TermEnter * setlocal scrolloff=0
-    autocmd BufEnter,WinEnter term://* startinsert | setlocal nobuflisted
-augroup END]]
-
 vim.filetype.add({ extension = { tikzstyles = "tex" } })
 if is_executable("txr") then
     vim.list_extend(freqlangs, { "txr", "tl" })
@@ -611,7 +602,7 @@ local function pkconf_overview()
     end
 end
 
-local function pkconf_haunt() require('haunt') end
+local function pkconf_haunt() require('haunt').setup() end
 
 local function pkconf_quark()
     quark = load("quark")
