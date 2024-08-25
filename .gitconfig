@@ -45,7 +45,7 @@
 	nuke = !git-nuke
 	inspect = show --format=full
 	develop = !git-develop
-	tags = for-each-ref --sort=-creatordate --format '%(color:cyan)%(creatordate:short) %(color:reset)%(refname:short) %(color:magenta)%(subject)' refs/tags
+	tags = for-each-ref --sort=-creatordate --format '%(color:cyan)%(creatordate:short) %(color:yellow)%(objectname:short) %(color:reset)%(refname:short) %(color:magenta)%(subject)' refs/tags
 [remote]
 	pushDefault = origin
 [push]
