@@ -343,7 +343,7 @@ bindkey("n", [[<Leader>c]], [[<Cmd>set cursorcolumn!<Cr>]], { desc = "Toggle cur
 bindkey("n", [[<Leader>h]], [[<Cmd>setlocal foldenable!<Cr>]], { desc = "Toggle folding (buffer-local)" })
 bindkey("n", [[<Leader>l]], [[<Cmd>set cursorline!<Cr>]], { desc = "Toggle cursorline" })
 bindkey("n", [[<Leader>m]], [[<Cmd>make!<Cr>]], { desc = "Run make! (doesn't jump to errorfile)" })
-bindkey("n", [[<Leader>i]], [[<Cmd>TSToggle highlight|colorscheme mellow<Cr>]],
+bindkey("n", [[<Leader>i]], [[<Cmd>TSBufToggle highlight|TSBufToggle indent|colorscheme mellow<Cr>]],
     { desc = "Toggle tree-sitter syntax highlighting" })
 -- Toggle line numbers for focused buffer.
 bindkey("n", [[<Leader>n]], [[<Cmd>set number! relativenumber!<Cr>]], { silent = true })
