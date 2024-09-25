@@ -45,7 +45,7 @@
 	nuke = !git-nuke
 	inspect = show --format=full
 	develop = !git-develop
-	tags = tag --sort=-committerdate --format '%(color:cyan)%(creatordate:short) %(color:yellow)%(objectname:short) %(color:reset)%(refname:short) %(color:magenta)%(subject)'
+	tags = tag --sort=-creatordate --format '%(color:cyan)%(creatordate:short) %(color:yellow)%(objectname:short) %(color:reset)%(refname:short) %(color:magenta)%(subject)'
 [remote]
 	pushDefault = origin
 [push]
