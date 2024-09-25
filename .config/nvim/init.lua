@@ -578,10 +578,8 @@ local function pkconf_vimtex() -- LaTeX/VimTeX setup.
     vim.g.vimtex_quickfix_ignore_filters = { 'underfull', 'moderncv' }
 end
 
-local function pkconf_lastplace()
-    -- Don't open folds when restoring cursor position.
-    vim.g.lastplace_open_folds = 0
-end
+-- Don't open folds when restoring cursor position.
+local function pkconf_lastplace() vim.g.lastplace_open_folds = 0 end
 
 local function pkconf_julia() -- Julia lang.
     vim.list_extend(freqlangs, { "julia", "markdown" })
@@ -590,9 +588,8 @@ local function pkconf_julia() -- Julia lang.
     vim.g.latex_to_unicode_file_types = freqlangs
 end
 
-local function pkconf_pollen() -- Pollen lang.
-    vim.list_extend(freqlangs, { "racket", "pollen" })
-end
+-- Pollen lang.
+local function pkconf_pollen() vim.list_extend(freqlangs, { "racket", "pollen" }) end
 
 local function pkconf_overview()
     overview = load("overview")
@@ -601,6 +598,8 @@ local function pkconf_overview()
         bindkey("n", "go", overview.focus, { desc = "Toggle focus between Overview sidebar and source buffer" })
     end
 end
+
+local function pkconf_fzf() vim.cmd("call fzf#install()") end
 
 local function pkconf_haunt() require('haunt').setup() end
 
@@ -658,7 +657,7 @@ require("pckr").add {
     -- Lua functions/plugin dev library.
     "nvim-lua/plenary.nvim",
     -- Replacement for :h netrw, directory viewer.
-    { "SidOfc/carbon.nvim",                  config = pkconf_carbon },
+    { "adigitoleo/carbon.nvim",              config = pkconf_carbon },
     -- A code minimap, like what cool Atom kids have.
     { "echasnovski/mini.map",                config = pkconf_map },
     -- Automatic delimiter pair insertion/deletion.
@@ -677,19 +676,26 @@ require("pckr").add {
     { "lukas-reineke/indent-blankline.nvim", config = pkconf_use_defaults("ibl") },
     -- Community configs for :h lsp.
     { "neovim/nvim-lspconfig",               config = pkconf_lsp },
-    -- Quickly comment/uncomment code.
-    { "numToStr/Comment.nvim",               config = pkconf_use_defaults("Comment") },
 
+    -- Provides the basic fzf.vim file, not needed on Void Linux.
+    { "junegunn/fzf", config = pkconf_fzf, cond = function(load_plugin)
+        if system == "Windows_NT" or is_executable("apt") then load_plugin() end
+    end },
     -- Downloader and shims for tree-sitter grammars; see :h :TSInstall and :h :TSEnable.
-    { "nvim-treesitter/nvim-treesitter",
-        cond = gen_cond('tree-sitter'), run = ":TSUpdate" },
+    { "nvim-treesitter/nvim-treesitter", cond = gen_cond('tree-sitter'),        run = ":TSUpdate" },
     -- Community configs for efm-langserver (emulate LSP servers for languages that don't have one).
     { "creativenull/efmls-configs-nvim",
         cond = gen_cond('efm-langserver'), requires = { "neovim/nvim-lspconfig" }, config = pkconf_efmls },
-    -- Follow symlinks when opening files (Linux, VimL).
-    { "aymericbeaumet/vim-symlink", requires = { "moll/vim-bbye" } },
     -- Switch between .c/.cpp and header files.
-    { "jakemason/ouroboros",        requires = { "nvim-lua/plenary.nvim" } },
+    { "jakemason/ouroboros",             requires = { "nvim-lua/plenary.nvim" } },
+    -- Comprehensive LaTeX integration.
+    { "lervag/vimtex",                   cond = gen_cond('latex'),              config = pkconf_vimtex },
+    -- Improved Julia syntax highlighting, unicode input.
+    { "JuliaEditorSupport/julia-vim",    cond = gen_cond('julia'),              config = pkconf_julia },
+    -- Syntax highlighting for #lang pollen.
+    { "otherjoel/vim-pollen",            cond = gen_cond('racket'),             config = pkconf_pollen },
+    -- Follow symlinks when opening files (Linux, VimL).
+    -- { "aymericbeaumet/vim-symlink",   requires = { "moll/vim-bbye" } },
 
     "jubnzv/mdeval.nvim",          -- Evaluate fenced code blocks in markdown and insert results.
     "AndrewRadev/inline_edit.vim", -- Edit embedded code in a temporary buffer with a different filetype
@@ -697,17 +703,6 @@ require("pckr").add {
     "dhruvasagar/vim-open-url",    -- Open URL's in browser without :h netrw (VimL).
     "whiteinge/diffconflicts",     -- 2-way vimdiff for merge conflicts (VimL).
     "HiPhish/jinja.vim",           -- Jinja template file syntax highlighting (VimL).
-
-    -- Comprehensive LaTeX integration.
-    { "lervag/vimtex",                cond = gen_cond('latex'),  config = pkconf_vimtex },
-    -- Improved Julia syntax highlighting, unicode input.
-    { "JuliaEditorSupport/julia-vim", cond = gen_cond('julia'),  config = pkconf_julia },
-    -- Syntax highlighting for #lang pollen
-    { "otherjoel/vim-pollen",         cond = gen_cond('racket'), config = pkconf_pollen },
-    -- Provides the basic fzf.vim file, not needed on Void Linux.
-    { "junegunn/fzf", config = function() vim.cmd("call fzf#install()") end, cond = function(load_plugin)
-        if system == "Windows_NT" or is_executable("apt") then load_plugin() end
-    end },
 
     { "https://git.sr.ht/~adigitoleo/haunt.nvim",    branch = "dev",        config = pkconf_haunt },
     { "https://git.sr.ht/~adigitoleo/overview.nvim", branch = "dev",        config = pkconf_overview },
