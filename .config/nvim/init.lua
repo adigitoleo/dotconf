@@ -696,6 +696,7 @@ require("pckr").add {
     "alvan/vim-closetag",          -- Auto-close (x|ht)ml tags (VimL).
     "dhruvasagar/vim-open-url",    -- Open URL's in browser without :h netrw (VimL).
     "whiteinge/diffconflicts",     -- 2-way vimdiff for merge conflicts (VimL).
+    "HiPhish/jinja.vim",           -- Jinja template file syntax highlighting (VimL).
 
     -- Comprehensive LaTeX integration.
     { "lervag/vimtex",                cond = gen_cond('latex'),  config = pkconf_vimtex },
