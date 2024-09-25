@@ -22,10 +22,10 @@ vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_node_provider = 0
 
-function neat_foldtext() -- Simplified, cleaner foldtext.
+function neat_foldtext()                        -- Simplified, cleaner foldtext.
     local patterns = {
-        "%s?{{{%d?",     -- Remove default fold markers, see :h foldmarker.
-        '"""',           -- Remove triple-quotes (Python docstring syntax).
+        "%s?" .. opt.foldmarker:get() .. "%d?", -- Remove default fold markers, see :h foldmarker.
+        '"""',                                  -- Remove triple-quotes (Python docstring syntax).
     }
     -- Make 'commentstring' into a more robust pattern and remove comment characters.
     local commentstring = string.gsub(opt.commentstring:get(), "%s", "%s?%%s")
