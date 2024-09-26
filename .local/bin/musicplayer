@@ -16,6 +16,7 @@ helpf() {
     echo '                  default: 6266'
     echo '-s                shuffle file list using shuf(1)'
     echo '-r                repeat from the beginning of the list when finished'
+    echo '-v                more verbose output, do not suppress stderr output'
     echo
     echo 'Operands:'
     echo '  <DIRECTORY>     music directory, for playlist mode using rg(1)'
@@ -43,24 +44,45 @@ play() {
     FILENAME="$1"
     JOB=
     echo "$SCRIPTNAME: playing ${FILENAME/$HOME/\~}"
+
     if [ "${FILENAME##*.}" = "mp3" ]; then
         is_command ffplay || exit 1
-        sleep 5 && 2>/dev/null ffplay -vn -sn -nodisp -autoexit -hide_banner "$FILENAME"
+        if [ $VERBOSE -eq 0 ]; then
+            ffplay -vn -sn -nodisp -autoexit -hide_banner -loglevel warning "$FILENAME"
+        else
+            2>/dev/null ffplay -vn -sn -nodisp -autoexit -hide_banner "$FILENAME"
+        fi
         JOB=$!
+
     elif [ "${FILENAME##*.}" = "opus" ]; then
         is_command opusdec || exit 1
         is_command aplay || exit 1
-        opusdec --quiet --force-wav "$FILENAME" -|aplay --quiet
+        if [ $VERBOSE -eq 0 ]; then
+            opusdec --force-wav "$FILENAME" -|aplay
+        else
+            2>/dev/null opusdec --quiet --force-wav "$FILENAME" -|aplay --quiet
+        fi
         JOB=$!
+
     elif [ "${FILENAME##*.}" = "flac" ]; then
         is_command flac || exit 1
         is_command aplay || exit 1
-        flac -dcs "$FILENAME"|aplay --quiet
+        if [ $VERBOSE -eq 0 ]; then
+            flac -dcs "$FILENAME"|aplay
+        else
+            2>/dev/null flac -dcs "$FILENAME"|aplay --quiet
+        fi
         JOB=$!
+
     elif [ "${FILENAME%%:*}" = "https" ]; then
         is_command ffplay || exit 1
-        2>/dev/null ffplay -vn -sn -nodisp -autoexit -hide_banner "$FILENAME"
+        if [ $VERBOSE -eq 0 ]; then
+            ffplay -vn -sn -nodisp -autoexit -hide_banner -loglevel warning "$FILENAME"
+        else
+            2>/dev/null ffplay -vn -sn -nodisp -autoexit -hide_banner "$FILENAME"
+        fi
         JOB=$!
+
     else
         warn "audio file format for $FILENAME unrecognised or not supported"
     fi
@@ -70,17 +92,20 @@ play() {
 }
 
 FILENAME=
-FZF_PORT=6266
+FZF_PORT=
+FZF_DEFAULT_PORT=6266
 SHUFFLE=1
 REPEAT=1
+VERBOSE=1
 [ $# -eq 0 ] && usage && exit 1
-while getopts "hsrp:f:" OPT; do
+while getopts "hsrvp:f:" OPT; do
     case $OPT in
         h ) usage && helpf; exit 0;;
         f ) FILENAME="$OPTARG";;
         p ) FZF_PORT="$OPTARG";;
         s ) SHUFFLE=0;;
         r ) REPEAT=0;;
+        v ) VERBOSE=0;;
         * ) usage; exit 1;;
     esac
 done
@@ -96,12 +121,12 @@ if [ "$FILENAME" = "" ]; then
         FZF_DEFAULT_COMMAND="${FZF_DEFAULT_COMMAND}|shuf"
     fi
     if [ $REPEAT -eq 0 ]; then
-        fzf --listen "$FZF_PORT" --cycle --no-sort \
+        fzf --listen "${FZF_PORT:-FZF_DEFAULT_PORT}" --cycle --no-sort \
             --bind "ctrl-r:reload:$FZF_DEFAULT_COMMAND || true" \
             --preview-window up,2 --preview "$SCRIPTNAME -f {}" \
             && kill -a musicplayer && exit 0
     else
-        fzf --listen "$FZF_PORT" --no-sort \
+        fzf --listen "${FZF_PORT:-FZF_DEFAULT_PORT}" --no-sort \
             --bind "ctrl-r:reload:$FZF_DEFAULT_COMMAND || true" \
             --preview-window up,2 --preview "$SCRIPTNAME -f {}" \
             && kill -a musicplayer && exit 0
@@ -109,7 +134,7 @@ if [ "$FILENAME" = "" ]; then
     exit 0
 fi
 
-play "$FILENAME"
+sleep 3 && play "$FILENAME"
 
 if [ -n "$FZF_PORT" ]; then
     is_command curl || exit 1
@@ -117,8 +142,5 @@ if [ -n "$FZF_PORT" ]; then
     [ -n "$JOB" ] || { sleep 5 && curl -XPOST localhost:"$FZF_PORT" -d 'down'; }
 fi
 
-if [ $REPEAT -eq 0 ]; then
-    # Loop single file.
-    # FIXME: Doesn't work, aplay crashes when it gets to the end of the wav.
-    play "$FILENAME"
-fi
+# Loop single file.
+while [ $REPEAT -eq 0 ]; then play "$FILENAME"; fi
