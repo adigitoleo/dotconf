@@ -142,5 +142,8 @@ if [ -n "$FZF_PORT" ]; then
     [ -n "$JOB" ] || { sleep 5 && curl -XPOST localhost:"$FZF_PORT" -d 'down'; }
 fi
 
-# Loop single file.
-while [ $REPEAT -eq 0 ]; do play "$FILENAME"; done
+# Loop single file, change SIGINT trap to exit the infinite loop.
+while [ $REPEAT -eq 0 ]; do
+    trap 'exit 0' INT
+    play "$FILENAME"
+done
