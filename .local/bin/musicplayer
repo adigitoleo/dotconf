@@ -31,7 +31,7 @@ helpf() {
 }
 
 warn() { >&2 printf '%s\n' "$SCRIPTNAME: $1"; }
-is_command() { # Check if command exists, for flow control (no stdout messages)
+is_command() {  # Check if command exists, for flow control (no stdout messages).
     if 1>/dev/null 2>&1 command -v "$1"; then
         return 0
     else
@@ -66,6 +66,7 @@ play() {
     fi
 
     trap "[ -n \"$JOB\" ] || kill $JOB" EXIT HUP TERM INT
+    JOB=
 }
 
 FILENAME=
@@ -85,8 +86,8 @@ while getopts "hsrp:f:" OPT; do
 done
 shift $(( OPTIND - 1 ))
 
-# Playlist mode, sets up a listing using fzf and uses a recursive call with -f
-# to play the selected file.
+# Playlist mode, sets up a listing using fzf and uses the fzf --preview command
+# to launch another instance of this script with -f to play the selected file.
 if [ "$FILENAME" = "" ]; then
     is_command rg || exit 1
     FZF_DEFAULT_COMMAND="rg --sort=path --files -g '*.mp3' -g '*.flac' -g '*.opus' $@"
@@ -111,8 +112,8 @@ fi
 play "$FILENAME"
 
 if [ -n "$FZF_PORT" ]; then
-    # Move to next file automatically,
-    # requires fzf to be started with --listen <FZF_PORT>
+    is_command curl || exit 1
+    # Move to next file automatically, requires fzf to be started with --listen <FZF_PORT>.
     [ -n "$JOB" ] || { sleep 5 && curl -XPOST localhost:"$FZF_PORT" -d 'down'; }
 fi
 
