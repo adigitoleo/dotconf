@@ -121,12 +121,12 @@ if [ "$FILENAME" = "" ]; then
         FZF_DEFAULT_COMMAND="${FZF_DEFAULT_COMMAND}|shuf"
     fi
     if [ $REPEAT -eq 0 ]; then
-        fzf --listen "${FZF_PORT:-FZF_DEFAULT_PORT}" --cycle --no-sort \
+        fzf --listen "${FZF_PORT:-${FZF_DEFAULT_PORT}}" --cycle --no-sort \
             --bind "ctrl-r:reload:$FZF_DEFAULT_COMMAND || true" \
             --preview-window up,2 --preview "$SCRIPTNAME -f {}" \
             && kill -a musicplayer && exit 0
     else
-        fzf --listen "${FZF_PORT:-FZF_DEFAULT_PORT}" --no-sort \
+        fzf --listen "${FZF_PORT:-${FZF_DEFAULT_PORT}}" --no-sort \
             --bind "ctrl-r:reload:$FZF_DEFAULT_COMMAND || true" \
             --preview-window up,2 --preview "$SCRIPTNAME -f {}" \
             && kill -a musicplayer && exit 0
