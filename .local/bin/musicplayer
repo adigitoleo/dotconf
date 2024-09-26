@@ -14,6 +14,8 @@ helpf() {
     echo '-f <file>         audio file, supports .opus, .mp3 or .flac'
     echo '-p <port>         port number to use for sending commands to fzf(1),'
     echo '                  default: 6266'
+    echo '-a <wav-player>   command to use for playing decoded wav streams,'
+    echo '                  default: "aplay", fallback: "paplay"'
     echo '-s                shuffle file list using shuf(1)'
     echo '-r                repeat from the beginning of the list when finished'
     echo '-v                more verbose output, do not suppress stderr output'
@@ -23,10 +25,11 @@ helpf() {
     echo '                  and fzf(1)'
     echo
     echo 'Decode and play a compressed audio file. Required executables:'
-    echo ' - aplay(1) for .opus and .flac files'
+    echo ' - aplay(1) or paplay(1) for .opus and .flac files'
     echo ' - opusdec(1) for .opus files'
     echo ' - ffplay(1) for .mp3 files'
     echo ' - flac(1) for .flac files'
+    echo 'Note that only paplay(1) will work in WSL2, which supports PulseAudio but not ALSA.'
     echo 'An URL to a radio stream can also be given to the -f option,'
     echo 'and it will be played using ffplay(1).'
 }
@@ -56,21 +59,21 @@ play() {
 
     elif [ "${FILENAME##*.}" = "opus" ]; then
         is_command opusdec || exit 1
-        is_command aplay || exit 1
+        is_command "$WAVPLAYER" || exit 1
         if [ $VERBOSE -eq 0 ]; then
-            opusdec --force-wav "$FILENAME" -|aplay
+            opusdec --force-wav "$FILENAME" -|eval "$WAVPLAYER $WAVPLAYER_FLAGS"
         else
-            2>/dev/null opusdec --quiet --force-wav "$FILENAME" -|aplay --quiet
+            2>/dev/null opusdec --quiet --force-wav "$FILENAME" -|eval "$WAVPLAYER $WAVPLAYER_FLAGS"
         fi
         JOB=$!
 
     elif [ "${FILENAME##*.}" = "flac" ]; then
         is_command flac || exit 1
-        is_command aplay || exit 1
+        is_command "$WAVPLAYER" || exit 1
         if [ $VERBOSE -eq 0 ]; then
-            flac -dcs "$FILENAME"|aplay
+            flac -dcs "$FILENAME"|eval "$WAVPLAYER $WAVPLAYER_FLAGS"
         else
-            2>/dev/null flac -dcs "$FILENAME"|aplay --quiet
+            2>/dev/null flac -dcs "$FILENAME"|eval "$WAVPLAYER $WAVPLAYER_FLAGS"
         fi
         JOB=$!
 
@@ -97,19 +100,31 @@ FZF_DEFAULT_PORT=6266
 SHUFFLE=1
 REPEAT=1
 VERBOSE=1
+WAVPLAYER="aplay"
+WAVPLAYER_FLAGS="--quiet"
 [ $# -eq 0 ] && usage && exit 1
-while getopts "hsrvp:f:" OPT; do
+while getopts "hsrva:p:f:" OPT; do
     case $OPT in
         h ) usage && helpf; exit 0;;
         f ) FILENAME="$OPTARG";;
         p ) FZF_PORT="$OPTARG";;
+        a ) WAVPLAYER="$OPTARG";;
         s ) SHUFFLE=0;;
         r ) REPEAT=0;;
-        v ) VERBOSE=0;;
+        v ) VERBOSE=0; WAVPLAYER_FLAGS="";;
         * ) usage; exit 1;;
     esac
 done
 shift $(( OPTIND - 1 ))
+
+# Fall back to PulseAudio player if aplay is not found.
+if [ "$WAVPLAYER" = "aplay" ]; then
+    2>/dev/null is_command aplay || \
+        { WAVPLAYER="paplay"; WAVPLAYER_FLAGS=""; [ $VERBOSE -eq 0 ] && WAVPLAYER_FLAGS="-v"; }
+fi
+if [ "$WAVPLAYER" = "paplay" ]; then
+    2>/dev/null is_command paplay || exit 1
+fi
 
 # Playlist mode, sets up a listing using fzf and uses the fzf --preview command
 # to launch another instance of this script with -f to play the selected file.
