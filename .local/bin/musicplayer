@@ -143,4 +143,4 @@ if [ -n "$FZF_PORT" ]; then
 fi
 
 # Loop single file.
-while [ $REPEAT -eq 0 ]; then play "$FILENAME"; fi
+while [ $REPEAT -eq 0 ]; do play "$FILENAME"; done
