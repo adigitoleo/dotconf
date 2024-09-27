@@ -133,7 +133,7 @@ if [ "$FILENAME" = "" ]; then
     PREVIEW_HEIGHT=2
     [ $VERBOSE -eq 0 ] && PREVIEW_HEIGHT=10
     is_command rg || exit 1
-    FZF_DEFAULT_COMMAND="rg --sort=path --files -g '*.mp3' -g '*.flac' -g '*.opus' $@"
+    FZF_DEFAULT_COMMAND="rg --sort=path --files -g '*.mp3' -g '*.flac' -g '*.opus' $*"
     if [ $SHUFFLE -eq 0 ]; then
         is_command shuf || exit 1
         FZF_DEFAULT_COMMAND="${FZF_DEFAULT_COMMAND}|shuf"
