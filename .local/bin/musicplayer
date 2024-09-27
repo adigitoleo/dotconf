@@ -116,6 +116,7 @@ while getopts "hsrva:p:f:" OPT; do
     esac
 done
 shift $(( OPTIND - 1 ))
+FZF_PORT="${FZF_PORT:-${FZF_DEFAULT_PORT}}"
 
 # Fall back to PulseAudio player if aplay is not found.
 if [ "$WAVPLAYER" = "aplay" ]; then
@@ -129,6 +130,8 @@ fi
 # Playlist mode, sets up a listing using fzf and uses the fzf --preview command
 # to launch another instance of this script with -f to play the selected file.
 if [ "$FILENAME" = "" ]; then
+    PREVIEW_HEIGHT=2
+    [ $VERBOSE -eq 0 ] && PREVIEW_HEIGHT=10
     is_command rg || exit 1
     FZF_DEFAULT_COMMAND="rg --sort=path --files -g '*.mp3' -g '*.flac' -g '*.opus' $@"
     if [ $SHUFFLE -eq 0 ]; then
@@ -136,14 +139,14 @@ if [ "$FILENAME" = "" ]; then
         FZF_DEFAULT_COMMAND="${FZF_DEFAULT_COMMAND}|shuf"
     fi
     if [ $REPEAT -eq 0 ]; then
-        fzf --listen "${FZF_PORT:-${FZF_DEFAULT_PORT}}" --cycle --no-sort \
+        fzf --listen "$FZF_PORT" --cycle --no-sort \
             --bind "ctrl-r:reload:$FZF_DEFAULT_COMMAND || true" \
-            --preview-window up,2 --preview "$SCRIPTNAME -f {}" \
+            --preview-window up,$PREVIEW_HEIGHT --preview "$SCRIPTNAME -f {}" \
             && kill -a musicplayer && exit 0
     else
-        fzf --listen "${FZF_PORT:-${FZF_DEFAULT_PORT}}" --no-sort \
+        fzf --listen "$FZF_PORT" --no-sort \
             --bind "ctrl-r:reload:$FZF_DEFAULT_COMMAND || true" \
-            --preview-window up,2 --preview "$SCRIPTNAME -f {}" \
+            --preview-window up,$PREVIEW_HEIGHT --preview "$SCRIPTNAME -f {}" \
             && kill -a musicplayer && exit 0
     fi
     exit 0
@@ -155,10 +158,10 @@ if [ -n "$FZF_PORT" ]; then
     is_command curl || exit 1
     # Move to next file automatically, requires fzf to be started with --listen <FZF_PORT>.
     [ -n "$JOB" ] || { sleep 5 && curl -XPOST localhost:"$FZF_PORT" -d 'down'; }
+else
+    # Loop single file, change SIGINT trap to exit the infinite loop.
+    while [ $REPEAT -eq 0 ]; do
+        trap 'exit 0' INT
+        play "$FILENAME"
+    done
 fi
-
-# Loop single file, change SIGINT trap to exit the infinite loop.
-while [ $REPEAT -eq 0 ]; do
-    trap 'exit 0' INT
-    play "$FILENAME"
-done
