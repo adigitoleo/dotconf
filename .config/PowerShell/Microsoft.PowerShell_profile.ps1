@@ -43,8 +43,9 @@ function symlink ($target, $link) {
     sudo New-Item -Path $link -ItemType SymbolicLink -Value $target
 }
 
-# Install neovim with winget.
+# Install neovim and brave with winget.
 Set-Alias -Name v -Value nvim
+Set-Alias -Name brave -Value 'C:\Users\adigi\AppData\Local\BraveSoftware\Brave-Browser\Application\brave.exe'
 
 # Install-Module pwsh-git-completion
 Register-GitCompletion
