@@ -78,8 +78,8 @@ alias c,='pushd +1'
 alias t='1>/dev/null 2>/dev/null setsid $TERM'
 
 # Zellij because tmux is too mainstream.
-alias z,main='zellij attach main||zellij -s main --layout=main'
-alias z,scratch='zellij attach scratch||zellij -s scratch --layout=scratch'
+alias z,main='zellij attach main||zellij -s main --new-session-with-layout=main'
+alias z,scratch='zellij attach scratch||zellij -s scratch --new-session-with-layout=scratch'
 
 # Open files but don't make a fuss on stdout.
 alias open='1>/dev/null 2>/dev/null setsid xdg-open'
