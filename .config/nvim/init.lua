@@ -229,12 +229,14 @@ local function setl_ft_autocmd(filetypes, options)
         command = "setlocal " .. table.concat(cmdparts, " "),
     })
 end
+
 setl_ft_autocmd({ "bash", "sh", "zsh" }, { foldmethod = "marker", textwidth = 100 })
 setl_ft_autocmd({ "bib" }, { expandtab = false })
 setl_ft_autocmd({ "cpp" }, { tabstop = 2, textwidth = 100 })
 setl_ft_autocmd({ "css" }, { tabstop = 2 })
 setl_ft_autocmd({ "desktop" }, { commentstring = "#\\ %s" })
 setl_ft_autocmd({ "enaml" }, { textwidth = 88, filetype = "python.enaml" })
+setl_ft_autocmd({ "carbon.explorer" }, { signcolumn = "no", cursorline = true })
 setl_ft_autocmd({ "fortran" }, { textwidth = 92 })
 setl_ft_autocmd({ "gitconfig" }, { expandtab = false })
 setl_ft_autocmd({ "help" }, { signcolumn = "no" })
