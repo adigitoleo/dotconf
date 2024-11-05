@@ -22,5 +22,5 @@ layout {
     }
     tab name="dev" cwd="vcs"
     tab name="write" cwd="Documents"
-    tab name="data" cwd="data"
+    tab name="run" cwd="~"
 }
