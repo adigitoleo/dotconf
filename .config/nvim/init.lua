@@ -578,6 +578,27 @@ local function pkconf_vimtex() -- LaTeX/VimTeX setup.
     vim.g.vimtex_quickfix_ignore_filters = { 'underfull', 'moderncv' }
 end
 
+local function pkconf_zenmode() -- Distraction-free centered buffer.
+    local zenmode = load("zen-mode")
+    if zenmode ~= nil then
+        zenmode.setup {
+            plugins = {
+                options = {
+                    laststatus = 3
+                }
+            },
+            on_open = function()
+                opt.textwidth = 0
+                opt.wrap = true
+            end,
+            on_close = function()
+                opt.wrap = false
+                opt.filetype = vim.o.filetype -- This should reset &textwidth.
+            end
+        }
+    end
+end
+
 -- Don't open folds when restoring cursor position.
 local function pkconf_lastplace() vim.g.lastplace_open_folds = 0 end
 
@@ -676,6 +697,8 @@ require("pckr").add {
     { "lukas-reineke/indent-blankline.nvim", config = pkconf_use_defaults("ibl") },
     -- Community configs for :h lsp.
     { "neovim/nvim-lspconfig",               config = pkconf_lsp },
+    -- Distraction-free writing in centered buffer.
+    { "folke/zen-mode.nvim",                 config = pkconf_zenmode },
 
     -- Provides the basic fzf.vim file, not needed on Void Linux.
     { "junegunn/fzf", config = pkconf_fzf, cond = function(load_plugin)
