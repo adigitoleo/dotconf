@@ -1,4 +1,3 @@
-import = ["~/.config/alacritty/mellow-dark.toml"]
 
 [cursor]
 vi_mode_style = "Underline"
@@ -8,3 +7,6 @@ size = 12
 
 [window]
 opacity = 0.8
+
+[general]
+import = ["~/.config/alacritty/mellow-dark.toml"]
