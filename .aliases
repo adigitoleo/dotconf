@@ -50,6 +50,9 @@ elif 1>/dev/null 2>&1 command -v apt ; then
     alias p,rinfo='apt show'
 fi
 
+# Propagate PATH to sudo, unless blocked by secure_path sudoers setting.
+alias sudop='sudo env PATH=$PATH'
+
 # Use ED25519 ssh keys by default.
 alias ssh-keygen='ssh-keygen -t ed25519'
 
