@@ -4,7 +4,7 @@ readonly SCRIPTNAME="${0##*/}"
 helpf() {
     echo 'Generate and display a PNG image of the given color.'
     echo 'Colors should be given in the HEX code format as supported by'
-    echo "imagemagick's 'convert' command."
+    echo "magick(1) from imagemagick."
 }
 warn() { >&2 printf '%s\n' "$SCRIPTNAME: $1"; }
 is_command() {
@@ -15,7 +15,7 @@ is_command() {
     fi
 }
 
-is_command convert || exit 1
+is_command magick || exit 1
 is_command xdg-open || exit 1
 
 HAS_DISPLAY=
@@ -31,6 +31,6 @@ fi
 
 [ "$1" = "-h" ] && { helpf; exit 0; }
 
-convert -size 20x20 xc:"$1" /tmp/c.png || exit 1
+magick -size 20x20 xc:"$1" /tmp/c.png || exit 1
 xdg-open /tmp/c.png
 rm /tmp/c.png
