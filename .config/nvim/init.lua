@@ -1,4 +1,4 @@
--- *** NeoVim 0.9+ configuration file ***
+-- *** NeoVim 0.11+ configuration file ***
 local api = vim.api
 local opt = vim.opt
 local fn = vim.fn
@@ -334,6 +334,8 @@ bindkey("n", [[[<Space>]], [[<C-u>]])
 bindkey("n", [[]<Space>]], [[<C-d>]])
 -- Better mapping for :tjump, clobbers :tselect.
 bindkey("n", "g]", [[g<C-]>]])
+-- Add mapping to populate loclist with buffer diagnostics.
+bindkey("n", "gl", vim.diagnostic.setloclist, { silent = true, desc = "vim.diagnostic.setloclist()" })
 -- Jump to first/last character of current line.
 bindkey("", "]l", [[g_]])
 bindkey("", "[l", [[^]])
@@ -411,39 +413,33 @@ local function pkgbootstrap()
 end
 
 local function pkconf_lsp()
-    local lsp = load('lspconfig')
-    if lsp == nil then return end
     -- LSP mappings and autocommands.
-    bindkey("n", "gl", vim.diagnostic.setloclist, { silent = true, desc = "Open LSP loclist" })
-    bindkey("n", "]d", vim.diagnostic.goto_next, { silent = true, desc = "Go to next LSP hint" })
-    bindkey("n", "[d", vim.diagnostic.goto_prev, { silent = true, desc = "Go to previous LSP hint" })
-    -- NOTE: To focus the hover buffer, press K a second time.
+    local lsp = vim.lsp
     api.nvim_create_autocmd("LspAttach", {
-        group = api.nvim_create_augroup("UserLspConfig", {}),
+        group = api.nvim_create_augroup("my.lsp", {}),
         callback = function(ev)
             vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
-            bindkey("n", "K", vim.lsp.buf.hover, { buffer = ev.buf, desc = "Show LSP hover info" })
-            bindkey("n", "<C-k>", vim.lsp.buf.signature_help, { buffer = ev.buf, desc = "Show LSP signature help" })
-            bindkey("n", "gd", vim.lsp.buf.definition, { buffer = ev.buf, desc = "Go to definition" })
-            bindkey("n", "gD", vim.lsp.buf.declaration, { buffer = ev.buf, desc = "Go to declaration" })
-            bindkey("n", "gr", vim.lsp.buf.references, { buffer = ev.buf, desc = "Find references to symbol" })
-            bindkey("n", "gR", vim.lsp.buf.rename, { buffer = ev.buf, desc = "Rename symbol" })
-            bindkey("n", "gL", vim.lsp.buf.document_symbol, { buffer = ev.buf, desc = "List symbols (current document)" })
+            bindkey("n", "gd", lsp.buf.definition, { buffer = ev.buf, desc = "Go to definition" })
+            bindkey("n", "gD", lsp.buf.declaration, { buffer = ev.buf, desc = "Go to declaration" })
+            bindkey("n", "gr", lsp.buf.references, { buffer = ev.buf, desc = "Find references to symbol" })
+            bindkey("n", "gR", lsp.buf.rename, { buffer = ev.buf, desc = "Rename symbol" })
+            bindkey("n", "gL", lsp.buf.document_symbol, { buffer = ev.buf, desc = "List symbols (current document)" })
             bindkey("n", "gf", function()
-                vim.lsp.buf.format { async = true }
+                lsp.buf.format { async = true }
             end, { buffer = ev.buf, desc = "Run LSP formatter" })
             bindkey("v", "gf", function()
-                vim.lsp.buf.format { async = true }
+                lsp.buf.format { async = true }
             end, { buffer = ev.buf, desc = "Run LSP formatter" })
         end,
     })
-    -- Borders for LSP popup windows.
-    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" })
-    vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" })
-    vim.diagnostic.config { float = { border = "single" } }
+    -- Borders for LSP and diagnostic popup windows.
+    lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" })
+    lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" })
+    vim.diagnostic.config { float = { border = "single" } } -- TODO: Move out of pkconf_lsp().
     -- https://github.com/LuaLS/lua-language-server
     if is_executable('lua-language-server') then
-        lsp.lua_ls.setup {
+        lsp.enable('lua_ls')
+        lsp.config.lua_ls = {
             settings = {
                 Lua = {
                     runtime = { version = 'LuaJIT' },
@@ -457,10 +453,11 @@ local function pkconf_lsp()
                         checkThirdParty = true,
                     },
                     telemetry = { enable = false }, -- Do not send telemetry data!
-                },
-            },
+                }
+            }
         }
     end
+
     -- Requires pip install python-lsp-server (NOT python-language-server!).
     if is_executable('pylsp') then
         lsp.pylsp.setup {
@@ -471,28 +468,30 @@ local function pkconf_lsp()
         }
     end
     -- https://github.com/latex-lsp/texlab
-    if is_executable('texlab') then lsp.texlab.setup {} end
+    if is_executable('texlab') then lsp.enable('texlab') end
     -- https://github.com/gnikit/fortls
-    if is_executable('fortls') then lsp.fortls.setup {} end
+    if is_executable('fortls') then lsp.enable('fortls') end
 end
 
 local function pkconf_efmls() -- https://github.com/mattn/efm-langserver
-    local lsp = load('lspconfig')
-    if is_executable('efm-langserver') and lsp ~= nil then
+    local lsp = vim.lsp
+    if is_executable('efm-langserver') then
         local efm_languages = {}
         if is_executable('shellcheck') then
             local shellcheck = load('efmls-configs.linters.shellcheck')
             if shellcheck then efm_languages.sh = { shellcheck } end
         end
-        lsp.efm.setup {
-            filetypes = vim.tbl_keys(efm_languages),
-            settings = {
-                rootMarkers = { '.git/' },
-                languages = efm_languages,
-            },
-            init_options = {
-                documentFormatting = true,
-                documentRangeFormatting = true,
+        lsp.efm = {
+            setup = {
+                filetypes = vim.tbl_keys(efm_languages),
+                settings = {
+                    rootMarkers = { '.git/' },
+                    languages = efm_languages,
+                },
+                init_options = {
+                    documentFormatting = true,
+                    documentRangeFormatting = true,
+                }
             }
         }
     end
